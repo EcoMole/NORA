@@ -1,2 +1,0 @@
-# NORA
-EFSA NORA Project
