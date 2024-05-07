@@ -1,12 +1,38 @@
 # Novel Foods Risk Assessment Data Modelling and Extraction (NORA) Project
 
+## For Developers
+
+### Local development
+1. `mkdir Nora && cd Nora`
+2. `git clone git@github.com:EcoMole/NORA.git`
+2. `cd NORA`
+3. create virtual environment `python -m venv venv`
+4. Activate the virtual environment `source venv/bin/activate`
+5. Install [poetry](https://python-poetry.org/docs/#installation)
+6. Run `poetry install` to install dependencies
+7. Create a `.env` file in the root directory and add variables from `.env.example`
+8. Create PostgreSQL database
+   ```shell
+   psql -d postgres
+   CREATE ROLE nora_user WITH LOGIN PASSWORD 'noraheslo' CREATEDB SUPERUSER;
+   CREATE DATABASE nora_db WITH ENCODING='UTF8' OWNER=nora_user CONNECTION LIMIT=30;
+   GRANT ALL PRIVILEGES ON DATABASE nora_db TO nora_user;
+   \q
+   ```
+9. Run `python manage.py migrate` to apply migrations
+10. Run `python manage.py createsuperuser` to create a superuser
+11. Run `python manage.py runserver` to start the development server
+12. Open `http://127.0.0.1:<port>/something-criptic/` in your browser to view the admin
+
+
+
 ## Introduction
 
 The European Food Safety Authority (EFSA) awarded Ecomole, s.r.o. the contract titled "Novel foods Risk Assessment Data Modelling and Extraction" (Contract No: NP/EFSA/NIF/2023/03). This project aims to aid EFSA in enhancing risk analysis capabilities by improving the quality, interoperability, and usability of data related to novel foods (NF).
 
 ## Background
 
-**Contractor**: EcoMole s.r.o.  
+**Contractor**: EcoMole s.r.o.
 **Awarding Body**: EFSA (European Food Safety Authority)
 
 ## Project Overview
