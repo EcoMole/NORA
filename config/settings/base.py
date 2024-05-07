@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "admin.apps.CustomAdminConfig",
     "api.apps.ApiConfig",
     "authentication.apps.AuthenticationConfig",
+    "administrative.apps.AdministrativeConfig",
     # Django's built-in apps
     "django.contrib.auth",
     "django.contrib.contenttypes",
