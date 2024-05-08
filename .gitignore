@@ -16,3 +16,4 @@ error.log
 cert.pem
 key.pem
 .vscode/
+.venv
