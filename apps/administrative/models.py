@@ -157,7 +157,6 @@ class MandateType(models.Model):
     )
     title = models.CharField(
         max_length=255,
-        unique=True,
         blank=False,
         null=False,
         help_text="Title of the mandate type",
@@ -179,7 +178,11 @@ class MandateType(models.Model):
     )
 
     def __str__(self) -> str:
-        return self.title
+        return (
+            f"{self.mandate_type_parent} - {self.title}"
+            if self.mandate_type_parent
+            else self.title
+        )
 
     class Meta:
         db_table = "MANDATE_TYPE"
