@@ -20,7 +20,9 @@ django-celery-results = "^2.5.1"
 django-celery-beat = "^2.5.0"
 django-import-export = "^3.3.1"
 colorlog = "^6.7.0"
-gunicorn = {version = "^22.0.0", optional = true}
+
+[tool.poetry.optional-dependencies]
+production = ["gunicorn@^22.0.0"]
 
 
 [tool.poetry.group.dev.dependencies]
