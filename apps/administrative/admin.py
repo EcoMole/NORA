@@ -4,7 +4,6 @@ from .models import (
     Applicant,
     Dossier,
     Mandate,
-    MandateType,
     OPAuthor,
     Opinion,
     OPQuestion,
@@ -50,13 +49,12 @@ class OpinionAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "doi",
-        "owner",
         "publication_date",
         "adoption_date",
         "outcome",
     ]
     search_fields = ["title", "doi"]
-    list_filter = ["owner", "outcome", "publication_date"]
+    list_filter = ["outcome", "publication_date"]
     inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline]
 
 
@@ -73,26 +71,18 @@ class ApplicantAdmin(admin.ModelAdmin):
     inlines = [DossierInline]
 
 
-@admin.register(MandateType)
-class MandateTypeAdmin(admin.ModelAdmin):
-    list_display = ["title", "mandate_type_parent"]
-    search_fields = ["title"]
-    inlines = [MandateInline]
-
-
 @admin.register(Mandate)
 class MandateAdmin(admin.ModelAdmin):
-    list_display = ["number", "mandate_type"]
-    search_fields = ["number"]
-    list_filter = ["mandate_type"]
+    list_display = ["title", "mandate_parent"]
+    search_fields = ["title"]
 
 
-@admin.register(Dossier)
+""" @admin.register(Dossier)
 class DossierAdmin(admin.ModelAdmin):
     list_display = ["number", "applicant"]
     search_fields = ["number"]
     list_filter = ["applicant"]
-    inlines = [QuestionInline]
+    inlines = [QuestionInline] """
 
 
 @admin.register(Question)
