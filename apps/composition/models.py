@@ -44,63 +44,6 @@ class Parameter(models.Model):
         help_text="Tax node VOCABULARY",
     )
 
-class Composition(models.Model):
-    id_composition = models.AutoField(primary_key=True)
-    parameter = models.ForeignKey(
-        Parameter,
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-    value = models.DecimalField(
-        max_digits=10,
-        decimal_places=10,
-        blank=False,
-        null=False,
-        help_text="Value of the parameter",
-    )
-    upper_range_value = models.DecimalField(
-        max_digits=10,
-        decimal_places=10,
-        blank=True,
-        null=True,
-        help_text="Optional upper range value of the parameter",
-    )
-    unit = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False,
-        help_text="Unit VOCABULARY",
-    )
-    #novel_food_variant
-
-    qualifier = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False,
-        help_text="Qualifier VOCABULARY",
-    )
-
-    TYPE_CHOICES = ( #TODO upresnit treti choice
-        ("specification", "Specification"),
-        ("composition", "Composition"),
-        ("other", "Other"),
-    )
-
-    type = models.CharField(
-        max_length=255,
-        choices=TYPE_CHOICES,
-        blank=False,
-        null=False,
-        help_text="Specification/Composition/Other",
-    )
-
-    footnote = models.ForeignKey(
-        FootNote,
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
 
 class NovelFoodVariant(models.Model):
     id_novel_food_variant = models.AutoField(primary_key=True)
@@ -146,3 +89,126 @@ class FoodForm_NovelFoodVariant(models.Model):
         db_table = "FOOD_FORM_NF_VARIANT"
 
 
+class Composition(models.Model):
+    id_composition = models.AutoField(primary_key=True)
+    parameter = models.ForeignKey(
+        Parameter,
+        blank=False,
+        null=False,
+        on_delete=models.PROTECT,
+    )
+    value = models.DecimalField(
+        max_digits=10,
+        decimal_places=10,
+        blank=False,
+        null=False,
+        help_text="Value of the parameter",
+    )
+    upper_range_value = models.DecimalField(
+        max_digits=10,
+        decimal_places=10,
+        blank=True,
+        null=True,
+        help_text="Optional upper range value of the parameter",
+    )
+    unit = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Unit VOCABULARY",
+    )
+    novel_food_variant = models.ForeignKey(
+        NovelFoodVariant,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+    )
+
+    qualifier = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Qualifier VOCABULARY",
+    )
+
+    TYPE_CHOICES = ( #TODO upresnit treti choice
+        ("specification", "Specification"),
+        ("composition", "Composition"),
+        ("other", "Other"),
+    )
+
+    type = models.CharField(
+        max_length=255,
+        choices=TYPE_CHOICES,
+        blank=False,
+        null=False,
+        help_text="Specification/Composition/Other",
+    )
+
+    footnote = models.ForeignKey(
+        FootNote,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
+
+
+class ProposedUseType(models.Model):
+    id_use_type = models.AutoField(primary_key=True)
+    USE_CHOICES = [
+        ("whole_foods", "Whole foods"),
+        ("food_ingredients", "Food ingredients"),
+        ("food_supplements", "Food supplements"),
+        ("infant_follow_on_formula", "Infant formula and follow-on formula"),
+        ("special_medical_purpose", "Food for special medical purposes"),
+        ("total_diet_replacement", "Total diet replacement for weight control"),
+    ]
+    title = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Title of the proposed use type",
+        choices=USE_CHOICES,
+    )
+
+
+class ProposedUse(models.Model):
+    id_proposed_use = models.AutoField(primary_key=True)
+    nf_variant = models.ForeignKey(
+        NovelFoodVariant,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+    )
+    use_type = models.ForeignKey(
+        ProposedUseType,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+    )
+
+    # TODO add age
+    """ id_age = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Age VOCABULARY",
+    ) """
+
+class BackgroundExposureAssessment(models.Model):
+    id_back_expo_assessment = models.AutoField(primary_key=True)
+    compound_of_interest = models.CharField(
+        max_length=2000,
+        blank=False,
+        null=False,
+        help_text="Compound of interest",
+    )
+
+    proposed_use = models.ForeignKey(
+        ProposedUse,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+    )
+
+    #yn = models.ForeignKey("taxonomies.YesNo", blank=False, null=False, on_delete=models.CASCADE)
