@@ -161,6 +161,7 @@ class MandateType(models.Model):
         null=False,
         help_text="Title of the mandate type",
     )
+    # Regulation from LEGREF catalogue
     # regulation = models.ForeignKey(
     #     "taxonomies.TaxonomyNode",
     #     blank=True,

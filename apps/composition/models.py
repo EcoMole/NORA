@@ -101,3 +101,48 @@ class Composition(models.Model):
         null=True,
         on_delete=models.PROTECT,
     )
+
+class NovelFoodVariant(models.Model):
+    id_novel_food_variant = models.AutoField(primary_key=True)
+    title = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Title of the novel food variant",
+    )
+
+class ProductionNovelFoodVariant(models.Model):
+    """through table for Novel Food Variant and Production(taxonomy node)"""
+    id_novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
+
+    id_node = models.CharField( # delete after adding catalogue
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Taxonomy node",
+    )
+    # TODO catalogue
+    #id_node = models.ForeignKey("taxonomies.TaxonomyNode", blank=False, null=False, on_delete=models.CASCADE)
+
+class FoodForm(models.Model):
+    id_food_form = models.AutoField(primary_key=True)
+    title = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Title of the food form",
+    )
+
+
+class FoodForm_NovelFoodVariant(models.Model):
+    """through table for Novel Food Variant and Food form"""
+    id_food_form = models.ForeignKey(FoodForm, blank=False, null=False, on_delete=models.CASCADE)
+    id_novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.id_food_form} - {self.id_novel_food_variant}"
+
+    class Meta:
+        db_table = "FOOD_FORM_NF_VARIANT"
+
+
