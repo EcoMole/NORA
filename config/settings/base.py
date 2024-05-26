@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "authentication.apps.AuthenticationConfig",
     "administrative.apps.AdministrativeConfig",
+    "composition.apps.CompositionConfig",
     # Django's built-in apps
     "django.contrib.auth",
     "django.contrib.contenttypes",

@@ -1,7 +1,8 @@
+from typing import Any
 from django.db import models
 
 
-class FootNote(models.Model):
+class FootNote(models.Model): 
     id_footnote = models.AutoField(primary_key=True)
     footnote = models.CharField(
         max_length=255,
@@ -20,6 +21,9 @@ class ParameterType(models.Model):
         null=False,
         help_text="Parameter type",
     )
+
+    def __str__(self) -> str:
+        return self.parameter_type
 
 class Parameter(models.Model):
     id_parameter = models.AutoField(primary_key=True)
@@ -44,6 +48,9 @@ class Parameter(models.Model):
         help_text="Tax node VOCABULARY",
     )
 
+    def __str__(self) -> str:
+        return f'{self.title} ({self.type})'
+
 
 class NovelFoodVariant(models.Model):
     id_novel_food_variant = models.AutoField(primary_key=True)
@@ -53,6 +60,11 @@ class NovelFoodVariant(models.Model):
         null=False,
         help_text="Title of the novel food variant",
     )
+    #TODO id_study
+    #TODO id_prod_proc ---neni link ve schematu
+
+    def __str__(self) -> str:
+        return self.title
 
 class ProductionNovelFoodVariant(models.Model):
     """through table for Novel Food Variant and Production(taxonomy node)"""
@@ -76,11 +88,14 @@ class FoodForm(models.Model):
         help_text="Title of the food form",
     )
 
+    def __str__(self) -> str:
+        return self.title
 
-class FoodForm_NovelFoodVariant(models.Model):
+
+class FoodFormNovelFoodVariant(models.Model):
     """through table for Novel Food Variant and Food form"""
-    id_food_form = models.ForeignKey(FoodForm, blank=False, null=False, on_delete=models.CASCADE)
-    id_novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
+    food_form = models.ForeignKey(FoodForm, blank=False, null=False, on_delete=models.CASCADE)
+    novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.id_food_form} - {self.id_novel_food_variant}"
@@ -99,14 +114,14 @@ class Composition(models.Model):
     )
     value = models.DecimalField(
         max_digits=10,
-        decimal_places=10,
+        decimal_places=4,
         blank=False,
         null=False,
         help_text="Value of the parameter",
     )
     upper_range_value = models.DecimalField(
         max_digits=10,
-        decimal_places=10,
+        decimal_places=4,
         blank=True,
         null=True,
         help_text="Optional upper range value of the parameter",
@@ -133,7 +148,6 @@ class Composition(models.Model):
 
     TYPE_CHOICES = ( #TODO upresnit treti choice
         ("specification", "Specification"),
-        ("composition", "Composition"),
         ("other", "Other"),
     )
 
@@ -195,7 +209,7 @@ class ProposedUse(models.Model):
         help_text="Age VOCABULARY",
     ) """
 
-class BackgroundExposureAssessment(models.Model):
+class BackgroundExposureAssessment(models.Model): # move to Nutrition
     id_back_expo_assessment = models.AutoField(primary_key=True)
     compound_of_interest = models.CharField(
         max_length=2000,
