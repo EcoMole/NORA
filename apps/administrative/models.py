@@ -4,14 +4,6 @@ from django.db import models
 
 
 class Opinion(models.Model):
-    OWNER_CHOICES = [
-        ("efsa nda", "EFSA NDA"),
-        ("efsa praper", "EFSA PRAPeR"),
-        ("efsa cef", "EFSA CEF"),
-        ("efsa ans", "EFSA ANS"),
-        ("efsa feedap", "EFSA FEEDAP"),
-        ("efsa contam", "EFSA CONTAM"),
-    ]
     OUTCOME_CHOICES = [
         ("positive", "Positive"),
         ("negative", "Negative"),
@@ -39,13 +31,6 @@ class Opinion(models.Model):
         max_length=255, blank=True, null=True, help_text="Digital Object Identifier"
     )
     url = models.URLField(blank=True, null=True, help_text="URL to the opinion")
-    owner = models.CharField(
-        max_length=255,
-        choices=OWNER_CHOICES,
-        blank=True,
-        null=True,
-        help_text="Owner of the opinion",
-    )
     publication_date = models.DateField(
         blank=True, null=True, help_text="Date of publication"
     )
@@ -114,7 +99,7 @@ class Applicant(models.Model):
         unique=True,
         blank=False,
         null=False,
-        help_text="Title of the applicant",
+        help_text="Name of the applicant",
     )
 
     def __str__(self) -> str:
@@ -126,9 +111,6 @@ class Applicant(models.Model):
 
 class Dossier(models.Model):
     id_dossier = models.AutoField(primary_key=True)
-    number = models.CharField(
-        max_length=255, unique=True, blank=False, null=False, help_text="Dossier number"
-    )
     applicant = models.ForeignKey(
         Applicant,
         blank=True,
@@ -145,23 +127,35 @@ class Dossier(models.Model):
         db_table = "DOSSIER"
 
 
-class MandateType(models.Model):
-    id_mandate_type = models.AutoField(primary_key=True)
-    mandate_type_parent = models.ForeignKey(
-        "self",
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="mandate_types",
-        db_column="id_mandate_type_parent",
-    )
+class Mandate(models.Model):
+    id_mandate = models.AutoField(primary_key=True)
+
+    TYPE_CHOICES = [
+        ("novel_food", "Novel food"),
+        ("new_dossier", "New dossier"),
+        ("extension_of_use", "Extension of use"),
+        ("nutrient_source", "Nutrient source"),
+        ("traditional_food", "Traditional food"),
+        ("nutrient_source", "Nutrient source"),
+    ]
+
     title = models.CharField(
         max_length=255,
         blank=False,
         null=False,
         help_text="Title of the mandate type",
+        choices=TYPE_CHOICES,
     )
-    # Regulation from LEGREF catalogue
+
+    mandate_parent = models.ForeignKey(
+        "self",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="mandates",
+        db_column="id_mandate_parent",
+    )
+
     # regulation = models.ForeignKey(
     #     "taxonomies.TaxonomyNode",
     #     blank=True,
@@ -179,40 +173,7 @@ class MandateType(models.Model):
     )
 
     def __str__(self) -> str:
-        return (
-            f"{self.mandate_type_parent} - {self.title}"
-            if self.mandate_type_parent
-            else self.title
-        )
-
-    class Meta:
-        db_table = "MANDATE_TYPE"
-
-
-class Mandate(models.Model):
-    TYPE_CHOICES = [
-        ("novel_food", "Novel food"),
-        ("new_dossier", "New dossier"),
-        ("extension_of_use", "Extension of use"),
-        ("nutrient_source", "Nutrient source"),
-        ("traditional_food", "Traditional food"),
-        ("nutrient_source", "Nutrient source"),
-    ]
-    id_mandate = models.AutoField(primary_key=True)
-    number = models.CharField(
-        max_length=255, unique=True, blank=False, null=False, help_text="Mandate number"
-    )
-    mandate_type = models.ForeignKey(
-        MandateType,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="mandates",
-        db_column="id_mandate_type",
-    )
-
-    def __str__(self) -> str:
-        return self.number
+        return self.title
 
     class Meta:
         db_table = "MANDATE"
