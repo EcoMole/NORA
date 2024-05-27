@@ -12,6 +12,9 @@ class FootNote(models.Model):
         help_text="Footnote text",
     )
 
+    def __str__(self) -> str:
+        return self.footnote
+
 class ParameterType(models.Model):
     id_parameter_type = models.AutoField(primary_key=True)
     parameter_type = models.CharField(
@@ -49,7 +52,7 @@ class Parameter(models.Model):
     )
 
     def __str__(self) -> str:
-        return f'{self.title} ({self.type})'
+        return f'{self.parameter_title} ({self.parameter_type})'
 
 
 class NovelFoodVariant(models.Model):
@@ -98,7 +101,7 @@ class FoodFormNovelFoodVariant(models.Model):
     novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.id_food_form} - {self.id_novel_food_variant}"
+        return f"{self.food_form} - {self.novel_food_variant}"
 
     class Meta:
         db_table = "FOOD_FORM_NF_VARIANT"

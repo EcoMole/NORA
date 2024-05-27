@@ -7,7 +7,9 @@ from .models import (
     ParameterType,
     FoodFormNovelFoodVariant,
     Composition,
-    FoodForm
+    FoodForm,
+    ProposedUse,
+    ProposedUseType
 )
 
 class FoodFormNFVariantInline(admin.TabularInline):
