@@ -13,6 +13,7 @@ from .models import (
     ScientificOfficer,
 )
 
+from novel_food.models import NovelFood
 
 class OPAuthorInline(admin.TabularInline):
     model = OPAuthor
@@ -43,6 +44,31 @@ class QuestionInline(admin.TabularInline):
     model = Question
     extra = 1
 
+class NovelFoodInline(admin.StackedInline):
+    model = NovelFood
+    extra = 1  # Number of extra forms to show
+    verbose_name = "Novel food"
+    verbose_name_plural = "Novel foods"
+
+    """ fieldsets = [
+        ('General Information', {
+            'fields': ['nf_code']
+        }),
+        ('Toxicity', {
+            'fields': [('is_mutagenic', 'is_genotoxic', 'is_carcinogenic')]
+        }),
+        ('Nutrition', {
+            'fields': ['protein_digestibility', 'antinutritional_factors']
+        }),
+        ('STABILITY', {
+            'fields': ['sufficient_data', 'food_matrices', 'shelflife_value', 'shelflife_unit'],
+            'description': 'This section is for stability related fields'
+        }),
+        ('Miscellaneous', {
+            'fields': ['rms_efsa', 'endocrine_disrupt_prop', 'outcome', 'outcome_remarks'],
+            'classes': ['collapse']
+        })
+    ] """
 
 @admin.register(Opinion)
 class OpinionAdmin(admin.ModelAdmin):
@@ -55,7 +81,7 @@ class OpinionAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title", "doi"]
     list_filter = ["outcome", "publication_date"]
-    inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline]
+    inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline, NovelFoodInline]
 
 
 @admin.register(Panel)
