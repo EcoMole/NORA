@@ -14,6 +14,7 @@ from .models import (
 )
 
 from novel_food.models import NovelFood
+from allergenicity.models import AllergenicityNovelFood
 
 class OPAuthorInline(admin.TabularInline):
     model = OPAuthor
@@ -44,12 +45,22 @@ class QuestionInline(admin.TabularInline):
     model = Question
     extra = 1
 
+""" class NovelFoodInline(admin.TabularInline):
+    model = NovelFood
+    extra = 1 """
+
+class AllergenicityNovelFoodInline(admin.StackedInline):
+    model = AllergenicityNovelFood
+    extra = 1
+    autocomplete_fields = ['allergenicity']
+
+
 class NovelFoodInline(admin.StackedInline):
     model = NovelFood
     extra = 1  # Number of extra forms to show
     verbose_name = "Novel food"
     verbose_name_plural = "Novel foods"
-
+    show_change_link = True
     """ fieldsets = [
         ('General Information', {
             'fields': ['nf_code']
@@ -68,16 +79,24 @@ class NovelFoodInline(admin.StackedInline):
             'fields': ['rms_efsa', 'endocrine_disrupt_prop', 'outcome', 'outcome_remarks'],
             'classes': ['collapse']
         })
-    ] """
+    ]
+ """
 
 @admin.register(Opinion)
 class OpinionAdmin(admin.ModelAdmin):
+    #fields = ['title', 'doi']
+    def novel_foods(self, obj):
+        novel_foods = obj.novel_food.all()
+        url = f"/admin/novel_food/novelfood/{novel_foods[0].id_study}/change/"
+        return f'<a href="{url}">{novel_foods[0].nf_code}</a>'
+
     list_display = [
         "title",
         "doi",
         "publication_date",
         "adoption_date",
         "outcome",
+        'novel_foods'
     ]
     search_fields = ["title", "doi"]
     list_filter = ["outcome", "publication_date"]

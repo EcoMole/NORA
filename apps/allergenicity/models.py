@@ -20,4 +20,5 @@ class AllergenicityNovelFood(models.Model):
 
     class Meta:
         #db_table = "ALLERGENICITY_NOVEL_FOOD"
-        verbose_name = "Allergenicity assignments"
+        verbose_name = "Allergenicity assignment"
+        verbose_name_plural = "Allergenicity assignments"

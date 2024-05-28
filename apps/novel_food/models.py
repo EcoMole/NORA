@@ -6,7 +6,10 @@ class NutritionalDisadvantage(models.Model):
     #syn = models.ForeignKey("StudySyn", on_delete=models.CASCADE) #?
     outcome = models.CharField() #yesNo vocab
     explanation = models.CharField(max_length=2000)
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
+    #novel_food = models.OneToOneField("NovelFood", on_delete=models.CASCADE, related_name='nutritional_disadvantage')
+
+    def __str__(self) -> str:
+        return f'{self.outcome} - {self.explanation}'
 
     class Meta:
         db_table = "NUTRITIONAL_DISADVANTAGE"
@@ -24,6 +27,7 @@ class Category(models.Model):
     class Meta:
         db_table = "SUBTYPE"
         verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
 
 class NovelFoodCategory(models.Model):
@@ -85,19 +89,50 @@ class NovelFoodOrganism(models.Model):
 
     class Meta:
         db_table = "STUDY_ORG"
-        verbose_name = "Organism Identity of NF"
+        verbose_name = "Organism Identity of Novel food"
 
 
 class NovelFoodComponent(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    component = models.CharField(blank=True) #vocab 
-    qualifier = models.CharField(blank=True) #vocab
+    component = models.CharField(blank=True) # FK to component table
+    qualifier = models.CharField(blank=True) #vocab QUALIFIER_FULL
     value = models.FloatField(null=True, blank=True)
 
     class Meta:
         db_table = "STUDY_COM"
         verbose_name = "Novel food component"
         verbose_name_plural = "Novel food components"
+
+class ComponentType(models.Model):
+    id_component_type = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    definition = models.CharField(max_length=2000)
+
+    class Meta:
+        db_table = "COM_TYPE"
+        verbose_name = "Component type"
+        verbose_name_plural = "Component types"
+
+class StructureReported(models.Model):
+    id_structure_reported = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    definition = models.CharField(max_length=2000)
+
+    class Meta:
+        db_table = "COM_STRUCTURE_SHOWN"
+        verbose_name = "Structure reported"
+        verbose_name_plural = "Structures reported"
+
+class Component(models.Model):
+    id_component = models.AutoField(primary_key=True)
+    catalogue_identity = models.CharField(max_length=255, db_column='ID_RNC_EFSA') #vocab param
+    component_type = models.ForeignKey(ComponentType, on_delete=models.CASCADE)
+    structure_reported = models.ForeignKey(StructureReported, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "COMPONENT"
+        verbose_name = "Component"
+        verbose_name_plural = "Components"
 
 
 class NovelFood(models.Model):
@@ -106,7 +141,7 @@ class NovelFood(models.Model):
     #TODO check relation
     is_mutagenic = models.BooleanField(blank=True, null=True, verbose_name='mutagenic') #yesNo vocab
 
-    is_genotoxic = models.BooleanField(blank=True, null=True, verbose_name='genotoxicity') #yesNo vocab
+    is_genotoxic = models.BooleanField(blank=True, null=True, verbose_name='genotoxic') #yesNo vocab
 
     is_carcinogenic = models.BooleanField(blank=True, null=True, verbose_name='carcinogenic') #yesNo vocab
 
@@ -116,11 +151,17 @@ class NovelFood(models.Model):
 
     protein_digestibility = models.CharField(blank=True) # vocab
     antinutritional_factors = models.CharField(blank=True) #vocab
+
+    nutritional_disadvantage = models.OneToOneField(NutritionalDisadvantage, on_delete=models.CASCADE, blank=True, null=True)
+
     food_category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, blank=True, null=True)
+
     sufficient_data = models.BooleanField(blank=True, null=True, help_text='Were sufficient data provided?') #yesNo vocab
     food_matrices = models.BooleanField(blank=True, null=True, verbose_name='food matrices', help_text='Were food matrices provided?')  #yesNo vocab
     shelflife_value = models.FloatField(blank=True, null=True)
     shelflife_unit = models.CharField(blank=True, help_text='UNIT Catalogue') #UNIT vocab
+    #chybi instability concerns
+
     rms_efsa = models.CharField(blank=True) #? what is this? vocab
     endocrine_disrupt_prop = models.CharField(blank=True) #vocab
     outcome = models.CharField(blank=True) #yesNo vocab
