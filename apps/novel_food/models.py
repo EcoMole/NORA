@@ -169,6 +169,9 @@ class Chemical(models.Model):
     chemical_type = models.ForeignKey(ChemicalType, on_delete=models.CASCADE, blank=True, null=True, db_column='component_type')
     structure_reported = models.ForeignKey(StructureReported, on_delete=models.CASCADE, blank=True, null=True)
 
+    def __str__(self):
+        return self.catalogue_identity
+
     class Meta:
         db_table = "COMPONENT"
         verbose_name = "Chemicals"

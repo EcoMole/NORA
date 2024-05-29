@@ -13,7 +13,6 @@ from .models import (
     ScientificOfficer,
 )
 
-from novel_food.models import NovelFood
 
 class OPAuthorInline(admin.TabularInline):
     model = OPAuthor
@@ -46,19 +45,12 @@ class QuestionInline(admin.TabularInline):
 
 @admin.register(Opinion)
 class OpinionAdmin(admin.ModelAdmin):
-    #fields = ['title', 'doi']
-    def novel_foods(self, obj):
-        novel_foods = obj.novel_food.all()
-        url = f"/admin/novel_food/novelfood/{novel_foods[0].id_study}/change/"
-        return f'<a href="{url}">{novel_foods[0].nf_code}</a>'
-
     list_display = [
         "title",
         "doi",
         "publication_date",
         "adoption_date",
         "outcome",
-        'novel_foods'
     ]
     search_fields = ["title", "doi"]
     list_filter = ["outcome", "publication_date"]
@@ -90,20 +82,12 @@ class MandateAdmin(admin.ModelAdmin):
     search_fields = ["title"]
 
 
-""" @admin.register(Dossier)
-class DossierAdmin(admin.ModelAdmin):
-    list_display = ["number", "applicant"]
-    search_fields = ["number"]
-    list_filter = ["applicant"]
-    inlines = [QuestionInline] """
-
-
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ["question", "dossier", "mandate"]
     search_fields = ["question"]
     list_filter = ["dossier", "mandate"]
-    inlines = [DossierInline]
+    #inlines = [DossierInline]
 
 
 @admin.register(ScientificOfficer)

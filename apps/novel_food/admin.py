@@ -18,7 +18,8 @@ from novel_food.models import (
     Allergenicity,
     AllergenicityNovelFood,
     SubstanceOfConcernNovelFood,
-    ChemicalSyn
+    ChemicalSyn,
+    GenotoxFinalOutcome
 )
 
 #from allergenicity.models import  Allergenicity
@@ -140,3 +141,11 @@ class SynonymAdmin(admin.ModelAdmin):
 @admin.register(Allergenicity)
 class AllergenicityAdmin(admin.ModelAdmin):
     list_display = ['title']
+
+@admin.register(GenotoxFinalOutcome)
+class GenotoxFinalOutcomeAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}

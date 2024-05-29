@@ -20,7 +20,7 @@ class ParameterType(models.Model):
     class Meta:
         db_table = "PARAMETER_TYPE"
         verbose_name = "Parameter Type"
-        verbose_name_plural = "Parameter Types"
+        verbose_name_plural = "Parameter Types - options"
 
 class Parameter(models.Model):
     id_parameter = models.AutoField(primary_key=True)
@@ -49,6 +49,11 @@ class Parameter(models.Model):
         if self.type is None:
             return self.title
         return f'{self.title} ({self.type})'
+    
+    class Meta:
+        db_table = "PARAMETER"
+        verbose_name = "Parameter"
+        verbose_name_plural = "Parameters - options"
 
 
 class NovelFoodVariant(models.Model):
@@ -59,7 +64,7 @@ class NovelFoodVariant(models.Model):
     risk_assessment_red_flags = models.ManyToManyField("RiskAssessmentRedFlags", through="RiskAssessmentRedFlagsNFVariant")
 
     def __str__(self) -> str:
-        return str(self.id_novel_food_variant)
+        return f'variant for {self.novel_food.title}'
     
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"
@@ -81,6 +86,10 @@ class ProductionNovelFoodVariant(models.Model):
 
     def __str__(self):
         return ''
+    
+    class Meta:
+        verbose_name = "Production Process"
+        verbose_name_plural = "Production Process"
 
 class FoodForm(models.Model):
     id_food_form = models.AutoField(primary_key=True)
@@ -196,6 +205,11 @@ class ProposedUseType(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        db_table = "PROPOSED_USE_TYPE"
+        verbose_name = "Proposed Use Type"
+        verbose_name_plural = "Proposed Use Types - options"
 
 
 class ProposedUse(models.Model):
