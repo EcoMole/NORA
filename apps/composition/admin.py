@@ -10,6 +10,8 @@ from .models import (
     ProposedUse,
     ProposedUseType,
     ProductionNovelFoodVariant,
+    RiskAssessmentRedFlagsNFVariant,
+    RiskAssessmentRedFlags
 )
 
 class FoodFormNFVariantInline(admin.TabularInline):
@@ -28,10 +30,14 @@ class ProductionNovelFoodVariantInline(admin.TabularInline):
     model = ProductionNovelFoodVariant
     extra = 1
 
+class RiskAssessmentRedFlagsNFVariantInline(admin.TabularInline):
+    model = RiskAssessmentRedFlagsNFVariant
+    extra = 1
+
 @admin.register(NovelFoodVariant)
 class NovelFoodVariantAdmin(admin.ModelAdmin):
     autocomplete_fields = ['novel_food']
-    inlines = [FoodFormNFVariantInline, ProposedUseInline, CompositionInline, ProductionNovelFoodVariantInline]
+    inlines = [FoodFormNFVariantInline, ProposedUseInline, CompositionInline, ProductionNovelFoodVariantInline, RiskAssessmentRedFlagsNFVariantInline]
 
 
 @admin.register(FoodForm)
@@ -83,3 +89,11 @@ class ProposedUseTypeAdmin(admin.ModelAdmin):
     list_display = [
         "title",
     ]
+
+@admin.register(RiskAssessmentRedFlags)
+class RiskAssessmentRedFlagsAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}

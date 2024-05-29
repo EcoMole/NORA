@@ -272,3 +272,7 @@ class RiskAssessmentRedFlagsNFVariant(models.Model):
     id_risk_assessment_red_flags_novel_food = models.AutoField(primary_key=True)
     nf_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
     risk_assessment = models.ForeignKey(RiskAssessmentRedFlags, blank=False, null=False, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Risk assessment red flag'
+        verbose_name_plural = 'Risk assessment red flags'
