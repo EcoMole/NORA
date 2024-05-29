@@ -14,7 +14,6 @@ from .models import (
 )
 
 from novel_food.models import NovelFood
-from allergenicity.models import AllergenicityNovelFood
 
 class OPAuthorInline(admin.TabularInline):
     model = OPAuthor
@@ -44,15 +43,6 @@ class MandateInline(admin.TabularInline):
 class QuestionInline(admin.TabularInline):
     model = Question
     extra = 1
-
-""" class NovelFoodInline(admin.TabularInline):
-    model = NovelFood
-    extra = 1 """
-
-class AllergenicityNovelFoodInline(admin.StackedInline):
-    model = AllergenicityNovelFood
-    extra = 1
-    autocomplete_fields = ['allergenicity']
 
 
 class NovelFoodInline(admin.StackedInline):

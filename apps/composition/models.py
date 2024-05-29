@@ -1,7 +1,7 @@
 from typing import Any
 from django.db import models
 
-
+from novel_food.models import NovelFood
 
 
 class ParameterType(models.Model):
@@ -41,35 +41,30 @@ class Parameter(models.Model):
     )
 
     def __str__(self) -> str:
+        if self.parameter_type is None:
+            return self.parameter_title
         return f'{self.parameter_title} ({self.parameter_type})'
 
 
 class NovelFoodVariant(models.Model):
     id_novel_food_variant = models.AutoField(primary_key=True)
-    title = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False,
-        help_text="Title of the novel food variant",
-    )
-    #TODO id_study
-    #TODO id_prod_proc ---neni link ve schematu
+    novel_food = models.ForeignKey(NovelFood, blank=True, null=True, on_delete=models.CASCADE, db_column='study_id') #TODO Make false before db delete
 
     def __str__(self) -> str:
-        return self.title
+        return self.novel_food.title
+    
 
 class ProductionNovelFoodVariant(models.Model):
     """through table for Novel Food Variant and Production(taxonomy node)"""
     id_novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
 
-    id_node = models.CharField( # delete after adding catalogue
+    id_node = models.CharField( # vocab
         max_length=255,
         blank=False,
         null=False,
+        verbose_name='production process step',
         help_text="Taxonomy node",
     )
-    # TODO catalogue
-    #id_node = models.ForeignKey("taxonomies.TaxonomyNode", blank=False, null=False, on_delete=models.CASCADE)
 
 class FoodForm(models.Model):
     id_food_form = models.AutoField(primary_key=True)
@@ -138,9 +133,11 @@ class Composition(models.Model):
         help_text="Qualifier VOCABULARY",
     )
 
-    TYPE_CHOICES = ( #TODO upresnit treti choice
+    TYPE_CHOICES = (
         ("specification", "Specification"),
+        ("characterisation", "Characterisation"),
         ("other", "Other"),
+
     )
 
     type = models.CharField(
@@ -174,6 +171,9 @@ class ProposedUseType(models.Model):
         help_text="Title of the proposed use type",
         choices=USE_CHOICES,
     )
+
+    def __str__(self):
+        return self.title
 
 
 class ProposedUse(models.Model):

@@ -8,12 +8,26 @@ from .models import (
     Composition,
     FoodForm,
     ProposedUse,
-    ProposedUseType
+    ProposedUseType,
+    ProductionNovelFoodVariant
 )
 
 class FoodFormNFVariantInline(admin.TabularInline):
     model = FoodFormNovelFoodVariant #TODO change the name of the model
     extra = 1 
+
+class CompositionInline(admin.TabularInline):
+    model = Composition
+    extra = 1
+
+class ProposedUseInline(admin.TabularInline):
+    model = ProposedUse
+    extra = 1
+
+class ProductionNovelFoodVariantInline(admin.TabularInline):
+    model = ProductionNovelFoodVariant
+    extra = 1
+
 
 @admin.register(FoodForm)
 class FoodFormAdmin(admin.ModelAdmin):
@@ -24,11 +38,11 @@ class FoodFormAdmin(admin.ModelAdmin):
 
 @admin.register(NovelFoodVariant)
 class NovelFoodVariantAdmin(admin.ModelAdmin):
-    list_display = [
-        "title",
-    ]
-    search_fields = ["title"]
-    inlines = [FoodFormNFVariantInline]
+    autocomplete_fields = ['novel_food']
+    inlines = [FoodFormNFVariantInline, CompositionInline, ProposedUseInline, ProductionNovelFoodVariantInline]
+
+
+
 
 @admin.register(ParameterType)
 class ParameterTypeAdmin(admin.ModelAdmin):
@@ -61,3 +75,8 @@ class CompositionAdmin(admin.ModelAdmin):
         "footnote",
     ]
 
+@admin.register(ProposedUseType)
+class ProposedUseTypeAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+    ]

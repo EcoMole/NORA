@@ -10,10 +10,15 @@ from novel_food.models import (
     NovelFoodComponent,
     NovelFoodOrganism,
     Organism,
-    Component
+    Component,
+    BackgroundExposureAssessment,
+    NovelFoodSyn,
+    SynonymType,
+    Allergenicity,
+    AllergenicityNovelFood
 )
 
-from allergenicity.models import AllergenicityNovelFood, Allergenicity
+#from allergenicity.models import  Allergenicity
 
 class NovelFoodCategoryInline(admin.TabularInline):
     model =  NovelFoodCategory #NovelFood.categories.through
@@ -32,8 +37,20 @@ class NutritionalDisadvantageInline(admin.TabularInline):
     model = NutritionalDisadvantage
     extra = 1
 
+class BackgroundExposureAssessmentInline(admin.TabularInline):
+    model = BackgroundExposureAssessment
+    extra = 1
 
-class NovelFoodForm(forms.ModelForm):
+class NovelFoodSynInline(admin.TabularInline):
+    model = NovelFoodSyn
+    extra = 1
+
+class AllergenicityNovelFoodInline(admin.TabularInline):
+    model = AllergenicityNovelFood
+    extra = 1
+
+
+""" class NovelFoodForm(forms.ModelForm):
     allergenicity = forms.ModelMultipleChoiceField(
         queryset=Allergenicity.objects.all(),
         required=False,
@@ -55,12 +72,12 @@ class NovelFoodForm(forms.ModelForm):
             instance.save()
         if instance.pk:
             instance.allergenicity.set(self.cleaned_data['allergenicity'])
-        return instance
+        return instance """
 
 
 @admin.register(NovelFood)
 class NovelFoodAdmin(admin.ModelAdmin):
-    form = NovelFoodForm
+    #form = NovelFoodForm
     fieldsets = [
         ('General Information', {
             'fields': ['opinion', 'nf_code']
@@ -75,9 +92,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
             'fields': ['sufficient_data', 'food_matrices', ('shelflife_value', 'shelflife_unit')],
             'description': 'This section is for stability related fields'
         }),
-        ('ALLERGENICITY', {
-            'fields': ['allergenicity'],
-        }),
+        
         ('HAZARDS', {
             'fields': ['endocrine_disrupt_prop'],
         }),
@@ -93,7 +108,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
     list_display = ['nf_code', 'opinion', 'outcome', 'outcome_remarks']
     search_fields = ['nf_code']
     autocomplete_fields = ['opinion']
-    inlines = [NovelFoodCategoryInline, NovelFoodComponentInline, NovelFoodOrganismInline]
+    inlines = [NovelFoodCategoryInline, NovelFoodComponentInline, NovelFoodOrganismInline, BackgroundExposureAssessmentInline, NovelFoodSynInline, AllergenicityNovelFoodInline]
     list_filter = ['is_carcinogenic', 'is_genotoxic', 'is_mutagenic']
 
 
@@ -128,3 +143,11 @@ class OrganismAdmin(admin.ModelAdmin):
 @admin.register(Component)
 class ComponentAdmin(admin.ModelAdmin):
     list_display = ['catalogue_identity']
+
+@admin.register(SynonymType)
+class SynonymAdmin(admin.ModelAdmin):
+    list_display = ['synonym_type']
+
+@admin.register(Allergenicity)
+class AllergenicityAdmin(admin.ModelAdmin):
+    list_display = ['title']
