@@ -77,15 +77,16 @@ class Organism(models.Model):
     organism_node = models.CharField(help_text='organism') #Catalogue
 
 
-class Variant(models.Model):
+""" class Variant(models.Model):
     org = models.ForeignKey(Organism, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255) """
 
 
 class NovelFoodOrganism(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
+    variant = models.ForeignKey(Organism, on_delete=models.CASCADE)
     org_part = models.CharField(help_text='part of organism', blank=True) #vocab
+    is_gmo = models.BooleanField(blank=True, null=True) #yesNo vocab
 
     class Meta:
         db_table = "STUDY_ORG"
@@ -94,15 +95,13 @@ class NovelFoodOrganism(models.Model):
 
 class NovelFoodComponent(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    component = models.CharField(blank=True) # FK to component table
-    qualifier = models.CharField(blank=True) #vocab QUALIFIER_FULL
-    value = models.FloatField(null=True, blank=True)
+    component = models.ForeignKey("Component", on_delete=models.CASCADE)
 
     class Meta:
         db_table = "STUDY_COM"
-        verbose_name = "Novel food component"
-        verbose_name_plural = "Novel food components"
+        verbose_name = "Chemical identity of Novel food"
 
+# For possible future use only
 class ComponentType(models.Model):
     id_component_type = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
@@ -113,6 +112,7 @@ class ComponentType(models.Model):
         verbose_name = "Component type"
         verbose_name_plural = "Component types"
 
+# For possible future use only
 class StructureReported(models.Model):
     id_structure_reported = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
@@ -131,14 +131,21 @@ class Component(models.Model):
 
     class Meta:
         db_table = "COMPONENT"
-        verbose_name = "Component"
-        verbose_name_plural = "Components"
+        verbose_name = "Chemicals" #TODO rename the model
+        verbose_name_plural = "Chemicals" #TODO rename the model
+
+    
+class BackgroundExposureAssessment(models.Model):
+    id_background_exposure_assessment = models.AutoField(primary_key=True)
+    component_of_interest = models.CharField(max_length=255, blank=True) #vocab
+    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
 
 
 class NovelFood(models.Model):
     id_study = models.AutoField(primary_key=True)
     opinion = models.ForeignKey(Opinion, on_delete=models.CASCADE, related_name="novel_food")
     #TODO check relation
+    title = models.CharField(max_length=255, blank=False)
     is_mutagenic = models.BooleanField(blank=True, null=True, verbose_name='mutagenic') #yesNo vocab
 
     is_genotoxic = models.BooleanField(blank=True, null=True, verbose_name='genotoxic') #yesNo vocab
@@ -149,9 +156,8 @@ class NovelFood(models.Model):
 
     tox_study_required = models.BooleanField(blank=True, null=True) #yesNo vocab
 
-    protein_digestibility = models.CharField(blank=True) # vocab
-    antinutritional_factors = models.CharField(blank=True) #vocab
-
+    protein_digestibility = models.BooleanField(blank=True, null=True) # vocab yesNo
+    antinutritional_factors = models.BooleanField(blank=True, null=True) # vocab yesNo
     nutritional_disadvantage = models.OneToOneField(NutritionalDisadvantage, on_delete=models.CASCADE, blank=True, null=True)
 
     food_category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, blank=True, null=True)
@@ -163,7 +169,7 @@ class NovelFood(models.Model):
     #chybi instability concerns
 
     rms_efsa = models.CharField(blank=True) #? what is this? vocab
-    endocrine_disrupt_prop = models.CharField(blank=True) #vocab
+    endocrine_disrupt_prop = models.BooleanField(blank=True, null=True, verbose_name='endocrine disrupt properties') #vocab
     outcome = models.CharField(blank=True) #yesNo vocab
     outcome_remarks = models.CharField(max_length=2000,blank=True)
 

@@ -9,7 +9,8 @@ from novel_food.models import (
     Category,
     NovelFoodComponent,
     NovelFoodOrganism,
-    Organism
+    Organism,
+    Component
 )
 
 from allergenicity.models import AllergenicityNovelFood, Allergenicity
@@ -74,59 +75,28 @@ class NovelFoodAdmin(admin.ModelAdmin):
             'fields': ['sufficient_data', 'food_matrices', ('shelflife_value', 'shelflife_unit')],
             'description': 'This section is for stability related fields'
         }),
-        ('Miscellaneous', {
-            'fields': ['rms_efsa', 'endocrine_disrupt_prop', ],
-            'classes': ['collapse']
-        }),
         ('ALLERGENICITY', {
             'fields': ['allergenicity'],
+        }),
+        ('HAZARDS', {
+            'fields': ['endocrine_disrupt_prop'],
         }),
         ('OUTCOME', {
             'fields': [('outcome', 'outcome_remarks')],
         }),
+        ('Miscellaneous', {
+            'fields': ['rms_efsa' ],
+            'classes': ['collapse']
+        }),
 
     ]
     list_display = ['nf_code', 'opinion', 'outcome', 'outcome_remarks']
     search_fields = ['nf_code']
+    autocomplete_fields = ['opinion']
     inlines = [NovelFoodCategoryInline, NovelFoodComponentInline, NovelFoodOrganismInline]
     list_filter = ['is_carcinogenic', 'is_genotoxic', 'is_mutagenic']
 
-""" @admin.register(NovelFood)
-class NovelFoodAdmin(admin.ModelAdmin):
-    fieldsets = [
-        ('General Information', {
-            'fields': ['opinion', 'nf_code']
-        }),
-        ('Toxicity', {
-            'fields': [('is_mutagenic', 'is_genotoxic', 'is_carcinogenic')]
-        }),
-        ('Nutrition', {
-            'fields': ['protein_digestibility', 'antinutritional_factors']
-        }),
-        ('STABILITY', {
-            'fields': ['sufficient_data', 'food_matrices', 'shelflife_value', 'shelflife_unit'],
-            'description': 'This section is for stability related fields'
-        }),
-        ('Miscellaneous', {
-            'fields': ['rms_efsa', 'endocrine_disrupt_prop', 'outcome', 'outcome_remarks'],
-            'classes': ['collapse']
-        })
-    ]
-    list_display = ['nf_code', 'opinion', 'outcome', 'outcome_remarks']
-    search_fields = ['nf_code']
-    inlines = [NovelFoodCategoryInline, AllergenicityNovelFoodInline, NutritionalDisadvantageInline, NovelFoodComponentInline, NovelFoodOrganismInline]
-    list_filter = ['is_carcinogenic', 'is_genotoxic', 'is_mutagenic'] """
 
-
-""" class NovelFoodAdmin(admin.ModelAdmin):
-    list_display = [
-        'nf_code',
-        'opinion',
-        'outcome',
-        'outcome_remarks'
-    ]
-
-    inlines = [NovelFoodCategoryInline, AllergenicityNovelFoodInline] """
 
 @admin.register(FoodCategory)
 class FoodCategoryAdmin(admin.ModelAdmin):
@@ -154,3 +124,7 @@ class NutritionalDisadvantageAdmin(admin.ModelAdmin):
 @admin.register(Organism)
 class OrganismAdmin(admin.ModelAdmin):
     list_display = ['organism_node']
+
+@admin.register(Component)
+class ComponentAdmin(admin.ModelAdmin):
+    list_display = ['catalogue_identity']

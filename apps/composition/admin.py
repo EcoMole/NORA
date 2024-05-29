@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 from .models import (
-    FootNote,
     NovelFoodVariant,
     Parameter,
     ParameterType,
@@ -15,13 +14,6 @@ from .models import (
 class FoodFormNFVariantInline(admin.TabularInline):
     model = FoodFormNovelFoodVariant #TODO change the name of the model
     extra = 1 
-
-@admin.register(FootNote)
-class FootNoteAdmin(admin.ModelAdmin):
-    list_display = [
-        "footnote",
-    ]
-    search_fields = ["footnote"]
 
 @admin.register(FoodForm)
 class FoodFormAdmin(admin.ModelAdmin):

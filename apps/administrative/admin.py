@@ -100,7 +100,7 @@ class OpinionAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title", "doi"]
     list_filter = ["outcome", "publication_date"]
-    inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline, NovelFoodInline]
+    inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline]
 
 
 @admin.register(Panel)

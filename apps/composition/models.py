@@ -2,18 +2,7 @@ from typing import Any
 from django.db import models
 
 
-class FootNote(models.Model): 
-    id_footnote = models.AutoField(primary_key=True)
-    footnote = models.CharField(
-        max_length=255,
-        unique=True, #?
-        blank=False,
-        null=False,
-        help_text="Footnote text",
-    )
 
-    def __str__(self) -> str:
-        return self.footnote
 
 class ParameterType(models.Model):
     id_parameter_type = models.AutoField(primary_key=True)
@@ -162,11 +151,9 @@ class Composition(models.Model):
         help_text="Specification/Composition/Other",
     )
 
-    footnote = models.ForeignKey(
-        FootNote,
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
+    footnote = models.CharField(
+        max_length=2000,
+        blank=True
     )
 
 
