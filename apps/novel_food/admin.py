@@ -7,15 +7,18 @@ from novel_food.models import (
     NutritionalDisadvantage,
     NovelFoodCategory,
     Category,
-    NovelFoodComponent,
+    NovelFoodChemical,
     NovelFoodOrganism,
     Organism,
-    Component,
+    OrganismSyn,
+    Chemical,
     BackgroundExposureAssessment,
     NovelFoodSyn,
     SynonymType,
     Allergenicity,
-    AllergenicityNovelFood
+    AllergenicityNovelFood,
+    SubstanceOfConcernNovelFood,
+    ChemicalSyn
 )
 
 #from allergenicity.models import  Allergenicity
@@ -24,9 +27,8 @@ class NovelFoodCategoryInline(admin.TabularInline):
     model =  NovelFoodCategory #NovelFood.categories.through
     extra = 1
 
-
-class NovelFoodComponentInline(admin.TabularInline):
-    model = NovelFoodComponent
+class NovelFoodChemicalInline(admin.TabularInline):
+    model = NovelFoodChemical
     extra = 1
 
 class NovelFoodOrganismInline(admin.TabularInline):
@@ -49,47 +51,33 @@ class AllergenicityNovelFoodInline(admin.TabularInline):
     model = AllergenicityNovelFood
     extra = 1
 
+class SubstanceOfConcernNovelFoodInline(admin.TabularInline):
+    model = SubstanceOfConcernNovelFood
+    extra = 1
 
-""" class NovelFoodForm(forms.ModelForm):
-    allergenicity = forms.ModelMultipleChoiceField(
-        queryset=Allergenicity.objects.all(),
-        required=False,
-        widget=forms.CheckboxSelectMultiple
-    )
+class OrganismSynInline(admin.TabularInline):
+    model = OrganismSyn
+    extra = 1
 
-    class Meta:
-        model = NovelFood
-        fields = '__all__'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance.pk:
-            self.fields['allergenicity'].initial = self.instance.allergenicity.all()
-
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        if commit:
-            instance.save()
-        if instance.pk:
-            instance.allergenicity.set(self.cleaned_data['allergenicity'])
-        return instance """
-
+class ChemicalSynInline(admin.TabularInline):
+    model = ChemicalSyn
+    extra = 1
 
 @admin.register(NovelFood)
 class NovelFoodAdmin(admin.ModelAdmin):
     #form = NovelFoodForm
     fieldsets = [
         ('General Information', {
-            'fields': ['opinion', 'nf_code']
+            'fields': ['opinion', 'title', 'nf_code', 'food_category']
         }),
         ('Toxicity', {
-            'fields': ['is_mutagenic', 'is_genotoxic', 'is_carcinogenic']
+            'fields': ['is_mutagenic', 'genotox_final_outcome', 'is_carcinogenic']
         }),
         ('Nutrition', {
             'fields': ['protein_digestibility', 'antinutritional_factors', 'nutritional_disadvantage'],
         }),
         ('STABILITY', {
-            'fields': ['sufficient_data', 'food_matrices', ('shelflife_value', 'shelflife_unit')],
+            'fields': ['sufficient_data', 'food_matrices', 'instability_concerns', ('shelflife_value', 'shelflife_unit')],
             'description': 'This section is for stability related fields'
         }),
         
@@ -106,12 +94,21 @@ class NovelFoodAdmin(admin.ModelAdmin):
 
     ]
     list_display = ['nf_code', 'opinion', 'outcome', 'outcome_remarks']
-    search_fields = ['nf_code']
+    search_fields = ['nf_code', 'title']
     autocomplete_fields = ['opinion']
-    inlines = [NovelFoodCategoryInline, NovelFoodComponentInline, NovelFoodOrganismInline, BackgroundExposureAssessmentInline, NovelFoodSynInline, AllergenicityNovelFoodInline]
-    list_filter = ['is_carcinogenic', 'is_genotoxic', 'is_mutagenic']
+    inlines = [NovelFoodCategoryInline, NovelFoodChemicalInline, NovelFoodOrganismInline, BackgroundExposureAssessmentInline, NovelFoodSynInline, AllergenicityNovelFoodInline, 
+               SubstanceOfConcernNovelFoodInline]
+    list_filter = ['is_carcinogenic', 'is_mutagenic']
 
+@admin.register(Organism)
+class OrganismAdmin(admin.ModelAdmin):
+    list_display = ['organism_node']
+    inlines = [OrganismSynInline]
 
+@admin.register(Chemical)
+class ChemicalAdmin(admin.ModelAdmin):
+    list_display = ['catalogue_identity']
+    inlines = [ChemicalSynInline]
 
 @admin.register(FoodCategory)
 class FoodCategoryAdmin(admin.ModelAdmin):
@@ -135,14 +132,6 @@ class NutritionalDisadvantageAdmin(admin.ModelAdmin):
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
-
-@admin.register(Organism)
-class OrganismAdmin(admin.ModelAdmin):
-    list_display = ['organism_node']
-
-@admin.register(Component)
-class ComponentAdmin(admin.ModelAdmin):
-    list_display = ['catalogue_identity']
 
 @admin.register(SynonymType)
 class SynonymAdmin(admin.ModelAdmin):

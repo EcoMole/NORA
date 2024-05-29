@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     "authentication.apps.AuthenticationConfig",
     "administrative.apps.AdministrativeConfig",
     "composition.apps.CompositionConfig",
-    "allergenicity.apps.AllergenicityConfig",
     "novel_food.apps.NovelFoodConfig",
     # Django's built-in apps
     "django.contrib.auth",

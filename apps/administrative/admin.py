@@ -44,34 +44,6 @@ class QuestionInline(admin.TabularInline):
     model = Question
     extra = 1
 
-
-class NovelFoodInline(admin.StackedInline):
-    model = NovelFood
-    extra = 1  # Number of extra forms to show
-    verbose_name = "Novel food"
-    verbose_name_plural = "Novel foods"
-    show_change_link = True
-    """ fieldsets = [
-        ('General Information', {
-            'fields': ['nf_code']
-        }),
-        ('Toxicity', {
-            'fields': [('is_mutagenic', 'is_genotoxic', 'is_carcinogenic')]
-        }),
-        ('Nutrition', {
-            'fields': ['protein_digestibility', 'antinutritional_factors']
-        }),
-        ('STABILITY', {
-            'fields': ['sufficient_data', 'food_matrices', 'shelflife_value', 'shelflife_unit'],
-            'description': 'This section is for stability related fields'
-        }),
-        ('Miscellaneous', {
-            'fields': ['rms_efsa', 'endocrine_disrupt_prop', 'outcome', 'outcome_remarks'],
-            'classes': ['collapse']
-        })
-    ]
- """
-
 @admin.register(Opinion)
 class OpinionAdmin(admin.ModelAdmin):
     #fields = ['title', 'doi']
@@ -105,6 +77,12 @@ class ApplicantAdmin(admin.ModelAdmin):
     search_fields = ["title"]
     inlines = [DossierInline]
 
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
 
 @admin.register(Mandate)
 class MandateAdmin(admin.ModelAdmin):
@@ -125,6 +103,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ["question", "dossier", "mandate"]
     search_fields = ["question"]
     list_filter = ["dossier", "mandate"]
+    inlines = [DossierInline]
 
 
 @admin.register(ScientificOfficer)

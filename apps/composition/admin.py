@@ -9,7 +9,7 @@ from .models import (
     FoodForm,
     ProposedUse,
     ProposedUseType,
-    ProductionNovelFoodVariant
+    ProductionNovelFoodVariant,
 )
 
 class FoodFormNFVariantInline(admin.TabularInline):
@@ -28,6 +28,11 @@ class ProductionNovelFoodVariantInline(admin.TabularInline):
     model = ProductionNovelFoodVariant
     extra = 1
 
+@admin.register(NovelFoodVariant)
+class NovelFoodVariantAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['novel_food']
+    inlines = [FoodFormNFVariantInline, ProposedUseInline, CompositionInline, ProductionNovelFoodVariantInline]
+
 
 @admin.register(FoodForm)
 class FoodFormAdmin(admin.ModelAdmin):
@@ -36,31 +41,24 @@ class FoodFormAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title"]
 
-@admin.register(NovelFoodVariant)
-class NovelFoodVariantAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['novel_food']
-    inlines = [FoodFormNFVariantInline, CompositionInline, ProposedUseInline, ProductionNovelFoodVariantInline]
-
-
-
 
 @admin.register(ParameterType)
 class ParameterTypeAdmin(admin.ModelAdmin):
     list_display = [
-        "parameter_type",
+        "title",
     ]
-    search_fields = ["parameter_type"]
+    search_fields = ["title"]
 
 
 @admin.register(Parameter)
 class ParameterAdmin(admin.ModelAdmin):
     list_display = [
-        "parameter_title",
-        "parameter_type",
-        "parameter_tax_node",
+        "title",
+        "type",
+        "tax_node",
     ]
     search_fields = ["title"]
-    list_filter = ["parameter_type"]
+    list_filter = ["type"]
 
 @admin.register(Composition)
 class CompositionAdmin(admin.ModelAdmin):
@@ -74,6 +72,11 @@ class CompositionAdmin(admin.ModelAdmin):
         "type",
         "footnote",
     ]
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 @admin.register(ProposedUseType)
 class ProposedUseTypeAdmin(admin.ModelAdmin):

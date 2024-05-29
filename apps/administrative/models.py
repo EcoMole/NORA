@@ -193,7 +193,6 @@ class Question(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        help_text="Dossier number",
         related_name="questions",
         db_column="id_dossier",
     )

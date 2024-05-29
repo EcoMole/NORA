@@ -2,13 +2,14 @@ from django.db import models
 from administrative.models import Opinion
 
 class Allergenicity(models.Model):
+    id_allergenicity = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
 
     def __str__(self) -> str:
         return self.title
     
     class Meta:
-        #db_table = "ALLERGENICITY"
+        db_table = "ALLERGENICITY"
         verbose_name = "Allergenicity"
         verbose_name_plural = "Allergenicity - options"
 
@@ -18,13 +19,13 @@ class AllergenicityNovelFood(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
 
     class Meta:
-        #db_table = "ALLERGENICITY_NOVEL_FOOD"
-        verbose_name = "Allergenicity assignment"
-        verbose_name_plural = "Allergenicity assignments"
+        db_table = "ALLERGENICITY_NOVEL_FOOD"
+        verbose_name = "Allergenicity Assignment"
+        verbose_name_plural = "Allergenicity Assignments"
 
 
 class NutritionalDisadvantage(models.Model):
-    #syn = models.ForeignKey("StudySyn", on_delete=models.CASCADE) #?
+    id_nutritional_disadvantage = models.AutoField(primary_key=True)
     outcome = models.CharField() #yesNo vocab
     explanation = models.CharField(max_length=2000, blank=True)
 
@@ -33,7 +34,7 @@ class NutritionalDisadvantage(models.Model):
 
     class Meta:
         db_table = "NUTRITIONAL_DISADVANTAGE"
-        verbose_name = "Nutritional disadvantage"
+        verbose_name = "Nutritional Disadvantage"
 
 
 class Category(models.Model):
@@ -46,22 +47,22 @@ class Category(models.Model):
 
     class Meta:
         db_table = "SUBTYPE"
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
+        verbose_name = "Novel Food Category"
+        verbose_name_plural = "NF Categories - options"
 
 
 class NovelFoodCategory(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-
     class Meta:
-        db_table = "STUDY_SUBTYPE"
-        verbose_name = "Novel food category"
-        verbose_name_plural = "Novel food categories"
+        db_table = "STUDY_SUB_TYPE"
+        verbose_name = "Novel Food Category"
+        verbose_name_plural = "Novel Food Categories"
 
 
 class FoodCategory(models.Model):
+    #id_food_category = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     definition = models.CharField(max_length=255)
 
@@ -71,7 +72,7 @@ class FoodCategory(models.Model):
     class Meta:
         #db_table = "FOOD_CATEGORY"
         verbose_name = "Food category"
-        verbose_name_plural = "Food categories"
+        verbose_name_plural = "Food categories - options"
 
 
 class SynonymType(models.Model):
@@ -83,12 +84,13 @@ class SynonymType(models.Model):
         return self.synonym_type
 
     class Meta:
-        db_table = "SYNONYM_TYPE" #todo rename to SYNONYM after db clean
+        db_table = "SYNONYM"
         verbose_name = "Synonym Type"
+        verbose_name_plural = "Synonym types - options"
     
 
 class NovelFoodSyn(models.Model):
-    synonym = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
+    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
     novel_food_synonym = models.CharField(max_length=255)
 
@@ -104,7 +106,20 @@ class Organism(models.Model):
 
     def __str__(self):
         return self.organism_node
+    
+    class Meta:
+        db_table = "ORGANISM"
+        verbose_name = "Organism"
+        verbose_name_plural = "Organisms"
 
+class OrganismSyn(models.Model):
+    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
+    organism = models.ForeignKey(Organism, on_delete=models.CASCADE)
+    synonym = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "ORG_SYN"
+        verbose_name = "Organism synonym"
 
 class NovelFoodOrganism(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
@@ -118,24 +133,24 @@ class NovelFoodOrganism(models.Model):
         verbose_name = "Organism Identity of Novel food"
 
 
-class NovelFoodComponent(models.Model):
+class NovelFoodChemical(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    component = models.ForeignKey("Component", on_delete=models.CASCADE)
+    chemical = models.ForeignKey("Chemical", on_delete=models.CASCADE)
 
     class Meta:
         db_table = "STUDY_COM"
         verbose_name = "Chemical identity of Novel food"
 
 # For possible future use only
-class ComponentType(models.Model):
-    id_component_type = models.AutoField(primary_key=True)
+class ChemicalType(models.Model): 
+    id_chemical_type = models.AutoField(primary_key=True, db_column='id_component_type')
     title = models.CharField(max_length=255)
     definition = models.CharField(max_length=2000)
 
     class Meta:
         db_table = "COM_TYPE"
-        verbose_name = "Component type"
-        verbose_name_plural = "Component types"
+        verbose_name = "Chemical type (future use)"
+        verbose_name_plural = "Chemical types (future use)"
 
 # For possible future use only
 class StructureReported(models.Model):
@@ -145,21 +160,30 @@ class StructureReported(models.Model):
 
     class Meta:
         db_table = "COM_STRUCTURE_SHOWN"
-        verbose_name = "Structure reported"
-        verbose_name_plural = "Structures reported"
+        verbose_name = "Structure reported (future use)"
+        verbose_name_plural = "Structures reported (future use)"
 
-class Component(models.Model):
-    id_component = models.AutoField(primary_key=True)
+class Chemical(models.Model):
+    id_chemical = models.AutoField(primary_key=True, db_column='id_component')
     catalogue_identity = models.CharField(max_length=255, db_column='ID_RNC_EFSA', blank=True) #vocab param
-    component_type = models.ForeignKey(ComponentType, on_delete=models.CASCADE, blank=True, null=True)
+    chemical_type = models.ForeignKey(ChemicalType, on_delete=models.CASCADE, blank=True, null=True, db_column='component_type')
     structure_reported = models.ForeignKey(StructureReported, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         db_table = "COMPONENT"
-        verbose_name = "Chemicals" #TODO rename the model
-        verbose_name_plural = "Chemicals" #TODO rename the model
+        verbose_name = "Chemicals"
+        verbose_name_plural = "Chemicals" 
 
     
+class ChemicalSyn(models.Model):
+    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
+    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
+    synonym = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "COM_SYN"
+        verbose_name = "Chemical synonym"
+
 class BackgroundExposureAssessment(models.Model):
     id_background_exposure_assessment = models.AutoField(primary_key=True)
     component_of_interest = models.CharField(max_length=255, blank=True) #vocab
@@ -167,22 +191,43 @@ class BackgroundExposureAssessment(models.Model):
 
     def __str__(self) -> str:
         return ''
+    
+    class Meta:
+        db_table = "BG_EXPO_ASSESSMENT"
+        verbose_name = "Background exposure assessment"
 
+class SubstanceOfConcernNovelFood(models.Model):
+    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
+    substance_of_concern = models.CharField(max_length=255) #vocab
+
+    class Meta:
+        db_table = "SUBSTANCE_OF_CONCERN_STUDY"
+        verbose_name = "Substance of concern"
+
+class GenotoxFinalOutcome(models.Model):
+    id_genotox_final_outcome = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255, blank=True)
+
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        db_table = "GENOTOX_FINAL_OUTCOME"
+        verbose_name = "Genotoxicity final outcome"
+        verbose_name_plural = "Genotoxicity final outcomes"
 
 class NovelFood(models.Model):
     id_study = models.AutoField(primary_key=True)
     opinion = models.ForeignKey(Opinion, on_delete=models.CASCADE, related_name="novel_food")
-    #TODO check relation
-    title = models.CharField(max_length=255, blank=False)
-    is_mutagenic = models.BooleanField(blank=True, null=True, verbose_name='mutagenic') #yesNo vocab
-
-    is_genotoxic = models.BooleanField(blank=True, null=True, verbose_name='genotoxic') #yesNo vocab
-
-    is_carcinogenic = models.BooleanField(blank=True, null=True, verbose_name='carcinogenic') #yesNo vocab
-
+    title = models.CharField(max_length=255, blank=False, verbose_name='NF name')
     nf_code = models.CharField(max_length=2000, verbose_name='NF Code')
 
+    is_mutagenic = models.BooleanField(blank=True, null=True, verbose_name='mutagenic') #yesNo vocab
+    genotox_final_outcome = models.ForeignKey(GenotoxFinalOutcome, on_delete=models.CASCADE, blank=True, null=True)
+    is_carcinogenic = models.BooleanField(blank=True, null=True, verbose_name='carcinogenic') #yesNo vocab
+
     tox_study_required = models.BooleanField(blank=True, null=True) #yesNo vocab
+    endocrine_disrupt_prop = models.BooleanField(blank=True, null=True, verbose_name='endocrine disrupt properties') #vocab
 
     protein_digestibility = models.BooleanField(blank=True, null=True) # vocab yesNo
     antinutritional_factors = models.BooleanField(blank=True, null=True) # vocab yesNo
@@ -194,10 +239,10 @@ class NovelFood(models.Model):
     food_matrices = models.BooleanField(blank=True, null=True, verbose_name='food matrices', help_text='Were food matrices provided?')  #yesNo vocab
     shelflife_value = models.FloatField(blank=True, null=True)
     shelflife_unit = models.CharField(blank=True, help_text='UNIT Catalogue') #UNIT vocab
-    #chybi instability concerns
+    instability_concerns = models.BooleanField(blank=True, null=True, verbose_name='instability concerns') #vocab yesNo
 
     rms_efsa = models.CharField(blank=True) #? what is this? vocab
-    endocrine_disrupt_prop = models.BooleanField(blank=True, null=True, verbose_name='endocrine disrupt properties') #vocab
+    
     outcome = models.CharField(blank=True) #yesNo vocab
     outcome_remarks = models.CharField(max_length=2000,blank=True)
 
@@ -209,5 +254,5 @@ class NovelFood(models.Model):
 
     class Meta:
         db_table = "STUDY"
-        verbose_name = "Novel food"
-        verbose_name_plural = "Novel foods"
+        verbose_name = "Novel Food"
+        verbose_name_plural = "Novel Foods"
