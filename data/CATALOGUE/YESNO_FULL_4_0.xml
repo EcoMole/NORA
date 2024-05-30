@@ -1,0 +1,268 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<message>
+  <catalogue>
+    <catalogueDesc>
+      <code>YESNO</code>
+      <name>YESNO</name>
+      <label>YESNO</label>
+      <scopeNote>Catalogue which contains result value</scopeNote>
+      <acceptNonStandardCodes>true</acceptNonStandardCodes>
+      <generateMissingCodes>false</generateMissingCodes>
+    </catalogueDesc>
+    <catalogueVersion>
+      <version>4.0</version>
+      <validFrom>2022-01-27T14:53:35</validFrom>
+      <status>PUBLISHED MAJOR</status>
+    </catalogueVersion>
+    <catalogueGroups>
+      <catalogueGroup>SSD2</catalogueGroup>
+    </catalogueGroups>
+    <catalogueHierarchies>
+      <hierarchy>
+        <hierarchyDesc>
+          <code>YNP</code>
+          <name>YNP</name>
+          <label>YNP</label>
+          <scopeNote>Hierarchy for FCM</scopeNote>
+          <hierarchyApplicability>base</hierarchyApplicability>
+          <hierarchyOrder>2</hierarchyOrder>
+        </hierarchyDesc>
+        <hierarchyVersion>
+          <version>4.0</version>
+          <lastUpdate>2022-01-27T14:53:35</lastUpdate>
+          <validFrom>2022-01-27T14:53:35</validFrom>
+          <status>APPROVED</status>
+        </hierarchyVersion>
+      </hierarchy>
+      <hierarchy>
+        <hierarchyDesc>
+          <code>zoo</code>
+          <name>zoo</name>
+          <label>zoo</label>
+          <scopeNote>domain for zoonoses without unknow</scopeNote>
+          <hierarchyApplicability>base</hierarchyApplicability>
+          <hierarchyOrder>1</hierarchyOrder>
+        </hierarchyDesc>
+        <hierarchyVersion>
+          <version>2.5</version>
+          <lastUpdate>2016-03-21T17:23:25</lastUpdate>
+          <validFrom>2016-03-21T17:23:25</validFrom>
+          <status>APPROVED</status>
+        </hierarchyVersion>
+      </hierarchy>
+      <hierarchy>
+        <hierarchyDesc>
+          <code>Extended</code>
+          <name>Extended</name>
+          <label>Extended</label>
+          <scopeNote>Hierarchy extended that contains term E (not included in the master one)</scopeNote>
+          <hierarchyApplicability>base</hierarchyApplicability>
+          <hierarchyOrder>1</hierarchyOrder>
+        </hierarchyDesc>
+        <hierarchyVersion>
+          <version>2.4</version>
+          <lastUpdate>2016-02-01T11:04:42</lastUpdate>
+          <validFrom>2016-02-01T11:04:42</validFrom>
+          <status>APPROVED</status>
+        </hierarchyVersion>
+      </hierarchy>
+    </catalogueHierarchies>
+    <catalogueTerms>
+      <term>
+        <termDesc>
+          <termCode>Y</termCode>
+          <termExtendedName>Yes</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>YESNO</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>4</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>Extended</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>zoo</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>YNP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>N</termCode>
+          <termExtendedName>No</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>YESNO</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>Extended</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>zoo</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>YNP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>U</termCode>
+          <termExtendedName>Unknown</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>YESNO</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>Extended</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>3</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>E</termCode>
+          <termExtendedName>Most accurate result value estimate</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>YESNO</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>3</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>Extended</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>4</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>P</termCode>
+          <termShortName>Partially</termShortName>
+          <termExtendedName>Partially</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>3.1</version>
+          <lastUpdate>2022-01-21T18:05:07</lastUpdate>
+          <validFrom>2022-01-21T18:05:07</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>YESNO</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>5</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>YNP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>3</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+    </catalogueTerms>
+  </catalogue>
+
+  <releaseNotes catalogueCode="YESNO">
+    <description>Catalogue YESNO 4.0 has been published</description>
+    <versionDate>2022-01-27T14:53:35.347</versionDate>
+    <versionHistory>
+      <version internalVersion="3.1.1">
+        <internalVersionNote>Major update, January 2022</internalVersionNote>
+        <operationsDetail operationName="Update Catalogue" operationDate="2022-01-27T14:08:51.653">
+          <operationInfo>The catalogue YESNO has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="reserveMajor" operationDate="2022-01-27T14:08:51.668">
+          <operationInfo/>
+        </operationsDetail>
+        <operationsDetail operationName="Update Catalogue" operationDate="2022-01-27T14:51:38.375">
+          <operationInfo>The catalogue YESNO has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="insertNewHierarchy" operationDate="2022-01-27T14:51:38.385">
+          <operationInfo>The hierarchy YNP has been added to catalogue YESNO</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="updateHierarchyAssignment" operationDate="2022-01-27T14:51:38.578">
+          <operationInfo>Term P assigned to hierarchy YESNO</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2022-01-27T14:51:38.844">
+          <operationInfo>Term N assigned to hierarchy YNP</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2022-01-27T14:51:38.899">
+          <operationInfo>Term P assigned to hierarchy YNP</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2022-01-27T14:51:38.959">
+          <operationInfo>Term Y assigned to hierarchy YNP</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="Update Catalogue" operationDate="2022-01-27T14:52:23.435">
+          <operationInfo>The catalogue YESNO has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="unreserve" operationDate="2022-01-27T14:52:23.445">
+          <operationInfo/>
+        </operationsDetail>
+      </version>
+    </versionHistory>
+  </releaseNotes>
+</message>

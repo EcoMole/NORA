@@ -10,16 +10,17 @@ class Opinion(models.Model):
         ("partially_negative", "Partially Negative"),
     ]
     id_op = models.AutoField(primary_key=True)
-    # id_op_type = models.ForeignKey(
-    #     "taxonomies.TaxonomyNode",
-    #     null=True,
-    #     blank=True,
-    #     related_name="opinions",
-    #     verbose_name="Document type",
-    #     on_delete=models.SET_NULL,
-    #     limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
-    # taxonomy__code='REF_TYPE', code='').get_descendants()))
-    # )
+    id_op_type = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        related_name="opinions",
+        verbose_name="Document type",
+        on_delete=models.SET_NULL,
+        limit_choices_to={"taxonomy__code": "REF_TYPE"}
+        #   limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
+        # taxonomy__code='REF_TYPE', code='').get_descendants()))
+    )
     title = models.CharField(
         max_length=255,
         unique=True,
@@ -160,20 +161,14 @@ class Mandate(models.Model):
         db_column="id_mandate_parent",
     )
 
-    # regulation = models.ForeignKey(
-    #     "taxonomies.TaxonomyNode",
-    #     blank=True,
-    #     null=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name="mandate_types",
-    #     db_column='id_regulation'
-    # )
-    # TODO: remove this field after the extraction is complete
-    helper_regulation = models.CharField(
-        max_length=255,
+    regulation = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
         blank=True,
         null=True,
-        help_text="this field will be removed after the extraction is complete",
+        on_delete=models.SET_NULL,
+        related_name="mandate_types",
+        db_column="id_regulation",
+        limit_choices_to={"taxonomy__code": "LEGREF"},
     )
 
     def __str__(self) -> str:

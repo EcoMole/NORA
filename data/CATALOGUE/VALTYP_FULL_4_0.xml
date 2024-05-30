@@ -1,0 +1,400 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<message>
+  <catalogue>
+    <catalogueDesc>
+      <code>VALTYP</code>
+      <name>VALTYP</name>
+      <label>VALTYP</label>
+      <scopeNote>Catalogue which contains value type</scopeNote>
+      <acceptNonStandardCodes>true</acceptNonStandardCodes>
+      <generateMissingCodes>false</generateMissingCodes>
+    </catalogueDesc>
+    <catalogueVersion>
+      <version>4.0</version>
+      <validFrom>2020-01-31T13:49:13</validFrom>
+      <status>PUBLISHED MAJOR</status>
+    </catalogueVersion>
+    <catalogueGroups>
+      <catalogueGroup>SSD2</catalogueGroup>
+    </catalogueGroups>
+    <catalogueHierarchies>
+      <hierarchy>
+        <hierarchyDesc>
+          <code>pestValtyp</code>
+          <name>pestValtyp</name>
+          <label>pestValtyp</label>
+          <scopeNote>Hierarchy for pesticides</scopeNote>
+          <hierarchyApplicability>base</hierarchyApplicability>
+          <hierarchyOrder>1</hierarchyOrder>
+        </hierarchyDesc>
+        <hierarchyVersion>
+          <version>2.4</version>
+          <lastUpdate>2017-04-25T18:26:13</lastUpdate>
+          <validFrom>2016-05-13T14:18:25</validFrom>
+          <status>APPROVED</status>
+        </hierarchyVersion>
+      </hierarchy>
+      <hierarchy>
+        <hierarchyDesc>
+          <code>simple</code>
+          <name>simple</name>
+          <label>simple</label>
+          <scopeNote>Hierarchy with quantitative and qualitative terms, use for Pest in Plant data collection</scopeNote>
+          <hierarchyApplicability>base</hierarchyApplicability>
+          <hierarchyOrder>2</hierarchyOrder>
+        </hierarchyDesc>
+        <hierarchyVersion>
+          <version>2.6</version>
+          <lastUpdate>2017-10-13T12:01:00</lastUpdate>
+          <validFrom>2017-10-13T12:01:00</validFrom>
+          <status>APPROVED</status>
+        </hierarchyVersion>
+      </hierarchy>
+      <hierarchy>
+        <hierarchyDesc>
+          <code>chemValTyp</code>
+          <name>chemValTyp</name>
+          <label>chemValTyp</label>
+          <scopeNote>Hierarchy for ChemMon data collection</scopeNote>
+          <hierarchyApplicability>base</hierarchyApplicability>
+          <hierarchyOrder>3</hierarchyOrder>
+        </hierarchyDesc>
+        <hierarchyVersion>
+          <version>4.0</version>
+          <lastUpdate>2020-01-31T13:49:13</lastUpdate>
+          <validFrom>2020-01-31T13:49:13</validFrom>
+          <status>APPROVED</status>
+        </hierarchyVersion>
+      </hierarchy>
+    </catalogueHierarchies>
+    <catalogueTerms>
+      <term>
+        <termDesc>
+          <termCode>CCA</termCode>
+          <termExtendedName>Value below CCalpha ( less than CCα)</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.3</version>
+          <lastUpdate>2016-05-13T14:18:25</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>chemValTyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>3</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>4</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CCB</termCode>
+          <termExtendedName>Value below CCbeta ( less than CCβ)</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.3</version>
+          <lastUpdate>2016-05-13T14:18:25</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>chemValTyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>4</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>5</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>LOD</termCode>
+          <termExtendedName>Non Detected Value ( less than LOD)</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.3</version>
+          <lastUpdate>2016-05-13T14:18:25</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>pestValtyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>4</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>chemValTyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>5</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>6</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>LOQ</termCode>
+          <termExtendedName>Non Quantified Value ( less than LOQ)</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.3</version>
+          <lastUpdate>2016-05-13T14:18:25</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>pestValtyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>chemValTyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>6</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>7</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>VAL</termCode>
+          <termExtendedName>Numerical Value</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>pestValtyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>3</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>chemValTyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>7</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>8</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>BIN</termCode>
+          <termExtendedName>Qualitative Value (Binary)</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>pestValtyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>chemValTyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>AWR</termCode>
+          <termExtendedName>Value above the upper limit of the working range</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>chemValTyp</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>BWR</termCode>
+          <termExtendedName>Value below the lower limit of the working range</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>3</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>QLT</termCode>
+          <termExtendedName>Qualitative</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.6</version>
+          <lastUpdate>2017-10-13T12:01:00</lastUpdate>
+          <validFrom>2017-10-13T12:01:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>simple</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>9</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>QNT</termCode>
+          <termExtendedName>Quantitative</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>2.6</version>
+          <lastUpdate>2017-10-13T12:01:00</lastUpdate>
+          <validFrom>2017-10-13T12:01:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>simple</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+          <hierarchyAssignment>
+            <hierarchyCode>VALTYP</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>10</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+    </catalogueTerms>
+  </catalogue>
+
+  <releaseNotes catalogueCode="VALTYP">
+    <description>Catalogue VALTYP 4.0 has been published</description>
+    <versionDate>2020-01-31T13:49:13.357</versionDate>
+    <versionHistory>
+      <version internalVersion="3.0.1">
+        <internalVersionNote>Annual update, January 2020</internalVersionNote>
+        <operationsDetail operationName="Update Catalogue" operationDate="2020-01-31T13:28:36.420">
+          <operationInfo>The catalogue VALTYP has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="reserveMajor" operationDate="2020-01-31T13:28:36.433">
+          <operationInfo/>
+        </operationsDetail>
+        <operationsDetail operationName="Update Catalogue" operationDate="2020-01-31T13:48:58.741">
+          <operationInfo>The catalogue VALTYP has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="insertNewHierarchy" operationDate="2020-01-31T13:48:58.761">
+          <operationInfo>The hierarchy chemValTyp has been added to catalogue VALTYP</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2020-01-31T13:48:58.797">
+          <operationInfo>Term AWR assigned to hierarchy chemValTyp</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2020-01-31T13:48:58.862">
+          <operationInfo>Term BIN assigned to hierarchy chemValTyp</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2020-01-31T13:48:58.877">
+          <operationInfo>Term CCA assigned to hierarchy chemValTyp</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2020-01-31T13:48:58.893">
+          <operationInfo>Term CCB assigned to hierarchy chemValTyp</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2020-01-31T13:48:58.907">
+          <operationInfo>Term LOD assigned to hierarchy chemValTyp</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2020-01-31T13:48:58.922">
+          <operationInfo>Term LOQ assigned to hierarchy chemValTyp</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="assignTermToHierarchy" operationDate="2020-01-31T13:48:58.936">
+          <operationInfo>Term VAL assigned to hierarchy chemValTyp</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="Update Catalogue" operationDate="2020-01-31T13:49:05.599">
+          <operationInfo>The catalogue VALTYP has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="unreserve" operationDate="2020-01-31T13:49:05.608">
+          <operationInfo/>
+        </operationsDetail>
+      </version>
+    </versionHistory>
+  </releaseNotes>
+</message>

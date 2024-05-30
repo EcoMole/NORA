@@ -1,43 +1,58 @@
 from django.contrib import admin
 
 from .models import (
+    Composition,
+    FoodForm,
+    FoodFormNovelFoodVariant,
     NovelFoodVariant,
     Parameter,
     ParameterType,
-    FoodFormNovelFoodVariant,
-    Composition,
-    FoodForm,
+    ProductionNovelFoodVariant,
     ProposedUse,
     ProposedUseType,
-    ProductionNovelFoodVariant,
+    RiskAssessmentRedFlags,
     RiskAssessmentRedFlagsNFVariant,
-    RiskAssessmentRedFlags
 )
 
+
 class FoodFormNFVariantInline(admin.TabularInline):
-    model = FoodFormNovelFoodVariant #TODO change the name of the model
-    extra = 1 
+    model = FoodFormNovelFoodVariant  # TODO change the name of the model
+    extra = 1
+
 
 class CompositionInline(admin.TabularInline):
     model = Composition
     extra = 1
+    autocomplete_fields = ["unit", "qualifier"]
+
 
 class ProposedUseInline(admin.TabularInline):
     model = ProposedUse
     extra = 1
+    autocomplete_fields = ["population"]
+
 
 class ProductionNovelFoodVariantInline(admin.TabularInline):
     model = ProductionNovelFoodVariant
     extra = 1
+    autocomplete_fields = ["process"]
+
 
 class RiskAssessmentRedFlagsNFVariantInline(admin.TabularInline):
     model = RiskAssessmentRedFlagsNFVariant
     extra = 1
 
+
 @admin.register(NovelFoodVariant)
 class NovelFoodVariantAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['novel_food']
-    inlines = [FoodFormNFVariantInline, ProposedUseInline, CompositionInline, ProductionNovelFoodVariantInline, RiskAssessmentRedFlagsNFVariantInline]
+    autocomplete_fields = ["novel_food"]
+    inlines = [
+        FoodFormNFVariantInline,
+        ProposedUseInline,
+        CompositionInline,
+        ProductionNovelFoodVariantInline,
+        RiskAssessmentRedFlagsNFVariantInline,
+    ]
 
 
 @admin.register(FoodForm)
@@ -61,10 +76,12 @@ class ParameterAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "type",
-        "tax_node",
+        "param_tax_node",
     ]
     search_fields = ["title"]
     list_filter = ["type"]
+    autocomplete_fields = ["param_tax_node"]
+
 
 @admin.register(Composition)
 class CompositionAdmin(admin.ModelAdmin):
@@ -78,17 +95,20 @@ class CompositionAdmin(admin.ModelAdmin):
         "type",
         "footnote",
     ]
+
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
 
+
 @admin.register(ProposedUseType)
 class ProposedUseTypeAdmin(admin.ModelAdmin):
     list_display = [
         "title",
     ]
+
 
 @admin.register(RiskAssessmentRedFlags)
 class RiskAssessmentRedFlagsAdmin(admin.ModelAdmin):

@@ -43,6 +43,7 @@ class QuestionInline(admin.TabularInline):
     model = Question
     extra = 1
 
+
 @admin.register(Opinion)
 class OpinionAdmin(admin.ModelAdmin):
     list_display = [
@@ -54,6 +55,7 @@ class OpinionAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title", "doi"]
     list_filter = ["outcome", "publication_date"]
+    autocomplete_fields = ["id_op_type"]
     inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline]
 
 
@@ -80,6 +82,7 @@ class ApplicantAdmin(admin.ModelAdmin):
 class MandateAdmin(admin.ModelAdmin):
     list_display = ["title", "mandate_parent"]
     search_fields = ["title"]
+    autocomplete_fields = ["regulation"]
 
 
 @admin.register(Question)
@@ -87,7 +90,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ["question", "dossier", "mandate"]
     search_fields = ["question"]
     list_filter = ["dossier", "mandate"]
-    #inlines = [DossierInline]
+    # inlines = [DossierInline]
 
 
 @admin.register(ScientificOfficer)

@@ -1,0 +1,1386 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<message>
+  <catalogue>
+    <catalogueDesc>
+      <code>TEST_TYPE</code>
+      <name>TEST_TYPE</name>
+      <label>TEST_TYPE</label>
+      <scopeNote>Toxicology tests using OECD harmonised template terms</scopeNote>
+      <termCodeMask>CHD###TT</termCodeMask>
+      <acceptNonStandardCodes>true</acceptNonStandardCodes>
+      <generateMissingCodes>true</generateMissingCodes>
+    </catalogueDesc>
+    <catalogueVersion>
+      <version>5.0</version>
+      <validFrom>2022-01-28T17:10:13</validFrom>
+      <status>PUBLISHED MAJOR</status>
+    </catalogueVersion>
+    <catalogueTerms>
+      <term>
+        <termDesc>
+          <termCode>CHD057TT</termCode>
+          <termExtendedName>Mammalian erythrocyte micronucleus test</termExtendedName>
+        </termDesc>
+        <termVersion>
+          <version>1.3</version>
+          <lastUpdate>2015-03-31T11:32:01</lastUpdate>
+          <validFrom>2015-03-31T11:32:01</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>57</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD058TT</termCode>
+          <termShortName>Not in the Compendium v10</termShortName>
+          <termExtendedName>Not in the Compendium v10</termExtendedName>
+          <termScopeNote>Not in the Compendium v10 - only to be used for records created from original botanical compendium</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.5</version>
+          <lastUpdate>2015-06-16T15:25:22</lastUpdate>
+          <validFrom>2015-06-16T15:25:22</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>58</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD059TT</termCode>
+          <termShortName>unscheduled DNA synthesis</termShortName>
+          <termExtendedName>unscheduled DNA synthesis</termExtendedName>
+          <termScopeNote>unscheduled DNA synthesis (OECD 2443)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.6</version>
+          <lastUpdate>2015-06-17T12:10:21</lastUpdate>
+          <validFrom>2015-06-17T12:10:21</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>59</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD060TT</termCode>
+          <termShortName>case report</termShortName>
+          <termExtendedName>case report</termExtendedName>
+          <termScopeNote>narrative in the professional literature that identifies a single incident and discusses pertinent factors related to the patient or animal</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.7</version>
+          <lastUpdate>2015-07-29T11:02:41</lastUpdate>
+          <validFrom>2015-07-29T11:02:41</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>60</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD051TT</termCode>
+          <termShortName>micronucleus assay</termShortName>
+          <termExtendedName>micronucleus assay</termExtendedName>
+          <termScopeNote>micronucleus assay (OECD 2108)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>2.0</version>
+          <lastUpdate>2015-07-31T17:18:29</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>50</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD001TT</termCode>
+          <termShortName>acute oral toxicity</termShortName>
+          <termExtendedName>acute oral toxicity</termExtendedName>
+          <termScopeNote>acute oral toxicity (OECD 1703)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>56</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD002TT</termCode>
+          <termShortName>acute toxic class method</termShortName>
+          <termExtendedName>acute toxic class method</termExtendedName>
+          <termScopeNote>acute toxic class method (OECD 51)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>1</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD003TT</termCode>
+          <termShortName>avoidance (repellency)</termShortName>
+          <termExtendedName>avoidance (repellency)</termExtendedName>
+          <termScopeNote>avoidance (repellency) (OEDC 1745)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>2</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD005TT</termCode>
+          <termShortName>combined repeated dose and carcinogenicity</termShortName>
+          <termExtendedName>combined repeated dose and carcinogenicity</termExtendedName>
+          <termScopeNote>combined repeated dose and carcinogenicity (OECD 1807)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>4</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD006TT</termCode>
+          <termShortName>combined repeated dose and reproduction / developmental screening</termShortName>
+          <termExtendedName>combined repeated dose and reproduction / developmental screening</termExtendedName>
+          <termScopeNote>combined repeated dose and reproduction / developmental screening (OECD 4842)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>5</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD007TT</termCode>
+          <termShortName>fixed dose procedure</termShortName>
+          <termExtendedName>fixed dose procedure</termExtendedName>
+          <termScopeNote>fixed dose procedure (OECD 770)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>6</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD008TT</termCode>
+          <termShortName>other</termShortName>
+          <termExtendedName>other</termExtendedName>
+          <termScopeNote>other (OECD 1243)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>7</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD009TT</termCode>
+          <termShortName>reproduction toxicity</termShortName>
+          <termExtendedName>reproduction toxicity</termExtendedName>
+          <termScopeNote>reproduction toxicity (OECD 2316)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>8</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD010TT</termCode>
+          <termShortName>short term dietary toxicity</termShortName>
+          <termExtendedName>short term dietary toxicity</termExtendedName>
+          <termScopeNote>short term dietary toxicity (OECD 2357)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>9</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD011TT</termCode>
+          <termShortName>standard acute method</termShortName>
+          <termExtendedName>standard acute method</termExtendedName>
+          <termScopeNote>standard acute method (OECD 1578)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>10</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD012TT</termCode>
+          <termShortName>subacute</termShortName>
+          <termExtendedName>subacute</termExtendedName>
+          <termScopeNote>subacute (OECD 2398)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>11</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD013TT</termCode>
+          <termShortName>subchronic</termShortName>
+          <termExtendedName>subchronic</termExtendedName>
+          <termScopeNote>subchronic (OECD 2399)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>12</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD014TT</termCode>
+          <termShortName>up and down procedure</termShortName>
+          <termExtendedName>up and down procedure</termExtendedName>
+          <termScopeNote>up and down procedure (OECD 1653)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>13</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD015TT</termCode>
+          <termShortName>not reported</termShortName>
+          <termExtendedName>not reported</termExtendedName>
+          <termScopeNote>not reported</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>14</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD016TT</termCode>
+          <termShortName>acute toxicity</termShortName>
+          <termExtendedName>acute toxicity</termExtendedName>
+          <termScopeNote>acute toxicity (OECD 5676)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>15</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD017TT</termCode>
+          <termShortName>short-term toxicity</termShortName>
+          <termExtendedName>short-term toxicity</termExtendedName>
+          <termScopeNote>short-term toxicity (OECD 2358)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>16</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD018TT</termCode>
+          <termShortName>long-term toxicity</termShortName>
+          <termExtendedName>long-term toxicity</termExtendedName>
+          <termScopeNote>long-term toxicity (OECD 2044)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>17</order>
+            <reportable>false</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD019TT</termCode>
+          <termShortName>cohort study (prospective)</termShortName>
+          <termExtendedName>cohort study (prospective)</termExtendedName>
+          <termScopeNote>cohort study (prospective) (OECD 1805)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>18</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD020TT</termCode>
+          <termShortName>cohort study (retrospective)</termShortName>
+          <termExtendedName>cohort study (retrospective)</termExtendedName>
+          <termScopeNote>cohort study (retrospective) (OECD 1806)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>19</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD021TT</termCode>
+          <termShortName>case control study (prospective)</termShortName>
+          <termExtendedName>case control study (prospective)</termExtendedName>
+          <termScopeNote>case control study (prospective)(OECD 1785)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>20</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD022TT</termCode>
+          <termShortName>case control study (retrospective)</termShortName>
+          <termExtendedName>case control study (retrospective)</termExtendedName>
+          <termScopeNote>case control study (retrospective) (OECD 1786)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>21</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD023TT</termCode>
+          <termShortName>cross sectional study</termShortName>
+          <termExtendedName>cross sectional study</termExtendedName>
+          <termScopeNote>cross sectional study (OECD 1824)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>22</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD024TT</termCode>
+          <termShortName>longitudinal study</termShortName>
+          <termExtendedName>longitudinal study</termExtendedName>
+          <termScopeNote>longitudinal study (OECD 2045)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>23</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD025TT</termCode>
+          <termShortName>ecological study</termShortName>
+          <termExtendedName>ecological study</termExtendedName>
+          <termScopeNote>ecological study (OECD 1867)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>24</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD026TT</termCode>
+          <termShortName>bacterial forward mutation assay</termShortName>
+          <termExtendedName>bacterial forward mutation assay</termExtendedName>
+          <termScopeNote>bacterial forward mutation assay (OECD 135)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>25</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD027TT</termCode>
+          <termShortName>bacterial gene mutation assay</termShortName>
+          <termExtendedName>bacterial gene mutation assay</termExtendedName>
+          <termScopeNote>bacterial gene mutation assay (OECD 136)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>26</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD028TT</termCode>
+          <termShortName>bacterial reverse mutation assay</termShortName>
+          <termExtendedName>bacterial reverse mutation assay</termExtendedName>
+          <termScopeNote>bacterial reverse mutation assay (OECD 137)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>27</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD029TT</termCode>
+          <termShortName>in vitro gene mutation assay in fungi</termShortName>
+          <termExtendedName>in vitro gene mutation assay in fungi</termExtendedName>
+          <termScopeNote>in vitro gene mutation assay in fungi (OECD 898)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>28</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD030TT</termCode>
+          <termShortName>mammalian cell gene mutation assay</termShortName>
+          <termExtendedName>mammalian cell gene mutation assay</termExtendedName>
+          <termScopeNote>mammalian cell gene mutation assay (OECD 1049)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>29</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD031TT</termCode>
+          <termShortName>transgenic BigBlue® rat cell assay for detection of gene mutation in vitro</termShortName>
+          <termExtendedName>transgenic BigBlue® rat cell assay for detection of gene mutation in vitro</termExtendedName>
+          <termScopeNote>transgenic BigBlue® rat cell assay for detection of gene mutation in vitro (OECD 1625)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>30</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD032TT</termCode>
+          <termShortName>in vitro mammalian chromosome aberration test</termShortName>
+          <termExtendedName>in vitro mammalian chromosome aberration test</termExtendedName>
+          <termScopeNote>in vitro mammalian chromosome aberration test (OECD 901)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>31</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD033TT</termCode>
+          <termShortName>in vitro mammalian cell micronucleus test</termShortName>
+          <termExtendedName>in vitro mammalian cell micronucleus test</termExtendedName>
+          <termScopeNote>in vitro mammalian cell micronucleus test (OECD 899)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>32</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD034TT</termCode>
+          <termShortName>Bacillus subtilis recombination assay</termShortName>
+          <termExtendedName>Bacillus subtilis recombination assay</termExtendedName>
+          <termScopeNote>Bacillus subtilis recombination assay (OECD 130)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>33</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD035TT</termCode>
+          <termShortName>SOS/umu test</termShortName>
+          <termExtendedName>SOS/umu test</termExtendedName>
+          <termScopeNote>SOS/umu test (OECD 318)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>34</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD036TT</termCode>
+          <termShortName>yeast cytogenetic assay</termShortName>
+          <termExtendedName>yeast cytogenetic assay</termExtendedName>
+          <termScopeNote>yeast cytogenetic assay (OECD 1669)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>35</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD037TT</termCode>
+          <termShortName>mitotic recombination in Saccharomyces cerevisiae</termShortName>
+          <termExtendedName>mitotic recombination in Saccharomyces cerevisiae</termExtendedName>
+          <termScopeNote>mitotic recombination in Saccharomyces cerevisiae (OECD 1080)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>36</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD038TT</termCode>
+          <termShortName>DNA damage and repair assay, unscheduled DNA synthesis in mammalian cells in vitro</termShortName>
+          <termExtendedName>DNA damage and repair assay, unscheduled DNA synthesis in mammalian cells in vitro</termExtendedName>
+          <termScopeNote>DNA damage and repair assay, unscheduled DNA synthesis in mammalian cells in vitro (OECD 317)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>37</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD039TT</termCode>
+          <termShortName>sister chromatid exchange assay in mammalian cells</termShortName>
+          <termExtendedName>sister chromatid exchange assay in mammalian cells</termExtendedName>
+          <termScopeNote>sister chromatid exchange assay in mammalian cells (1556)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>38</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD040TT</termCode>
+          <termShortName>single cell gel/comet assay in mammalian cells for detection of DNA damage</termShortName>
+          <termExtendedName>single cell gel/comet assay in mammalian cells for detection of DNA damage</termExtendedName>
+          <termScopeNote>single cell gel/comet assay in mammalian cells for detection of DNA damage (OECD 1555)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>39</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD041TT</termCode>
+          <termShortName>in vitro mammalian cell transformation assay</termShortName>
+          <termExtendedName>in vitro mammalian cell transformation assay</termExtendedName>
+          <termScopeNote>in vitro mammalian cell transformation assay (OECD 900)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>40</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD042TT</termCode>
+          <termShortName>Drosophila SLRL test</termShortName>
+          <termExtendedName>Drosophila SLRL test</termExtendedName>
+          <termScopeNote>Drosophila SLRL test (OECD 348)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>41</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD043TT</termCode>
+          <termShortName>endogenous gene animal assay</termShortName>
+          <termExtendedName>endogenous gene animal assay</termExtendedName>
+          <termScopeNote>endogenous gene animal assay (OECD 1875)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>42</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD044TT</termCode>
+          <termShortName>mouse spot test</termShortName>
+          <termExtendedName>mouse spot test</termExtendedName>
+          <termScopeNote>mouse spot test (OECD 2138)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>43</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD045TT</termCode>
+          <termShortName>somatic mutation assay in Drosophila</termShortName>
+          <termExtendedName>somatic mutation assay in Drosophila</termExtendedName>
+          <termScopeNote>somatic mutation assay in Drosophila (OECD 2383)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>44</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD046TT</termCode>
+          <termShortName>transgenic animal mutagenicity assay</termShortName>
+          <termExtendedName>transgenic animal mutagenicity assay</termExtendedName>
+          <termScopeNote>transgenic animal mutagenicity assay (OECD 2431)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>45</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD047TT</termCode>
+          <termShortName>chromosome aberration assay</termShortName>
+          <termExtendedName>chromosome aberration assay</termExtendedName>
+          <termScopeNote>chromosome aberration assay (OECD 1796)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>46</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD048TT</termCode>
+          <termShortName>dominant lethal assay</termShortName>
+          <termExtendedName>dominant lethal assay</termExtendedName>
+          <termScopeNote>dominant lethal assay (OECD 1863)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>47</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD049TT</termCode>
+          <termShortName>heritable translocation assay</termShortName>
+          <termExtendedName>heritable translocation assay</termExtendedName>
+          <termScopeNote>heritable translocation assay (1966)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>48</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD050TT</termCode>
+          <termShortName>mammalian germ cell cytogenetic assay</termShortName>
+          <termExtendedName>mammalian germ cell cytogenetic assay</termExtendedName>
+          <termScopeNote>mammalian germ cell cytogenetic assay (OECD 2055)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>49</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD052TT</termCode>
+          <termShortName>inhibition of DNA-Synthesis</termShortName>
+          <termExtendedName>inhibition of DNA-Synthesis</termExtendedName>
+          <termScopeNote>inhibition of DNA-Synthesis (OECD 2001)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>51</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD053TT</termCode>
+          <termShortName>TA 1535 pSK1002</termShortName>
+          <termExtendedName>TA 1535 pSK1002</termExtendedName>
+          <termScopeNote>TA 1535 pSK1002 - S. typhimurium</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <validTo>2014-10-30T00:00:00</validTo>
+          <status>DEPRECATED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>52</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD054TT</termCode>
+          <termShortName>WP2</termShortName>
+          <termExtendedName>WP2</termExtendedName>
+          <termScopeNote>WP2 - E. coli</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <validTo>2014-10-30T00:00:00</validTo>
+          <status>DEPRECATED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>53</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD055TT</termCode>
+          <termShortName>WP2 uvr A</termShortName>
+          <termExtendedName>WP2 uvr A</termExtendedName>
+          <termScopeNote>WP2 uvr A - E. coli</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <validTo>2014-10-30T00:00:00</validTo>
+          <status>DEPRECATED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>54</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD056TT</termCode>
+          <termShortName>study with volunteers</termShortName>
+          <termExtendedName>study with volunteers</termExtendedName>
+          <termScopeNote>study with volunteers (OECD 2397)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>1.2</version>
+          <lastUpdate>2014-10-30T00:00:00</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>55</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD004TT</termCode>
+          <termShortName>chronic/long term toxicity</termShortName>
+          <termExtendedName>chronic/long term toxicity</termExtendedName>
+          <termScopeNote>chronic (OECD 1797)</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>4.1</version>
+          <lastUpdate>2021-03-03T15:26:14</lastUpdate>
+          <validFrom>2014-10-30T00:00:00</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>3</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+      <term>
+        <termDesc>
+          <termCode>CHD061TT</termCode>
+          <termShortName>in vitro</termShortName>
+          <termExtendedName>in vitro</termExtendedName>
+          <termScopeNote>in vitro</termScopeNote>
+        </termDesc>
+        <termVersion>
+          <version>2.1</version>
+          <lastUpdate>2016-07-21T11:09:15</lastUpdate>
+          <validFrom>2016-07-21T11:09:15</validFrom>
+          <status>APPROVED</status>
+        </termVersion>
+        <hierarchyAssignments>
+          <hierarchyAssignment>
+            <hierarchyCode>TEST_TYPE</hierarchyCode>
+            <parentCode>root</parentCode>
+            <order>61</order>
+            <reportable>true</reportable>
+          </hierarchyAssignment>
+        </hierarchyAssignments>
+      </term>
+    </catalogueTerms>
+  </catalogue>
+
+  <releaseNotes catalogueCode="TEST_TYPE">
+    <description>Catalogue TEST_TYPE 5.0 has been published</description>
+    <versionDate>2022-01-28T17:10:13.616</versionDate>
+    <versionHistory>
+      <version internalVersion="4.1.1">
+        <internalVersionNote>Major Update January 2022</internalVersionNote>
+        <operationsDetail operationName="Update Catalogue" operationDate="2022-01-28T17:08:41.843">
+          <operationInfo>The catalogue TEST_TYPE has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="reserveMajor" operationDate="2022-01-28T17:08:41.853">
+          <operationInfo/>
+        </operationsDetail>
+        <operationsDetail operationName="Update Catalogue" operationDate="2022-01-28T17:09:52.533">
+          <operationInfo>The catalogue TEST_TYPE has been updated</operationInfo>
+        </operationsDetail>
+        <operationsDetail operationName="unreserve" operationDate="2022-01-28T17:09:52.544">
+          <operationInfo/>
+        </operationsDetail>
+      </version>
+    </versionHistory>
+  </releaseNotes>
+</message>

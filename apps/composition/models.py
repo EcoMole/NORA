@@ -1,6 +1,4 @@
-from typing import Any
 from django.db import models
-
 from novel_food.models import NovelFood
 
 
@@ -16,11 +14,12 @@ class ParameterType(models.Model):
 
     def __str__(self) -> str:
         return self.title
-    
+
     class Meta:
         db_table = "PARAMETER_TYPE"
         verbose_name = "Parameter Type"
         verbose_name_plural = "Parameter Types - options"
+
 
 class Parameter(models.Model):
     id_parameter = models.AutoField(primary_key=True)
@@ -38,18 +37,21 @@ class Parameter(models.Model):
         on_delete=models.SET_NULL,
     )
 
-    tax_node = models.CharField(
-        max_length=255,
-        blank=True,
+    param_tax_node = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
         null=True,
-        help_text="Tax node VOCABULARY",
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="param_tax_node_parameters",
+        db_column="id_param_tax_node",
+        limit_choices_to={"taxonomy__code": "PARAM"},
     )
 
     def __str__(self) -> str:
         if self.type is None:
             return self.title
-        return f'{self.title} ({self.type})'
-    
+        return f"{self.title} ({self.type})"
+
     class Meta:
         db_table = "PARAMETER"
         verbose_name = "Parameter"
@@ -58,38 +60,51 @@ class Parameter(models.Model):
 
 class NovelFoodVariant(models.Model):
     id_novel_food_variant = models.AutoField(primary_key=True)
-    novel_food = models.ForeignKey(NovelFood, blank=False, null=False, on_delete=models.CASCADE, db_column='study_id') 
+    novel_food = models.ForeignKey(
+        NovelFood,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="study_id",
+    )
 
     # django specific fields to get the models well tied together
-    risk_assessment_red_flags = models.ManyToManyField("RiskAssessmentRedFlags", through="RiskAssessmentRedFlagsNFVariant")
+    risk_assessment_red_flags = models.ManyToManyField(
+        "RiskAssessmentRedFlags", through="RiskAssessmentRedFlagsNFVariant"
+    )
 
     def __str__(self) -> str:
-        return f'variant for {self.novel_food.title}'
-    
+        return f"variant for {self.novel_food.title}"
+
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"
         verbose_name = "Novel Food Variant"
         verbose_name_plural = " Novel Food Variants"
-    
+
 
 class ProductionNovelFoodVariant(models.Model):
     """through table for Novel Food Variant and Production(taxonomy node)"""
-    id_novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
 
-    id_node = models.CharField( # vocab
-        max_length=255,
-        blank=False,
-        null=False,
-        verbose_name='production process step',
-        help_text="Taxonomy node",
+    id_novel_food_variant = models.ForeignKey(
+        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
+    )
+
+    process = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="process_production_novel_food_variants",
+        limit_choices_to={"taxonomy__code": "MTX"},
     )
 
     def __str__(self):
-        return ''
-    
+        return ""
+
     class Meta:
         verbose_name = "Production Process"
         verbose_name_plural = "Production Process"
+
 
 class FoodForm(models.Model):
     id_food_form = models.AutoField(primary_key=True)
@@ -102,7 +117,7 @@ class FoodForm(models.Model):
 
     def __str__(self) -> str:
         return self.title
-    
+
     class Meta:
         db_table = "FOOD_FORM"
         verbose_name = "Food Form"
@@ -111,8 +126,13 @@ class FoodForm(models.Model):
 
 class FoodFormNovelFoodVariant(models.Model):
     """through table for Novel Food Variant and Food form"""
-    food_form = models.ForeignKey(FoodForm, blank=False, null=False, on_delete=models.CASCADE)
-    novel_food_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
+
+    food_form = models.ForeignKey(
+        FoodForm, blank=False, null=False, on_delete=models.CASCADE
+    )
+    novel_food_variant = models.ForeignKey(
+        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
+    )
 
     def __str__(self) -> str:
         return f"{self.food_form} - {self.novel_food_variant}"
@@ -123,11 +143,26 @@ class FoodFormNovelFoodVariant(models.Model):
 
 class Composition(models.Model):
     id_composition = models.AutoField(primary_key=True)
+    novel_food_variant = models.ForeignKey(
+        NovelFoodVariant,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+    )
     parameter = models.ForeignKey(
         Parameter,
         blank=False,
         null=False,
         on_delete=models.PROTECT,
+    )
+    qualifier = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="qualifier_compositions",
+        db_column="id_qualifier",
+        limit_choices_to={"taxonomy__code": "QUALIFIER"},
     )
     value = models.DecimalField(
         max_digits=10,
@@ -143,29 +178,19 @@ class Composition(models.Model):
         null=True,
         help_text="Optional upper range value of the parameter",
     )
-    unit = models.CharField(
-        max_length=255,
+    unit = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
         blank=True,
-        help_text="Unit VOCABULARY",
+        on_delete=models.SET_NULL,
+        related_name="unit_compositions",
+        db_column="id_unit",
+        limit_choices_to={"taxonomy__code": "UNIT"},
     )
-    novel_food_variant = models.ForeignKey(
-        NovelFoodVariant,
-        blank=False,
-        null=False,
-        on_delete=models.CASCADE,
-    )
-
-    qualifier = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="Qualifier VOCABULARY",
-    )
-
     TYPE_CHOICES = (
         ("specification", "Specification"),
         ("characterisation", "Characterisation"),
         ("other", "Other"),
-
     )
 
     type = models.CharField(
@@ -176,13 +201,10 @@ class Composition(models.Model):
         help_text="Specification/Composition/Other",
     )
 
-    footnote = models.CharField(
-        max_length=2000,
-        blank=True
-    )
+    footnote = models.CharField(max_length=2000, blank=True)
 
     def __str__(self):
-        return ''
+        return ""
 
 
 class ProposedUseType(models.Model):
@@ -205,7 +227,7 @@ class ProposedUseType(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         db_table = "PROPOSED_USE_TYPE"
         verbose_name = "Proposed Use Type"
@@ -222,39 +244,43 @@ class ProposedUse(models.Model):
     )
     use_type = models.ForeignKey(
         ProposedUseType,
-        blank=False,
-        null=False,
-        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
 
-    # TODO add age
-    """ id_age = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False,
-        help_text="Age VOCABULARY",
-    ) """
+    population = models.ForeignKey(
+        "taxonomies.Population",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="population_proposed_uses",
+        db_column="id_age",
+    )
 
     def __str__(self):
-        return ''
+        return f"{self.nf_variant} - {self.use_type} - {self.population}"
 
-class BackgroundExposureAssessment(models.Model): # move to Nutrition
-    id_back_expo_assessment = models.AutoField(primary_key=True)
-    compound_of_interest = models.CharField(
-        max_length=2000,
-        blank=False,
-        null=False,
+
+class BackgroundExposureAssessment(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_bg_exp_assessment")
+    novel_food = models.ForeignKey(
+        NovelFood,
+        on_delete=models.CASCADE,
+        related_name="novel_food_bg_expo_assessments",
+        db_column="id_study",
+    )
+    comp_of_interest = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="comp_of_interest_bg_expo_assessments",
+        db_column="id_comp_of_interest",
+        limit_choices_to={"taxonomy__code": "PARAM"},
         help_text="Compound of interest",
     )
 
-    proposed_use = models.ForeignKey(
-        ProposedUse,
-        blank=False,
-        null=False,
-        on_delete=models.CASCADE,
-    )
-
-    #yn = models.ForeignKey("taxonomies.YesNo", blank=False, null=False, on_delete=models.CASCADE)
 
 class RiskAssessmentRedFlags(models.Model):
     id_risk_assessment_red_flags = models.AutoField(primary_key=True)
@@ -267,12 +293,17 @@ class RiskAssessmentRedFlags(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+
 class RiskAssessmentRedFlagsNFVariant(models.Model):
     id_risk_assessment_red_flags_novel_food = models.AutoField(primary_key=True)
-    nf_variant = models.ForeignKey(NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE)
-    risk_assessment = models.ForeignKey(RiskAssessmentRedFlags, blank=False, null=False, on_delete=models.CASCADE)
+    nf_variant = models.ForeignKey(
+        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
+    )
+    risk_assessment = models.ForeignKey(
+        RiskAssessmentRedFlags, blank=False, null=False, on_delete=models.CASCADE
+    )
 
     class Meta:
-        verbose_name = 'Risk assessment red flag'
-        verbose_name_plural = 'Risk assessment red flags'
+        verbose_name = "Risk assessment red flag"
+        verbose_name_plural = "Risk assessment red flags"

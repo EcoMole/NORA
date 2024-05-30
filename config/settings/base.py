@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "administrative.apps.AdministrativeConfig",
     "composition.apps.CompositionConfig",
     "novel_food.apps.NovelFoodConfig",
+    "taxonomies.apps.TaxonomiesConfig",
     # Django's built-in apps
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -70,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Third-party apps
+    "mptt",
     "rest_framework",
     "rest_framework.authtoken",
     "dj_rest_auth",
