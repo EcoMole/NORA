@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from .models import (
     Applicant,
-    Dossier,
     Mandate,
     OPAuthor,
     Opinion,
@@ -29,11 +28,6 @@ class OPScientificOfficerInline(admin.TabularInline):
     extra = 1
 
 
-class DossierInline(admin.TabularInline):
-    model = Dossier
-    extra = 1
-
-
 class MandateInline(admin.TabularInline):
     model = Mandate
     extra = 1
@@ -52,11 +46,20 @@ class OpinionAdmin(admin.ModelAdmin):
         "publication_date",
         "adoption_date",
         "outcome",
+        "pdf_link",
     ]
     search_fields = ["title", "doi"]
     list_filter = ["outcome", "publication_date"]
     autocomplete_fields = ["id_op_type"]
     inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline]
+
+    def pdf_link(self, obj):
+        if obj.pdf:
+            return obj.pdf.url
+        return "No PDF"
+
+    pdf_link.allow_tags = True
+    pdf_link.short_description = "PDF File"
 
 
 @admin.register(Panel)
@@ -69,7 +72,6 @@ class PanelAdmin(admin.ModelAdmin):
 class ApplicantAdmin(admin.ModelAdmin):
     list_display = ["title"]
     search_fields = ["title"]
-    inlines = [DossierInline]
 
     def get_model_perms(self, request):
         """
@@ -87,10 +89,9 @@ class MandateAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ["question", "dossier", "mandate"]
+    list_display = ["question", "mandate"]
     search_fields = ["question"]
-    list_filter = ["dossier", "mandate"]
-    # inlines = [DossierInline]
+    list_filter = ["mandate"]
 
 
 @admin.register(ScientificOfficer)

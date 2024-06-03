@@ -45,6 +45,9 @@ class Opinion(models.Model):
         null=True,
         help_text="Outcome of the opinion",
     )
+    # upload_to='pdfs/' parameter in the FileField specifies
+    # the subdirectory within the MEDIA_ROOT where the files will be saved
+    pdf = models.FileField(upload_to="pdfs/", null=True, blank=True)
 
     def __str__(self) -> str:
         return self.title
@@ -114,24 +117,6 @@ class Applicant(models.Model):
         verbose_name_plural = "Applicants - options"
 
 
-class Dossier(models.Model):
-    id_dossier = models.AutoField(primary_key=True)
-    applicant = models.ForeignKey(
-        Applicant,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="dossiers",
-        db_column="id_applicant",
-    )
-
-    def __str__(self) -> str:
-        return self.number
-
-    class Meta:
-        db_table = "DOSSIER"
-
-
 class Mandate(models.Model):
     id_mandate = models.AutoField(primary_key=True)
 
@@ -189,13 +174,14 @@ class Question(models.Model):
         null=False,
         help_text="Question number",
     )
-    dossier = models.OneToOneField(
-        Dossier,
+
+    applicant = models.ForeignKey(
+        Applicant,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name="questions",
-        db_column="id_dossier",
+        related_name="applicant_questions",
+        db_column="id_applicant",
     )
     mandate = models.ForeignKey(
         Mandate,
