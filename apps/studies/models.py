@@ -6,6 +6,9 @@ class Assessment(models.Model):
     title = models.CharField(max_length=255, db_column="assessment")
     definition = models.CharField(max_length=255)
 
+    def __str__(self) -> str:
+        return self.title
+
     class Meta:
         db_table = "ASSESSMENT"
 
@@ -72,7 +75,7 @@ class EndpointStudy(models.Model):
         db_column="id_sex",
         related_name="sex_endpointstudies",
     )
-    exp_duration = models.FloatField()
+    exp_duration = models.FloatField(null=True, blank=True)
     duration_unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -91,8 +94,19 @@ class EndpointStudy(models.Model):
         related_name="study_source_endpointstudies",
         db_column="id_study_source",
     )
-    remarks = models.CharField(max_length=2000)
-    test_material = models.CharField(max_length=255)
+    remarks = models.CharField(max_length=2000, null=True, blank=True)
+    test_material = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self) -> str:
+        res = self.novel_food.title
+        if self.testing_method:
+            res += " - " + self.testing_method.name
+        return res
+
+    class Meta:
+        db_table = "ENDPOINTSTUDY"
+        verbose_name = "Endpointstudy"
+        verbose_name_plural = "Endpointstudies"
 
 
 class EndEndstudyOutcome(models.Model):
@@ -105,7 +119,7 @@ class EndEndstudyOutcome(models.Model):
         db_column="id_qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
     )
-    lovalue = models.FloatField()
+    lovalue = models.FloatField(null=True, blank=True)
     unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -140,6 +154,19 @@ class EndEndstudyOutcome(models.Model):
         db_column="id_endpoint",
         related_name="endpoint_end_endstudy_outcomes",
     )
+
+    def __str__(self) -> str:
+        res = self.endpointstudy.novel_food.title
+        if self.testing_method:
+            res += self.testing_method.name
+        if self.endpoint:
+            res += " - " + self.endpoint.name
+        return res
+
+    class Meta:
+        db_table = "END_ENDSTUDY_HAZARD"
+        verbose_name = "Endpoint Endpointstudy Outcome"
+        verbose_name_plural = "Endpoint Endpointstudy Outcomes"
 
 
 class Outcome(models.Model):
@@ -194,6 +221,16 @@ class Outcome(models.Model):
         related_name="toxicity_concern_outcomes",
     )
 
+    def __str__(self) -> str:
+        res = ""
+        if self.assessment_type:
+            res += self.assessment_type.name
+        if self.value:
+            res += " - " + self.value
+        if self.unit:
+            res += " - " + self.unit.name
+        return res
+
     class Meta:
         db_table = "HAZARD"
 
@@ -201,6 +238,9 @@ class Outcome(models.Model):
 class StudyType(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_type")
     title = models.CharField(max_length=255, unique=True)
+
+    def __str__(self) -> str:
+        return self.title
 
     class Meta:
         db_table = "STUDY_TYPE"
@@ -220,6 +260,14 @@ class OutcomePopulation(models.Model):
         db_column="id_age",
     )
 
+    def __str__(self) -> str:
+        res = ""
+        if self.outcome:
+            res += self.outcome.assessment_type.name
+        if self.population:
+            res += " - " + self.population.name
+        return res
+
     class Meta:
         db_table = "HAZARD_AGE"
         constraints = [
@@ -232,6 +280,9 @@ class OutcomePopulation(models.Model):
 class StudySource(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_type")
     title = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return self.title
 
     class Meta:
         db_table = "STUDY_SOURCE"
@@ -276,11 +327,21 @@ class ADME(models.Model):
         related_name="study_source_admes",
         db_column="id_study_source",
     )
-    remarks = models.TextField(max_length=2000, db_column="study_comment")
-    test_material = models.CharField(max_length=255)
+    remarks = models.TextField(
+        max_length=2000, db_column="study_comment", null=True, blank=True
+    )
+    test_material = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self) -> str:
+        res = self.novel_food.title
+        if self.testing_method:
+            res += " - " + self.testing_method.name
+        return res
 
     class Meta:
         db_table = "PKTK"
+        verbose_name = "ADME"
+        verbose_name_plural = "ADMEs"
 
 
 class ADMEStudyType(models.Model):
@@ -290,8 +351,16 @@ class ADMEStudyType(models.Model):
         StudyType, db_column="id_study_type", on_delete=models.CASCADE
     )
 
+    def __str__(self) -> str:
+        res = self.adme.novel_food.title
+        if self.adme.testing_method:
+            res += " - " + self.adme.testing_method.name
+        return res
+
     class Meta:
         db_table = "PKTK_STUDY_TYPE"
+        verbose_name = "ADME Study Type"
+        verbose_name_plural = "ADME Study Types"
 
 
 class Genotox(models.Model):
@@ -318,7 +387,7 @@ class Genotox(models.Model):
         db_column="id_guideline_qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
     )
-    genotox_genotox_guideline = models.ForeignKey(
+    genotox_guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
@@ -355,9 +424,40 @@ class Genotox(models.Model):
         help_text="for ex.: acute oral toxicity (OECD phrase ID 1703), or "
         "subchronic (OECD phrase ID 2399)",
     )
-    test_material = models.CharField(max_length=255)
+    test_material = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self) -> str:
+        res = self.novel_food.title
+        if self.testing_method:
+            res += " - " + self.testing_method.name
+        return res
+
+    class Meta:
+        db_table = "GENOTOX"
+        verbose_name = "Genotox"
+        verbose_name_plural = "Genotoxes"
 
 
 class GenotoxOutcome(models.Model):
     id_tox = models.ForeignKey(Genotox, on_delete=models.CASCADE)
     hazard = models.ForeignKey(Outcome, on_delete=models.CASCADE)
+
+
+class SpecificToxicityStudy(models.Model):
+    id_tox = models.ForeignKey(EndpointStudy, on_delete=models.CASCADE)
+    id_spec_tox = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="id_spec_tox_specific_toxicity_studies",
+        limit_choices_to={"taxonomy__code": "TOXICITY"},
+    )
+
+    def __str__(self) -> str:
+        res = self.id_tox.novel_food.title
+        if self.id_tox.testing_method:
+            res += " - " + self.id_tox.testing_method.name
+        if self.id_spec_tox:
+            res += " - " + self.id_spec_tox.name
+        return res

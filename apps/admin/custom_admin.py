@@ -19,10 +19,11 @@ class CustomAdminSite(AdminSite):
         # order they are registered in INSTALLED_APPS
         # The order of the apps is set here (use the app_label name):
         app_order = [
-            "process",
-            "novelfood",
-            "identity",
-            "study",
+            "administrative",
+            "novel_food",
+            "composition",
+            "studies",
+            "taxonomies",
             "auth",  # Authentication and Authorization
             "core",
             "account",  # Accounts
