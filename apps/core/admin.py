@@ -5,7 +5,7 @@ from import_export import fields
 from import_export.admin import ExportActionMixin
 from import_export.resources import ModelResource
 
-from .models import User
+from .models import Contribution, User
 
 
 class UserResource(ModelResource):
@@ -70,3 +70,10 @@ class TheUserAdmin(ExportActionMixin, UserAdmin):
 
     email_verified.boolean = True
     email_verified.admin_order_field = "_email_verified"
+
+
+@admin.register(Contribution)
+class ContributionAdmin(admin.ModelAdmin):
+    list_display = ("id_op", "id_user", "status", "remarks")
+    list_filter = ("status", "id_user")
+    search_fields = ("id_op__description", "remarks")

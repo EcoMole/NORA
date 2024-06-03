@@ -54,3 +54,38 @@ class User(CreatedUpdatedMixin, AbstractUser):
                 return email_address.verified
             except EmailAddress.DoesNotExist:
                 return False
+
+
+class Contribution(models.Model):
+    STATUS_CHOICES = [
+        ("assigned_not_started", "assigned not started"),
+        ("working_on", "working on"),
+        ("currently_working_on", "currently working on"),
+        ("has_blocker", "has blocker"),
+        ("finished", "finished"),
+    ]
+
+    id_op = models.ForeignKey(
+        "administrative.Opinion",
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+    )
+    id_user = models.ForeignKey(
+        User,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+    )
+    status = models.CharField(
+        max_length=255,
+        choices=STATUS_CHOICES,
+        blank=True,
+        null=True,
+        help_text="Status of the contribution",
+    )
+    remarks = models.CharField(
+        max_length=2000,
+        blank=True,
+        null=True,
+    )
