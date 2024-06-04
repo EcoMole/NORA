@@ -180,13 +180,11 @@ class NovelFoodOrganism(models.Model):
         related_name="is_gmo_novel_foods",
         limit_choices_to={"taxonomy__code": "YESNO"},
     )
-    variant = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
+    variant = models.CharField(
+        max_length=255,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name="variant_novel_foods",
-        limit_choices_to={"taxonomy__code": "STRAIN"},
+        null=True,
+        help_text="STRAIN for microorganisms / VARIETY for plants / SUBSPECIES for animals",
     )
 
     class Meta:

@@ -36,7 +36,7 @@ class NovelFoodChemicalInline(admin.TabularInline):
 
 class NovelFoodOrganismInline(admin.TabularInline):
     model = NovelFoodOrganism
-    autocomplete_fields = ["org_part", "variant"]
+    autocomplete_fields = ["org_part"]
     extra = 1
 
 
