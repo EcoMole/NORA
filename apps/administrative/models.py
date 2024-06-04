@@ -4,30 +4,23 @@ from django.db import models
 
 
 class Opinion(models.Model):
-    OWNER_CHOICES = [
-        ("efsa nda", "EFSA NDA"),
-        ("efsa praper", "EFSA PRAPeR"),
-        ("efsa cef", "EFSA CEF"),
-        ("efsa ans", "EFSA ANS"),
-        ("efsa feedap", "EFSA FEEDAP"),
-        ("efsa contam", "EFSA CONTAM"),
-    ]
     OUTCOME_CHOICES = [
         ("positive", "Positive"),
         ("negative", "Negative"),
         ("partially_negative", "Partially Negative"),
     ]
     id_op = models.AutoField(primary_key=True)
-    # id_op_type = models.ForeignKey(
-    #     "taxonomies.TaxonomyNode",
-    #     null=True,
-    #     blank=True,
-    #     related_name="opinions",
-    #     verbose_name="Document type",
-    #     on_delete=models.SET_NULL,
-    #     limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
-    # taxonomy__code='REF_TYPE', code='').get_descendants()))
-    # )
+    id_op_type = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        related_name="opinions",
+        verbose_name="Document type",
+        on_delete=models.SET_NULL,
+        limit_choices_to={"taxonomy__code": "REF_TYPE"}
+        #   limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
+        # taxonomy__code='REF_TYPE', code='').get_descendants()))
+    )
     title = models.CharField(
         max_length=255,
         unique=True,
@@ -39,13 +32,6 @@ class Opinion(models.Model):
         max_length=255, blank=True, null=True, help_text="Digital Object Identifier"
     )
     url = models.URLField(blank=True, null=True, help_text="URL to the opinion")
-    owner = models.CharField(
-        max_length=255,
-        choices=OWNER_CHOICES,
-        blank=True,
-        null=True,
-        help_text="Owner of the opinion",
-    )
     publication_date = models.DateField(
         blank=True, null=True, help_text="Date of publication"
     )
@@ -82,6 +68,8 @@ class Panel(models.Model):
 
     class Meta:
         db_table = "PANEL"
+        verbose_name = "Panel"
+        verbose_name_plural = "Panels - options"
 
 
 class OPAuthor(models.Model):
@@ -114,7 +102,7 @@ class Applicant(models.Model):
         unique=True,
         blank=False,
         null=False,
-        help_text="Title of the applicant",
+        help_text="Name of the applicant",
     )
 
     def __str__(self) -> str:
@@ -122,13 +110,12 @@ class Applicant(models.Model):
 
     class Meta:
         db_table = "APPLICANT"
+        verbose_name = "Applicant"
+        verbose_name_plural = "Applicants - options"
 
 
 class Dossier(models.Model):
     id_dossier = models.AutoField(primary_key=True)
-    number = models.CharField(
-        max_length=255, unique=True, blank=False, null=False, help_text="Dossier number"
-    )
     applicant = models.ForeignKey(
         Applicant,
         blank=True,
@@ -145,50 +132,9 @@ class Dossier(models.Model):
         db_table = "DOSSIER"
 
 
-class MandateType(models.Model):
-    id_mandate_type = models.AutoField(primary_key=True)
-    mandate_type_parent = models.ForeignKey(
-        "self",
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="mandate_types",
-        db_column="id_mandate_type_parent",
-    )
-    title = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False,
-        help_text="Title of the mandate type",
-    )
-    # regulation = models.ForeignKey(
-    #     "taxonomies.TaxonomyNode",
-    #     blank=True,
-    #     null=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name="mandate_types",
-    #     db_column='id_regulation'
-    # )
-    # TODO: remove this field after the extraction is complete
-    helper_regulation = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        help_text="this field will be removed after the extraction is complete",
-    )
-
-    def __str__(self) -> str:
-        return (
-            f"{self.mandate_type_parent} - {self.title}"
-            if self.mandate_type_parent
-            else self.title
-        )
-
-    class Meta:
-        db_table = "MANDATE_TYPE"
-
-
 class Mandate(models.Model):
+    id_mandate = models.AutoField(primary_key=True)
+
     TYPE_CHOICES = [
         ("novel_food", "Novel food"),
         ("new_dossier", "New dossier"),
@@ -197,24 +143,41 @@ class Mandate(models.Model):
         ("traditional_food", "Traditional food"),
         ("nutrient_source", "Nutrient source"),
     ]
-    id_mandate = models.AutoField(primary_key=True)
-    number = models.CharField(
-        max_length=255, unique=True, blank=False, null=False, help_text="Mandate number"
+
+    title = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="Title of the mandate type",
+        choices=TYPE_CHOICES,
     )
-    mandate_type = models.ForeignKey(
-        MandateType,
+
+    mandate_parent = models.ForeignKey(
+        "self",
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
         related_name="mandates",
-        db_column="id_mandate_type",
+        db_column="id_mandate_parent",
+    )
+
+    regulation = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="mandate_types",
+        db_column="id_regulation",
+        limit_choices_to={"taxonomy__code": "LEGREF"},
     )
 
     def __str__(self) -> str:
-        return self.number
+        return self.title
 
     class Meta:
         db_table = "MANDATE"
+        verbose_name = "Mandate"
+        verbose_name_plural = "Mandates - options"
 
 
 class Question(models.Model):
@@ -231,7 +194,6 @@ class Question(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        help_text="Dossier number",
         related_name="questions",
         db_column="id_dossier",
     )
@@ -249,6 +211,8 @@ class Question(models.Model):
 
     class Meta:
         db_table = "QUESTION"
+        verbose_name = "Question"
+        verbose_name_plural = "Questions"
 
 
 class OPQuestion(models.Model):
@@ -285,6 +249,8 @@ class ScientificOfficer(models.Model):
 
     class Meta:
         db_table = "SCI_OFFICER"
+        verbose_name = "Scientific Officer"
+        verbose_name_plural = "Scientific Officers - options"
 
 
 class OPScientificOfficer(models.Model):

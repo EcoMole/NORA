@@ -4,7 +4,6 @@ from .models import (
     Applicant,
     Dossier,
     Mandate,
-    MandateType,
     OPAuthor,
     Opinion,
     OPQuestion,
@@ -50,13 +49,13 @@ class OpinionAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "doi",
-        "owner",
         "publication_date",
         "adoption_date",
         "outcome",
     ]
     search_fields = ["title", "doi"]
-    list_filter = ["owner", "outcome", "publication_date"]
+    list_filter = ["outcome", "publication_date"]
+    autocomplete_fields = ["id_op_type"]
     inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline]
 
 
@@ -72,27 +71,18 @@ class ApplicantAdmin(admin.ModelAdmin):
     search_fields = ["title"]
     inlines = [DossierInline]
 
-
-@admin.register(MandateType)
-class MandateTypeAdmin(admin.ModelAdmin):
-    list_display = ["title", "mandate_type_parent"]
-    search_fields = ["title"]
-    inlines = [MandateInline]
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(Mandate)
 class MandateAdmin(admin.ModelAdmin):
-    list_display = ["number", "mandate_type"]
-    search_fields = ["number"]
-    list_filter = ["mandate_type"]
-
-
-@admin.register(Dossier)
-class DossierAdmin(admin.ModelAdmin):
-    list_display = ["number", "applicant"]
-    search_fields = ["number"]
-    list_filter = ["applicant"]
-    inlines = [QuestionInline]
+    list_display = ["title", "mandate_parent"]
+    search_fields = ["title"]
+    autocomplete_fields = ["regulation"]
 
 
 @admin.register(Question)
@@ -100,6 +90,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ["question", "dossier", "mandate"]
     search_fields = ["question"]
     list_filter = ["dossier", "mandate"]
+    # inlines = [DossierInline]
 
 
 @admin.register(ScientificOfficer)

@@ -19,8 +19,11 @@ celery = "^5.3.4"
 django-celery-results = "^2.5.1"
 django-celery-beat = "^2.5.0"
 django-import-export = "^3.3.1"
+django-model-utils = "^3.2.0"
+django-mptt = "^0.13.4"
 colorlog = "^6.7.0"
 pandas = "^2.2.2"
+lxml = "^4.6.1"
 
 [tool.poetry.group.prod.dependencies]
 gunicorn = "^22.0.0"
