@@ -19,13 +19,13 @@ class CustomAdminSite(AdminSite):
         # order they are registered in INSTALLED_APPS
         # The order of the apps is set here (use the app_label name):
         app_order = [
+            "core",
             "administrative",
             "novel_food",
             "composition",
             "studies",
             "taxonomies",
             "auth",  # Authentication and Authorization
-            "core",
             "account",  # Accounts
             "django_celery_beat",  # Periodic Tasks
             "django_celery_results",  # Celery Results

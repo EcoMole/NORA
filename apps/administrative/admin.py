@@ -1,3 +1,4 @@
+from core.models import Contribution
 from django.contrib import admin
 
 from .models import (
@@ -38,6 +39,11 @@ class QuestionInline(admin.TabularInline):
     extra = 1
 
 
+class ContributionInline(admin.TabularInline):
+    model = Contribution
+    extra = 1
+
+
 @admin.register(Opinion)
 class OpinionAdmin(admin.ModelAdmin):
     list_display = [
@@ -51,7 +57,12 @@ class OpinionAdmin(admin.ModelAdmin):
     search_fields = ["title", "doi"]
     list_filter = ["outcome", "publication_date"]
     autocomplete_fields = ["id_op_type"]
-    inlines = [OPAuthorInline, OPQuestionInline, OPScientificOfficerInline]
+    inlines = [
+        ContributionInline,
+        OPAuthorInline,
+        OPQuestionInline,
+        OPScientificOfficerInline,
+    ]
 
     def pdf_link(self, obj):
         if obj.pdf:

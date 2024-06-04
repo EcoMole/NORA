@@ -74,6 +74,6 @@ class TheUserAdmin(ExportActionMixin, UserAdmin):
 
 @admin.register(Contribution)
 class ContributionAdmin(admin.ModelAdmin):
-    list_display = ("id_op", "id_user", "status", "remarks")
-    list_filter = ("status", "id_user")
-    search_fields = ("id_op__description", "remarks")
+    list_display = ("opinion", "user", "status", "remarks")
+    list_filter = ("status", "user")
+    search_fields = ("opinion__title", "remarks")

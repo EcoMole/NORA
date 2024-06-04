@@ -61,27 +61,22 @@ class Contribution(models.Model):
         ("assigned_not_started", "assigned not started"),
         ("working_on", "working on"),
         ("currently_working_on", "currently working on"),
-        ("has_blocker", "has blocker"),
+        ("paused", "paused"),
         ("finished", "finished"),
     ]
-
-    id_op = models.ForeignKey(
+    opinion = models.ForeignKey(
         "administrative.Opinion",
-        blank=False,
-        null=False,
         on_delete=models.CASCADE,
+        db_column="id_op",
     )
-    id_user = models.ForeignKey(
+    user = models.ForeignKey(
         User,
-        blank=False,
-        null=False,
+        db_column="id_user",
         on_delete=models.CASCADE,
     )
     status = models.CharField(
         max_length=255,
         choices=STATUS_CHOICES,
-        blank=True,
-        null=True,
         help_text="Status of the contribution",
     )
     remarks = models.CharField(
@@ -89,3 +84,13 @@ class Contribution(models.Model):
         blank=True,
         null=True,
     )
+
+    class Meta:
+        db_table = "CONTRIBUTION"
+        verbose_name = "Contribution"
+        verbose_name_plural = "Contributions"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["opinion", "user"], name="unique_opinion_user"
+            ),
+        ]
