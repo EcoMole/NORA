@@ -4,8 +4,8 @@ from .models import (
     ADME,
     ADMEStudyType,
     Assessment,
-    EndEndstudyOutcome,
-    EndpointStudy,
+    Endpoint,
+    Endpointstudy,
     Genotox,
     GenotoxOutcome,
     Outcome,
@@ -18,14 +18,14 @@ from .models import (
 # Inline Admin Classes for managing relationships directly from the main model's admin interface
 
 
-class EndpointStudyInline(admin.TabularInline):
-    model = EndpointStudy
+class EndpointstudyInline(admin.TabularInline):
+    model = Endpointstudy
     extra = 1
     autocomplete_fields = ["novel_food", "testing_method", "test_type"]
 
 
-class EndEndstudyOutcomeInline(admin.TabularInline):
-    model = EndEndstudyOutcome
+class EndpointInline(admin.TabularInline):
+    model = Endpoint
     extra = 1
     autocomplete_fields = ["qualifier", "unit", "sex"]
 
@@ -34,6 +34,12 @@ class OutcomeInline(admin.TabularInline):
     model = Outcome
     extra = 1
     autocomplete_fields = ["assessment_type", "risk_qualifier", "unit"]
+
+
+class GenotoxOutcomeInline(admin.TabularInline):
+    model = GenotoxOutcome
+    extra = 1
+    autocomplete_fields = ["outcome"]
 
 
 class OutcomePopulationInline(admin.TabularInline):
@@ -57,8 +63,8 @@ class SpecificToxicityStudyInline(admin.TabularInline):
 # Main model admin classes
 
 
-@admin.register(EndpointStudy)
-class EndpointStudyAdmin(admin.ModelAdmin):
+@admin.register(Endpointstudy)
+class EndpointstudyAdmin(admin.ModelAdmin):
     list_display = ["novel_food", "testing_method", "test_type", "species", "sex"]
     search_fields = ["novel_food__title", "testing_method__description"]
     autocomplete_fields = [
@@ -68,11 +74,11 @@ class EndpointStudyAdmin(admin.ModelAdmin):
         "species",
         "sex",
     ]
-    inlines = [EndEndstudyOutcomeInline, SpecificToxicityStudyInline]
+    inlines = [EndpointInline, SpecificToxicityStudyInline]
 
 
-@admin.register(EndEndstudyOutcome)
-class EndEndstudyOutcomeAdmin(admin.ModelAdmin):
+@admin.register(Endpoint)
+class EndpointAdmin(admin.ModelAdmin):
     list_display = ["endpointstudy", "qualifier", "lovalue", "unit", "sex"]
     autocomplete_fields = ["endpointstudy", "qualifier", "unit", "sex"]
 
@@ -88,12 +94,19 @@ class GenotoxAdmin(admin.ModelAdmin):
         "test_type",
         "genotox_guideline",
     ]
+    inlines = [GenotoxOutcomeInline]
 
 
 @admin.register(GenotoxOutcome)
 class GenotoxOutcomeAdmin(admin.ModelAdmin):
-    list_display = ["id_tox", "hazard"]
-    autocomplete_fields = ["id_tox", "hazard"]
+    list_display = ["genotox", "outcome"]
+    search_fields = ["outcome"]
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(ADME)
@@ -109,9 +122,37 @@ class ADMEAdmin(admin.ModelAdmin):
     inlines = [ADMEStudyTypeInline]
 
 
+@admin.register(StudyType)
+class StudyTypeAdmin(admin.ModelAdmin):
+    search_fields = ["title"]
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+@admin.register(StudySource)
+class StudySourceAdmin(admin.ModelAdmin):
+    search_fields = ["title"]
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
 @admin.register(Outcome)
 class OutcomeAdmin(admin.ModelAdmin):
-    list_display = ["assessment", "risk_qualifier", "value", "unit", "safety_factor"]
+    list_display = [
+        "assessment_type",
+        "risk_qualifier",
+        "value",
+        "unit",
+        "safety_factor",
+    ]
     search_fields = ["assessment__title", "risk_qualifier__description", "value"]
     autocomplete_fields = ["assessment", "assessment_type", "risk_qualifier", "unit"]
     inlines = [OutcomePopulationInline]
@@ -121,39 +162,10 @@ class OutcomeAdmin(admin.ModelAdmin):
 class AssessmentAdmin(admin.ModelAdmin):
     list_display = ["title", "definition"]
     search_fields = ["title"]
-    inlines = [OutcomeInline]
+    fields = ["title", "definition"]
 
-
-@admin.register(StudyType)
-class StudyTypeAdmin(admin.ModelAdmin):
-    list_display = ["title"]
-    search_fields = ["title"]
-
-
-@admin.register(StudySource)
-class StudySourceAdmin(admin.ModelAdmin):
-    list_display = ["title"]
-
-
-@admin.register(ADMEStudyType)
-class ADMEStudyTypeAdmin(admin.ModelAdmin):
-    list_display = ["adme", "study_type"]
-    search_fields = ["adme__novel_food__title", "study_type__title"]
-    autocomplete_fields = ["adme", "study_type"]
-
-
-@admin.register(OutcomePopulation)
-class OutcomePopulationAdmin(admin.ModelAdmin):
-    list_display = ["outcome", "population"]
-    search_fields = ["outcome__assessment__title", "population__description"]
-    autocomplete_fields = ["outcome", "population"]
-
-
-@admin.register(SpecificToxicityStudy)
-class SpecificToxicityStudyAdmin(admin.ModelAdmin):
-    list_display = ["id_tox", "id_spec_tox"]
-    autocomplete_fields = [
-        "id_tox",
-        "id_spec_tox",
-    ]  # Enables autocomplete for foreign key fields
-    search_fields = ["id_tox__novel_food__title", "id_spec_tox__description"]
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}

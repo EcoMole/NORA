@@ -46,6 +46,13 @@ class HasEmailVerified(admin.SimpleListFilter):
             return queryset.filter(_email_verified=False)
 
 
+@admin.register(Contribution)
+class ContributionAdmin(admin.ModelAdmin):
+    list_display = ("opinion", "user", "status", "remarks")
+    list_filter = ("status", "user")
+    search_fields = ("opinion__title", "remarks")
+
+
 @admin.register(models.User)
 class TheUserAdmin(ExportActionMixin, UserAdmin):
     list_display = [
@@ -70,10 +77,3 @@ class TheUserAdmin(ExportActionMixin, UserAdmin):
 
     email_verified.boolean = True
     email_verified.admin_order_field = "_email_verified"
-
-
-@admin.register(Contribution)
-class ContributionAdmin(admin.ModelAdmin):
-    list_display = ("opinion", "user", "status", "remarks")
-    list_filter = ("status", "user")
-    search_fields = ("opinion__title", "remarks")

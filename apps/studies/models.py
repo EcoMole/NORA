@@ -11,9 +11,11 @@ class Assessment(models.Model):
 
     class Meta:
         db_table = "ASSESSMENT"
+        verbose_name = "additional Assessment"
+        verbose_name_plural = "additional Assessments"
 
 
-class EndpointStudy(models.Model):
+class Endpointstudy(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_tox")
     novel_food = models.ForeignKey(
         "novel_food.NovelFood", on_delete=models.CASCADE, db_column="id_study"
@@ -105,11 +107,11 @@ class EndpointStudy(models.Model):
 
     class Meta:
         db_table = "ENDPOINTSTUDY"
-        verbose_name = "Endpointstudy"
-        verbose_name_plural = "Endpointstudies"
+        verbose_name = "Endpoint Study"
+        verbose_name_plural = "Endpoint Studies 📍"
 
 
-class EndEndstudyOutcome(models.Model):
+class Endpoint(models.Model):
     qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -140,7 +142,7 @@ class EndEndstudyOutcome(models.Model):
         related_name="sex_end_endstudy_outcomes",
     )
     endpointstudy = models.ForeignKey(
-        EndpointStudy,
+        Endpointstudy,
         on_delete=models.CASCADE,
         db_column="id_tox",
         related_name="endpointstudy_end_endstudy_outcomes",
@@ -164,9 +166,9 @@ class EndEndstudyOutcome(models.Model):
         return res
 
     class Meta:
-        db_table = "END_ENDSTUDY_HAZARD"
-        verbose_name = "Endpoint Endpointstudy Outcome"
-        verbose_name_plural = "Endpoint Endpointstudy Outcomes"
+        db_table = "ENDPOINT"
+        verbose_name = "Endpoint"
+        verbose_name_plural = "Endpoints"
 
 
 class Outcome(models.Model):
@@ -179,6 +181,7 @@ class Outcome(models.Model):
         limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
         db_column="id_assessment_type",
         related_name="assessment_type_outcomes",
+        verbose_name="Assessment Type",
     )
     risk_qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -189,7 +192,11 @@ class Outcome(models.Model):
         related_name="risk_qualifier_outcomes",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
     )
-    value = models.FloatField(db_column="risk_value")
+    value = models.FloatField(
+        db_column="risk_value",
+        null=True,
+        blank=True,
+    )
     unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -200,17 +207,31 @@ class Outcome(models.Model):
         help_text="UNIT Catalogue",
         related_name="unit_outcomes",
     )
-    safety_factor = models.IntegerField()
+    safety_factor = models.IntegerField(
+        null=True,
+        blank=True,
+    )
     assessment = models.ForeignKey(
         Assessment,
         db_column="id_assess",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        verbose_name="additional Assessment",
+        help_text="Use this field to describe assessment type in case there is "
+        "no sufficient explanation in the Assessment Type field.",
     )
-    remarks = models.CharField(max_length=2000)
+    remarks = models.CharField(
+        max_length=2000,
+        null=True,
+        blank=True,
+    )
     end_endstudy_outcome = models.ForeignKey(
-        EndEndstudyOutcome, on_delete=models.CASCADE, db_column="end_endstudy_hazard"
+        Endpoint,
+        on_delete=models.CASCADE,
+        db_column="end_endstudy_hazard",
+        null=True,
+        blank=True,
     )
     toxicity_concern = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -226,13 +247,15 @@ class Outcome(models.Model):
         if self.assessment_type:
             res += self.assessment_type.name
         if self.value:
-            res += " - " + self.value
+            res += " - " + str(self.value)
         if self.unit:
             res += " - " + self.unit.name
         return res
 
     class Meta:
         db_table = "HAZARD"
+        verbose_name = "Final Outcome"
+        verbose_name_plural = "Final Outcomes 📍"
 
 
 class StudyType(models.Model):
@@ -244,6 +267,8 @@ class StudyType(models.Model):
 
     class Meta:
         db_table = "STUDY_TYPE"
+        verbose_name = "ADME Study Type"
+        verbose_name_plural = "ADME Study Types"
 
 
 class OutcomePopulation(models.Model):
@@ -262,14 +287,16 @@ class OutcomePopulation(models.Model):
 
     def __str__(self) -> str:
         res = ""
-        if self.outcome:
+        if self.outcome and self.outcome.assessment_type:
             res += self.outcome.assessment_type.name
         if self.population:
-            res += " - " + self.population.name
+            res += " - " + self.population.__str__()
         return res
 
     class Meta:
         db_table = "HAZARD_AGE"
+        verbose_name = "Outcome Population"
+        verbose_name_plural = "Outcome Populations"
         constraints = [
             models.UniqueConstraint(
                 fields=["outcome", "population"], name="unique_outcome_population"
@@ -286,6 +313,7 @@ class StudySource(models.Model):
 
     class Meta:
         db_table = "STUDY_SOURCE"
+        verbose_name_plural = "Study Sources"
 
 
 class ADME(models.Model):
@@ -327,10 +355,10 @@ class ADME(models.Model):
         related_name="study_source_admes",
         db_column="id_study_source",
     )
+    test_material = models.CharField(max_length=255, null=True, blank=True)
     remarks = models.TextField(
         max_length=2000, db_column="study_comment", null=True, blank=True
     )
-    test_material = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self) -> str:
         res = self.novel_food.title
@@ -340,8 +368,8 @@ class ADME(models.Model):
 
     class Meta:
         db_table = "PKTK"
-        verbose_name = "ADME"
-        verbose_name_plural = "ADMEs"
+        verbose_name = "ADME Study"
+        verbose_name_plural = "ADME Studies 📍"
 
 
 class ADMEStudyType(models.Model):
@@ -434,17 +462,22 @@ class Genotox(models.Model):
 
     class Meta:
         db_table = "GENOTOX"
-        verbose_name = "Genotox"
-        verbose_name_plural = "Genotoxes"
+        verbose_name = "Genotox Study"
+        verbose_name_plural = "Genotox Studies 📍"
 
 
 class GenotoxOutcome(models.Model):
-    id_tox = models.ForeignKey(Genotox, on_delete=models.CASCADE)
-    hazard = models.ForeignKey(Outcome, on_delete=models.CASCADE)
+    genotox = models.ForeignKey(Genotox, on_delete=models.CASCADE)
+    outcome = models.ForeignKey(Outcome, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "GENOTOX_HAZARD"
+        verbose_name = "Genotox Outcome"
+        verbose_name_plural = "Genotox Outcomes"
 
 
 class SpecificToxicityStudy(models.Model):
-    id_tox = models.ForeignKey(EndpointStudy, on_delete=models.CASCADE)
+    endpointstudy = models.ForeignKey(Endpointstudy, on_delete=models.CASCADE)
     id_spec_tox = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -455,9 +488,14 @@ class SpecificToxicityStudy(models.Model):
     )
 
     def __str__(self) -> str:
-        res = self.id_tox.novel_food.title
-        if self.id_tox.testing_method:
-            res += " - " + self.id_tox.testing_method.name
+        res = self.endpointstudy.novel_food.title
+        if self.endpointstudy.testing_method:
+            res += " - " + self.endpointstudy.testing_method.name
         if self.id_spec_tox:
             res += " - " + self.id_spec_tox.name
         return res
+
+    class Meta:
+        db_table = "SPECIFIC_TOXICITY_STUDY"
+        verbose_name = "Specific Toxicity Study"
+        verbose_name_plural = "Specific Toxicity Studies"

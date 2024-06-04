@@ -167,11 +167,6 @@ class ChemicalAdmin(admin.ModelAdmin):
     inlines = [ChemicalSynInline]
 
 
-@admin.register(FoodCategory)
-class FoodCategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition"]
-
-
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["title", "definition", "regulation"]
@@ -184,6 +179,11 @@ class NutritionalDisadvantageAdmin(admin.ModelAdmin):
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
+
+
+@admin.register(FoodCategory)
+class FoodCategoryAdmin(admin.ModelAdmin):
+    list_display = ["title", "definition"]
 
 
 @admin.register(SynonymType)

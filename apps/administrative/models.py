@@ -54,6 +54,8 @@ class Opinion(models.Model):
 
     class Meta:
         db_table = "OPINION"
+        verbose_name = "Opinion 📄"
+        verbose_name_plural = "Opinions 📄"
 
 
 class Panel(models.Model):
@@ -72,7 +74,7 @@ class Panel(models.Model):
     class Meta:
         db_table = "PANEL"
         verbose_name = "Panel"
-        verbose_name_plural = "Panels - options"
+        verbose_name_plural = "📂 Panels"
 
 
 class OPAuthor(models.Model):
@@ -114,7 +116,7 @@ class Applicant(models.Model):
     class Meta:
         db_table = "APPLICANT"
         verbose_name = "Applicant"
-        verbose_name_plural = "Applicants - options"
+        verbose_name_plural = "📂 Applicants"
 
 
 class Mandate(models.Model):
@@ -162,7 +164,7 @@ class Mandate(models.Model):
     class Meta:
         db_table = "MANDATE"
         verbose_name = "Mandate"
-        verbose_name_plural = "Mandates - options"
+        verbose_name_plural = "📂 Mandates"
 
 
 class Question(models.Model):
@@ -198,7 +200,7 @@ class Question(models.Model):
     class Meta:
         db_table = "QUESTION"
         verbose_name = "Question"
-        verbose_name_plural = "Questions"
+        verbose_name_plural = "📂 Questions"
 
 
 class OPQuestion(models.Model):
@@ -236,7 +238,7 @@ class ScientificOfficer(models.Model):
     class Meta:
         db_table = "SCI_OFFICER"
         verbose_name = "Scientific Officer"
-        verbose_name_plural = "Scientific Officers - options"
+        verbose_name_plural = "📂 Scientific Officers"
 
 
 class OPScientificOfficer(models.Model):

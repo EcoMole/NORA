@@ -4,26 +4,6 @@ from django.contrib import admin
 from taxonomies.models import Population, Subgroup, Taxonomy, TaxonomyNode
 
 
-@admin.register(TaxonomyNode)
-class TaxonomyNodeAdmin(admin.ModelAdmin):
-    list_display = ["code", "name", "taxonomy"]
-    search_fields = ["code", "short_name", "extended_name"]
-    fields = ["code", "short_name", "extended_name", "taxonomy"]
-    list_filter = ["taxonomy"]
-
-
-@admin.register(Taxonomy)
-class TaxonomyAdmin(admin.ModelAdmin):
-    search_fields = ["code"]
-
-
-@admin.register(Subgroup)
-class SubgroupAdmin(admin.ModelAdmin):
-    list_display = ["title"]
-    search_fields = ["title"]
-    fields = ["title"]
-
-
 @admin.register(Population)
 class PopulationAdmin(admin.ModelAdmin):
     list_display = [
@@ -49,3 +29,23 @@ class PopulationAdmin(admin.ModelAdmin):
         "subgroup",
     ]
     autocomplete_fields = ["sex", "population_age", "qualifier", "unit"]
+
+
+@admin.register(Subgroup)
+class SubgroupAdmin(admin.ModelAdmin):
+    list_display = ["title"]
+    search_fields = ["title"]
+    fields = ["title"]
+
+
+@admin.register(Taxonomy)
+class TaxonomyAdmin(admin.ModelAdmin):
+    search_fields = ["code"]
+
+
+@admin.register(TaxonomyNode)
+class TaxonomyNodeAdmin(admin.ModelAdmin):
+    list_display = ["code", "name", "taxonomy"]
+    search_fields = ["code", "short_name", "extended_name"]
+    fields = ["code", "short_name", "extended_name", "taxonomy"]
+    list_filter = ["taxonomy"]

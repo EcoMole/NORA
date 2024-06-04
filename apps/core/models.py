@@ -55,6 +55,10 @@ class User(CreatedUpdatedMixin, AbstractUser):
             except EmailAddress.DoesNotExist:
                 return False
 
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "📂 Users"
+
 
 class Contribution(models.Model):
     STATUS_CHOICES = [
@@ -88,7 +92,7 @@ class Contribution(models.Model):
     class Meta:
         db_table = "CONTRIBUTION"
         verbose_name = "Contribution"
-        verbose_name_plural = "Contributions"
+        verbose_name_plural = "Contributions 👥"
         constraints = [
             models.UniqueConstraint(
                 fields=["opinion", "user"], name="unique_opinion_user"

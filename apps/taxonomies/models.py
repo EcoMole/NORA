@@ -11,7 +11,7 @@ class Taxonomy(models.Model):
     code = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name_plural = "Taxonomies"
+        verbose_name_plural = "📂 Taxonomies"
 
     def __str__(self):
         return self.code
@@ -141,6 +141,9 @@ class TaxonomyNode(MPTTModel, SyncMixin):
     class MPTTMeta:
         order_insertion_by = ["order", "code"]
 
+    class Meta:
+        verbose_name_plural = "📂 Taxonomy Nodes"
+
 
 class ImplicitAttribute(models.Model):
     node = models.ForeignKey(
@@ -175,6 +178,8 @@ class Subgroup(models.Model):
 
     class Meta:
         db_table = "SUBGROUP"
+        verbose_name = "Subgroup"
+        verbose_name_plural = "📂 Subgroups"
 
 
 class Population(models.Model):
@@ -251,3 +256,5 @@ class Population(models.Model):
 
     class Meta:
         db_table = "AGE"
+        verbose_name = "Population"
+        verbose_name_plural = "Populations 👨‍👩‍👧"

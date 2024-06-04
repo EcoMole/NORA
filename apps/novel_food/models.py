@@ -12,7 +12,7 @@ class Allergenicity(models.Model):
     class Meta:
         db_table = "ALLERGENICITY"
         verbose_name = "Allergenicity"
-        verbose_name_plural = "Allergenicity - options"
+        verbose_name_plural = "📂 Allergenicity"
 
 
 class AllergenicityNovelFood(models.Model):
@@ -76,7 +76,7 @@ class Category(models.Model):
     class Meta:
         db_table = "SUB_TYPE"
         verbose_name = "Novel Food Category"
-        verbose_name_plural = "NF Categories - options"
+        verbose_name_plural = "📂 NF Categories"
 
 
 class NovelFoodCategory(models.Model):
@@ -100,7 +100,7 @@ class FoodCategory(models.Model):
     class Meta:
         # db_table = "FOOD_CATEGORY"
         verbose_name = "Food category"
-        verbose_name_plural = "Food categories - options"
+        verbose_name_plural = "📂 Food categories"
 
 
 class SynonymType(models.Model):
@@ -117,7 +117,7 @@ class SynonymType(models.Model):
     class Meta:
         db_table = "SYNONYM"
         verbose_name = "Synonym Type"
-        verbose_name_plural = "Synonym types - options"
+        verbose_name_plural = "📂 Synonym types"
 
 
 class NovelFoodSyn(models.Model):
@@ -148,7 +148,7 @@ class Organism(models.Model):
     class Meta:
         db_table = "ORGANISM"
         verbose_name = "Organism"
-        verbose_name_plural = "Organisms"
+        verbose_name_plural = "Organisms 🦠"
 
 
 class OrganismSyn(models.Model):
@@ -178,7 +178,20 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="is_gmo_novel_foods",
+        verbose_name="is GMO",
         limit_choices_to={"taxonomy__code": "YESNO"},
+        help_text="Was the organism genetically modified? or in case of cell culture, "
+        "was the cell culture modified?",
+    )
+    has_qps = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="has_qps_novel_foods",
+        limit_choices_to={"taxonomy__code": "YESNO"},
+        verbose_name="has QPS",
+        help_text="Has qualified presumption of safety?",
     )
     variant = models.CharField(
         max_length=255,
@@ -253,7 +266,7 @@ class Chemical(models.Model):
     class Meta:
         db_table = "COMPONENT"
         verbose_name = "Chemicals"
-        verbose_name_plural = "Chemicals"
+        verbose_name_plural = "Chemicals 🧪"
 
 
 class ChemicalSyn(models.Model):
@@ -485,7 +498,7 @@ class NovelFood(models.Model):
     class Meta:
         db_table = "STUDY"
         verbose_name = "Novel Food"
-        verbose_name_plural = "Novel Foods"
+        verbose_name_plural = "Novel Foods 🥗"
 
 
 class HBGV(models.Model):
