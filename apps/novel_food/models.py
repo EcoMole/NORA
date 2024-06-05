@@ -197,7 +197,8 @@ class NovelFoodOrganism(models.Model):
         max_length=255,
         blank=True,
         null=True,
-        help_text="STRAIN for microorganisms / VARIETY for plants / SUBSPECIES for animals",
+        help_text="STRAIN for microorganisms / VARIETY for plants / "
+        "SUBSPECIES for animals / CEll_TYPE for cell cultures",
     )
 
     class Meta:
@@ -307,6 +308,7 @@ class SubstanceOfConcernNovelFood(models.Model):
     class Meta:
         db_table = "SUBSTANCE_OF_CONCERN_STUDY"
         verbose_name = "Substance of concern"
+        verbose_name_plural = "Substances of concern"
 
 
 class GenotoxFinalOutcome(models.Model):
@@ -503,6 +505,12 @@ class NovelFood(models.Model):
 
 class HBGV(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_hbgv")
+    novel_food = models.ForeignKey(
+        NovelFood,
+        on_delete=models.CASCADE,
+        related_name="novel_food_hbgvs",
+        db_column="id_study",
+    )
     type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -512,11 +520,14 @@ class HBGV(models.Model):
         limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
         db_column="id_type",
     )
-    novel_food = models.ForeignKey(
-        NovelFood,
-        on_delete=models.CASCADE,
-        related_name="novel_food_hbgvs",
-        db_column="id_study",
+    substance = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="substance_hbgvs",
+        limit_choices_to={"taxonomy__code": "PARAM"},
+        db_column="id_substance",
     )
     exceeded_for_population = models.ForeignKey(
         "taxonomies.Population",
@@ -526,15 +537,6 @@ class HBGV(models.Model):
         related_name="population_hbgvs",
         db_column="id_age",
         help_text="Population for which the HBGV is exceeded",
-    )
-    substance = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="substance_hbgvs",
-        limit_choices_to={"taxonomy__code": "PARAM"},
-        db_column="id_substance",
     )
 
     def __str__(self):

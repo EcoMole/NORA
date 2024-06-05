@@ -141,6 +141,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
     search_fields = ["nf_code", "title"]
     autocomplete_fields = ["opinion", "shelflife_unit", "catalogue_identity"]
     inlines = [
+        SubstanceOfConcernNovelFoodInline,
         NovelFoodSynInline,
         NovelFoodCategoryInline,
         NovelFoodChemicalInline,
@@ -148,7 +149,6 @@ class NovelFoodAdmin(admin.ModelAdmin):
         BackgroundExposureAssessmentInline,
         HBGVInline,
         AllergenicityNovelFoodInline,
-        SubstanceOfConcernNovelFoodInline,
     ]
     list_filter = ["carcinogenicity", "mutagenicity"]
 

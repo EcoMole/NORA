@@ -207,9 +207,8 @@ class Outcome(models.Model):
         help_text="UNIT Catalogue",
         related_name="unit_outcomes",
     )
-    safety_factor = models.IntegerField(
-        null=True,
-        blank=True,
+    uncertainty_factor = models.IntegerField(
+        null=True, blank=True, verbose_name="uncertainty factor"
     )
     assessment = models.ForeignKey(
         Assessment,

@@ -151,7 +151,7 @@ class OutcomeAdmin(admin.ModelAdmin):
         "risk_qualifier",
         "value",
         "unit",
-        "safety_factor",
+        "uncertainty_factor",
     ]
     search_fields = ["assessment__title", "risk_qualifier__description", "value"]
     autocomplete_fields = ["assessment", "assessment_type", "risk_qualifier", "unit"]
