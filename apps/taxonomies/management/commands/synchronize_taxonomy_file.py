@@ -54,16 +54,24 @@ class Command(BaseCommand):
             "were not found in the new taxonomy as deprecated",
         )
 
+        parser.add_argument(
+            "--chunk-size",
+            type=int,
+            dest="chunk_size",
+            default=10000,
+            help="If used, sets the number of characters to be read from the file at the time.",
+        )
+
         help = "Reads in taxonomy file"  # noqa F841
 
-    def parse_and_call(self, fname):
+    def parse_and_call(self, fname, chunk_size):
         parser = etree.XMLPullParser(events=("end",))
         catalogue_code = None
         delayed_records = []
         try:
             with open(fname) as f:
                 while True:
-                    data = f.read(10000)
+                    data = f.read(chunk_size)
                     if not data:
                         break
 
@@ -360,13 +368,13 @@ class Command(BaseCommand):
             if os.path.getsize(fname) > 1000000:
                 log.warning("File larger than 1 MB, using delayed MPTT sync")
                 with TaxonomyNode.objects.disable_mptt_updates():
-                    self.parse_and_call(fname)
+                    self.parse_and_call(fname, chunk_size=options["chunk_size"])
                 if set(self.stats.keys()) != {"unchanged"}:
                     # rebuild only if there was some change
                     TaxonomyNode.objects.rebuild()
             else:
                 with TaxonomyNode.objects.delay_mptt_updates():
-                    self.parse_and_call(fname)
+                    self.parse_and_call(fname, chunk_size=options["chunk_size"])
         etime = time.time()
 
         print("    update took %s seconds" % (int(etime - stime)))
