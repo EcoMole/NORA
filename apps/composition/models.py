@@ -45,6 +45,7 @@ class Parameter(models.Model):
         related_name="param_tax_node_parameters",
         db_column="id_param_tax_node",
         limit_choices_to={"taxonomy__code": "PARAM"},
+        help_text="(PARAM vocab)",
     )
 
     def __str__(self) -> str:
@@ -96,6 +97,7 @@ class ProductionNovelFoodVariant(models.Model):
         on_delete=models.SET_NULL,
         related_name="process_production_novel_food_variants",
         limit_choices_to={"taxonomy__code": "MTX"},
+        help_text="(MTX vocab)",
     )
 
     def __str__(self):
@@ -163,6 +165,7 @@ class Composition(models.Model):
         related_name="qualifier_compositions",
         db_column="id_qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        help_text="(QUALIFIER vocab)",
     )
     value = models.DecimalField(
         max_digits=10,
@@ -186,6 +189,7 @@ class Composition(models.Model):
         related_name="unit_compositions",
         db_column="id_unit",
         limit_choices_to={"taxonomy__code": "UNIT"},
+        help_text="(UNIT vocab)",
     )
     TYPE_CHOICES = (
         ("specification", "Specification"),

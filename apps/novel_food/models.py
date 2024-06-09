@@ -46,6 +46,7 @@ class NutritionalDisadvantage(models.Model):
         limit_choices_to={"taxonomy__code": "YESNO"},
         db_column="is_yn",
         related_name="yes_no_nutritional_disadvantages",
+        help_text="(YESNO vocab)",
     )
     explanation = models.CharField(max_length=2000, blank=True)
 
@@ -68,6 +69,7 @@ class Category(models.Model):
         # related_name="regulation_categories",
         db_column="id_regulation",
         limit_choices_to={"taxonomy__code": "LEGREF"},
+        help_text="(LEGREF vocab)",
     )
 
     def __str__(self) -> str:
@@ -140,6 +142,7 @@ class Organism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "MTX"},
+        help_text="(MTX vocab)",
     )
 
     def __str__(self):
@@ -171,6 +174,7 @@ class NovelFoodOrganism(models.Model):
         on_delete=models.SET_NULL,
         related_name="org_part_novel_foods",
         limit_choices_to={"taxonomy__code": "MTX"},
+        help_text="(MTX vocab)",
     )
     is_gmo = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -181,7 +185,7 @@ class NovelFoodOrganism(models.Model):
         verbose_name="is GMO",
         limit_choices_to={"taxonomy__code": "YESNO"},
         help_text="Was the organism genetically modified? or in case of cell culture, "
-        "was the cell culture modified?",
+        "was the cell culture modified? (YESNO vocab)",
     )
     has_qps = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -191,7 +195,7 @@ class NovelFoodOrganism(models.Model):
         related_name="has_qps_novel_foods",
         limit_choices_to={"taxonomy__code": "YESNO"},
         verbose_name="has QPS",
-        help_text="Has qualified presumption of safety?",
+        help_text="Has qualified presumption of safety? (YESNO vocab)",
     )
     variant = models.CharField(
         max_length=255,
@@ -248,6 +252,7 @@ class Chemical(models.Model):
         on_delete=models.SET_NULL,
         related_name="catalogue_identity_chemicals",
         limit_choices_to={"taxonomy__code": "PARAM"},
+        help_text="(PARAM vocab)",
     )
 
     chemical_type = models.ForeignKey(
@@ -290,6 +295,7 @@ class SubstanceOfConcernNovelFood(models.Model):
         related_name="substance_of_concern_substance_of_concern_novel_foods",
         limit_choices_to={"taxonomy__code": "PARAM"},
         db_column="id_sub_of_concern",
+        help_text="(PARAM vocab)",
     )
 
     class Meta:
@@ -344,6 +350,7 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         related_name="tox_study_required_novel_foods",
+        help_text="(YESNO vocab)",
     )
     mutagenicity = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -354,6 +361,7 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         related_name="mutagenicity_novel_foods",
+        help_text="(YESNO vocab)",
     )
     carcinogenicity = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -364,6 +372,7 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         related_name="carcinogenicity_novel_foods",
+        help_text="(YESNO vocab)",
     )
     genotox_final_outcome = models.ForeignKey(
         GenotoxFinalOutcome,
@@ -383,6 +392,7 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         related_name="protein_digestibility_novel_foods",
+        help_text="(YESNO vocab)",
     )
     antinutritional_factors = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -393,6 +403,7 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         related_name="antinutritional_factors_novel_foods",
+        help_text="(YESNO vocab)",
     )
     nutritional_disadvantage = models.OneToOneField(
         NutritionalDisadvantage,
@@ -410,8 +421,8 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         db_column="id_is_sufficient_data",
-        help_text="Were sufficient data provided?",
         related_name="sufficient_data_novel_foods",
+        help_text="Were sufficient data provided? (YESNO vocab)",
     )
 
     food_matrices = models.ForeignKey(
@@ -421,7 +432,7 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         db_column="id_is_food_matrices",
-        help_text="Were food matrices provided?",
+        help_text="Were food matrices provided? (YESNO vocab)",
         related_name="food_matrices_novel_foods",
     )
     instability_concerns = models.ForeignKey(
@@ -432,6 +443,7 @@ class NovelFood(models.Model):
         limit_choices_to={"taxonomy__code": "YESNO"},
         db_column="id_instability_concerns",
         related_name="instability_concerns_novel_foods",
+        help_text="(YESNO vocab)",
     )
     shelflife_value = models.FloatField(blank=True, null=True)
     shelflife_unit = models.ForeignKey(
@@ -441,8 +453,8 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_shelflife_unit",
-        help_text="UNIT Catalogue",
         related_name="shelflife_unit_novel_foods",
+        help_text="(UNIT vocab)",
     )
 
     endocrine_disrupt_prop = models.ForeignKey(
@@ -454,6 +466,7 @@ class NovelFood(models.Model):
         db_column="id_has_endocrine_disrupt_prop",
         verbose_name="has endocrine disrupt properties",
         related_name="endocrine_disrupt_prop_novel_foods",
+        help_text="(YESNO vocab)",
     )
     outcome = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -463,6 +476,7 @@ class NovelFood(models.Model):
         limit_choices_to={"taxonomy__code": "POSNEG"},
         db_column="id_outcome",
         related_name="outcome_novel_foods",
+        help_text="(POSNEG vocab)",
     )
     outcome_remarks = models.CharField(max_length=2000, blank=True, null=True)
 
@@ -474,6 +488,7 @@ class NovelFood(models.Model):
         limit_choices_to={"taxonomy__code": "PARAM"},
         db_column="id_rms_efsa",
         related_name="catalogue_identity_novel_foods",
+        help_text="(PARAM vocab)",
     )
 
     # django specific fields to get the models well tied together
@@ -508,7 +523,7 @@ class BackgroundExposureAssessment(models.Model):
         related_name="comp_of_interest_bg_expo_assessments",
         db_column="id_comp_of_interest",
         limit_choices_to={"taxonomy__code": "PARAM"},
-        help_text="Compound of interest",
+        help_text="Compound of interest (PARAM vocab)",
     )
 
     def __str__(self) -> str:
@@ -535,6 +550,7 @@ class HBGV(models.Model):
         related_name="type_hbgvs",
         limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
         db_column="id_type",
+        help_text="(ENDPOINT_HGV vocab)",
     )
     substance = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -544,6 +560,7 @@ class HBGV(models.Model):
         related_name="substance_hbgvs",
         limit_choices_to={"taxonomy__code": "PARAM"},
         db_column="id_substance",
+        help_text="(PARAM vocab)",
     )
     exceeded_for_population = models.ForeignKey(
         "taxonomies.Population",

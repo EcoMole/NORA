@@ -28,7 +28,7 @@ class Endpointstudy(models.Model):
         related_name="testing_method_endpointstudies",
         db_column="id_testing_method",
         limit_choices_to={"taxonomy__code": "TEST_TYPE"},
-        help_text="for ex.: in silico, in vitro, in vivo, human study etc.",
+        help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
     )
     test_type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -39,7 +39,7 @@ class Endpointstudy(models.Model):
         db_column="id_test_type",
         limit_choices_to={"taxonomy__code": "TEST_TYPE"},
         help_text="for ex.: acute oral toxicity (OECD phrase ID 1703), or "
-        "subchronic (OECD phrase ID 2399)",
+        "subchronic (OECD phrase ID 2399) (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -49,6 +49,7 @@ class Endpointstudy(models.Model):
         related_name="guideline_qualifier_endpointstudies",
         db_column="id_guideline_qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        help_text="(QUALIFIER vocab)",
     )
     guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -58,6 +59,7 @@ class Endpointstudy(models.Model):
         related_name="guideline_endpointstudies",
         db_column="id_guideline",
         limit_choices_to={"taxonomy__code": "GUIDELINE"},
+        help_text="(GUIDELINE vocab)",
     )
     species = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -67,6 +69,7 @@ class Endpointstudy(models.Model):
         limit_choices_to={"taxonomy__code": "MTX"},
         db_column="id_species",
         related_name="species_endpointstudies",
+        help_text="(MTX vocab)",
     )
     sex = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -76,6 +79,7 @@ class Endpointstudy(models.Model):
         limit_choices_to={"taxonomy__code": "MTX"},
         db_column="id_sex",
         related_name="sex_endpointstudies",
+        help_text="(MTX vocab)",
     )
     exp_duration = models.FloatField(null=True, blank=True)
     duration_unit = models.ForeignKey(
@@ -85,8 +89,8 @@ class Endpointstudy(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_duration_unit",
-        help_text="UNIT Catalogue",
         related_name="duration_unit_endpointstudies",
+        help_text="(UNIT vocab)",
     )
     study_source = models.ForeignKey(
         "studies.StudySource",
@@ -120,6 +124,7 @@ class Endpoint(models.Model):
         related_name="qualifier_end_endstudy_outcomes",
         db_column="id_qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        help_text="(QUALIFIER vocab)",
     )
     lovalue = models.FloatField(null=True, blank=True)
     unit = models.ForeignKey(
@@ -129,8 +134,8 @@ class Endpoint(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_unit",
-        help_text="UNIT Catalogue",
         related_name="unit_end_endstudy_outcomes",
+        help_text="(UNIT vocab)",
     )
     sex = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -140,6 +145,7 @@ class Endpoint(models.Model):
         limit_choices_to={"taxonomy__code": "MTX"},
         db_column="id_sex",
         related_name="sex_end_endstudy_outcomes",
+        help_text="(MTX vocab)",
     )
     endpointstudy = models.ForeignKey(
         Endpointstudy,
@@ -155,6 +161,7 @@ class Endpoint(models.Model):
         limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
         db_column="id_endpoint",
         related_name="endpoint_end_endstudy_outcomes",
+        help_text="(ENDPOINT_HGV vocab)",
     )
 
     def __str__(self) -> str:
@@ -182,6 +189,7 @@ class Outcome(models.Model):
         db_column="id_assessment_type",
         related_name="assessment_type_outcomes",
         verbose_name="Assessment Type",
+        help_text="(ENDPOINT_HGV vocab)",
     )
     risk_qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -191,6 +199,7 @@ class Outcome(models.Model):
         db_column="id_risk_qualifier",
         related_name="risk_qualifier_outcomes",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        help_text="(QUALIFIER vocab)",
     )
     value = models.FloatField(
         db_column="risk_value",
@@ -204,8 +213,8 @@ class Outcome(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_risk_unit",
-        help_text="UNIT Catalogue",
         related_name="unit_outcomes",
+        help_text="(UNIT vocab)",
     )
     uncertainty_factor = models.IntegerField(
         null=True, blank=True, verbose_name="uncertainty factor"
@@ -239,6 +248,7 @@ class Outcome(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         related_name="toxicity_concern_outcomes",
+        help_text="(YESNO vocab)",
     )
 
     def __str__(self) -> str:
@@ -328,7 +338,7 @@ class ADME(models.Model):
         related_name="testing_method_admes",
         db_column="assay_system_endpoint",
         limit_choices_to={"taxonomy__code": "TEST_TYPE"},
-        help_text="for ex.: in silico, in vitro, in vivo, human study etc.",
+        help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -337,6 +347,7 @@ class ADME(models.Model):
         on_delete=models.SET_NULL,
         related_name="guideline_qualifier_admes",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        help_text="(QUALIFIER vocab)",
     )
     guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -345,6 +356,7 @@ class ADME(models.Model):
         on_delete=models.SET_NULL,
         related_name="guideline_admes",
         limit_choices_to={"taxonomy__code": "GUIDELINE"},
+        help_text="(GUIDELINE vocab)",
     )
     study_source = models.ForeignKey(
         "studies.StudySource",
@@ -403,7 +415,7 @@ class Genotox(models.Model):
         related_name="testing_method_genotoxes",
         db_column="id_testing_method",
         limit_choices_to={"taxonomy__code": "TEST_TYPE"},
-        help_text="for ex.: in silico, in vitro, in vivo, human study etc.",
+        help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -413,6 +425,7 @@ class Genotox(models.Model):
         related_name="guideline_qualifier_genotoxes",
         db_column="id_guideline_qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        help_text="(QUALIFIER vocab)",
     )
     genotox_guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -422,6 +435,7 @@ class Genotox(models.Model):
         related_name="genotox_guideline_genotoxes",
         db_column="id_genotox_guideline",
         limit_choices_to={"taxonomy__code": "GUIDELINE"},
+        help_text="(GUIDELINE vocab)",
     )
     outcome = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -431,6 +445,7 @@ class Genotox(models.Model):
         limit_choices_to={"taxonomy__code": "YESNO"},
         db_column="id_is_genotoxic",
         related_name="outcome_genotoxes",
+        help_text="(YESNO vocab)",
     )
     study_source = models.ForeignKey(
         "studies.StudySource",
@@ -449,7 +464,7 @@ class Genotox(models.Model):
         db_column="id_test_type",
         limit_choices_to={"taxonomy__code": "TEST_TYPE"},
         help_text="for ex.: acute oral toxicity (OECD phrase ID 1703), or "
-        "subchronic (OECD phrase ID 2399)",
+        "subchronic (OECD phrase ID 2399). (TEST_TYPE vocab)",
     )
     test_material = models.CharField(max_length=255, null=True, blank=True)
 
@@ -484,6 +499,7 @@ class SpecificToxicityStudy(models.Model):
         on_delete=models.SET_NULL,
         related_name="id_spec_tox_specific_toxicity_studies",
         limit_choices_to={"taxonomy__code": "TOXICITY"},
+        help_text="(TOXICITY vocab)",
     )
 
     def __str__(self) -> str:

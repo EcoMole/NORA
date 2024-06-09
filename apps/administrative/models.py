@@ -17,7 +17,8 @@ class Opinion(models.Model):
         related_name="opinions",
         verbose_name="Document type",
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "REF_TYPE"}
+        limit_choices_to={"taxonomy__code": "REF_TYPE"},
+        help_text="(REF_TYPE vocab)",
         #   limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
         # taxonomy__code='REF_TYPE', code='').get_descendants()))
     )
@@ -274,6 +275,7 @@ class QuestionMandate(models.Model):
         related_name="regulation_questionmandates",
         db_column="id_regulation",
         limit_choices_to={"taxonomy__code": "LEGREF"},
+        help_text="(LEGREF vocab)",
     )
 
     def __str__(self) -> str:
