@@ -216,6 +216,8 @@ class ScientificOfficer(models.Model):
     last_name = models.CharField(max_length=255, blank=False, null=False)
 
     def __str__(self) -> str:
+        if self.middle_name is None:
+            return f"{self.first_name} {self.last_name}"
         return f"{self.first_name} {self.middle_name} {self.last_name}"
 
     class Meta:
