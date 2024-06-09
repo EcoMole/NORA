@@ -8,8 +8,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("taxonomies", "0001_initial"),
         ("administrative", "0001_initial"),
+        ("taxonomies", "0001_initial"),
     ]
 
     operations = [
@@ -183,7 +183,12 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("title", models.CharField(max_length=255, verbose_name="NF Name")),
-                ("nf_code", models.CharField(max_length=2000, verbose_name="NF Code")),
+                (
+                    "nf_code",
+                    models.CharField(
+                        blank=True, max_length=2000, null=True, verbose_name="NF Code"
+                    ),
+                ),
                 ("shelflife_value", models.FloatField(blank=True, null=True)),
                 (
                     "outcome_remarks",
@@ -871,14 +876,32 @@ class Migration(migrations.Migration):
             name="BackgroundExposureAssessment",
             fields=[
                 (
-                    "id_background_exposure_assessment",
-                    models.AutoField(primary_key=True, serialize=False),
+                    "id",
+                    models.AutoField(
+                        db_column="id_bg_exp_assessment",
+                        primary_key=True,
+                        serialize=False,
+                    ),
                 ),
-                ("component_of_interest", models.CharField(blank=True, max_length=255)),
+                (
+                    "comp_of_interest",
+                    models.ForeignKey(
+                        blank=True,
+                        db_column="id_comp_of_interest",
+                        help_text="Compound of interest",
+                        limit_choices_to={"taxonomy__code": "PARAM"},
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="comp_of_interest_bg_expo_assessments",
+                        to="taxonomies.taxonomynode",
+                    ),
+                ),
                 (
                     "novel_food",
                     models.ForeignKey(
+                        db_column="id_study",
                         on_delete=django.db.models.deletion.CASCADE,
+                        related_name="novel_food_bg_expo_assessments",
                         to="novel_food.novelfood",
                     ),
                 ),

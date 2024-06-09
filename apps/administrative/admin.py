@@ -11,8 +11,15 @@ from .models import (
     OPScientificOfficer,
     Panel,
     Question,
+    QuestionMandate,
     ScientificOfficer,
 )
+
+
+class QuestionMandateInline(admin.TabularInline):
+    model = QuestionMandate
+    extra = 1
+    autocomplete_fields = ["regulation"]
 
 
 class OPAuthorInline(admin.TabularInline):
@@ -51,11 +58,10 @@ class OpinionAdmin(admin.ModelAdmin):
         "title",
         "publication_date",
         "adoption_date",
-        "outcome",
         "pdf_link",
     ]
     search_fields = ["title", "doi"]
-    list_filter = ["outcome", "publication_date"]
+    list_filter = ["publication_date"]
     autocomplete_fields = ["id_op_type"]
     inlines = [
         ContributionInline,
@@ -90,11 +96,22 @@ class ApplicantAdmin(admin.ModelAdmin):
         return {}
 
 
+@admin.register(QuestionMandate)
+class QuestionMandateAdmin(admin.ModelAdmin):
+    list_display = ["question", "mandate", "regulation"]
+    search_fields = ["title", "mandate", "regulation"]
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
 @admin.register(Mandate)
 class MandateAdmin(admin.ModelAdmin):
     list_display = ["title", "mandate_parent"]
     search_fields = ["title"]
-    autocomplete_fields = ["regulation"]
 
 
 @admin.register(Question)
@@ -102,6 +119,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ["question", "mandate"]
     search_fields = ["question"]
     list_filter = ["mandate"]
+    inlines = [QuestionMandateInline]
 
 
 @admin.register(ScientificOfficer)

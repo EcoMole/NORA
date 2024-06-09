@@ -59,18 +59,6 @@ class Migration(migrations.Migration):
                         to="administrative.mandate",
                     ),
                 ),
-                (
-                    "regulation",
-                    models.ForeignKey(
-                        blank=True,
-                        db_column="id_regulation",
-                        limit_choices_to={"taxonomy__code": "LEGREF"},
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        related_name="mandate_types",
-                        to="taxonomies.taxonomynode",
-                    ),
-                ),
             ],
             options={
                 "verbose_name": "Mandate",
@@ -115,20 +103,6 @@ class Migration(migrations.Migration):
                         blank=True, help_text="Date of adoption", null=True
                     ),
                 ),
-                (
-                    "outcome",
-                    models.CharField(
-                        blank=True,
-                        choices=[
-                            ("positive", "Positive"),
-                            ("negative", "Negative"),
-                            ("partially_negative", "Partially Negative"),
-                        ],
-                        help_text="Outcome of the opinion",
-                        max_length=255,
-                        null=True,
-                    ),
-                ),
                 ("pdf", models.FileField(blank=True, null=True, upload_to="pdfs/")),
                 (
                     "id_op_type",
@@ -164,23 +138,6 @@ class Migration(migrations.Migration):
                 "verbose_name": "Panel",
                 "verbose_name_plural": "📂 Panels",
                 "db_table": "PANEL",
-            },
-        ),
-        migrations.CreateModel(
-            name="ScientificOfficer",
-            fields=[
-                ("id_sci_officer", models.AutoField(primary_key=True, serialize=False)),
-                ("first_name", models.CharField(max_length=255)),
-                (
-                    "middle_name",
-                    models.CharField(blank=True, max_length=255, null=True),
-                ),
-                ("last_name", models.CharField(max_length=255)),
-            ],
-            options={
-                "verbose_name": "Scientific Officer",
-                "verbose_name_plural": "📂 Scientific Officers",
-                "db_table": "SCI_OFFICER",
             },
         ),
         migrations.CreateModel(
@@ -220,6 +177,70 @@ class Migration(migrations.Migration):
                 "verbose_name": "Question",
                 "verbose_name_plural": "📂 Questions",
                 "db_table": "QUESTION",
+            },
+        ),
+        migrations.CreateModel(
+            name="ScientificOfficer",
+            fields=[
+                ("id_sci_officer", models.AutoField(primary_key=True, serialize=False)),
+                ("first_name", models.CharField(max_length=255)),
+                (
+                    "middle_name",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                ("last_name", models.CharField(max_length=255)),
+            ],
+            options={
+                "verbose_name": "Scientific Officer",
+                "verbose_name_plural": "📂 Scientific Officers",
+                "db_table": "SCI_OFFICER",
+            },
+        ),
+        migrations.CreateModel(
+            name="QuestionMandate",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "mandate",
+                    models.ForeignKey(
+                        db_column="id_mandate",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="administrative.mandate",
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        db_column="id_question",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="administrative.question",
+                    ),
+                ),
+                (
+                    "regulation",
+                    models.ForeignKey(
+                        blank=True,
+                        db_column="id_regulation",
+                        limit_choices_to={"taxonomy__code": "LEGREF"},
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="regulation_questionmandates",
+                        to="taxonomies.taxonomynode",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Question Mandate Regulation",
+                "verbose_name_plural": "📂 Question Mandate Regulation",
+                "db_table": "QUESTION_MANDATE",
             },
         ),
         migrations.CreateModel(

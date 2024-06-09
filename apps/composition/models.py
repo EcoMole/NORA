@@ -262,26 +262,6 @@ class ProposedUse(models.Model):
         return f"{self.nf_variant} - {self.use_type} - {self.population}"
 
 
-class BackgroundExposureAssessment(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_bg_exp_assessment")
-    novel_food = models.ForeignKey(
-        NovelFood,
-        on_delete=models.CASCADE,
-        related_name="novel_food_bg_expo_assessments",
-        db_column="id_study",
-    )
-    comp_of_interest = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="comp_of_interest_bg_expo_assessments",
-        db_column="id_comp_of_interest",
-        limit_choices_to={"taxonomy__code": "PARAM"},
-        help_text="Compound of interest",
-    )
-
-
 class RiskAssessmentRedFlags(models.Model):
     id_risk_assessment_red_flags = models.AutoField(primary_key=True)
     title = models.CharField(

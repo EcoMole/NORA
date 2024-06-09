@@ -38,13 +38,6 @@ class Opinion(models.Model):
     adoption_date = models.DateField(
         blank=True, null=True, help_text="Date of adoption"
     )
-    outcome = models.CharField(
-        max_length=255,
-        choices=OUTCOME_CHOICES,
-        blank=True,
-        null=True,
-        help_text="Outcome of the opinion",
-    )
     # upload_to='pdfs/' parameter in the FileField specifies
     # the subdirectory within the MEDIA_ROOT where the files will be saved
     pdf = models.FileField(upload_to="pdfs/", null=True, blank=True)
@@ -146,16 +139,6 @@ class Mandate(models.Model):
         on_delete=models.SET_NULL,
         related_name="mandates",
         db_column="id_mandate_parent",
-    )
-
-    regulation = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="mandate_types",
-        db_column="id_regulation",
-        limit_choices_to={"taxonomy__code": "LEGREF"},
     )
 
     def __str__(self) -> str:
@@ -262,3 +245,42 @@ class OPScientificOfficer(models.Model):
 
     class Meta:
         db_table = "OP_SCI_OFFICER"
+
+
+class QuestionMandate(models.Model):
+    """through table for Question and Mandate"""
+
+    question = models.ForeignKey(
+        Question,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_question",
+    )
+    mandate = models.ForeignKey(
+        Mandate,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_mandate",
+    )
+    regulation = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="regulation_questionmandates",
+        db_column="id_regulation",
+        limit_choices_to={"taxonomy__code": "LEGREF"},
+    )
+
+    def __str__(self) -> str:
+        res = f"{self.id_question} - {self.id_mandate}"
+        if self.regulation:
+            res += f" - {self.regulation.name}"
+        return res
+
+    class Meta:
+        db_table = "QUESTION_MANDATE"
+        verbose_name = "Question Mandate Regulation"
+        verbose_name_plural = "📂 Question Mandate Regulation"

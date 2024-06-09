@@ -8,8 +8,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("novel_food", "0001_initial"),
         ("taxonomies", "0001_initial"),
+        ("novel_food", "0001_initial"),
     ]
 
     operations = [
@@ -372,41 +372,6 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="unit_compositions",
                         to="taxonomies.taxonomynode",
-                    ),
-                ),
-            ],
-        ),
-        migrations.CreateModel(
-            name="BackgroundExposureAssessment",
-            fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        db_column="id_bg_exp_assessment",
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-                (
-                    "comp_of_interest",
-                    models.ForeignKey(
-                        blank=True,
-                        db_column="id_comp_of_interest",
-                        help_text="Compound of interest",
-                        limit_choices_to={"taxonomy__code": "PARAM"},
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        related_name="comp_of_interest_bg_expo_assessments",
-                        to="taxonomies.taxonomynode",
-                    ),
-                ),
-                (
-                    "novel_food",
-                    models.ForeignKey(
-                        db_column="id_study",
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="novel_food_bg_expo_assessments",
-                        to="novel_food.novelfood",
                     ),
                 ),
             ],
