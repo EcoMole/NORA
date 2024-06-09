@@ -8,8 +8,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("novel_food", "0001_initial"),
         ("taxonomies", "0001_initial"),
+        ("novel_food", "0001_initial"),
     ]
 
     operations = [

@@ -280,19 +280,6 @@ class ChemicalSyn(models.Model):
         verbose_name = "Chemical synonym"
 
 
-class BackgroundExposureAssessment(models.Model):
-    id_background_exposure_assessment = models.AutoField(primary_key=True)
-    component_of_interest = models.CharField(max_length=255, blank=True)  # vocab
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-
-    def __str__(self) -> str:
-        return ""
-
-    class Meta:
-        db_table = "BG_EXPO_ASSESSMENT"
-        verbose_name = "Background exposure assessment"
-
-
 class SubstanceOfConcernNovelFood(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
     substance_of_concern = models.ForeignKey(
@@ -335,7 +322,9 @@ class NovelFood(models.Model):
         null=True,
     )
     title = models.CharField(max_length=255, blank=False, verbose_name="NF Name")
-    nf_code = models.CharField(max_length=2000, verbose_name="NF Code")
+    nf_code = models.CharField(
+        max_length=2000, verbose_name="NF Code", null=True, blank=True
+    )
 
     food_category = models.ForeignKey(
         FoodCategory,
@@ -501,6 +490,33 @@ class NovelFood(models.Model):
         db_table = "STUDY"
         verbose_name = "Novel Food"
         verbose_name_plural = "Novel Foods 🥗"
+
+
+class BackgroundExposureAssessment(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_bg_exp_assessment")
+    novel_food = models.ForeignKey(
+        NovelFood,
+        on_delete=models.CASCADE,
+        related_name="novel_food_bg_expo_assessments",
+        db_column="id_study",
+    )
+    comp_of_interest = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="comp_of_interest_bg_expo_assessments",
+        db_column="id_comp_of_interest",
+        limit_choices_to={"taxonomy__code": "PARAM"},
+        help_text="Compound of interest",
+    )
+
+    def __str__(self) -> str:
+        return ""
+
+    class Meta:
+        db_table = "BG_EXPO_ASSESSMENT"
+        verbose_name = "Background exposure assessment"
 
 
 class HBGV(models.Model):
