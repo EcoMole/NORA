@@ -1,9 +1,9 @@
 from django.db import models
 
 
-class Assessment(models.Model):
+class AssessmentRemarks(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_assess")
-    title = models.CharField(max_length=255, db_column="assessment")
+    title = models.CharField(max_length=255, db_column="assess")
     definition = models.CharField(max_length=255)
 
     def __str__(self) -> str:
@@ -11,8 +11,8 @@ class Assessment(models.Model):
 
     class Meta:
         db_table = "ASSESSMENT"
-        verbose_name = "additional Assessment"
-        verbose_name_plural = "additional Assessments"
+        verbose_name = "Assessment Remarks"
+        verbose_name_plural = "Assessment Remarks"
 
 
 class Endpointstudy(models.Model):
@@ -215,15 +215,16 @@ class Outcome(models.Model):
     uncertainty_factor = models.IntegerField(
         null=True, blank=True, verbose_name="uncertainty factor"
     )
-    assessment = models.ForeignKey(
-        Assessment,
+    assessment_remarks = models.ForeignKey(
+        AssessmentRemarks,
         db_column="id_assess",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name="Additional Assessment",
-        help_text="Use this field to describe assessment type in case there is "
-        "no sufficient explanation in the Assessment Type field.",
+        verbose_name="Assessment Remarks",
+        help_text="This field provides additional information regarding the "
+        "assessment particularly when no health-based guidance value (e.g., ADI, TDI) "
+        "is provided in the Opinion.",
     )
     remarks = models.CharField(
         max_length=2000,
@@ -461,29 +462,3 @@ class Genotox(models.Model):
         db_table = "GENOTOX"
         verbose_name = "Genotox Study"
         verbose_name_plural = "Genotox Studies 🧬🔬"
-
-
-class SpecificToxicityStudy(models.Model):
-    endpointstudy = models.ForeignKey(Endpointstudy, on_delete=models.CASCADE)
-    id_spec_tox = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="id_spec_tox_specific_toxicity_studies",
-        limit_choices_to={"taxonomy__code": "TOXICITY"},
-        help_text="(TOXICITY vocab)",
-    )
-
-    def __str__(self) -> str:
-        res = self.endpointstudy.novel_food.title
-        if self.endpointstudy.testing_method:
-            res += " - " + self.endpointstudy.testing_method.name
-        if self.id_spec_tox:
-            res += " - " + self.id_spec_tox.name
-        return res
-
-    class Meta:
-        db_table = "SPECIFIC_TOXICITY_STUDY"
-        verbose_name = "Specific Toxicity Study"
-        verbose_name_plural = "Specific Toxicity Studies"

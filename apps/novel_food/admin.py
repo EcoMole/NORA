@@ -98,6 +98,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
                     "mutagenicity",
                     "carcinogenicity",
                     "genotox_final_outcome",
+                    "specific_toxicity",
                 ]
             },
         ),

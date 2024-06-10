@@ -49,7 +49,7 @@ class TaxonomyNode(MPTTModel, SyncMixin):
 
     is_botanic = models.BooleanField(
         default=False,
-        help_text="Is this node marked as being in " "'botanic' hierarchy?",
+        help_text="Is this node marked as being in 'botanic' hierarchy?",
     )
 
     def to_html(self):
@@ -191,27 +191,6 @@ class Population(models.Model):
         on_delete=models.SET_NULL,
         related_name="subgroup_populations",
         db_column="id_subgroup",
-    )
-    sex = models.ForeignKey(
-        TaxonomyNode,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "MTX"},
-        db_column="id_sex",
-        related_name="sex_populations",
-    )
-    population_age = models.ForeignKey(
-        TaxonomyNode,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="population_age_populations",
-        limit_choices_to={"taxonomy__code": "POP_SUBGROUP"},
-        db_column="age",
-        help_text="If possible, specify the population info from this vocabulary. In case "
-        "granularity in this field is not sufficient, use the other fields to specify the "
-        "population. (POP_SUBGROUP vocab)",
     )
     qualifier = models.ForeignKey(
         TaxonomyNode,

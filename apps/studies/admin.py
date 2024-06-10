@@ -3,13 +3,12 @@ from django.contrib import admin
 from .models import (
     ADME,
     ADMEStudyType,
-    Assessment,
+    AssessmentRemarks,
     Endpoint,
     Endpointstudy,
     Genotox,
     Outcome,
     OutcomePopulation,
-    SpecificToxicityStudy,
     StudySource,
     StudyType,
 )
@@ -47,12 +46,6 @@ class ADMEStudyTypeInline(admin.TabularInline):
     autocomplete_fields = ["study_type"]
 
 
-class SpecificToxicityStudyInline(admin.TabularInline):
-    model = SpecificToxicityStudy
-    extra = 1
-    autocomplete_fields = ["id_spec_tox"]
-
-
 # Main model admin classes
 
 
@@ -68,7 +61,7 @@ class EndpointstudyAdmin(admin.ModelAdmin):
         "sex",
         "duration_unit",
     ]
-    inlines = [EndpointInline, SpecificToxicityStudyInline]
+    inlines = [EndpointInline]
 
 
 @admin.register(Endpoint)
@@ -147,13 +140,22 @@ class OutcomeAdmin(admin.ModelAdmin):
         "unit",
         "uncertainty_factor",
     ]
-    search_fields = ["assessment__title", "risk_qualifier__description", "value"]
-    autocomplete_fields = ["assessment", "assessment_type", "risk_qualifier", "unit"]
+    search_fields = [
+        "assessment_remarks__title",
+        "risk_qualifier__description",
+        "value",
+    ]
+    autocomplete_fields = [
+        "assessment_remarks",
+        "assessment_type",
+        "risk_qualifier",
+        "unit",
+    ]
     inlines = [OutcomePopulationInline]
 
 
-@admin.register(Assessment)
-class AssessmentAdmin(admin.ModelAdmin):
+@admin.register(AssessmentRemarks)
+class AssessmentRemarksAdmin(admin.ModelAdmin):
     list_display = ["title", "definition"]
     search_fields = ["title"]
     fields = ["title", "definition"]

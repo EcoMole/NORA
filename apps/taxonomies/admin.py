@@ -14,18 +14,16 @@ from taxonomies.models import (
 class PopulationAdmin(admin.ModelAdmin):
     list_display = [
         "subgroup",
-        "sex",
-        "population_age",
         "qualifier",
         "value",
         "upper_range_value",
         "unit",
     ]
-    search_fields = ["subgroup__title", "sex__name", "population_age__name"]
+    search_fields = [
+        "subgroup__title",
+    ]
     fields = [
         "subgroup",
-        "sex",
-        "population_age",
         "qualifier",
         "value",
         "upper_range_value",
@@ -34,7 +32,7 @@ class PopulationAdmin(admin.ModelAdmin):
     list_filter = [
         "subgroup",
     ]
-    autocomplete_fields = ["sex", "population_age", "qualifier", "unit"]
+    autocomplete_fields = ["qualifier", "unit"]
 
 
 @admin.register(GuidelineQualifier)
