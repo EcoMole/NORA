@@ -318,6 +318,12 @@ class GenotoxFinalOutcome(models.Model):
 
 
 class NovelFood(models.Model):
+    OUTCOME_CHOICES = [
+        ("negative", "Negative"),
+        ("partially_negative", "Partially Negative"),
+        ("positive", "Positive"),
+    ]
+
     # general info
     id = models.AutoField(primary_key=True, db_column="id_study")
     opinion = models.ForeignKey(
@@ -454,9 +460,8 @@ class NovelFood(models.Model):
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_shelflife_unit",
         related_name="shelflife_unit_novel_foods",
-        help_text="(UNIT vocab)",
+        help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
-
     endocrine_disrupt_prop = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -468,17 +473,15 @@ class NovelFood(models.Model):
         related_name="endocrine_disrupt_prop_novel_foods",
         help_text="(YESNO vocab)",
     )
-    outcome = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "POSNEG"},
-        db_column="id_outcome",
-        related_name="outcome_novel_foods",
-        help_text="(POSNEG vocab)",
+    outcome = models.CharField(
+        max_length=255, blank=True, null=True, choices=OUTCOME_CHOICES
     )
-    outcome_remarks = models.CharField(max_length=2000, blank=True, null=True)
+    outcome_remarks = models.CharField(
+        max_length=2000,
+        blank=True,
+        null=True,
+        help_text="explanation in case the Outcome is 'Partially Negative'",
+    )
 
     catalogue_identity = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -499,12 +502,13 @@ class NovelFood(models.Model):
     )
 
     def __str__(self) -> str:
-        return self.nf_code + " - " + self.title
+        nf_code_part = f"{self.nf_code} - " if self.nf_code else ""
+        return nf_code_part + self.title
 
     class Meta:
         db_table = "STUDY"
         verbose_name = "Novel Food"
-        verbose_name_plural = "Novel Foods 🥗"
+        verbose_name_plural = "Novel Foods 🥬"
 
 
 class BackgroundExposureAssessment(models.Model):

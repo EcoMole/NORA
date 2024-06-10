@@ -1,7 +1,13 @@
 from django.contrib import admin
 
 # Register your models here.
-from taxonomies.models import Population, Subgroup, Taxonomy, TaxonomyNode
+from taxonomies.models import (
+    GuidelineQualifier,
+    Population,
+    Subgroup,
+    Taxonomy,
+    TaxonomyNode,
+)
 
 
 @admin.register(Population)
@@ -29,6 +35,16 @@ class PopulationAdmin(admin.ModelAdmin):
         "subgroup",
     ]
     autocomplete_fields = ["sex", "population_age", "qualifier", "unit"]
+
+
+@admin.register(GuidelineQualifier)
+class GuidelineQualifierAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+    ]
+    search_fields = [
+        "title",
+    ]
 
 
 @admin.register(Subgroup)

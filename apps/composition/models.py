@@ -18,7 +18,7 @@ class ParameterType(models.Model):
     class Meta:
         db_table = "PARAMETER_TYPE"
         verbose_name = "Parameter Type"
-        verbose_name_plural = "Parameter Types - options"
+        verbose_name_plural = "📂 Parameter Types"
 
 
 class Parameter(models.Model):
@@ -56,7 +56,7 @@ class Parameter(models.Model):
     class Meta:
         db_table = "PARAMETER"
         verbose_name = "Parameter"
-        verbose_name_plural = "Parameters - options"
+        verbose_name_plural = "📂 Parameters"
 
 
 class NovelFoodVariant(models.Model):
@@ -75,12 +75,16 @@ class NovelFoodVariant(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"variant for {self.novel_food.title}"
+        food_forms = ""
+        for foodform_novelfoodvariant in self.foodformnovelfoodvariant_set.all():
+            food_forms += f"{foodform_novelfoodvariant.food_form.title}, "
+        food_forms = food_forms[:-2]
+        return f"{self.novel_food.title} - {food_forms}"
 
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"
         verbose_name = "Novel Food Variant"
-        verbose_name_plural = " Novel Food Variants"
+        verbose_name_plural = "Novel Food Variants 🥗"
 
 
 class ProductionNovelFoodVariant(models.Model):
@@ -123,7 +127,7 @@ class FoodForm(models.Model):
     class Meta:
         db_table = "FOOD_FORM"
         verbose_name = "Food Form"
-        verbose_name_plural = "Food Forms - options"
+        verbose_name_plural = "📂 Food Forms"
 
 
 class FoodFormNovelFoodVariant(models.Model):
@@ -189,7 +193,7 @@ class Composition(models.Model):
         related_name="unit_compositions",
         db_column="id_unit",
         limit_choices_to={"taxonomy__code": "UNIT"},
-        help_text="(UNIT vocab)",
+        help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     TYPE_CHOICES = (
         ("specification", "Specification"),
@@ -235,7 +239,7 @@ class ProposedUseType(models.Model):
     class Meta:
         db_table = "PROPOSED_USE_TYPE"
         verbose_name = "Proposed Use Type"
-        verbose_name_plural = "Proposed Use Types - options"
+        verbose_name_plural = "📂 Proposed Use Types"
 
 
 class ProposedUse(models.Model):

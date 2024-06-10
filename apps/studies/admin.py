@@ -7,7 +7,6 @@ from .models import (
     Endpoint,
     Endpointstudy,
     Genotox,
-    GenotoxOutcome,
     Outcome,
     OutcomePopulation,
     SpecificToxicityStudy,
@@ -34,12 +33,6 @@ class OutcomeInline(admin.TabularInline):
     model = Outcome
     extra = 1
     autocomplete_fields = ["assessment_type", "risk_qualifier", "unit"]
-
-
-class GenotoxOutcomeInline(admin.TabularInline):
-    model = GenotoxOutcome
-    extra = 1
-    autocomplete_fields = ["outcome"]
 
 
 class OutcomePopulationInline(admin.TabularInline):
@@ -73,14 +66,28 @@ class EndpointstudyAdmin(admin.ModelAdmin):
         "test_type",
         "species",
         "sex",
+        "duration_unit",
     ]
     inlines = [EndpointInline, SpecificToxicityStudyInline]
 
 
 @admin.register(Endpoint)
 class EndpointAdmin(admin.ModelAdmin):
-    list_display = ["endpointstudy", "qualifier", "lovalue", "unit", "sex"]
-    autocomplete_fields = ["endpointstudy", "qualifier", "unit", "sex"]
+    list_display = [
+        "reference_point",
+        "endpointstudy",
+        "qualifier",
+        "lovalue",
+        "unit",
+        "sex",
+    ]
+    autocomplete_fields = [
+        "reference_point",
+        "endpointstudy",
+        "qualifier",
+        "unit",
+        "sex",
+    ]
 
 
 @admin.register(Genotox)
@@ -94,19 +101,6 @@ class GenotoxAdmin(admin.ModelAdmin):
         "test_type",
         "genotox_guideline",
     ]
-    inlines = [GenotoxOutcomeInline]
-
-
-@admin.register(GenotoxOutcome)
-class GenotoxOutcomeAdmin(admin.ModelAdmin):
-    list_display = ["genotox", "outcome"]
-    search_fields = ["outcome"]
-
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
 
 
 @admin.register(ADME)

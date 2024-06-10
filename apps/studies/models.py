@@ -42,14 +42,12 @@ class Endpointstudy(models.Model):
         "subchronic (OECD phrase ID 2399) (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
+        "taxonomies.GuidelineQualifier",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="guideline_qualifier_endpointstudies",
         db_column="id_guideline_qualifier",
-        limit_choices_to={"taxonomy__code": "QUALIFIER"},
-        help_text="(QUALIFIER vocab)",
     )
     guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -90,7 +88,7 @@ class Endpointstudy(models.Model):
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_duration_unit",
         related_name="duration_unit_endpointstudies",
-        help_text="(UNIT vocab)",
+        help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     study_source = models.ForeignKey(
         "studies.StudySource",
@@ -112,10 +110,20 @@ class Endpointstudy(models.Model):
     class Meta:
         db_table = "ENDPOINTSTUDY"
         verbose_name = "Endpoint Study"
-        verbose_name_plural = "Endpoint Studies 📍"
+        verbose_name_plural = "Endpoint Studies 📐🔬"
 
 
 class Endpoint(models.Model):
+    reference_point = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
+        db_column="id_endpoint",
+        related_name="endpoint_end_endstudy_outcomes",
+        help_text="(ENDPOINT_HGV vocab)",
+    )
     qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -135,7 +143,7 @@ class Endpoint(models.Model):
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_unit",
         related_name="unit_end_endstudy_outcomes",
-        help_text="(UNIT vocab)",
+        help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     sex = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -153,29 +161,17 @@ class Endpoint(models.Model):
         db_column="id_tox",
         related_name="endpointstudy_end_endstudy_outcomes",
     )
-    endpoint = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
-        db_column="id_endpoint",
-        related_name="endpoint_end_endstudy_outcomes",
-        help_text="(ENDPOINT_HGV vocab)",
-    )
 
     def __str__(self) -> str:
         res = self.endpointstudy.novel_food.title
-        if self.testing_method:
-            res += self.testing_method.name
-        if self.endpoint:
-            res += " - " + self.endpoint.name
+        if self.reference_point:
+            res += " - " + self.reference_point.name
         return res
 
     class Meta:
         db_table = "ENDPOINT"
         verbose_name = "Endpoint"
-        verbose_name_plural = "Endpoints"
+        verbose_name_plural = "📂 Endpoints"
 
 
 class Outcome(models.Model):
@@ -214,7 +210,7 @@ class Outcome(models.Model):
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_risk_unit",
         related_name="unit_outcomes",
-        help_text="(UNIT vocab)",
+        help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     uncertainty_factor = models.IntegerField(
         null=True, blank=True, verbose_name="uncertainty factor"
@@ -225,7 +221,7 @@ class Outcome(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name="additional Assessment",
+        verbose_name="Additional Assessment",
         help_text="Use this field to describe assessment type in case there is "
         "no sufficient explanation in the Assessment Type field.",
     )
@@ -234,21 +230,12 @@ class Outcome(models.Model):
         null=True,
         blank=True,
     )
-    end_endstudy_outcome = models.ForeignKey(
+    endpoint = models.ForeignKey(
         Endpoint,
         on_delete=models.CASCADE,
-        db_column="end_endstudy_hazard",
+        db_column="id_endpoint",
         null=True,
         blank=True,
-    )
-    toxicity_concern = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
-        related_name="toxicity_concern_outcomes",
-        help_text="(YESNO vocab)",
     )
 
     def __str__(self) -> str:
@@ -264,7 +251,7 @@ class Outcome(models.Model):
     class Meta:
         db_table = "HAZARD"
         verbose_name = "Final Outcome"
-        verbose_name_plural = "Final Outcomes 📍"
+        verbose_name_plural = "Final Outcomes 🎰"
 
 
 class StudyType(models.Model):
@@ -341,13 +328,11 @@ class ADME(models.Model):
         help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
+        "taxonomies.GuidelineQualifier",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="guideline_qualifier_admes",
-        limit_choices_to={"taxonomy__code": "QUALIFIER"},
-        help_text="(QUALIFIER vocab)",
     )
     guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -380,7 +365,7 @@ class ADME(models.Model):
     class Meta:
         db_table = "PKTK"
         verbose_name = "ADME Study"
-        verbose_name_plural = "ADME Studies 📍"
+        verbose_name_plural = "ADME Studies 🎸🔬"
 
 
 class ADMEStudyType(models.Model):
@@ -418,14 +403,12 @@ class Genotox(models.Model):
         help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
+        "taxonomies.GuidelineQualifier",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="guideline_qualifier_genotoxes",
         db_column="id_guideline_qualifier",
-        limit_choices_to={"taxonomy__code": "QUALIFIER"},
-        help_text="(QUALIFIER vocab)",
     )
     genotox_guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -442,10 +425,10 @@ class Genotox(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to={"taxonomy__code": "POSNEG"},
         db_column="id_is_genotoxic",
         related_name="outcome_genotoxes",
-        help_text="(YESNO vocab)",
+        help_text="(POSNEG vocab)",
     )
     study_source = models.ForeignKey(
         "studies.StudySource",
@@ -477,17 +460,7 @@ class Genotox(models.Model):
     class Meta:
         db_table = "GENOTOX"
         verbose_name = "Genotox Study"
-        verbose_name_plural = "Genotox Studies 📍"
-
-
-class GenotoxOutcome(models.Model):
-    genotox = models.ForeignKey(Genotox, on_delete=models.CASCADE)
-    outcome = models.ForeignKey(Outcome, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "GENOTOX_HAZARD"
-        verbose_name = "Genotox Outcome"
-        verbose_name_plural = "Genotox Outcomes"
+        verbose_name_plural = "Genotox Studies 🧬🔬"
 
 
 class SpecificToxicityStudy(models.Model):

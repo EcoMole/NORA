@@ -207,8 +207,11 @@ class Population(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="population_age_populations",
-        db_column="age"
-        # limit_choices_to={"taxonomy__code": ""},  # TODO: Add code of a taxonomy vocabulary
+        limit_choices_to={"taxonomy__code": "POP_SUBGROUP"},
+        db_column="age",
+        help_text="If possible, specify the population info from this vocabulary. In case "
+        "granularity in this field is not sufficient, use the other fields to specify the "
+        "population. (POP_SUBGROUP vocab)",
     )
     qualifier = models.ForeignKey(
         TaxonomyNode,
@@ -235,6 +238,7 @@ class Population(models.Model):
         related_name="unit_populations",
         db_column="id_unit",
         limit_choices_to={"taxonomy__code": "UNIT"},
+        help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
 
     def __str__(self):
@@ -258,3 +262,16 @@ class Population(models.Model):
         db_table = "AGE"
         verbose_name = "Population"
         verbose_name_plural = "Populations 👨‍👩‍👧"
+
+
+class GuidelineQualifier(models.Model):
+    id = models.BigAutoField(primary_key=True, db_column="id_quideline_qualifier")
+    title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "GUIDELINE_QUALIFIER"
+        verbose_name = "Guideline Qualifier"
+        verbose_name_plural = "📂 Guideline Qualifiers"
