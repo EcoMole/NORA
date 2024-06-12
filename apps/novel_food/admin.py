@@ -7,6 +7,7 @@ from novel_food.models import (
     Category,
     Chemical,
     ChemicalSyn,
+    ChemicalType,
     Family,
     FoodCategory,
     GenotoxFinalOutcome,
@@ -20,6 +21,7 @@ from novel_food.models import (
     Organism,
     OrganismSyn,
     OrgModification,
+    StructureReported,
     SubstanceOfConcernNovelFood,
     SynonymType,
     Type,
@@ -101,6 +103,11 @@ class OrganismInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(SynonymType)
+class SynonymAdmin(admin.ModelAdmin):
+    list_display = ["synonym_type"]
+
+
 @admin.register(NovelFood)
 class NovelFoodAdmin(admin.ModelAdmin):
     # form = NovelFoodForm
@@ -171,6 +178,21 @@ class NovelFoodAdmin(admin.ModelAdmin):
         AllergenicityNovelFoodInline,
     ]
     list_filter = ["carcinogenicity", "mutagenicity"]
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ["title", "definition", "regulation"]
+
+
+@admin.register(FoodCategory)
+class FoodCategoryAdmin(admin.ModelAdmin):
+    list_display = ["title", "definition"]
+
+
+@admin.register(Allergenicity)
+class AllergenicityAdmin(admin.ModelAdmin):
+    list_display = ["title"]
 
 
 class IsFromVocabFilter(admin.SimpleListFilter):
@@ -279,11 +301,6 @@ class ChemicalAdmin(admin.ModelAdmin):
     inlines = [ChemicalSynInline]
 
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition", "regulation"]
-
-
 @admin.register(NutritionalDisadvantage)
 class NutritionalDisadvantageAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
@@ -293,19 +310,18 @@ class NutritionalDisadvantageAdmin(admin.ModelAdmin):
         return {}
 
 
-@admin.register(FoodCategory)
-class FoodCategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition"]
-
-
-@admin.register(SynonymType)
-class SynonymAdmin(admin.ModelAdmin):
-    list_display = ["synonym_type"]
-
-
-@admin.register(Allergenicity)
-class AllergenicityAdmin(admin.ModelAdmin):
+@admin.register(ChemicalType)
+class ChemicalTypeAdmin(admin.ModelAdmin):
     list_display = ["title"]
+    search_fields = ["title"]
+    list_filter = ["title"]
+
+
+@admin.register(StructureReported)
+class StructureReportedAdmin(admin.ModelAdmin):
+    list_display = ["title"]
+    search_fields = ["title"]
+    list_filter = ["title"]
 
 
 @admin.register(GenotoxFinalOutcome)
