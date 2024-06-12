@@ -19,6 +19,7 @@ from novel_food.models import (
     NutritionalDisadvantage,
     Organism,
     OrganismSyn,
+    OrgModification,
     SubstanceOfConcernNovelFood,
     SynonymType,
     Type,
@@ -309,6 +310,15 @@ class AllergenicityAdmin(admin.ModelAdmin):
 
 @admin.register(GenotoxFinalOutcome)
 class GenotoxFinalOutcomeAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+@admin.register(OrgModification)
+class OrgModificationAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.

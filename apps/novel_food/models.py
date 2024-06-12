@@ -218,6 +218,20 @@ class OrganismSyn(models.Model):
         verbose_name = "Organism synonym"
 
 
+class OrgModification(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_org_modification")
+    title = models.CharField(max_length=255, unique=True, db_column="org_modification")
+    description = models.CharField(max_length=2000, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "ORG_MODIFICATION"
+        verbose_name = "Organism Modification"
+        verbose_name_plural = "📂 Organism Modifications"
+
+
 class NovelFoodOrganism(models.Model):
     novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
     organism = models.ForeignKey(Organism, on_delete=models.CASCADE)
@@ -230,16 +244,14 @@ class NovelFoodOrganism(models.Model):
         limit_choices_to={"taxonomy__code": "MTX"},
         help_text="(MTX vocab)",
     )
-    is_gmo = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
+    modification = models.ForeignKey(
+        OrgModification,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="is_gmo_novel_foods",
-        verbose_name="is GMO",
-        limit_choices_to={"taxonomy__code": "YESNO"},
-        help_text="Was the organism genetically modified? or in case of cell culture, "
-        "was the cell culture modified? (YESNO vocab)",
+        related_name="modification_novel_foods",
+        verbose_name="modification",
+        help_text="if modified choose how: genitically, hormonally, etc.",
     )
     has_qps = models.ForeignKey(
         "taxonomies.TaxonomyNode",
