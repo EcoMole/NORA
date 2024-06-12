@@ -135,6 +135,51 @@ class NovelFoodSyn(models.Model):
         verbose_name = "Novel food synonym"
 
 
+class Type(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_type")
+    title = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "TYPE"
+        verbose_name = "Type (taxonomy)"
+        verbose_name_plural = "📂 Types (taxonomy)"
+
+
+class Family(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_family")
+    type = models.ForeignKey(
+        Type, on_delete=models.CASCADE, db_column="id_type", null=True, blank=True
+    )
+    title = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "FAMILY"
+        verbose_name = "Family (taxonomy)"
+        verbose_name_plural = "📂 Families (taxonomy)"
+
+
+class Genus(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_genus")
+    family = models.ForeignKey(
+        Family, on_delete=models.CASCADE, db_column="id_family", null=True, blank=True
+    )
+    title = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "GENUS"
+        verbose_name = "Genus (taxonomy)"
+        verbose_name_plural = "📂 Genera (taxonomy)"
+
+
 class Organism(models.Model):
     organism_node = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -144,9 +189,18 @@ class Organism(models.Model):
         limit_choices_to={"taxonomy__code": "MTX"},
         help_text="(MTX vocab)",
     )
+    species_title = models.CharField(max_length=255, null=True, blank=True)
+    genus = models.ForeignKey(
+        Genus, on_delete=models.CASCADE, null=True, blank=True, db_column="id_genus"
+    )
 
     def __str__(self):
-        return self.organism_node.name
+        if self.species_title:
+            return self.species_title
+        elif self.organism_node:
+            return self.organism_node.name
+        else:
+            return None
 
     class Meta:
         db_table = "ORGANISM"

@@ -121,12 +121,12 @@ class Command(BaseCommand):
                                 assignment = None
                                 for a in assignments:
                                     hc = ct(a, "hierarchyCode")
-                                    if hc == catalogue_code:
+                                    if hc == "botanic":
                                         assignment = a
-                                    elif hc == "botanic":
                                         is_botanic = True
-                                        if assignment:
-                                            break  # we have all we need: assignment and is_botanic
+                                        break  # we have all we need: assignment and is_botanic
+                                    elif hc == catalogue_code:
+                                        assignment = a
 
                                 if assignment is None:
                                     raise Exception(
