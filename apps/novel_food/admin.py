@@ -59,6 +59,7 @@ class NutritionalDisadvantageInline(admin.TabularInline):
 
 class BackgroundExposureAssessmentInline(admin.TabularInline):
     model = BackgroundExposureAssessment
+    autocomplete_fields = ["comp_of_interest"]
     extra = 1
 
 
