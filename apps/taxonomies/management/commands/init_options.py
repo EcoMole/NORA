@@ -23,7 +23,7 @@ class Command(BaseCommand):
         
         recommendation = TaxonomyNode.objects.get_or_create(code='NORA', taxonomy=legref, short_name='Commission Recommendation 97/618/EC')
 
-        regulation_258_97 = TaxonomyNode.objects.get_or_create(taxonomy=legref, code = 'N124A', short_name='Regulation (EC) No 258/1997') #TODO Tady nechat jen kod
+        regulation_258_97 = TaxonomyNode.objects.get_or_create(taxonomy=legref, code = 'N124A')
 
         categories_2015_2283 = {
         "Modified molecular structure": "food with a new or intentionally modified molecular structure, where that structure was not used as, or in, a food within the Union before 15 May 1997;",
