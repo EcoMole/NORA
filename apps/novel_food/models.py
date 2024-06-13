@@ -73,7 +73,7 @@ class Category(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.regulation} : {self.title}"
+        return f"{self.regulation.name} : {self.title}"
 
     class Meta:
         db_table = "SUB_TYPE"

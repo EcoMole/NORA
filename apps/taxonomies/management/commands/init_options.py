@@ -1,11 +1,11 @@
 from django.core.management.base import BaseCommand, CommandError
-from administrative.models import Panel
+from administrative.models import Panel, Mandate
 from novel_food.models import Allergenicity, FoodCategory, SynonymType, Category
 from composition.models import FoodForm, ParameterType, ProposedUseType
 from taxonomies.models import Taxonomy, TaxonomyNode
 
 class Command(BaseCommand):
-    help = "TODO"
+    help = "command to initialize options in the database - panels, categories, mandates, allergenicity etc."
 
     def create_panels(self):
         for name in ['EFSA', 'NDA', 'GMO']:
@@ -23,7 +23,7 @@ class Command(BaseCommand):
         
         recommendation = TaxonomyNode.objects.get_or_create(code='NORA', taxonomy=legref, short_name='Commission Recommendation 97/618/EC')
 
-        regulation_258_97 = TaxonomyNode.objects.get_or_create(taxonomy=legref, code = 'N124A', short_name='Regulation (EC) No 258/1997')
+        regulation_258_97 = TaxonomyNode.objects.get_or_create(taxonomy=legref, code = 'N124A', short_name='Regulation (EC) No 258/1997') #TODO Tady nechat jen kod
 
         categories_2015_2283 = {
         "Modified molecular structure": "food with a new or intentionally modified molecular structure, where that structure was not used as, or in, a food within the Union before 15 May 1997;",
@@ -100,6 +100,16 @@ class Command(BaseCommand):
             Category.objects.get_or_create(title=key, definition=value, regulation=regulation_258_97[0])
 
 
+    def create_mandates(self):
+        Mandate.objects.get_or_create(title='traditional_food')
+        Mandate.objects.get_or_create(title='nutrient_source')
+
+        novel_food = Mandate.objects.get_or_create(title='novel_food')
+
+        # Create children for novel food
+        Mandate.objects.get_or_create(title='new_dossier', mandate_parent=novel_food[0])
+        Mandate.objects.get_or_create(title='extension_of_use', mandate_parent=novel_food[0])
+        Mandate.objects.get_or_create(title='nutrient_source', mandate_parent=novel_food[0])
 
     def create_allergenicity(self):
         options = ['Low', 'Unlikely', 'Possible', 'Possible cross-reactivity', 'Possible primary sensitization', 'Certainty', 'N/A']
@@ -141,3 +151,4 @@ class Command(BaseCommand):
         self.create_parameter_types()
         self.create_proposed_use_types()
         self.create_novel_food_categories()
+        self.create_mandates()

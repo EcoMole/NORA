@@ -116,6 +116,7 @@ class MandateAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
+    fields = ["question"]
     list_display = ["question", "mandate"]
     search_fields = ["question"]
     list_filter = ["mandate"]
