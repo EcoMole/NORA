@@ -60,7 +60,7 @@ class NutritionalDisadvantage(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=255, null=True, blank=True)
+    definition = models.CharField(max_length=2000, null=True, blank=True)
     regulation = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         blank=True,
