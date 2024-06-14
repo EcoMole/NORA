@@ -1,5 +1,6 @@
 from administrative.models import Opinion
 from django.db import models
+from taxonomies.util import Descriptor
 
 
 class Allergenicity(models.Model):
@@ -348,6 +349,51 @@ class Chemical(models.Model):
         db_table = "COMPONENT"
         verbose_name = "Chemicals"
         verbose_name_plural = "Chemicals 🧪"
+
+
+class ChemDescriptor(models.Model):
+    TYPE_CHOICES = [
+        (
+            Descriptor.OTHER_NAMES.value,
+            Descriptor.OTHER_NAMES.verbose,
+        ),
+        (Descriptor.IUPAC.value, Descriptor.IUPAC.verbose),
+        (
+            Descriptor.MOLECULAR_FORMULA.value,
+            Descriptor.MOLECULAR_FORMULA.verbose,
+        ),
+        (Descriptor.CAS.value, Descriptor.CAS.verbose),
+        (
+            Descriptor.SMILES_NOTATION.value,
+            Descriptor.SMILES_NOTATION.verbose,
+        ),
+        (Descriptor.INCHI.value, Descriptor.INCHI.verbose),
+        (Descriptor.ZOO_LABEL.value, Descriptor.ZOO_LABEL.verbose),
+        (Descriptor.CATEGORY.value, Descriptor.CATEGORY.verbose),
+        (Descriptor.PEST_CLASS.value, Descriptor.PEST_CLASS.verbose),
+        (
+            Descriptor.DETAIL_LEVEL.value,
+            Descriptor.DETAIL_LEVEL.verbose,
+        ),
+        (
+            Descriptor.COM_ECSUBINVENTENTRYREF.value,
+            Descriptor.COM_ECSUBINVENTENTRYREF.verbose,
+        ),
+        (
+            Descriptor.FLAVIS_NUMBER.value,
+            Descriptor.FLAVIS_NUMBER.verbose,
+        ),
+    ]
+    id = models.AutoField(primary_key=True, db_column="id_chem_descriptor")
+    type = models.CharField(max_length=255, choices=TYPE_CHOICES)
+    value = models.CharField(max_length=255)
+    chemical = models.ForeignKey(
+        Chemical, on_delete=models.CASCADE, related_name="chem_descriptors"
+    )
+
+    class Meta:
+        db_table = "CHEM_DESCRIPTOR"
+        verbose_name = "Custom Descriptor"
 
 
 class ChemicalSyn(models.Model):

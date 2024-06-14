@@ -5,6 +5,7 @@ from novel_food.models import (
     AllergenicityNovelFood,
     BackgroundExposureAssessment,
     Category,
+    ChemDescriptor,
     Chemical,
     ChemicalSyn,
     ChemicalType,
@@ -26,6 +27,7 @@ from novel_food.models import (
     SynonymType,
     Type,
 )
+from taxonomies.util import Descriptor
 
 # from allergenicity.models import  Allergenicity
 
@@ -101,6 +103,11 @@ class GenusInline(admin.TabularInline):
 
 class OrganismInline(admin.TabularInline):
     model = Organism
+    extra = 1
+
+
+class ChemDescriptorInline(admin.TabularInline):
+    model = ChemDescriptor
     extra = 1
 
 
@@ -277,7 +284,6 @@ class TypeAdmin(admin.ModelAdmin):
     inlines = [FamilyInline]
 
 
-# Admin for Family
 @admin.register(Family)
 class FamilyAdmin(admin.ModelAdmin):
     list_display = ["title", "type"]
@@ -286,7 +292,6 @@ class FamilyAdmin(admin.ModelAdmin):
     inlines = [GenusInline]
 
 
-# Admin for Genus
 @admin.register(Genus)
 class GenusAdmin(admin.ModelAdmin):
     list_display = ["title", "family"]
@@ -297,9 +302,191 @@ class GenusAdmin(admin.ModelAdmin):
 
 @admin.register(Chemical)
 class ChemicalAdmin(admin.ModelAdmin):
-    list_display = ["catalogue_identity"]
+    list_display = ["catalogue_identity", "get_iupac", "get_mol_form", "get_cas"]
     autocomplete_fields = ["catalogue_identity"]
-    inlines = [ChemicalSynInline]
+    inlines = [ChemicalSynInline, ChemDescriptorInline]
+    readonly_fields = [
+        "get_iupac",
+        "get_mol_form",
+        "get_pest_class",
+        "get_flavis_number",
+        "get_detail_level",
+        "get_smiles",
+        "get_zoo_label",
+        "get_cas",
+        "get_ec_subinvent_entry_ref",
+        "get_inchi",
+        "get_category",
+        "get_other_names",
+    ]
+    fieldsets = [
+        (
+            "General Information",
+            {"fields": ["catalogue_identity"]},
+        ),
+        (
+            "OFT fields - optional for NORA?",
+            {
+                "fields": ["chemical_type", "structure_reported"],
+                "classes": ["collapse"],
+            },
+        ),
+        (
+            "Final Descriptors (Custom Descriptors and Vocabulary Descriptors combined)",
+            {
+                "fields": [
+                    "get_iupac",
+                    "get_mol_form",
+                    "get_cas",
+                    "get_smiles",
+                    "get_inchi",
+                    "get_zoo_label",
+                    "get_category",
+                    "get_pest_class",
+                    "get_detail_level",
+                    "get_ec_subinvent_entry_ref",
+                    "get_flavis_number",
+                    "get_other_names",
+                ]
+            },
+        ),
+    ]
+
+    @staticmethod
+    def get_descriptors_to_display(custom_descriptors, vocab_descriptors):
+        result = ""
+        if custom_descriptors.exists():
+            for descriptor in custom_descriptors:
+                result += descriptor.value + ", "
+        if vocab_descriptors.exists():
+            for attr in vocab_descriptors:
+                result += attr.value + ", "
+        if result == "":
+            return "😢"
+        else:
+            return result[:-2]
+
+    def get_iupac(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.IUPAC.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.IUPAC.value
+            ),
+        )
+
+    get_iupac.short_description = Descriptor.IUPAC.verbose
+
+    def get_mol_form(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.MOLECULAR_FORMULA.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.MOLECULAR_FORMULA.value
+            ),
+        )
+
+    get_mol_form.short_description = Descriptor.MOLECULAR_FORMULA.verbose
+
+    def get_pest_class(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.PEST_CLASS.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.PEST_CLASS.value
+            ),
+        )
+
+    get_pest_class.short_description = Descriptor.PEST_CLASS.verbose
+
+    def get_flavis_number(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.FLAVIS_NUMBER.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.FLAVIS_NUMBER.value
+            ),
+        )
+
+    get_flavis_number.short_description = Descriptor.FLAVIS_NUMBER.verbose
+
+    def get_detail_level(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.DETAIL_LEVEL.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.DETAIL_LEVEL.value
+            ),
+        )
+
+    get_detail_level.short_description = Descriptor.DETAIL_LEVEL.verbose
+
+    def get_smiles(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.SMILES_NOTATION.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.SMILES_NOTATION.value
+            ),
+        )
+
+    get_smiles.short_description = Descriptor.SMILES_NOTATION.verbose
+
+    def get_zoo_label(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.ZOO_LABEL.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.ZOO_LABEL.value
+            ),
+        )
+
+    get_zoo_label.short_description = Descriptor.ZOO_LABEL.verbose
+
+    def get_cas(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.CAS.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.CAS.value
+            ),
+        )
+
+    get_cas.short_description = Descriptor.CAS.verbose
+
+    def get_ec_subinvent_entry_ref(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.COM_ECSUBINVENTENTRYREF.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.COM_ECSUBINVENTENTRYREF.value
+            ),
+        )
+
+    get_ec_subinvent_entry_ref.short_description = (
+        Descriptor.COM_ECSUBINVENTENTRYREF.verbose
+    )
+
+    def get_inchi(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.INCHI.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.INCHI.value
+            ),
+        )
+
+    get_inchi.short_description = Descriptor.INCHI.verbose
+
+    def get_category(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.CATEGORY.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.CATEGORY.value
+            ),
+        )
+
+    get_category.short_description = Descriptor.CATEGORY.verbose
+
+    def get_other_names(self, obj):
+        return self.get_descriptors_to_display(
+            obj.chem_descriptors.filter(type=Descriptor.OTHER_NAMES.value),
+            obj.catalogue_identity.implicit_attributes.filter(
+                code=Descriptor.OTHER_NAMES.value
+            ),
+        )
+
+    get_other_names.short_description = Descriptor.OTHER_NAMES.verbose
 
 
 @admin.register(NutritionalDisadvantage)
