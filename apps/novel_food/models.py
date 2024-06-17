@@ -219,23 +219,13 @@ class OrganismSyn(models.Model):
         verbose_name = "Organism synonym"
 
 
-class OrgModification(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_org_modification")
-    title = models.CharField(max_length=255, unique=True, db_column="org_modification")
-    description = models.CharField(max_length=2000, blank=True, null=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        db_table = "ORG_MODIFICATION"
-        verbose_name = "Organism Modification"
-        verbose_name_plural = "📂 Organism Modifications"
-
-
 class NovelFoodOrganism(models.Model):
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    organism = models.ForeignKey(Organism, on_delete=models.CASCADE)
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+    organism = models.ForeignKey(
+        Organism, on_delete=models.CASCADE, db_column="id_organism"
+    )
     org_part = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -244,15 +234,25 @@ class NovelFoodOrganism(models.Model):
         related_name="org_part_novel_foods",
         limit_choices_to={"taxonomy__code": "MTX"},
         help_text="(MTX vocab)",
+        db_column="id_org_part",
     )
-    modification = models.ForeignKey(
-        OrgModification,
+    variant = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text="STRAIN if microorganism / VARIETY if plant / "
+        "SUBSPECIES if animal / CEll_TYPE if cell culture",
+    )
+    is_gmo = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="modification_novel_foods",
-        verbose_name="modification",
-        help_text="if modified choose how: genitically, hormonally, etc.",
+        related_name="is_gmo_novel_foods",
+        limit_choices_to={"taxonomy__code": "YESNO"},
+        verbose_name="is GMO",
+        db_column="id_is_gmo",
+        help_text="Is the organism genetically modified? (YESNO vocab)",
     )
     has_qps = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -262,14 +262,29 @@ class NovelFoodOrganism(models.Model):
         related_name="has_qps_novel_foods",
         limit_choices_to={"taxonomy__code": "YESNO"},
         verbose_name="has QPS",
+        db_column="id_has_qps",
         help_text="Has qualified presumption of safety? (YESNO vocab)",
     )
-    variant = models.CharField(
-        max_length=255,
-        blank=True,
+    cell_culture = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
         null=True,
-        help_text="STRAIN for microorganisms / VARIETY for plants / "
-        "SUBSPECIES for animals / CEll_TYPE for cell cultures",
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="cell_culture_novel_foods",
+        limit_choices_to={"taxonomy__code": "STRAIN"},
+        db_column="id_cell_culture",
+        help_text="(STRAIN vocab)",
+    )
+    is_cell_culture_modified = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="is_cell_culture_modified_novel_foods",
+        limit_choices_to={"taxonomy__code": "YESNO"},
+        verbose_name="is the cell culture modified",
+        db_column="id_is_cell_culture_modified",
+        help_text="Is the cell culture modified? (YESNO vocab)",
     )
 
     class Meta:

@@ -21,7 +21,6 @@ from novel_food.models import (
     NutritionalDisadvantage,
     Organism,
     OrganismSyn,
-    OrgModification,
     StructureReported,
     SubstanceOfConcernNovelFood,
     SynonymType,
@@ -42,10 +41,43 @@ class NovelFoodChemicalInline(admin.TabularInline):
     extra = 1
 
 
-class NovelFoodOrganismInline(admin.TabularInline):
+class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
     model = NovelFoodOrganism
-    autocomplete_fields = ["org_part", "organism"]
+    autocomplete_fields = ["org_part", "organism", "cell_culture"]
     extra = 1
+    fieldsets = [
+        (
+            "General Information",
+            {
+                "fields": [
+                    "novel_food",
+                    "organism",
+                    "org_part",
+                    "variant",
+                    "is_gmo",
+                ]
+            },
+        ),
+        (
+            "if microorganism",
+            {
+                "fields": [
+                    "has_qps",
+                ],
+                "classes": ["collapse"],
+            },
+        ),
+        (
+            "if cell culture",
+            {
+                "fields": [
+                    "cell_culture",
+                    "is_cell_culture_modified",
+                ],
+                "classes": ["collapse"],
+            },
+        ),
+    ]
 
 
 class HBGVInline(admin.TabularInline):
@@ -222,6 +254,7 @@ class IsFromVocabFilter(admin.SimpleListFilter):
 
 @admin.register(Organism)
 class OrganismAdmin(admin.ModelAdmin):
+    readonly_fields = ["get_scientific_name", "get_parent_nodes"]
     list_display = [
         "get_organism",
         "get_scientific_name",
@@ -514,15 +547,6 @@ class StructureReportedAdmin(admin.ModelAdmin):
 
 @admin.register(GenotoxFinalOutcome)
 class GenotoxFinalOutcomeAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
-
-
-@admin.register(OrgModification)
-class OrgModificationAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
