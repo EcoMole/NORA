@@ -199,15 +199,19 @@ class Population(models.Model):
         on_delete=models.SET_NULL,
         related_name="qualifier_populations",
         db_column="id_qualifier",
+        verbose_name="Age Qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
     )
     value = models.FloatField(
         null=True,
         blank=True,
+        verbose_name="Age Value",
     )
     upper_range_value = models.FloatField(
         null=True,
         blank=True,
+        verbose_name="Age Upper Value",
+        help_text="only if there is upper range value for age",
     )
     unit = models.ForeignKey(
         TaxonomyNode,
@@ -217,6 +221,7 @@ class Population(models.Model):
         related_name="unit_populations",
         db_column="id_unit",
         limit_choices_to={"taxonomy__code": "UNIT"},
+        verbose_name="Age Unit",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
 
@@ -231,11 +236,7 @@ class Population(models.Model):
         if self.unit:
             repr += f" {self.unit.name}"
 
-        return (
-            self.population_age
-            if self.population_age
-            else f"{self.subgroup} - {self.sex} - {repr}"
-        )
+        return f"{self.subgroup} - {repr}"
 
     class Meta:
         db_table = "AGE"
