@@ -1,5 +1,7 @@
 from administrative.models import Opinion
 from django.db import models
+from django.db.models import Q
+from taxonomies.models import TaxonomyNode
 from taxonomies.util import Descriptor
 
 
@@ -233,6 +235,7 @@ class NovelFoodOrganism(models.Model):
         on_delete=models.SET_NULL,
         related_name="org_part_novel_foods",
         limit_choices_to={"taxonomy__code": "MTX"},
+        # limit_choices_to=get_org_part_limit_choices,
         help_text="(MTX vocab)",
         db_column="id_org_part",
     )
@@ -290,6 +293,59 @@ class NovelFoodOrganism(models.Model):
     class Meta:
         db_table = "STUDY_ORG"
         verbose_name = "Organism Identity of Novel food"
+
+
+def get_org_part_limit_choices():
+    return Q(
+        taxonomy__code="MTX",
+        id__in=[
+            obj.id
+            for obj in TaxonomyNode.objects.filter(taxonomy__code="MTX")
+            if "A16PR"
+            in [ancestor.code for ancestor in obj.get_significant_ancestors()]
+            # A16PR jsem dostal od Klárky jako node který je parentem všech organism parts.
+            # Podle mě bych měl ale použít A0B8Y - "Part-nature" což je parentem toho nodu A16PR.
+            # kouknout se jaké parenty maj nodes zmíněné v Combu které mám sepsány níže, jetli je "
+            # parentem ten A0B8Y. (zjistím to pomocí n.get_significant_ancestors())
+            # MTX catalogue, MTX ROOTs: Part-nature - 'A166E', 'A066N', 'A0CEG', 'A07XD', 'A0BA0'
+            # id_plantPart = TaxonomyField(
+            #     widget=TaxonomyWidget(
+            #         "MTX",
+            #         allowed_values=[
+            #             "A166F",
+            #             "A066V",
+            #             "A066X",
+            #             "A066Z",
+            #             "A067A",
+            #             "A166G",
+            #             "A067B",
+            #             "A166H",
+            #             "A067D",
+            #             "A166J",
+            #             "A0EKT",
+            #             "A0EKS",
+            #             "A166K",
+            #             "A067G",
+            #             "A067D",
+            #             "A0ESK",
+            #             "A067M",
+            #             "A066P",
+            #             "A067T",
+            #             "A067R",
+            #             "A067S",
+            #             "A166L",
+            #             "A166M",
+            #             "A166N",
+            #             "A0F5F",
+            #             "A07XD",
+            #             "A0BA0",
+            #             "A166P",
+            #         ],
+            #     ),
+            #     required=False,
+            # )
+        ],
+    )
 
 
 class NovelFoodChemical(models.Model):

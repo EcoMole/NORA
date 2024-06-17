@@ -79,6 +79,25 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
         ),
     ]
 
+    # def get_formset(self, request, obj=None, **kwargs):
+    #     formset = super().get_formset(request, obj, **kwargs)
+
+    #     class CustomFormset(formset.form):
+    #         def __init__(self, *args, **kwargs):
+    #             super().__init__(*args, **kwargs)
+    #             self.fields['org_part'].queryset = TaxonomyNode.objects.filter(
+    #                 taxonomy__code="MTX",
+    #                 id__in=[
+    #                     obj.id
+    #                     for obj in TaxonomyNode.objects.filter(taxonomy__code="MTX")
+    #                     if "A16PR" in
+    # [ancestor.code for ancestor in obj.get_significant_ancestors()]
+    #                 ]
+    #             )
+
+    #     formset.form = CustomFormset
+    #     return formset
+
 
 class HBGVInline(admin.TabularInline):
     model = HBGV
