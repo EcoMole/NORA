@@ -151,9 +151,7 @@ class Type(models.Model):
 
 class Family(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_family")
-    type = models.ForeignKey(
-        Type, on_delete=models.CASCADE, db_column="id_type", null=True, blank=True
-    )
+    type = models.ForeignKey(Type, on_delete=models.CASCADE, db_column="id_type")
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -167,9 +165,7 @@ class Family(models.Model):
 
 class Genus(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_genus")
-    family = models.ForeignKey(
-        Family, on_delete=models.CASCADE, db_column="id_family", null=True, blank=True
-    )
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, db_column="id_family")
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -182,31 +178,27 @@ class Genus(models.Model):
 
 
 class Organism(models.Model):
-    organism_node = models.ForeignKey(
+    vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
-        blank=True,
+        blank=False,
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "MTX"},
         help_text="(MTX vocab)",
+        related_name="vocab_id_organisms",
+        verbose_name="Organism vocabulary identification",
     )
-    species_title = models.CharField(max_length=255, null=True, blank=True)
     genus = models.ForeignKey(
         Genus, on_delete=models.CASCADE, null=True, blank=True, db_column="id_genus"
     )
 
     def __str__(self):
-        if self.species_title:
-            return self.species_title
-        elif self.organism_node:
-            return self.organism_node.name
-        else:
-            return None
+        return self.vocab_id.name
 
     class Meta:
         db_table = "ORGANISM"
         verbose_name = "Organism"
-        verbose_name_plural = "Organisms 🦠"
+        verbose_name_plural = "📂 ORGANISMS"
 
 
 class OrganismSyn(models.Model):
@@ -326,18 +318,21 @@ class StructureReported(models.Model):
 
 
 class Chemical(models.Model):
-    id_chemical = models.AutoField(primary_key=True, db_column="id_component")
-    catalogue_identity = models.ForeignKey(
+    id = models.AutoField(primary_key=True, db_column="id_com")
+    vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
+        db_column="id_rnc_efsa",
+        blank=False,
         null=True,
-        blank=True,
         on_delete=models.SET_NULL,
-        related_name="catalogue_identity_chemicals",
+        related_name="vocab_id_chemicals",
         limit_choices_to={"taxonomy__code": "PARAM"},
         help_text="(PARAM vocab)",
+        verbose_name="Chemical vocabulary identification",
     )
 
     chemical_type = models.ForeignKey(
+        # for possible future use
         ChemicalType,
         on_delete=models.CASCADE,
         blank=True,
@@ -347,6 +342,7 @@ class Chemical(models.Model):
         "(OECD 2012). More on the purpose of this field: 2013:EN-458 page:20",
     )
     structure_reported = models.ForeignKey(
+        # for possible future use
         StructureReported,
         on_delete=models.CASCADE,
         blank=True,
@@ -358,12 +354,12 @@ class Chemical(models.Model):
     )
 
     def __str__(self):
-        return self.catalogue_identity.name if self.catalogue_identity else None
+        return self.vocab_id.name
 
     class Meta:
         db_table = "COMPONENT"
         verbose_name = "Chemicals"
-        verbose_name_plural = "Chemicals 🧪"
+        verbose_name_plural = "📂 CHEMICALS"
 
 
 class ChemDescriptor(models.Model):
@@ -630,15 +626,16 @@ class NovelFood(models.Model):
         help_text="explanation in case the Outcome is 'Partially Negative'",
     )
 
-    catalogue_identity = models.ForeignKey(
+    vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "PARAM"},
         db_column="id_rms_efsa",
-        related_name="catalogue_identity_novel_foods",
-        help_text="(PARAM vocab)",
+        related_name="vocab_id_novel_foods",
+        verbose_name="NovelFood vocabulary identification",
+        help_text="If missing in vocabulary, move on, do not add into vocab. (PARAM vocab)",
     )
 
     # django specific fields to get the models well tied together

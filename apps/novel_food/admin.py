@@ -154,7 +154,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             "General Information",
-            {"fields": ["opinion", "title", "nf_code", "food_category"]},
+            {"fields": ["opinion", "title", "nf_code", "vocab_id", "food_category"]},
         ),
         (
             "Toxicity",
@@ -202,11 +202,10 @@ class NovelFoodAdmin(admin.ModelAdmin):
                 "fields": [("outcome", "outcome_remarks")],
             },
         ),
-        ("Miscellaneous", {"fields": ["catalogue_identity"], "classes": ["collapse"]}),
     ]
     list_display = ["nf_code", "opinion", "outcome", "outcome_remarks"]
     search_fields = ["nf_code", "title"]
-    autocomplete_fields = ["opinion", "shelflife_unit", "catalogue_identity"]
+    autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id"]
     inlines = [
         SubstanceOfConcernNovelFoodInline,
         NovelFoodSynInline,
@@ -247,27 +246,38 @@ class IsFromVocabFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "Yes":
-            return queryset.filter(organism_node__isnull=False)
+            return queryset.filter(vocab_id__isnull=False)
         if self.value() == "No":
-            return queryset.filter(organism_node__isnull=True)
+            return queryset.filter(vocab_id__isnull=True)
 
 
 @admin.register(Organism)
 class OrganismAdmin(admin.ModelAdmin):
-    readonly_fields = ["get_scientific_name", "get_parent_nodes"]
     list_display = [
         "get_organism",
         "get_scientific_name",
         "get_parent_nodes",
         "get_is_from_vocab",
     ]
-    autocomplete_fields = ["organism_node"]
+    fieldsets = [
+        (
+            "General Information",
+            {"fields": ["vocab_id"]},
+        ),
+        (
+            "Final Descriptors (Custom Descriptors + Vocabulary Descriptors)",
+            {"fields": ["get_scientific_name", "get_parent_nodes"]},
+        ),
+        ("Custom Descriptors", {"fields": ["genus"]}),
+    ]
+    readonly_fields = ["get_scientific_name", "get_parent_nodes"]
+    autocomplete_fields = ["vocab_id"]
     inlines = [OrganismSynInline]
-    search_fields = ["species_title"]
+    search_fields = ["vocab_id__name"]
     list_filter = [IsFromVocabFilter]
 
     def get_is_from_vocab(self, obj):
-        return obj.organism_node is not None
+        return obj.vocab_id is not None
 
     get_is_from_vocab.boolean = True
     get_is_from_vocab.short_description = "Is from Vocab"
@@ -276,23 +286,20 @@ class OrganismAdmin(admin.ModelAdmin):
         if obj.organismsyn_set.filter(type__synonym_type="scientific name").exists():
             return obj.organismsyn_set.get(type__synonym_type="scientific name").synonym
         else:
-            return None
+            return "😢"
 
     get_scientific_name.short_description = "Scientific Name"
 
     def get_organism(self, obj):
-        if obj.species_title:
-            return obj.species_title
-        if obj.organism_node:
-            return obj.organism_node.name
-        else:
-            return None
+        return obj.vocab_id.name
 
     get_organism.short_description = "Spicies"
 
     def get_parent_nodes(self, obj):
-        if obj.organism_node:
-            ancestors = obj.organism_node.get_significant_ancestors()
+        if obj.genus and obj.genus.family and obj.genus.family.type:
+            return f"{obj.genus.title} < {obj.genus.family.title} < {obj.genus.family.type.title}"
+        elif ancestors := obj.vocab_id.get_significant_ancestors():
+            ancestors = obj.vocab_id.get_significant_ancestors()
             while len(ancestors) > 0 and ancestors[-1].code in [
                 "A0C5X",
                 "A0B8X",
@@ -305,7 +312,7 @@ class OrganismAdmin(admin.ModelAdmin):
                 res += " < " + ancestor.name
             return res.lstrip(" < ")
         else:
-            return f"{obj.genus.title} < {obj.genus.family.title} < {obj.genus.family.type.title}"
+            return "😢"
 
     get_parent_nodes.short_description = "Taxonomy Path"
 
@@ -314,7 +321,6 @@ class OrganismAdmin(admin.ModelAdmin):
 class TypeAdmin(admin.ModelAdmin):
     list_display = ["title"]
     search_fields = ["title"]
-    inlines = [FamilyInline]
 
 
 @admin.register(Family)
@@ -322,7 +328,6 @@ class FamilyAdmin(admin.ModelAdmin):
     list_display = ["title", "type"]
     search_fields = ["title"]
     list_filter = ["type"]
-    inlines = [GenusInline]
 
 
 @admin.register(Genus)
@@ -330,14 +335,13 @@ class GenusAdmin(admin.ModelAdmin):
     list_display = ["title", "family"]
     search_fields = ["title"]
     list_filter = ["family"]
-    inlines = [OrganismInline]
 
 
 @admin.register(Chemical)
 class ChemicalAdmin(admin.ModelAdmin):
-    list_display = ["catalogue_identity", "get_iupac", "get_mol_form", "get_cas"]
-    autocomplete_fields = ["catalogue_identity"]
-    inlines = [ChemicalSynInline, ChemDescriptorInline]
+    list_display = ["vocab_id", "get_iupac", "get_mol_form", "get_cas"]
+    autocomplete_fields = ["vocab_id"]
+    inlines = [ChemDescriptorInline, ChemicalSynInline]
     readonly_fields = [
         "get_iupac",
         "get_mol_form",
@@ -355,17 +359,10 @@ class ChemicalAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             "General Information",
-            {"fields": ["catalogue_identity"]},
+            {"fields": ["vocab_id"]},
         ),
         (
-            "OFT fields - optional for NORA?",
-            {
-                "fields": ["chemical_type", "structure_reported"],
-                "classes": ["collapse"],
-            },
-        ),
-        (
-            "Final Descriptors (Custom Descriptors and Vocabulary Descriptors combined)",
+            "Final Descriptors (Custom Descriptors + Vocabulary Descriptors)",
             {
                 "fields": [
                     "get_iupac",
@@ -402,9 +399,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_iupac(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.IUPAC.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.IUPAC.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.IUPAC.value),
         )
 
     get_iupac.short_description = Descriptor.IUPAC.verbose
@@ -412,7 +407,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_mol_form(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.MOLECULAR_FORMULA.value),
-            obj.catalogue_identity.implicit_attributes.filter(
+            obj.vocab_id.implicit_attributes.filter(
                 code=Descriptor.MOLECULAR_FORMULA.value
             ),
         )
@@ -422,9 +417,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_pest_class(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.PEST_CLASS.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.PEST_CLASS.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.PEST_CLASS.value),
         )
 
     get_pest_class.short_description = Descriptor.PEST_CLASS.verbose
@@ -432,7 +425,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_flavis_number(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.FLAVIS_NUMBER.value),
-            obj.catalogue_identity.implicit_attributes.filter(
+            obj.vocab_id.implicit_attributes.filter(
                 code=Descriptor.FLAVIS_NUMBER.value
             ),
         )
@@ -442,9 +435,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_detail_level(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.DETAIL_LEVEL.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.DETAIL_LEVEL.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.DETAIL_LEVEL.value),
         )
 
     get_detail_level.short_description = Descriptor.DETAIL_LEVEL.verbose
@@ -452,7 +443,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_smiles(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.SMILES_NOTATION.value),
-            obj.catalogue_identity.implicit_attributes.filter(
+            obj.vocab_id.implicit_attributes.filter(
                 code=Descriptor.SMILES_NOTATION.value
             ),
         )
@@ -462,9 +453,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_zoo_label(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.ZOO_LABEL.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.ZOO_LABEL.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.ZOO_LABEL.value),
         )
 
     get_zoo_label.short_description = Descriptor.ZOO_LABEL.verbose
@@ -472,9 +461,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_cas(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.CAS.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.CAS.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.CAS.value),
         )
 
     get_cas.short_description = Descriptor.CAS.verbose
@@ -482,7 +469,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_ec_subinvent_entry_ref(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.COM_ECSUBINVENTENTRYREF.value),
-            obj.catalogue_identity.implicit_attributes.filter(
+            obj.vocab_id.implicit_attributes.filter(
                 code=Descriptor.COM_ECSUBINVENTENTRYREF.value
             ),
         )
@@ -494,9 +481,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_inchi(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.INCHI.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.INCHI.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.INCHI.value),
         )
 
     get_inchi.short_description = Descriptor.INCHI.verbose
@@ -504,9 +489,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_category(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.CATEGORY.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.CATEGORY.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.CATEGORY.value),
         )
 
     get_category.short_description = Descriptor.CATEGORY.verbose
@@ -514,9 +497,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     def get_other_names(self, obj):
         return self.get_descriptors_to_display(
             obj.chem_descriptors.filter(type=Descriptor.OTHER_NAMES.value),
-            obj.catalogue_identity.implicit_attributes.filter(
-                code=Descriptor.OTHER_NAMES.value
-            ),
+            obj.vocab_id.implicit_attributes.filter(code=Descriptor.OTHER_NAMES.value),
         )
 
     get_other_names.short_description = Descriptor.OTHER_NAMES.verbose

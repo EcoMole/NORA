@@ -21,10 +21,12 @@ class TaxonomyNode(MPTTModel, SyncMixin):
     code = models.CharField(max_length=100, db_index=True)
 
     taxonomy = models.ForeignKey(
-        "Taxonomy", null=True, blank=True, on_delete=models.CASCADE
+        "Taxonomy", null=True, blank=False, on_delete=models.CASCADE
     )
 
-    short_name = models.CharField(max_length=255, null=True, blank=True)
+    short_name = models.CharField(
+        max_length=255, null=True, blank=True, help_text="SPECIES if organism"
+    )
 
     scope = models.TextField(null=True, blank=True)
 
