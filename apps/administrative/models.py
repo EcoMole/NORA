@@ -142,7 +142,9 @@ class Mandate(models.Model):
         db_column="id_mandate_parent",
     )
 
-    def __str__(self) -> str:
+    def __str__(self):
+        if self.mandate_parent:
+            return f"{self.mandate_parent.title} - {self.title}"
         return self.title
 
     class Meta:
