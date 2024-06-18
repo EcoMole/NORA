@@ -161,8 +161,6 @@ class NovelFoodAdmin(admin.ModelAdmin):
             {
                 "fields": [
                     "tox_study_required",
-                    "mutagenicity",
-                    "carcinogenicity",
                     "genotox_final_outcome",
                     "specific_toxicity",
                 ]
@@ -205,7 +203,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
     ]
     list_display = ["nf_code", "opinion", "outcome", "outcome_remarks"]
     search_fields = ["nf_code", "title"]
-    autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id"]
+    autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
     inlines = [
         SubstanceOfConcernNovelFoodInline,
         NovelFoodSynInline,
@@ -216,7 +214,6 @@ class NovelFoodAdmin(admin.ModelAdmin):
         HBGVInline,
         AllergenicityNovelFoodInline,
     ]
-    list_filter = ["carcinogenicity", "mutagenicity"]
 
 
 @admin.register(Category)
@@ -271,7 +268,7 @@ class OrganismAdmin(admin.ModelAdmin):
         ("Custom Descriptors", {"fields": ["genus"]}),
     ]
     readonly_fields = ["get_scientific_name", "get_parent_nodes"]
-    autocomplete_fields = ["vocab_id"]
+    autocomplete_fields = ["vocab_id", "genus"]
     inlines = [OrganismSynInline]
     search_fields = ["vocab_id__name"]
     list_filter = [IsFromVocabFilter]
@@ -293,11 +290,15 @@ class OrganismAdmin(admin.ModelAdmin):
     def get_organism(self, obj):
         return obj.vocab_id.name
 
-    get_organism.short_description = "Spicies"
+    get_organism.short_description = "Species"
 
     def get_parent_nodes(self, obj):
         if obj.genus and obj.genus.family and obj.genus.family.org_type:
-            return f"{obj.genus.title} < {obj.genus.family.title} < {obj.genus.family.org_type.title}"
+            return (
+                f"{obj.genus.title} < "
+                f"{obj.genus.family.title} < "
+                f"{obj.genus.family.org_type.title}"
+            )
         elif ancestors := obj.vocab_id.get_significant_ancestors():
             ancestors = obj.vocab_id.get_significant_ancestors()
             while len(ancestors) > 0 and ancestors[-1].code in [
@@ -335,6 +336,7 @@ class GenusAdmin(admin.ModelAdmin):
     list_display = ["title", "family"]
     search_fields = ["title"]
     list_filter = ["family"]
+    autocomplete_fields = ["family"]
 
 
 @admin.register(Chemical)

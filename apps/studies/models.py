@@ -176,6 +176,11 @@ class Endpoint(models.Model):
 
 class Outcome(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_hazard")
+    endpoint = models.ForeignKey(
+        Endpoint,
+        on_delete=models.CASCADE,
+        db_column="id_endpoint",
+    )
     assessment_type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -227,13 +232,6 @@ class Outcome(models.Model):
         "is provided in the Opinion.",
     )
     remarks = models.TextField(
-        null=True,
-        blank=True,
-    )
-    endpoint = models.ForeignKey(
-        Endpoint,
-        on_delete=models.CASCADE,
-        db_column="id_endpoint",
         null=True,
         blank=True,
     )
@@ -363,7 +361,7 @@ class ADME(models.Model):
     class Meta:
         db_table = "PKTK"
         verbose_name = "ADME Study"
-        verbose_name_plural = "ADME Studies 🎸🔬"
+        verbose_name_plural = "ADME Studies ♻️🔬"
 
 
 class ADMEStudyType(models.Model):

@@ -506,28 +506,6 @@ class NovelFood(models.Model):
         related_name="tox_study_required_novel_foods",
         help_text="(YESNO vocab)",
     )
-    mutagenicity = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        db_column="id_is_mutagenic",
-        verbose_name="Mutagenicity",
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
-        related_name="mutagenicity_novel_foods",
-        help_text="(YESNO vocab)",
-    )
-    carcinogenicity = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        db_column="id_is_carcinogenic",
-        verbose_name="Carcinogenicity",
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
-        related_name="carcinogenicity_novel_foods",
-        help_text="(YESNO vocab)",
-    )
     genotox_final_outcome = models.ForeignKey(
         GenotoxFinalOutcome,
         on_delete=models.SET_NULL,
