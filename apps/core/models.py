@@ -83,8 +83,7 @@ class Contribution(models.Model):
         choices=STATUS_CHOICES,
         help_text="Status of the contribution",
     )
-    remarks = models.CharField(
-        max_length=2000,
+    remarks = models.TextField(
         blank=True,
         null=True,
     )

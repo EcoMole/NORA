@@ -4,7 +4,7 @@ from django.db import models
 class AssessmentRemarks(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_assess")
     title = models.CharField(max_length=255, db_column="assess")
-    definition = models.CharField(max_length=255)
+    definition = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.title
@@ -98,7 +98,7 @@ class Endpointstudy(models.Model):
         related_name="study_source_endpointstudies",
         db_column="id_study_source",
     )
-    remarks = models.CharField(max_length=2000, null=True, blank=True)
+    remarks = models.TextField(null=True, blank=True)
     test_material = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self) -> str:
@@ -226,8 +226,7 @@ class Outcome(models.Model):
         "assessment particularly when no health-based guidance value (e.g., ADI, TDI) "
         "is provided in the Opinion.",
     )
-    remarks = models.CharField(
-        max_length=2000,
+    remarks = models.TextField(
         null=True,
         blank=True,
     )
@@ -353,9 +352,7 @@ class ADME(models.Model):
         db_column="id_study_source",
     )
     test_material = models.CharField(max_length=255, null=True, blank=True)
-    remarks = models.TextField(
-        max_length=2000, db_column="study_comment", null=True, blank=True
-    )
+    remarks = models.TextField(db_column="study_comment", null=True, blank=True)
 
     def __str__(self) -> str:
         res = self.novel_food.title
@@ -451,6 +448,7 @@ class Genotox(models.Model):
         "subchronic (OECD phrase ID 2399). (TEST_TYPE vocab)",
     )
     test_material = models.CharField(max_length=255, null=True, blank=True)
+    remarks = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
         res = self.novel_food.title

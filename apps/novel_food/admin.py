@@ -21,10 +21,10 @@ from novel_food.models import (
     NutritionalDisadvantage,
     Organism,
     OrganismSyn,
+    OrgType,
     StructureReported,
     SubstanceOfConcernNovelFood,
     SynonymType,
-    Type,
 )
 from taxonomies.util import Descriptor
 
@@ -296,8 +296,8 @@ class OrganismAdmin(admin.ModelAdmin):
     get_organism.short_description = "Spicies"
 
     def get_parent_nodes(self, obj):
-        if obj.genus and obj.genus.family and obj.genus.family.type:
-            return f"{obj.genus.title} < {obj.genus.family.title} < {obj.genus.family.type.title}"
+        if obj.genus and obj.genus.family and obj.genus.family.org_type:
+            return f"{obj.genus.title} < {obj.genus.family.title} < {obj.genus.family.org_type.title}"
         elif ancestors := obj.vocab_id.get_significant_ancestors():
             ancestors = obj.vocab_id.get_significant_ancestors()
             while len(ancestors) > 0 and ancestors[-1].code in [
@@ -317,17 +317,17 @@ class OrganismAdmin(admin.ModelAdmin):
     get_parent_nodes.short_description = "Taxonomy Path"
 
 
-@admin.register(Type)
-class TypeAdmin(admin.ModelAdmin):
+@admin.register(OrgType)
+class OrgTypeAdmin(admin.ModelAdmin):
     list_display = ["title"]
     search_fields = ["title"]
 
 
 @admin.register(Family)
 class FamilyAdmin(admin.ModelAdmin):
-    list_display = ["title", "type"]
+    list_display = ["title", "org_type"]
     search_fields = ["title"]
-    list_filter = ["type"]
+    list_filter = ["org_type"]
 
 
 @admin.register(Genus)

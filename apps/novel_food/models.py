@@ -49,7 +49,7 @@ class NutritionalDisadvantage(models.Model):
         related_name="yes_no_nutritional_disadvantages",
         help_text="(YESNO vocab)",
     )
-    explanation = models.CharField(max_length=2000, blank=True)
+    explanation = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.yes_no} - {self.explanation}"
@@ -61,7 +61,7 @@ class NutritionalDisadvantage(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=2000, null=True, blank=True)
+    definition = models.TextField(null=True, blank=True)
     regulation = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         blank=True,
@@ -112,7 +112,7 @@ class SynonymType(models.Model):
         max_length=255,
         help_text="Type of synonym -e.g. common name, trade name, synonym",
     )
-    definition = models.CharField(max_length=2000, blank=True)
+    definition = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.synonym_type
@@ -136,22 +136,27 @@ class NovelFoodSyn(models.Model):
         verbose_name = "Novel food synonym"
 
 
-class Type(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_type")
+class OrgType(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_org_type")
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.title
 
     class Meta:
-        db_table = "TYPE"
-        verbose_name = "Type (taxonomy)"
-        verbose_name_plural = "📂 Types (taxonomy)"
+        db_table = "ORG_TYPE"
+        verbose_name = "Organism Type (taxonomy)"
+        verbose_name_plural = "📂 Organism Types (taxonomy)"
 
 
 class Family(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_family")
-    type = models.ForeignKey(Type, on_delete=models.CASCADE, db_column="id_type")
+    org_type = models.ForeignKey(
+        OrgType,
+        on_delete=models.CASCADE,
+        db_column="id_org_type",
+        verbose_name="Organism Type",
+    )
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -297,7 +302,7 @@ class NovelFoodChemical(models.Model):
 class ChemicalType(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_component_type")
     title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=2000, null=True, blank=True)
+    definition = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = "COM_TYPE"
@@ -309,7 +314,7 @@ class ChemicalType(models.Model):
 class StructureReported(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_structure_reported")
     title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=2000, null=True, blank=True)
+    definition = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = "COM_STRUCTURE_SHOWN"
@@ -467,7 +472,7 @@ class NovelFood(models.Model):
     )
     title = models.CharField(max_length=255, blank=False, verbose_name="NF Name")
     nf_code = models.CharField(
-        max_length=2000, verbose_name="NF Code", null=True, blank=True
+        max_length=255, verbose_name="NF Code", null=True, blank=True
     )
 
     food_category = models.ForeignKey(
@@ -619,8 +624,7 @@ class NovelFood(models.Model):
     outcome = models.CharField(
         max_length=255, blank=True, null=True, choices=OUTCOME_CHOICES
     )
-    outcome_remarks = models.CharField(
-        max_length=2000,
+    outcome_remarks = models.TextField(
         blank=True,
         null=True,
         help_text="explanation in case the Outcome is 'Partially Negative'",

@@ -209,7 +209,7 @@ class Composition(models.Model):
         help_text="Specification/Composition/Other",
     )
 
-    footnote = models.CharField(max_length=2000, blank=True)
+    footnote = models.TextField(blank=True)
 
     def __str__(self):
         return ""
