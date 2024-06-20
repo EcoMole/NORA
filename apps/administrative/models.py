@@ -9,8 +9,8 @@ class Opinion(models.Model):
         ("negative", "Negative"),
         ("partially_negative", "Partially Negative"),
     ]
-    id_op = models.AutoField(primary_key=True)
-    id_op_type = models.ForeignKey(
+    id = models.AutoField(primary_key=True, db_column="id_op")
+    document_type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
@@ -19,6 +19,7 @@ class Opinion(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "REF_TYPE"},
         help_text="(REF_TYPE vocab)",
+        db_column="id_op_type",
         #   limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
         # taxonomy__code='REF_TYPE', code='').get_descendants()))
     )
@@ -52,18 +53,39 @@ class Opinion(models.Model):
         verbose_name_plural = "Opinions 📄"
 
 
+class Question(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_question")
+    number = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=False,
+        null=False,
+        db_column="question",
+        help_text="Question number",
+    )
+
+    def __str__(self) -> str:
+        return self.number
+
+    class Meta:
+        db_table = "QUESTION"
+        verbose_name = "Question"
+        verbose_name_plural = "Questions❔"
+
+
 class Panel(models.Model):
-    id_panel = models.AutoField(primary_key=True)
-    panel = models.CharField(
+    id = models.AutoField(primary_key=True, db_column="id_panel")
+    title = models.CharField(
         max_length=255,
         unique=True,
         blank=False,
         null=False,
         help_text="Title of the panel",
+        db_column="panel",
     )
 
     def __str__(self) -> str:
-        return self.panel
+        return self.title
 
     class Meta:
         db_table = "PANEL"
@@ -71,31 +93,33 @@ class Panel(models.Model):
         verbose_name_plural = "📂 Panels"
 
 
-class OPAuthor(models.Model):
+class OpinionPanel(models.Model):
     """through table for Opinion and Panel"""
 
-    id_op = models.ForeignKey(
+    opinion = models.ForeignKey(
         Opinion,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_op",
     )
-    id_panel = models.ForeignKey(
+    panel = models.ForeignKey(
         Panel,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_panel",
     )
 
     def __str__(self) -> str:
-        return f"{self.id_op} - {self.id_panel}"
+        return f"{self.opinion} - {self.panel}"
 
     class Meta:
         db_table = "OP_AUTHOR"
 
 
 class Applicant(models.Model):
-    id_applicant = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_applicant")
     title = models.CharField(
         max_length=255,
         unique=True,
@@ -113,8 +137,8 @@ class Applicant(models.Model):
         verbose_name_plural = "📂 Applicants"
 
 
-class Mandate(models.Model):
-    id_mandate = models.AutoField(primary_key=True)
+class MandateType(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_mandate_type")
 
     TYPE_CHOICES = [
         ("novel_food", "Novel food"),
@@ -131,89 +155,45 @@ class Mandate(models.Model):
         null=False,
         help_text="Title of the mandate type",
         choices=TYPE_CHOICES,
-    )
-
-    mandate_parent = models.ForeignKey(
-        "self",
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="mandates",
-        db_column="id_mandate_parent",
+        db_column="mandate_type",
     )
 
     def __str__(self):
-        if self.mandate_parent:
-            return f"{self.mandate_parent.title} - {self.title}"
         return self.title
 
     class Meta:
-        db_table = "MANDATE"
-        verbose_name = "Mandate"
-        verbose_name_plural = "📂 Mandates"
+        db_table = "MANDATE_TYPE"
+        verbose_name = "Mandate Type"
+        verbose_name_plural = "📂 Mandate Typess"
 
 
-class Question(models.Model):
-    id_question = models.AutoField(primary_key=True)
-    question = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=False,
-        null=False,
-        help_text="Question number",
-    )
-
-    applicant = models.ForeignKey(
-        Applicant,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="applicant_questions",
-        db_column="id_applicant",
-    )
-    mandate = models.ForeignKey(
-        Mandate,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="questions",
-        db_column="id_mandate",
-    )
-
-    def __str__(self) -> str:
-        return self.question
-
-    class Meta:
-        db_table = "QUESTION"
-        verbose_name = "Question"
-        verbose_name_plural = "📂 Questions"
-
-
-class OPQuestion(models.Model):
+class OpinionQuestion(models.Model):
     """through table for Opinion and Question"""
 
-    id_op = models.ForeignKey(
+    opinion = models.ForeignKey(
         Opinion,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_op",
     )
-    id_question = models.ForeignKey(
+    question = models.ForeignKey(
         Question,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_question",
     )
 
     def __str__(self) -> str:
-        return f"{self.id_op} - {self.id_question}"
+        return f"{self.opinion} - {self.question}"
 
     class Meta:
         db_table = "OP_QUESTION"
 
 
 class ScientificOfficer(models.Model):
-    id_sci_officer = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_sci_officer")
     first_name = models.CharField(max_length=255, blank=False, null=False)
     middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=False, null=False)
@@ -229,16 +209,17 @@ class ScientificOfficer(models.Model):
         verbose_name_plural = "📂 Scientific Officers"
 
 
-class OPScientificOfficer(models.Model):
+class OpinionSciOfficer(models.Model):
     """through table for Opinion and Scientific Officer"""
 
-    id_op = models.ForeignKey(
+    opinion = models.ForeignKey(
         Opinion,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_op",
     )
-    id_sci_officer = models.ForeignKey(
+    sci_officer = models.ForeignKey(
         ScientificOfficer,
         blank=False,
         null=False,
@@ -246,14 +227,16 @@ class OPScientificOfficer(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.id_op} - {self.id_sci_officer}"
+        return f"{self.opinion} - {self.sci_officer}"
 
     class Meta:
         db_table = "OP_SCI_OFFICER"
 
 
-class QuestionMandate(models.Model):
-    """through table for Question and Mandate"""
+class Mandate(models.Model):
+    """through table for Question and MandateType and regulations from TaxonomyNode"""
+
+    id = models.AutoField(primary_key=True, db_column="id_mandate")
 
     question = models.ForeignKey(
         Question,
@@ -262,26 +245,26 @@ class QuestionMandate(models.Model):
         on_delete=models.CASCADE,
         db_column="id_question",
     )
-    mandate = models.ForeignKey(
-        Mandate,
+    mandate_type = models.ForeignKey(
+        MandateType,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
-        db_column="id_mandate",
+        db_column="id_mandate_type",
     )
     regulation = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name="regulation_questionmandates",
+        related_name="regulation_mandates",
         db_column="id_regulation",
         limit_choices_to={"taxonomy__code": "LEGREF"},
         help_text="(LEGREF vocab)",
     )
 
     def __str__(self) -> str:
-        res = f"{self.id_question} - {self.id_mandate}"
+        res = f"{self.question} - {self.mandate_type}"
         if self.regulation:
             res += f" - {self.regulation.name}"
         return res
@@ -290,3 +273,16 @@ class QuestionMandate(models.Model):
         db_table = "QUESTION_MANDATE"
         verbose_name = "Question Mandate Regulation"
         verbose_name_plural = "📂 Question Mandate Regulation"
+
+
+class QuestionApplicant(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.question} - {self.applicant}"
+
+    class Meta:
+        db_table = "QUESTION_APPLICANT"
+        verbose_name = "Question Applicant"
+        verbose_name_plural = "📂 Question Applicants"

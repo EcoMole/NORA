@@ -5,41 +5,46 @@ from django.utils.html import format_html
 from .models import (
     Applicant,
     Mandate,
-    OPAuthor,
+    MandateType,
     Opinion,
-    OPQuestion,
-    OPScientificOfficer,
+    OpinionPanel,
+    OpinionQuestion,
+    OpinionSciOfficer,
     Panel,
     Question,
-    QuestionMandate,
+    QuestionApplicant,
     ScientificOfficer,
 )
-
-
-class QuestionMandateInline(admin.TabularInline):
-    model = QuestionMandate
-    extra = 1
-    autocomplete_fields = ["regulation"]
-
-
-class OPAuthorInline(admin.TabularInline):
-    model = OPAuthor
-    extra = 1
-
-
-class OPQuestionInline(admin.TabularInline):
-    model = OPQuestion
-    extra = 1
-
-
-class OPScientificOfficerInline(admin.TabularInline):
-    model = OPScientificOfficer
-    extra = 1
 
 
 class MandateInline(admin.TabularInline):
     model = Mandate
     extra = 1
+    autocomplete_fields = ["regulation", "question"]
+
+
+class OPAuthorInline(admin.TabularInline):
+    model = OpinionPanel
+    extra = 1
+    autocomplete_fields = ["panel"]
+
+
+class QuestionApplicantInline(admin.TabularInline):
+    model = QuestionApplicant
+    extra = 1
+    autocomplete_fields = ["question", "applicant"]
+
+
+class OpinionQuestionInline(admin.TabularInline):
+    model = OpinionQuestion
+    extra = 1
+    autocomplete_fields = ["question"]
+
+
+class OPScientificOfficerInline(admin.TabularInline):
+    model = OpinionSciOfficer
+    extra = 1
+    autocomplete_fields = ["sci_officer"]
 
 
 class QuestionInline(admin.TabularInline):
@@ -62,11 +67,11 @@ class OpinionAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title", "doi"]
     list_filter = ["publication_date"]
-    autocomplete_fields = ["id_op_type"]
+    autocomplete_fields = ["document_type"]
     inlines = [
         ContributionInline,
         OPAuthorInline,
-        OPQuestionInline,
+        OpinionQuestionInline,
         OPScientificOfficerInline,
     ]
 
@@ -78,10 +83,18 @@ class OpinionAdmin(admin.ModelAdmin):
     pdf_link.short_description = "PDF File"
 
 
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    fields = ["number"]
+    list_display = ["number"]
+    search_fields = ["number"]
+    inlines = [QuestionApplicantInline, MandateInline]
+
+
 @admin.register(Panel)
 class PanelAdmin(admin.ModelAdmin):
-    list_display = ["panel"]
-    search_fields = ["panel"]
+    list_display = ["title"]
+    search_fields = ["title"]
 
 
 @admin.register(Applicant)
@@ -89,38 +102,23 @@ class ApplicantAdmin(admin.ModelAdmin):
     list_display = ["title"]
     search_fields = ["title"]
 
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
-
-
-@admin.register(QuestionMandate)
-class QuestionMandateAdmin(admin.ModelAdmin):
-    list_display = ["question", "mandate", "regulation"]
-    search_fields = ["title", "mandate", "regulation"]
-
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
-
 
 @admin.register(Mandate)
 class MandateAdmin(admin.ModelAdmin):
-    list_display = ["title", "mandate_parent"]
+    list_display = ["question", "mandate_type", "regulation"]
+    search_fields = ["question", "mandate_type", "regulation"]
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+@admin.register(MandateType)
+class MandateTypeAdmin(admin.ModelAdmin):
+    list_display = ["title"]
     search_fields = ["title"]
-
-
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
-    fields = ["question"]
-    list_display = ["question", "mandate"]
-    search_fields = ["question"]
-    list_filter = ["mandate"]
-    inlines = [QuestionMandateInline]
 
 
 @admin.register(ScientificOfficer)

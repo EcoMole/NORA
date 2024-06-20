@@ -1,9 +1,23 @@
-from django.core.management.base import BaseCommand, CommandError
-import pandas as pd
-#Importting models from administrative app:
-from administrative.models import Applicant, OPAuthor, Panel, Opinion, Dossier, MandateType, Mandate, Question, OPQuestion, ScientificOfficer, OPScientificOfficer
+import datetime  # TODO - remove if not needed
 from datetime import date
-import datetime #TODO - remove if not needed
+
+import pandas as pd
+
+#Importting models from administrative app:
+from administrative.models import (
+    Applicant,
+    Dossier,
+    MandateType,
+    Opinion,
+    OpinionPanel,
+    OpinionQuestion,
+    OpinionSciOfficer,
+    Panel,
+    Question,
+    ScientificOfficer,
+)
+from django.core.management.base import BaseCommand, CommandError
+
 
 class Command(BaseCommand):
     help = "Closes the specified poll for voting"
@@ -37,7 +51,7 @@ class Command(BaseCommand):
                         officers_objs.append(ScientificOfficer.objects.get_or_create(first_name=names[0], last_name=names[1]))
                     elif len(names) == 3:
                         officers_objs.append(ScientificOfficer.objects.get_or_create(first_name=names[0], middle_name=names[1], last_name=names[2]))
-                        
+
 
             # Create mandate
             mandates = row[1]['mandate_type'].strip().split(',')
@@ -45,7 +59,7 @@ class Command(BaseCommand):
 
             # Create question
             question_number = row[1]['question_number']
-            question_obj = Question.objects.get_or_create(question = question_number, dossier=dossier_obj[0]) #TODO vice mandatu
+            question_obj = Question.objects.get_or_create(number=question_number, dossier=dossier_obj[0]) #TODO vice mandatu
 
             if mandate_obj != None:
                 question_obj[0].mandate = mandate_obj[0]
@@ -59,7 +73,7 @@ class Command(BaseCommand):
             elif '-' in publication_date:
                 day, month, year = publication_date.split('-')
                 pub_date = date(int(year), int(month), int(day))
-                
+
             opinion_obj = Opinion.objects.get_or_create(title=row[1]['title'], doi = row[1]['doi'], publication_date=pub_date)
 
             if not pd.isnull(row[1]['url']): # we have both url and adoption date
@@ -74,15 +88,15 @@ class Command(BaseCommand):
                 opinion_obj[0].save()
 
 
-            OPQuestion.objects.get_or_create(id_op=opinion_obj[0], id_question=question_obj[0])
+            OpinionQuestion.objects.get_or_create(opinion=opinion_obj[0], question=question_obj[0])
             for officer in officers_objs:
-                OPScientificOfficer.objects.get_or_create(id_op=opinion_obj[0], id_sci_officer=officer[0])
+                OpinionSciOfficer.objects.get_or_create(opinion=opinion_obj[0], sci_officer=officer[0])
 
 
             panels = row[1]['panel'].split(',')
             for panel in panels:
-                panel_obj = Panel.objects.get_or_create(panel=panel.strip())
-                OPAuthor.objects.get_or_create(id_op=opinion_obj[0], id_panel=panel_obj[0])
+                panel_obj = Panel.objects.get_or_create(title=panel.strip())
+                OpinionPanel.objects.get_or_create(opinion=opinion_obj[0], panel=panel_obj[0])
 
 
     def create_mandate_types(self):
@@ -94,7 +108,7 @@ class Command(BaseCommand):
         nf_nutrient_obj = MandateType.objects.get_or_create(title='NF - Nutrient source', mandate_type_parent=nf_obj[0])
         nf_extension_obj = MandateType.objects.get_or_create(title='NF - Extension of use', mandate_type_parent=nf_obj[0])
         return nf_obj, tf_obj, nutrient_obj, nf_dossier_obj, nf_nutrient_obj, nf_extension_obj
-    
+
 
     def create_mandate(self, mandates, mandate_types, number):
 
@@ -103,23 +117,17 @@ class Command(BaseCommand):
 
         match mandates[0]: # TODO vice mandatu pro jednu question
             case 'TF':
-                mandate_obj = Mandate.objects.get_or_create(mandate_type=tf_obj[0], number=number)
+                mandate_obj = MandateType.objects.get_or_create(mandate_type=tf_obj[0], number=number)
             case 'NF: new dossier':
-                mandate_obj = Mandate.objects.get_or_create(mandate_type=nf_dossier_obj[0], number=number)
+                mandate_obj = MandateType.objects.get_or_create(mandate_type=nf_dossier_obj[0], number=number)
             case 'NF: extension of use':
-                mandate_obj = Mandate.objects.get_or_create(mandate_type=nf_extension_obj[0], number=number)
+                mandate_obj = MandateType.objects.get_or_create(mandate_type=nf_extension_obj[0], number=number)
             case 'NF: nutrient source':
-                mandate_obj = Mandate.objects.get_or_create(mandate_type=nf_nutrient_obj[0], number=number)
+                mandate_obj = MandateType.objects.get_or_create(mandate_type=nf_nutrient_obj[0], number=number)
             case 'new dossier?':
-                mandate_obj = Mandate.objects.get_or_create(mandate_type=nf_dossier_obj[0], number=number)
+                mandate_obj = MandateType.objects.get_or_create(mandate_type=nf_dossier_obj[0], number=number)
             case _:
                 mandate_obj = None
 
         #mandate_objs.append(mandate_obj)
         return mandate_obj
-    
-
-
-
-        
-            

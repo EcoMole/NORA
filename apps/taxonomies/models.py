@@ -243,7 +243,7 @@ class Population(models.Model):
     class Meta:
         db_table = "AGE"
         verbose_name = "Population"
-        verbose_name_plural = "Populations 👨‍👩‍👧"
+        verbose_name_plural = "📂 Populations"
 
 
 class GuidelineQualifier(models.Model):
