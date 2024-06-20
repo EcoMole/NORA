@@ -76,11 +76,9 @@ class ParameterAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "type",
-        "param_tax_node",
     ]
     search_fields = ["title"]
     list_filter = ["type"]
-    autocomplete_fields = ["param_tax_node"]
 
 
 @admin.register(Composition)

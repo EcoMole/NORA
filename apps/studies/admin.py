@@ -3,12 +3,11 @@ from django.contrib import admin
 from .models import (
     ADME,
     ADMEStudyType,
-    AssessmentRemarks,
     Endpoint,
     Endpointstudy,
+    FinalOutcome,
+    FinalOutcomePopulation,
     Genotox,
-    Outcome,
-    OutcomePopulation,
     StudySource,
     StudyType,
 )
@@ -35,17 +34,11 @@ class EndpointstudyInline(admin.TabularInline):
 class EndpointInline(admin.TabularInline):
     model = Endpoint
     extra = 1
-    autocomplete_fields = ["qualifier", "unit", "sex"]
+    autocomplete_fields = ["qualifier", "unit"]
 
 
-class OutcomeInline(admin.TabularInline):
-    model = Outcome
-    extra = 1
-    autocomplete_fields = ["assessment_type", "risk_qualifier", "unit"]
-
-
-class OutcomePopulationInline(admin.TabularInline):
-    model = OutcomePopulation
+class FinalOutcomePopulationInline(admin.TabularInline):
+    model = FinalOutcomePopulation
     extra = 1
     autocomplete_fields = ["population"]
 
@@ -85,14 +78,12 @@ class EndpointAdmin(admin.ModelAdmin):
         "qualifier",
         "lovalue",
         "unit",
-        "sex",
     ]
     autocomplete_fields = [
         "reference_point",
         "endpointstudy",
         "qualifier",
         "unit",
-        "sex",
     ]
 
 
@@ -144,37 +135,22 @@ class StudySourceAdmin(admin.ModelAdmin):
         return {}
 
 
-@admin.register(Outcome)
-class OutcomeAdmin(admin.ModelAdmin):
+@admin.register(FinalOutcome)
+class FinalOutcomeAdmin(admin.ModelAdmin):
     list_display = [
-        "assessment_type",
-        "risk_qualifier",
+        "outcome",
+        "qualifier",
         "value",
         "unit",
         "uncertainty_factor",
     ]
     search_fields = [
-        "assessment_remarks__title",
-        "risk_qualifier__description",
+        "qualifier__description",
         "value",
     ]
     autocomplete_fields = [
-        "assessment_remarks",
-        "assessment_type",
-        "risk_qualifier",
+        "outcome",
+        "qualifier",
         "unit",
     ]
-    inlines = [OutcomePopulationInline]
-
-
-@admin.register(AssessmentRemarks)
-class AssessmentRemarksAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition"]
-    search_fields = ["title"]
-    fields = ["title", "definition"]
-
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    inlines = [FinalOutcomePopulationInline]

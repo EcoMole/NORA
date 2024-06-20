@@ -37,15 +37,17 @@ class Parameter(models.Model):
         on_delete=models.SET_NULL,
     )
 
-    param_tax_node = models.ForeignKey(
+    # For possible future use only
+    vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="param_tax_node_parameters",
-        db_column="id_param_tax_node",
+        related_name="vocab_id_parameters",
         limit_choices_to={"taxonomy__code": "PARAM"},
         help_text="(PARAM vocab)",
+        verbose_name="Parameter Vocabulary Identification",
+        db_column="id_param",
     )
 
     def __str__(self) -> str:

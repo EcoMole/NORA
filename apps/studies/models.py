@@ -1,20 +1,6 @@
 from django.db import models
 
 
-class AssessmentRemarks(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_assess")
-    title = models.CharField(max_length=255, db_column="assess")
-    definition = models.TextField(null=True, blank=True)
-
-    def __str__(self) -> str:
-        return self.title
-
-    class Meta:
-        db_table = "ASSESSMENT"
-        verbose_name = "Assessment Remarks"
-        verbose_name_plural = "Assessment Remarks"
-
-
 class Endpointstudy(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_tox")
     novel_food = models.ForeignKey(
@@ -79,7 +65,7 @@ class Endpointstudy(models.Model):
         related_name="sex_endpointstudies",
         help_text="(MTX vocab)",
     )
-    exp_duration = models.FloatField(null=True, blank=True)
+    study_duration = models.FloatField(null=True, blank=True, db_column="exp_duration")
     duration_unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -121,7 +107,7 @@ class Endpoint(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
         db_column="id_endpoint",
-        related_name="endpoint_end_endstudy_outcomes",
+        related_name="endpoint_endpoints",
         help_text="(ENDPOINT_HGV vocab)",
     )
     qualifier = models.ForeignKey(
@@ -129,7 +115,7 @@ class Endpoint(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="qualifier_end_endstudy_outcomes",
+        related_name="qualifier_endpoints",
         db_column="id_qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
         help_text="(QUALIFIER vocab)",
@@ -142,24 +128,25 @@ class Endpoint(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_unit",
-        related_name="unit_end_endstudy_outcomes",
+        related_name="unit_endpoints",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
-    sex = models.ForeignKey(
+    subpopulation = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "MTX"},
-        db_column="id_sex",
-        related_name="sex_end_endstudy_outcomes",
-        help_text="(MTX vocab)",
+        db_column="id_subpopulation",
+        related_name="subpopulation_endpoints",
+        help_text="value such as 'male', 'female', 'mothers', 'fetuses', 'offsprings' are "
+        "stored here. (MTX vocab)",
     )
     endpointstudy = models.ForeignKey(
         Endpointstudy,
         on_delete=models.CASCADE,
         db_column="id_tox",
-        related_name="endpointstudy_end_endstudy_outcomes",
+        related_name="endpointstudy_endpoints",
     )
 
     def __str__(self) -> str:
@@ -174,31 +161,30 @@ class Endpoint(models.Model):
         verbose_name_plural = "📂 Endpoints"
 
 
-class Outcome(models.Model):
+class FinalOutcome(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_hazard")
     endpoint = models.ForeignKey(
         Endpoint,
         on_delete=models.CASCADE,
         db_column="id_endpoint",
     )
-    assessment_type = models.ForeignKey(
+    outcome = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
         db_column="id_assessment_type",
-        related_name="assessment_type_outcomes",
-        verbose_name="Assessment Type",
+        related_name="outcome_final_outcomes",
         help_text="(ENDPOINT_HGV vocab)",
     )
-    risk_qualifier = models.ForeignKey(
+    qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         db_column="id_risk_qualifier",
-        related_name="risk_qualifier_outcomes",
+        related_name="qualifier_final_outcomes",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
         help_text="(QUALIFIER vocab)",
     )
@@ -214,22 +200,11 @@ class Outcome(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_risk_unit",
-        related_name="unit_outcomes",
+        related_name="unit_final_outcomes",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     uncertainty_factor = models.IntegerField(
         null=True, blank=True, verbose_name="uncertainty factor"
-    )
-    assessment_remarks = models.ForeignKey(
-        AssessmentRemarks,
-        db_column="id_assess",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name="Assessment Remarks",
-        help_text="This field provides additional information regarding the "
-        "assessment particularly when no health-based guidance value (e.g., ADI, TDI) "
-        "is provided in the Opinion.",
     )
     remarks = models.TextField(
         null=True,
@@ -238,8 +213,8 @@ class Outcome(models.Model):
 
     def __str__(self) -> str:
         res = ""
-        if self.assessment_type:
-            res += self.assessment_type.name
+        if self.outcome:
+            res += self.outcome.name
         if self.value:
             res += " - " + str(self.value)
         if self.unit:
@@ -265,10 +240,10 @@ class StudyType(models.Model):
         verbose_name_plural = "ADME Study Types"
 
 
-class OutcomePopulation(models.Model):
+class FinalOutcomePopulation(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_hazard_age")
-    outcome = models.ForeignKey(
-        Outcome, db_column="id_hazard", on_delete=models.CASCADE
+    final_outcome = models.ForeignKey(
+        FinalOutcome, db_column="id_hazard", on_delete=models.CASCADE
     )
     population = models.ForeignKey(
         "taxonomies.Population",
@@ -281,19 +256,20 @@ class OutcomePopulation(models.Model):
 
     def __str__(self) -> str:
         res = ""
-        if self.outcome and self.outcome.assessment_type:
-            res += self.outcome.assessment_type.name
+        if self.final_outcome and self.final_outcome.outcome:
+            res += self.final_outcome.outcome.name
         if self.population:
             res += " - " + self.population.__str__()
         return res
 
     class Meta:
         db_table = "HAZARD_AGE"
-        verbose_name = "Outcome Population"
-        verbose_name_plural = "Outcome Populations"
+        verbose_name = "Final Outcome Population"
+        verbose_name_plural = "Final Outcome Populations"
         constraints = [
             models.UniqueConstraint(
-                fields=["outcome", "population"], name="unique_outcome_population"
+                fields=["final_outcome", "population"],
+                name="unique_final_outcome_population",
             ),
         ]
 

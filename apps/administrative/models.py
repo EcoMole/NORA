@@ -140,22 +140,13 @@ class Applicant(models.Model):
 class MandateType(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_mandate_type")
 
-    TYPE_CHOICES = [
-        ("novel_food", "Novel food"),
-        ("new_dossier", "New dossier"),
-        ("extension_of_use", "Extension of use"),
-        ("nutrient_source", "Nutrient source"),
-        ("traditional_food", "Traditional food"),
-        ("nutrient_source", "Nutrient source"),
-    ]
-
     title = models.CharField(
         max_length=255,
         blank=False,
         null=False,
         help_text="Title of the mandate type",
-        choices=TYPE_CHOICES,
         db_column="mandate_type",
+        unique=True,
     )
 
     def __str__(self):

@@ -82,7 +82,7 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
 
 class HBGVInline(admin.TabularInline):
     model = HBGV
-    autocomplete_fields = ["type", "novel_food", "exceeded_for_population", "substance"]
+    autocomplete_fields = ["type", "novel_food", "exceeded", "substance"]
     extra = 1
 
 

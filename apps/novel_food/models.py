@@ -192,6 +192,7 @@ class Organism(models.Model):
         help_text="(MTX vocab)",
         related_name="vocab_id_organisms",
         verbose_name="Organism vocabulary identification",
+        db_column="id_org",
     )
     genus = models.ForeignKey(
         Genus, on_delete=models.CASCADE, null=True, blank=True, db_column="id_genus"
@@ -323,7 +324,7 @@ class StructureReported(models.Model):
 
 
 class Chemical(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_com")
+    id = models.AutoField(primary_key=True, db_column="id_component")
     vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         db_column="id_rnc_efsa",
@@ -605,7 +606,7 @@ class NovelFood(models.Model):
     outcome_remarks = models.TextField(
         blank=True,
         null=True,
-        help_text="explanation in case the Outcome is 'Partially Negative'",
+        help_text="explanation in case the FinalOutcome is 'Partially Negative'",
     )
 
     vocab_id = models.ForeignKey(
@@ -616,7 +617,7 @@ class NovelFood(models.Model):
         limit_choices_to={"taxonomy__code": "PARAM"},
         db_column="id_rms_efsa",
         related_name="vocab_id_novel_foods",
-        verbose_name="NovelFood vocabulary identification",
+        verbose_name="NovelFood Vocabulary Identification",
         help_text="If missing in vocabulary, move on, do not add into vocab. (PARAM vocab)",
     )
 
@@ -692,14 +693,15 @@ class HBGV(models.Model):
         db_column="id_substance",
         help_text="(PARAM vocab)",
     )
-    exceeded_for_population = models.ForeignKey(
-        "taxonomies.Population",
+    exceeded = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="population_hbgvs",
-        db_column="id_age",
-        help_text="Population for which the HBGV is exceeded",
+        related_name="exceeded_hbgvs",
+        limit_choices_to={"taxonomy__code": "YESNO"},
+        db_column="id_exceeded",
+        help_text="(YESNO vocab)",
     )
 
     def __str__(self):
