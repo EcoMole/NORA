@@ -37,28 +37,6 @@ class AllergenicityNovelFood(models.Model):
         verbose_name_plural = "Allergenicity Assignments"
 
 
-class NutritionalDisadvantage(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_nutri_disadvantage")
-    yes_no = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
-        db_column="is_yn",
-        related_name="yes_no_nutritional_disadvantages",
-        help_text="(YESNO vocab)",
-    )
-    explanation = models.TextField(null=True, blank=True)
-
-    def __str__(self) -> str:
-        return f"{self.yes_no} - {self.explanation}"
-
-    class Meta:
-        db_table = "NUTRITIONAL_DISADVANTAGE"
-        verbose_name = "Nutritional Disadvantage"
-
-
 class FoodCategory(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_food_category")
     title = models.CharField(max_length=255)
@@ -559,6 +537,11 @@ class NovelFood(models.Model):
         db_column="id_is_genotoxic",
         related_name="genotox_final_outcome_novel_foods",
     )
+    final_toxicology_remarks = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Final toxicology assessment for all the toxicology studies",
+    )
     # nutrition
     protein_digestibility = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -582,14 +565,24 @@ class NovelFood(models.Model):
         related_name="antinutritional_factors_novel_foods",
         help_text="(YESNO vocab)",
     )
-    nutritional_disadvantage = models.OneToOneField(
-        NutritionalDisadvantage,
+    has_nutri_disadvantage = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        db_column="id_has_nutri_disadvantage",
+        verbose_name="has Nutritional Disadvantage",
         on_delete=models.SET_NULL,
+        limit_choices_to={"taxonomy__code": "YESNO"},
+        related_name="has_nutri_disadvantage_novel_foods",
+        help_text="(YESNO vocab)",
+    )
+    nutri_disadvantage_explanation = models.TextField(
         blank=True,
         null=True,
-        db_column="id_nutri_disadvantage",
-        related_name="nutritional_disadvantage_novel_foods",
+        verbose_name="if Nutritional Disadvantage Explain Why",
+        help_text="explanation in case the Novel Food has a nutritional disadvantage",
     )
+
     # stability
     sufficient_data = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -650,7 +643,7 @@ class NovelFood(models.Model):
     outcome_remarks = models.TextField(
         blank=True,
         null=True,
-        help_text="explanation in case the FinalOutcome is 'Partially Negative'",
+        help_text="explanation in case the FinalOutcome is 'Negative' or 'Partially Negative'",
     )
 
     vocab_id = models.ForeignKey(

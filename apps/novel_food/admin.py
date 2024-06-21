@@ -19,7 +19,6 @@ from novel_food.models import (
     NovelFoodChemical,
     NovelFoodOrganism,
     NovelFoodSyn,
-    NutritionalDisadvantage,
     Organism,
     OrganismSyn,
     OrgType,
@@ -89,11 +88,6 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
 class HBGVInline(admin.TabularInline):
     model = HBGV
     autocomplete_fields = ["type", "novel_food", "exceeded", "substance"]
-    extra = 1
-
-
-class NutritionalDisadvantageInline(admin.TabularInline):
-    model = NutritionalDisadvantage
     extra = 1
 
 
@@ -169,6 +163,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
                     "tox_study_required",
                     "genotox_final_outcome",
                     "specific_toxicity",
+                    "final_toxicology_remarks",
                 ]
             },
         ),
@@ -178,7 +173,8 @@ class NovelFoodAdmin(admin.ModelAdmin):
                 "fields": [
                     "protein_digestibility",
                     "antinutritional_factors",
-                    "nutritional_disadvantage",
+                    "has_nutri_disadvantage",
+                    "nutri_disadvantage_explanation",
                 ],
             },
         ),
@@ -510,15 +506,6 @@ class ChemicalAdmin(admin.ModelAdmin):
         )
 
     get_other_names.short_description = Descriptor.OTHER_NAMES.verbose
-
-
-@admin.register(NutritionalDisadvantage)
-class NutritionalDisadvantageAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
 
 
 @admin.register(ChemicalType)
