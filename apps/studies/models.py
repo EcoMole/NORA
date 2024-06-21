@@ -6,16 +6,6 @@ class Endpointstudy(models.Model):
     novel_food = models.ForeignKey(
         "novel_food.NovelFood", on_delete=models.CASCADE, db_column="id_study"
     )
-    testing_method = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="testing_method_endpointstudies",
-        db_column="id_testing_method",
-        limit_choices_to={"taxonomy__code": "TEST_TYPE"},
-        help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
-    )
     test_type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -42,8 +32,8 @@ class Endpointstudy(models.Model):
         on_delete=models.SET_NULL,
         related_name="guideline_endpointstudies",
         db_column="id_guideline",
-        limit_choices_to={"taxonomy__code": "GUIDELINE"},
-        help_text="(GUIDELINE vocab)",
+        limit_choices_to={"taxonomy__code": "STUDYGUIDELINE"},
+        help_text="(STUDYGUIDELINE vocab)",
     )
     species = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -89,8 +79,8 @@ class Endpointstudy(models.Model):
 
     def __str__(self) -> str:
         res = self.novel_food.title
-        if self.testing_method:
-            res += " - " + self.testing_method.name
+        if self.test_type:
+            res += " - " + self.test_type.name
         return res
 
     class Meta:
@@ -100,6 +90,12 @@ class Endpointstudy(models.Model):
 
 
 class Endpoint(models.Model):
+    endpointstudy = models.ForeignKey(
+        Endpointstudy,
+        on_delete=models.CASCADE,
+        db_column="id_tox",
+        related_name="endpointstudy_endpoints",
+    )
     reference_point = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -141,12 +137,6 @@ class Endpoint(models.Model):
         related_name="subpopulation_endpoints",
         help_text="value such as 'male', 'female', 'mothers', 'fetuses', 'offsprings' are "
         "stored here. (MTX vocab)",
-    )
-    endpointstudy = models.ForeignKey(
-        Endpointstudy,
-        on_delete=models.CASCADE,
-        db_column="id_tox",
-        related_name="endpointstudy_endpoints",
     )
 
     def __str__(self) -> str:
@@ -227,17 +217,17 @@ class FinalOutcome(models.Model):
         verbose_name_plural = "Final Outcomes 🎰"
 
 
-class StudyType(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_study_type")
+class InvestigationType(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_investigation_type")
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self) -> str:
         return self.title
 
     class Meta:
-        db_table = "STUDY_TYPE"
-        verbose_name = "ADME Study Type"
-        verbose_name_plural = "ADME Study Types"
+        db_table = "INVESTIGATION_TYPE"
+        verbose_name = "ADME Investigation Type"
+        verbose_name_plural = "ADME Investigation Types"
 
 
 class FinalOutcomePopulation(models.Model):
@@ -275,7 +265,7 @@ class FinalOutcomePopulation(models.Model):
 
 
 class StudySource(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_study_type")
+    id = models.AutoField(primary_key=True, db_column="id_study_source")
     title = models.CharField(max_length=255)
 
     def __str__(self) -> str:
@@ -291,12 +281,12 @@ class ADME(models.Model):
     novel_food = models.ForeignKey(
         "novel_food.NovelFood", db_column="pktkade_study", on_delete=models.CASCADE
     )
-    testing_method = models.ForeignKey(
+    test_type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="testing_method_admes",
+        related_name="test_type_admes",
         db_column="assay_system_endpoint",
         limit_choices_to={"taxonomy__code": "TEST_TYPE"},
         help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
@@ -314,8 +304,8 @@ class ADME(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="guideline_admes",
-        limit_choices_to={"taxonomy__code": "GUIDELINE"},
-        help_text="(GUIDELINE vocab)",
+        limit_choices_to={"taxonomy__code": "STUDYGUIDELINE"},
+        help_text="(STUDYGUIDELINE vocab)",
     )
     study_source = models.ForeignKey(
         "studies.StudySource",
@@ -330,8 +320,8 @@ class ADME(models.Model):
 
     def __str__(self) -> str:
         res = self.novel_food.title
-        if self.testing_method:
-            res += " - " + self.testing_method.name
+        if self.test_type:
+            res += " - " + self.test_type.name
         return res
 
     class Meta:
@@ -340,39 +330,29 @@ class ADME(models.Model):
         verbose_name_plural = "ADME Studies 🔬♻️"
 
 
-class ADMEStudyType(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_pktkade_study_type")
+class ADMEInvestigationType(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_pktkade_investigation_type")
     adme = models.ForeignKey(ADME, db_column="id_pktkade", on_delete=models.CASCADE)
-    study_type = models.ForeignKey(
-        StudyType, db_column="id_study_type", on_delete=models.CASCADE
+    investigation_type = models.ForeignKey(
+        InvestigationType, db_column="id_investigation_type", on_delete=models.CASCADE
     )
 
     def __str__(self) -> str:
         res = self.adme.novel_food.title
-        if self.adme.testing_method:
-            res += " - " + self.adme.testing_method.name
+        if self.adme.test_type:
+            res += " - " + self.adme.test_type.name
         return res
 
     class Meta:
-        db_table = "PKTK_STUDY_TYPE"
-        verbose_name = "ADME Study Type"
-        verbose_name_plural = "ADME Study Types"
+        db_table = "PKTK_INVESTIGATION_TYPE"
+        verbose_name = "ADME Investigation Type"
+        verbose_name_plural = "ADME Investigation Types"
 
 
 class Genotox(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_tox")
     novel_food = models.ForeignKey(
         "novel_food.NovelFood", on_delete=models.CASCADE, db_column="id_study"
-    )
-    testing_method = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="testing_method_genotoxes",
-        db_column="id_testing_method",
-        limit_choices_to={"taxonomy__code": "TEST_TYPE"},
-        help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
         "taxonomies.GuidelineQualifier",
@@ -382,15 +362,15 @@ class Genotox(models.Model):
         related_name="guideline_qualifier_genotoxes",
         db_column="id_guideline_qualifier",
     )
-    genotox_guideline = models.ForeignKey(
+    guideline = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="genotox_guideline_genotoxes",
+        related_name="guideline_genotoxes",
         db_column="id_genotox_guideline",
-        limit_choices_to={"taxonomy__code": "GUIDELINE"},
-        help_text="(GUIDELINE vocab)",
+        limit_choices_to={"taxonomy__code": "STUDYGUIDELINE"},
+        help_text="(STUDYGUIDELINE vocab)",
     )
     outcome = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -426,8 +406,8 @@ class Genotox(models.Model):
 
     def __str__(self) -> str:
         res = self.novel_food.title
-        if self.testing_method:
-            res += " - " + self.testing_method.name
+        if self.test_type:
+            res += " - " + self.test_type.name
         return res
 
     class Meta:

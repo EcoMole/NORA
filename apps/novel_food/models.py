@@ -643,7 +643,7 @@ class NovelFood(models.Model):
     outcome_remarks = models.TextField(
         blank=True,
         null=True,
-        help_text="explanation in case the FinalOutcome is 'Negative' or 'Partially Negative'",
+        help_text="explanation in case the Outcome is 'Negative' or 'Partially Negative'",
     )
 
     vocab_id = models.ForeignKey(
