@@ -59,8 +59,52 @@ class NutritionalDisadvantage(models.Model):
         verbose_name = "Nutritional Disadvantage"
 
 
-class Category(models.Model):
+class FoodCategory(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_food_category")
     title = models.CharField(max_length=255)
+    definition = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "FOOD_CATEGORY"
+        verbose_name = "Food Category"
+        verbose_name_plural = "📂 Food Categories"
+
+
+class FoodCategoryNovelFood(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_food_category_study")
+    food_category = models.ForeignKey(
+        FoodCategory, on_delete=models.CASCADE, db_column="id_food_category"
+    )
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+
+    def __str__(self) -> str:
+        nf_code_part = (
+            f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
+        )
+        return (
+            self.food_category.title + " - " + f"{self.novel_food.title}{nf_code_part}"
+        )
+
+    class Meta:
+        db_table = "STUDY_FOOD_CATEGORY"
+        verbose_name = "Food Category of Novel Food"
+        verbose_name_plural = "Food Categories"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["novel_food", "food_category"],
+                name="unique_food_category_novel_food",
+            ),
+        ]
+
+
+class NovelFoodCategory(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_sub_type")
+    title = models.CharField(max_length=255, db_column="sub_type")
     definition = models.TextField(null=True, blank=True)
     regulation = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -74,36 +118,42 @@ class Category(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.regulation.name} : {self.title}"
+        regulation_part = f"{self.regulation.name} : " if self.regulation else ""
+        return regulation_part + self.title
 
     class Meta:
         db_table = "SUB_TYPE"
         verbose_name = "Novel Food Category"
-        verbose_name_plural = "📂 NF Categories"
+        verbose_name_plural = "📂 Novel Food Categories"
 
 
-class NovelFoodCategory(models.Model):
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+class NovelFoodCategoryNovelFood(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_sub_type_study")
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+    novel_food_category = models.ForeignKey(
+        NovelFoodCategory, on_delete=models.CASCADE, db_column="id_sub_type"
+    )
+
+    def __str__(self) -> str:
+        nf_code_part = (
+            f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
+        )
+        return (
+            self.novel_food_category + " - " + f"{self.novel_food.title}{nf_code_part}"
+        )
 
     class Meta:
         db_table = "STUDY_SUB_TYPE"
-        verbose_name = "Novel Food Category"
+        verbose_name = "Novel Food Category of Novel Food"
         verbose_name_plural = "Novel Food Categories"
-
-
-class FoodCategory(models.Model):
-    # id_food_category = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        # db_table = "FOOD_CATEGORY"
-        verbose_name = "Food category"
-        verbose_name_plural = "📂 Food categories"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["novel_food", "novel_food_category"],
+                name="unique_novel_food_category_novel_food",
+            ),
+        ]
 
 
 class SynonymType(models.Model):
@@ -288,6 +338,7 @@ class NovelFoodOrganism(models.Model):
     class Meta:
         db_table = "STUDY_ORG"
         verbose_name = "Organism Identity of Novel food"
+        verbose_name_plural = "Organism Identities"
 
 
 class NovelFoodChemical(models.Model):
@@ -296,7 +347,8 @@ class NovelFoodChemical(models.Model):
 
     class Meta:
         db_table = "STUDY_COM"
-        verbose_name = "Chemical identity of Novel food"
+        verbose_name = "Chemical Identity of Novel Food"
+        verbose_name_plural = "Chemical Identities"
 
 
 # For possible future use only
@@ -476,14 +528,6 @@ class NovelFood(models.Model):
         max_length=255, verbose_name="NF Code", null=True, blank=True
     )
 
-    food_category = models.ForeignKey(
-        FoodCategory,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        db_column="id_food_category",
-        related_name="food_category_novel_foods",
-    )
     # toxicity
     specific_toxicity = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -634,7 +678,7 @@ class NovelFood(models.Model):
 
     class Meta:
         db_table = "STUDY"
-        verbose_name = "Novel Food"
+        verbose_name = "Novel Food 🥬"
         verbose_name_plural = "Novel Foods 🥬"
 
 

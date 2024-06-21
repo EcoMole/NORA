@@ -4,17 +4,18 @@ from novel_food.models import (
     Allergenicity,
     AllergenicityNovelFood,
     BackgroundExposureAssessment,
-    Category,
     ChemDescriptor,
     Chemical,
     ChemicalSyn,
     ChemicalType,
     Family,
     FoodCategory,
+    FoodCategoryNovelFood,
     GenotoxFinalOutcome,
     Genus,
     NovelFood,
     NovelFoodCategory,
+    NovelFoodCategoryNovelFood,
     NovelFoodChemical,
     NovelFoodOrganism,
     NovelFoodSyn,
@@ -31,8 +32,13 @@ from taxonomies.util import Descriptor
 # from allergenicity.models import  Allergenicity
 
 
-class NovelFoodCategoryInline(admin.TabularInline):
-    model = NovelFoodCategory  # NovelFood.categories.through
+class NovelFoodCategoryNovelFoodInline(admin.TabularInline):
+    model = NovelFoodCategoryNovelFood
+    extra = 1
+
+
+class FoodCategoryNovelFoodInline(admin.TabularInline):
+    model = FoodCategoryNovelFood
     extra = 1
 
 
@@ -154,7 +160,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             "General Information",
-            {"fields": ["opinion", "title", "nf_code", "vocab_id", "food_category"]},
+            {"fields": ["opinion", "title", "nf_code", "vocab_id"]},
         ),
         (
             "Toxicity",
@@ -207,7 +213,8 @@ class NovelFoodAdmin(admin.ModelAdmin):
     inlines = [
         SubstanceOfConcernNovelFoodInline,
         NovelFoodSynInline,
-        NovelFoodCategoryInline,
+        FoodCategoryNovelFoodInline,
+        NovelFoodCategoryNovelFoodInline,
         NovelFoodChemicalInline,
         NovelFoodOrganismInline,
         BackgroundExposureAssessmentInline,
@@ -216,9 +223,9 @@ class NovelFoodAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition", "regulation"]
+@admin.register(NovelFoodCategory)
+class NovelFoodCategoryAdmin(admin.ModelAdmin):
+    list_display = ["title", "regulation", "definition"]
 
 
 @admin.register(FoodCategory)

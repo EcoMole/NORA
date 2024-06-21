@@ -1,7 +1,12 @@
 from administrative.models import MandateType, Panel
 from composition.models import FoodForm, ParameterType, ProposedUseType
 from django.core.management.base import BaseCommand
-from novel_food.models import Allergenicity, Category, FoodCategory, SynonymType
+from novel_food.models import (
+    Allergenicity,
+    FoodCategory,
+    NovelFoodCategory,
+    SynonymType,
+)
 from taxonomies.models import Taxonomy, TaxonomyNode
 
 
@@ -59,7 +64,7 @@ class Command(BaseCommand):
         }
 
         for key, value in categories_2015_2283.items():
-            Category.objects.get_or_create(
+            NovelFoodCategory.objects.get_or_create(
                 title=key, definition=value, regulation=article_3[0]
             )
 
@@ -84,7 +89,7 @@ class Command(BaseCommand):
         }
 
         for key, value in categories_97_618.items():
-            Category.objects.get_or_create(
+            NovelFoodCategory.objects.get_or_create(
                 title=key, definition=value, regulation=recommendation[0]
             )
 
@@ -100,7 +105,7 @@ class Command(BaseCommand):
         }
 
         for key, value in categories_258_97.items():
-            Category.objects.get_or_create(
+            NovelFoodCategory.objects.get_or_create(
                 title=key, definition=value, regulation=regulation_258_97[0]
             )
 

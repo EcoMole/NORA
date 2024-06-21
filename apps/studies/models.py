@@ -95,8 +95,8 @@ class Endpointstudy(models.Model):
 
     class Meta:
         db_table = "ENDPOINTSTUDY"
-        verbose_name = "Endpoint Study"
-        verbose_name_plural = "Endpoint Studies 📐🔬"
+        verbose_name = "Endpoint Study 🔬📐"
+        verbose_name_plural = "Endpoint Studies 🔬📐"
 
 
 class Endpoint(models.Model):
@@ -223,7 +223,7 @@ class FinalOutcome(models.Model):
 
     class Meta:
         db_table = "HAZARD"
-        verbose_name = "Final Outcome"
+        verbose_name = "Final Outcome 🎰"
         verbose_name_plural = "Final Outcomes 🎰"
 
 
@@ -336,8 +336,8 @@ class ADME(models.Model):
 
     class Meta:
         db_table = "PKTK"
-        verbose_name = "ADME Study"
-        verbose_name_plural = "ADME Studies ♻️🔬"
+        verbose_name = "ADME Study 🔬♻️"
+        verbose_name_plural = "ADME Studies 🔬♻️"
 
 
 class ADMEStudyType(models.Model):
@@ -432,5 +432,5 @@ class Genotox(models.Model):
 
     class Meta:
         db_table = "GENOTOX"
-        verbose_name = "Genotox Study"
-        verbose_name_plural = "Genotox Studies 🧬🔬"
+        verbose_name = "Genotox Study 🔬🧬"
+        verbose_name_plural = "Genotox Studies 🔬🧬"

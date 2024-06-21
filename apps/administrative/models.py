@@ -69,7 +69,7 @@ class Question(models.Model):
 
     class Meta:
         db_table = "QUESTION"
-        verbose_name = "Question"
+        verbose_name = "Question❔"
         verbose_name_plural = "Questions❔"
 
 
@@ -139,7 +139,6 @@ class Applicant(models.Model):
 
 class MandateType(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_mandate_type")
-
     title = models.CharField(
         max_length=255,
         blank=False,
@@ -147,6 +146,10 @@ class MandateType(models.Model):
         help_text="Title of the mandate type",
         db_column="mandate_type",
         unique=True,
+    )
+    definition = models.TextField(
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
