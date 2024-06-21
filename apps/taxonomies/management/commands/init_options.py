@@ -2,7 +2,8 @@ from administrative.models import MandateType, Panel
 from composition.models import FoodForm, ParameterType, ProposedUseType
 from django.core.management.base import BaseCommand
 from novel_food.models import Allergenicity, Category, FoodCategory, SynonymType
-from taxonomies.models import Taxonomy, TaxonomyNode
+from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier, Subgroup
+from studies.models import StudySource
 
 
 class Command(BaseCommand):
@@ -105,21 +106,9 @@ class Command(BaseCommand):
             )
 
     def create_mandates(self):
-        MandateType.objects.get_or_create(title="traditional_food")
-        MandateType.objects.get_or_create(title="nutrient_source")
-
-        novel_food = MandateType.objects.get_or_create(title="novel_food")
-
-        # Create children for novel food
-        MandateType.objects.get_or_create(
-            title="new_dossier", mandate_parent=novel_food[0]
-        )
-        MandateType.objects.get_or_create(
-            title="extension_of_use", mandate_parent=novel_food[0]
-        )
-        MandateType.objects.get_or_create(
-            title="nutrient_source", mandate_parent=novel_food[0]
-        )
+        options = ['NF - New dossier', 'NF - Extension of use', 'NF - Nutrient source', 'Traditional food', 'Nutrient source']
+        for option in options:
+            MandateType.objects.get_or_create(title=option)
 
     def create_allergenicity(self):
         options = [
@@ -130,6 +119,7 @@ class Command(BaseCommand):
             "Possible primary sensitization",
             "Certainty",
             "N/A",
+            "no concerns"
         ]
         for option in options:
             Allergenicity.objects.get_or_create(title=option)
@@ -182,6 +172,22 @@ class Command(BaseCommand):
         for option in options:
             ProposedUseType.objects.get_or_create(title=option)
 
+    def create_study_sources(self):
+        options = ['original', 'literature', 'Previous assessment', 'EFSA', 'N/A']
+        for option in options:
+            StudySource.objects.get_or_create(title=option)
+
+    def create_guideline_qualifiers(self):
+        options = ['according to', 'similar to']
+        for option in options:
+            GuidelineQualifier.objects.get_or_create(title=option)
+
+    def create_population_subgroups(self):
+        options = ['general population', 'infants', 'other children', 'adults, including pregnant and lactating women', 'adults, excluding pregnant and lactating women', 
+                   'pregnant and lactating women', 'adolescents']
+        for option in options:
+            Subgroup.objects.get_or_create(title=option)
+
     def handle(self, *args, **options):
         self.create_panels()
         self.create_allergenicity()
@@ -192,3 +198,6 @@ class Command(BaseCommand):
         self.create_proposed_use_types()
         self.create_novel_food_categories()
         self.create_mandates()
+        self.create_study_sources()
+        self.create_guideline_qualifiers()
+        self.create_population_subgroups()
