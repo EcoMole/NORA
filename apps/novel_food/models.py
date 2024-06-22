@@ -126,29 +126,12 @@ class NovelFoodCategoryNovelFood(models.Model):
         db_table = "STUDY_SUB_TYPE"
         verbose_name = "Novel Food Category of Novel Food"
         verbose_name_plural = "Novel Food Categories"
-<<<<<<< HEAD
-
-
-class FoodCategory(models.Model):
-    # id_food_category = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=2000, null=True, blank=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        # db_table = "FOOD_CATEGORY"
-        verbose_name = "Food category"
-        verbose_name_plural = "📂 Food categories"
-=======
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "novel_food_category"],
                 name="unique_novel_food_category_novel_food",
             ),
         ]
->>>>>>> develop
 
 
 class SynonymType(models.Model):
