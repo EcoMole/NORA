@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from core.models import User, Contribution
 from administrative.models import Opinion, Panel, OpinionPanel, Question, OpinionQuestion, ScientificOfficer, OpinionSciOfficer, MandateType, Mandate, Applicant, QuestionApplicant
-from novel_food.models import NovelFood, Allergenicity, AllergenicityNovelFood, NutritionalDisadvantage, NovelFoodSyn, SynonymType, GenotoxFinalOutcome
+from novel_food.models import NovelFood, Allergenicity, AllergenicityNovelFood, NovelFoodSyn, SynonymType, GenotoxFinalOutcome
 from taxonomies.models import Taxonomy, TaxonomyNode
 import pandas as pd
 
@@ -32,17 +32,8 @@ class Command(BaseCommand):
 
         r_publication_date = row['publication date']
         if not pd.isnull(r_publication_date):
-            if '/' in r_publication_date:
-                month, day, year = r_publication_date.split('/')
-                if int(year) < 25:
-                    year = '20' + year
-                else:
-                    year = '19' + year
-                pub_date = date(int(year), int(month), int(day))
-            elif '-' in r_publication_date:
-                day, month, year = r_publication_date.split('-')
-                pub_date = date(int(year), int(month), int(day))
-
+            day, month, year = r_publication_date.split('-')
+            pub_date = date(int(year), int(month), int(day))
             opinion_obj.publication_date = pub_date
             opinion_obj.save()
 
@@ -58,12 +49,13 @@ class Command(BaseCommand):
 
         person = row['person']
 
+        state = f"""Excel : {row['status']}\n"""
         if person == 'KN':
-            Contribution.objects.create(opinion=opinion_obj, user=KN, remarks=row['status']) #TODO status
+            Contribution.objects.create(opinion=opinion_obj, user=KN, remarks=state)
         elif person == 'MF':
-            Contribution.objects.create(opinion=opinion_obj, user=MF, remarks=row['status'])
+            Contribution.objects.create(opinion=opinion_obj, user=MF, remarks=state)
         elif person == 'LČ':
-            Contribution.objects.create(opinion=opinion_obj, user=LC, remarks=row['status'])
+            Contribution.objects.create(opinion=opinion_obj, user=LC, remarks=state)
 
         status = row['status']
 
@@ -83,14 +75,18 @@ class Command(BaseCommand):
             applicant_obj, _ = Applicant.objects.get_or_create(title=r_applicant)
             QuestionApplicant.objects.create(question=question, applicant=applicant_obj)
 
+        OpinionQuestion.objects.create(opinion=opinion_obj, question=question)
+
         if not pd.isna(r_mandates):
             for mandate in r_mandates.split(','):
-                mandate_type_obj, _ = MandateType.objects.get_or_create(title=mandate.strip())
-                OpinionQuestion.objects.create(opinion=opinion_obj, question=question)
+                mandate_type_obj = MandateType.objects.get(title=mandate.strip())
+                Mandate.objects.create(question=question, mandate_type=mandate_type_obj)
+
+        #TODO regulation
 
         # Import scientific officers
         r_so = row['so']
-        if not pd.isna(r_so) and not r_so == 'N/A':
+        if not pd.isna(r_so):
             sos = r_so.split(',')
             for so in sos:
                 so_first_name, so_last_name = so.strip().split(' ', maxsplit=1)
@@ -111,7 +107,7 @@ class Command(BaseCommand):
         if word == 'No' or word == 'no':
             return no
         
-        if word == 'Not specified' or word == 'not specified' or word == 'N/A':
+        if word == 'Not specified' or word == 'not specified' or word == 'N/A' or word == 'Unknown':
             return unknown
 
     def get_unit(self, word):
@@ -176,12 +172,8 @@ class Command(BaseCommand):
         
 
         r_nutr_disadvantages = row['nutritional – disadvantageous']
-        r_nutr_dis_reason = row['nutritional - reason']
+        novel_food_obj.has_nutri_disadvantage = self.get_yes_no(r_nutr_disadvantages)
 
-        if not pd.isna(r_nutr_disadvantages): #TODO upravit NutriDisadv na OnetoMany
-            nutri = NutritionalDisadvantage.objects.create(yes_no = self.get_yes_no(r_nutr_disadvantages), explanation = r_nutr_dis_reason)
-            novel_food_obj.nutritional_disadvantage = nutri
-            novel_food_obj.save()
 
         r_protein_digestibility = row['nutritional - protein digestibility']
         if not pd.isna(r_protein_digestibility):
@@ -189,8 +181,10 @@ class Command(BaseCommand):
             novel_food_obj.save()
 
         if row['nutritional – antinutritional factors'] in ['Yes', 'yes']:
-            result_msg += 'missing antinutritional factors\n'
+            result_msg += 'missing antinutritional factors\n' #TODO Mozna nechteji konkretne
 
+        novel_food_obj.antinutritional_factors = self.get_yes_no(row['nutritional – antinutritional factors']) 
+        novel_food_obj.save()
 
         r_common_names = row['nf - common name']
         if not pd.isna(r_common_names):
@@ -204,13 +198,50 @@ class Command(BaseCommand):
             for trade_name in r_trade_names.split(','):
                 NovelFoodSyn.objects.create(type=syn_trade_name, novel_food=novel_food_obj, novel_food_synonym=trade_name.strip())
 
-        r_genotox_final = row['genotox_final_outcome']
+        """ r_genotox_final = row['genotox_final_outcome']
         if not pd.isna(r_genotox_final):
             novel_food_obj.genotox_final_outcome = GenotoxFinalOutcome.objects.get_or_create(title=r_genotox_final)[0]
         else:
-            result_msg += 'genotox final outcome missing \n' #TODO musi byt ale jeste i tox required=True
+            result_msg += 'genotox final outcome missing \n' #TODO musi byt ale jeste i tox required=True """
+
+        r_outcome = row['outcome']
+        r_outcome_remarks = row['outcome remarks']
+        if not pd.isna(r_outcome):
+            novel_food_obj.outcome = r_outcome.lower().replace(' ', '_')
+        if not pd.isna(r_outcome_remarks):
+            novel_food_obj.outcome_remarks = r_outcome_remarks
+        novel_food_obj.save()
+
+        r_endocrine = row['endocrine disrupting properties']
+        if not pd.isna(r_endocrine):
+            novel_food_obj.endocrine_disrupt_prop = self.get_yes_no(r_endocrine)
+
+        if row['HBGV'] in ['yes', 'Yes']:
+            result_msg += 'missing HBGV\n'
+
+        if row['substances of concern'] in ['yes', 'Yes']:
+            result_msg += 'missing substances of concern\n'
+
+        r_specific_toxicity = row['specific toxicity – type']
+        if not pd.isna(r_specific_toxicity):
+            toxicity_vocab = Taxonomy.objects.get(code='TOXICITY')
+            try:
+                toxicity_node = TaxonomyNode.objects.get(taxonomy=toxicity_vocab, extended_name=r_specific_toxicity.upper())
+            except:
+                print(f'TOXICITY node {r_specific_toxicity} not found, creating.')
+                toxicity_node = TaxonomyNode.objects.create(taxonomy=toxicity_vocab, extended_name=r_specific_toxicity.upper(), code='NORA')
+            
+            novel_food_obj.specific_toxicity = toxicity_node
+            novel_food_obj.save()
 
 
+        #Find contribution for this opinioon:
+        try:
+            contribution = Contribution.objects.get(opinion=opinion)
+            contribution.remarks = contribution.remarks + result_msg
+            contribution.save()
+        except:
+            pass
 
         return result_msg
 
@@ -230,10 +261,6 @@ class Command(BaseCommand):
 
         #delete all novel foods
         NovelFood.objects.all().delete()
-
-        #delete all nutritional disadvantages
-        NutritionalDisadvantage.objects.all().delete()
-
         
         for row_obj in df.iterrows():
             opinion = self.import_opinion(row_obj[1])

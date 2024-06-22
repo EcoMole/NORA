@@ -203,7 +203,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
             },
         ),
     ]
-    list_display = ["nf_code", "opinion", "outcome", "outcome_remarks"]
+    list_display = ["nf_code", "opinion", "outcome"]
     search_fields = ["nf_code", "title"]
     autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
     inlines = [
