@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from core.models import User, Contribution
-from administrative.models import Opinion, Panel, OpinionPanel, Question, OpinionQuestion, ScientificOfficer, OpinionSciOfficer, MandateType, Mandate
+from administrative.models import Opinion, Panel, OpinionPanel, Question, OpinionQuestion, ScientificOfficer, OpinionSciOfficer, MandateType, Mandate, Applicant, QuestionApplicant
 from novel_food.models import NovelFood, Allergenicity, AllergenicityNovelFood, NutritionalDisadvantage, NovelFoodSyn, SynonymType, GenotoxFinalOutcome
 from taxonomies.models import Taxonomy, TaxonomyNode
 import pandas as pd
@@ -9,7 +9,7 @@ from datetime import date
 import datetime
 
 class Command(BaseCommand):
-    help = "Closes the specified poll for voting" #TODO fix
+    help = "TODO" #TODO fix
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -76,15 +76,17 @@ class Command(BaseCommand):
         # import questions
         r_question = row['question']
         r_mandates = row['mandate']
+        r_applicant = row['applicant']
 
         question = Question.objects.create(number=r_question)
+        if not pd.isna(r_applicant):
+            applicant_obj, _ = Applicant.objects.get_or_create(title=r_applicant)
+            QuestionApplicant.objects.create(question=question, applicant=applicant_obj)
 
-        if r_mandates != 'N/A':
+        if not pd.isna(r_mandates):
             for mandate in r_mandates.split(','):
                 mandate_type_obj, _ = MandateType.objects.get_or_create(title=mandate.strip())
                 OpinionQuestion.objects.create(opinion=opinion_obj, question=question)
-
-        Mandate.objects.create(question=question, mandate_type=mandate_type_obj)
 
         # Import scientific officers
         r_so = row['so']
