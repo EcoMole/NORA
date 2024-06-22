@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def create_panels(self):
         for name in ["EFSA", "NDA", "GMO"]:
-            Panel.objects.get_or_create(panel=name)
+            Panel.objects.get_or_create(title=name)
 
     def create_novel_food_categories(self):
         legref, _ = Taxonomy.objects.get_or_create(code="LEGREF")
@@ -106,7 +106,7 @@ class Command(BaseCommand):
             )
 
     def create_mandates(self):
-        options = ['NF - New dossier', 'NF - Extension of use', 'NF - Nutrient source', 'Traditional food', 'Nutrient source']
+        options = ['NF: New dossier', 'NF: Extension of use', 'NF: nutrient source', 'Traditional food', 'Nutrient source']
         for option in options:
             MandateType.objects.get_or_create(title=option)
 
@@ -144,7 +144,7 @@ class Command(BaseCommand):
             FoodForm.objects.get_or_create(title=option)
 
     def create_synonym_types(self):
-        options = ["synonym", "common name", "trade name"]
+        options = ["synonym", "common name", "trade name", "scientific name"]
         for option in options:
             SynonymType.objects.get_or_create(synonym_type=option)
 

@@ -24,7 +24,7 @@ class Opinion(models.Model):
         # taxonomy__code='REF_TYPE', code='').get_descendants()))
     )
     title = models.CharField(
-        max_length=255,
+        max_length=2000,
         unique=True,
         blank=False,
         null=False,

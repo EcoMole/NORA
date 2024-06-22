@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from core.models import User, Contribution
-from administrative.models import Opinion, Panel, OPAuthor, Question, OPQuestion, ScientificOfficer, OPScientificOfficer
+from administrative.models import Opinion, Panel, OpinionPanel, Question, OpinionQuestion, ScientificOfficer, OpinionSciOfficer, MandateType, Mandate
 from novel_food.models import NovelFood, Allergenicity, AllergenicityNovelFood, NutritionalDisadvantage, NovelFoodSyn, SynonymType, GenotoxFinalOutcome
 from taxonomies.models import Taxonomy, TaxonomyNode
 import pandas as pd
@@ -70,20 +70,21 @@ class Command(BaseCommand):
         # import panels
         panels = row['panel'].split(',')
         for panel in panels:
-            panel_obj = Panel.objects.get(panel=panel.strip())
-            OPAuthor.objects.create(id_op=opinion_obj, id_panel=panel_obj)
+            panel_obj = Panel.objects.get(title=panel.strip())
+            OpinionPanel.objects.create(opinion=opinion_obj, panel=panel_obj)
 
         # import questions
         r_question = row['question']
-        r_mandate = row['mandate']
-        # TODO mandates
-        """ if '?' in r_mandate:
-            mandate = None
-        if 'TF' or 'traditional' in r_mandate:
-            mandate =  """
+        r_mandates = row['mandate']
 
-        question = Question.objects.create(question=r_question)
-        OPQuestion.objects.create(id_op=opinion_obj, id_question=question)
+        question = Question.objects.create(number=r_question)
+
+        if r_mandates != 'N/A':
+            for mandate in r_mandates.split(','):
+                mandate_type_obj, _ = MandateType.objects.get_or_create(title=mandate.strip())
+                OpinionQuestion.objects.create(opinion=opinion_obj, question=question)
+
+        Mandate.objects.create(question=question, mandate_type=mandate_type_obj)
 
         # Import scientific officers
         r_so = row['so']
@@ -92,40 +93,39 @@ class Command(BaseCommand):
             for so in sos:
                 so_first_name, so_last_name = so.strip().split(' ', maxsplit=1)
                 so_obj = ScientificOfficer.objects.get_or_create(first_name=so_first_name, last_name=so_last_name)
-                OPScientificOfficer.objects.create(id_op=opinion_obj, id_sci_officer=so_obj[0])
-
+                OpinionSciOfficer.objects.create(opinion=opinion_obj, sci_officer=so_obj[0])
 
         return opinion_obj
 
     def get_yes_no(self, word):
-        yesno, _ = Taxonomy.objects.get_or_create(code='YESNO') #FINAL delete create
-        yes = TaxonomyNode.objects.get_or_create(taxonomy=yesno, code='Y') #FINAL delete create
-        no = TaxonomyNode.objects.get_or_create(taxonomy=yesno, code='N') #FINAL delete create
-        unknown = TaxonomyNode.objects.get_or_create(taxonomy=yesno, code='U') #FINAL delete create
+        yesno = Taxonomy.objects.get(code='YESNO')
+        yes = TaxonomyNode.objects.get(taxonomy=yesno, code='Y')
+        no = TaxonomyNode.objects.get(taxonomy=yesno, code='N')
+        unknown = TaxonomyNode.objects.get(taxonomy=yesno, code='U')
 
         if word == 'Yes' or word == 'yes':
-            return yes[0] #FINAL delete tu nulu
+            return yes
         
         if word == 'No' or word == 'no':
-            return no[0]
+            return no
         
         if word == 'Not specified' or word == 'not specified' or word == 'N/A':
-            return unknown[0]
+            return unknown
 
     def get_unit(self, word):
-        unit, _ = Taxonomy.objects.get_or_create(code='UNIT') #FINAL delete create
-        year = TaxonomyNode.objects.get_or_create(taxonomy=unit, code='6207A', short_name='Year') #FINAL delete create, FINAL delete short_name
-        month = TaxonomyNode.objects.get_or_create(taxonomy=unit, code='6206A', short_name='Month') #FINAL delete create, FINAL delete short_name
-        day = TaxonomyNode.objects.get_or_create(taxonomy=unit, code='6134A', short_name='Day') #FINAL delete create, FINAL delete short_name
+        unit = Taxonomy.objects.get(code='UNIT')
+        year = TaxonomyNode.objects.get(taxonomy=unit, code='G207A', extended_name='Year')
+        month = TaxonomyNode.objects.get(taxonomy=unit, code='G206A', extended_name='Month')
+        day = TaxonomyNode.objects.get(taxonomy=unit, code='G134A', extended_name='Day')
 
         if word in ['month', 'Month', 'month(s)', 'Month(s)']:
-            return month[0] #FINAL delete 0
+            return month
         
         if word in ['year', 'Year', 'year(s)', 'Year(s)']:
-            return year[0]
+            return year
         
         if word in ['day', 'Day', 'days', 'Days']:
-            return day[0]
+            return day
 
     def import_novel_food(self, row, opinion):
         result_msg = 'Novel food: '
@@ -160,11 +160,11 @@ class Command(BaseCommand):
         novel_food_obj.save()
 
         r_shelflife_value = row['stability – shelf life value']
-        if not pd.isna(r_shelflife_value):
+        if not pd.isna(r_shelflife_value) and r_shelflife_value != 'N/A':
             novel_food_obj.shelflife_value = r_shelflife_value
 
         r_shelflife_unit = row['stability – shelf life unit']
-        if not pd.isna(r_shelflife_unit):
+        if not pd.isna(r_shelflife_unit) and r_shelflife_unit != 'N/A':
             novel_food_obj.shelflife_unit = self.get_unit(r_shelflife_unit)
 
         novel_food_obj.save()
@@ -215,7 +215,7 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        df = pd.read_csv(options["csv_file"])
+        df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[''])
 
         print(df.head())
         print(df.columns)

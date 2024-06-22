@@ -95,7 +95,7 @@ class NovelFoodCategory(models.Model):
 class FoodCategory(models.Model):
     # id_food_category = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=255, null=True, blank=True)
+    definition = models.CharField(max_length=2000, null=True, blank=True)
 
     def __str__(self):
         return self.title
