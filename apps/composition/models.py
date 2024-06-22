@@ -85,7 +85,7 @@ class NovelFoodVariant(models.Model):
 
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"
-        verbose_name = "Novel Food Variant"
+        verbose_name = "Novel Food Variant 🥗"
         verbose_name_plural = "Novel Food Variants 🥗"
 
 

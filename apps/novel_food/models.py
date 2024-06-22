@@ -37,30 +37,52 @@ class AllergenicityNovelFood(models.Model):
         verbose_name_plural = "Allergenicity Assignments"
 
 
-class NutritionalDisadvantage(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_nutri_disadvantage")
-    yes_no = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
-        db_column="is_yn",
-        related_name="yes_no_nutritional_disadvantages",
-        help_text="(YESNO vocab)",
-    )
-    explanation = models.TextField(null=True, blank=True)
+class FoodCategory(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_food_category")
+    title = models.CharField(max_length=255)
+    definition = models.CharField(max_length=255, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return f"{self.yes_no} - {self.explanation}"
+    def __str__(self):
+        return self.title
 
     class Meta:
-        db_table = "NUTRITIONAL_DISADVANTAGE"
-        verbose_name = "Nutritional Disadvantage"
+        db_table = "FOOD_CATEGORY"
+        verbose_name = "Food Category"
+        verbose_name_plural = "📂 Food Categories"
 
 
-class Category(models.Model):
-    title = models.CharField(max_length=255)
+class FoodCategoryNovelFood(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_food_category_study")
+    food_category = models.ForeignKey(
+        FoodCategory, on_delete=models.CASCADE, db_column="id_food_category"
+    )
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+
+    def __str__(self) -> str:
+        nf_code_part = (
+            f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
+        )
+        return (
+            self.food_category.title + " - " + f"{self.novel_food.title}{nf_code_part}"
+        )
+
+    class Meta:
+        db_table = "STUDY_FOOD_CATEGORY"
+        verbose_name = "Food Category of Novel Food"
+        verbose_name_plural = "Food Categories"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["novel_food", "food_category"],
+                name="unique_food_category_novel_food",
+            ),
+        ]
+
+
+class NovelFoodCategory(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_sub_type")
+    title = models.CharField(max_length=255, db_column="sub_type")
     definition = models.TextField(null=True, blank=True)
     regulation = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -74,22 +96,37 @@ class Category(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.regulation.name} : {self.title}"
+        regulation_part = f"{self.regulation.name} : " if self.regulation else ""
+        return regulation_part + self.title
 
     class Meta:
         db_table = "SUB_TYPE"
         verbose_name = "Novel Food Category"
-        verbose_name_plural = "📂 NF Categories"
+        verbose_name_plural = "📂 Novel Food Categories"
 
 
-class NovelFoodCategory(models.Model):
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+class NovelFoodCategoryNovelFood(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_sub_type_study")
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+    novel_food_category = models.ForeignKey(
+        NovelFoodCategory, on_delete=models.CASCADE, db_column="id_sub_type"
+    )
+
+    def __str__(self) -> str:
+        nf_code_part = (
+            f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
+        )
+        return (
+            self.novel_food_category + " - " + f"{self.novel_food.title}{nf_code_part}"
+        )
 
     class Meta:
         db_table = "STUDY_SUB_TYPE"
-        verbose_name = "Novel Food Category"
+        verbose_name = "Novel Food Category of Novel Food"
         verbose_name_plural = "Novel Food Categories"
+<<<<<<< HEAD
 
 
 class FoodCategory(models.Model):
@@ -104,6 +141,14 @@ class FoodCategory(models.Model):
         # db_table = "FOOD_CATEGORY"
         verbose_name = "Food category"
         verbose_name_plural = "📂 Food categories"
+=======
+        constraints = [
+            models.UniqueConstraint(
+                fields=["novel_food", "novel_food_category"],
+                name="unique_novel_food_category_novel_food",
+            ),
+        ]
+>>>>>>> develop
 
 
 class SynonymType(models.Model):
@@ -288,6 +333,7 @@ class NovelFoodOrganism(models.Model):
     class Meta:
         db_table = "STUDY_ORG"
         verbose_name = "Organism Identity of Novel food"
+        verbose_name_plural = "Organism Identities"
 
 
 class NovelFoodChemical(models.Model):
@@ -296,7 +342,8 @@ class NovelFoodChemical(models.Model):
 
     class Meta:
         db_table = "STUDY_COM"
-        verbose_name = "Chemical identity of Novel food"
+        verbose_name = "Chemical Identity of Novel Food"
+        verbose_name_plural = "Chemical Identities"
 
 
 # For possible future use only
@@ -476,14 +523,6 @@ class NovelFood(models.Model):
         max_length=255, verbose_name="NF Code", null=True, blank=True
     )
 
-    food_category = models.ForeignKey(
-        FoodCategory,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        db_column="id_food_category",
-        related_name="food_category_novel_foods",
-    )
     # toxicity
     specific_toxicity = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -515,6 +554,11 @@ class NovelFood(models.Model):
         db_column="id_is_genotoxic",
         related_name="genotox_final_outcome_novel_foods",
     )
+    final_toxicology_remarks = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Final toxicology assessment for all the toxicology studies",
+    )
     # nutrition
     protein_digestibility = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -538,14 +582,24 @@ class NovelFood(models.Model):
         related_name="antinutritional_factors_novel_foods",
         help_text="(YESNO vocab)",
     )
-    nutritional_disadvantage = models.OneToOneField(
-        NutritionalDisadvantage,
+    has_nutri_disadvantage = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=True,
+        blank=True,
+        db_column="id_has_nutri_disadvantage",
+        verbose_name="has Nutritional Disadvantage",
         on_delete=models.SET_NULL,
+        limit_choices_to={"taxonomy__code": "YESNO"},
+        related_name="has_nutri_disadvantage_novel_foods",
+        help_text="(YESNO vocab)",
+    )
+    nutri_disadvantage_explanation = models.TextField(
         blank=True,
         null=True,
-        db_column="id_nutri_disadvantage",
-        related_name="nutritional_disadvantage_novel_foods",
+        verbose_name="if Nutritional Disadvantage Explain Why",
+        help_text="explanation in case the Novel Food has a nutritional disadvantage",
     )
+
     # stability
     sufficient_data = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -606,7 +660,7 @@ class NovelFood(models.Model):
     outcome_remarks = models.TextField(
         blank=True,
         null=True,
-        help_text="explanation in case the FinalOutcome is 'Partially Negative'",
+        help_text="explanation in case the Outcome is 'Negative' or 'Partially Negative'",
     )
 
     vocab_id = models.ForeignKey(
@@ -634,7 +688,7 @@ class NovelFood(models.Model):
 
     class Meta:
         db_table = "STUDY"
-        verbose_name = "Novel Food"
+        verbose_name = "Novel Food 🥬"
         verbose_name_plural = "Novel Foods 🥬"
 
 

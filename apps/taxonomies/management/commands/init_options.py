@@ -5,7 +5,6 @@ from novel_food.models import Allergenicity, Category, FoodCategory, SynonymType
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier, Subgroup
 from studies.models import StudySource
 
-
 class Command(BaseCommand):
     help = "command to initialize options in the database - panels, categories, mandates, allergenicity etc."
 
@@ -60,7 +59,7 @@ class Command(BaseCommand):
         }
 
         for key, value in categories_2015_2283.items():
-            Category.objects.get_or_create(
+            NovelFoodCategory.objects.get_or_create(
                 title=key, definition=value, regulation=article_3[0]
             )
 
@@ -85,7 +84,7 @@ class Command(BaseCommand):
         }
 
         for key, value in categories_97_618.items():
-            Category.objects.get_or_create(
+            NovelFoodCategory.objects.get_or_create(
                 title=key, definition=value, regulation=recommendation[0]
             )
 
@@ -101,7 +100,7 @@ class Command(BaseCommand):
         }
 
         for key, value in categories_258_97.items():
-            Category.objects.get_or_create(
+            NovelFoodCategory.objects.get_or_create(
                 title=key, definition=value, regulation=regulation_258_97[0]
             )
 

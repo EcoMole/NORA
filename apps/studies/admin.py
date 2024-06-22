@@ -2,14 +2,14 @@ from django.contrib import admin
 
 from .models import (
     ADME,
-    ADMEStudyType,
+    ADMEInvestigationType,
     Endpoint,
     Endpointstudy,
     FinalOutcome,
     FinalOutcomePopulation,
     Genotox,
+    InvestigationType,
     StudySource,
-    StudyType,
 )
 
 
@@ -25,16 +25,15 @@ def duplicate_model(modeladmin, request, queryset):
 duplicate_model.short_description = "Duplicate selected records"
 
 
-class EndpointstudyInline(admin.TabularInline):
-    model = Endpointstudy
-    extra = 1
-    autocomplete_fields = ["novel_food", "testing_method", "test_type"]
-
-
 class EndpointInline(admin.TabularInline):
     model = Endpoint
     extra = 1
-    autocomplete_fields = ["qualifier", "unit"]
+    autocomplete_fields = [
+        "qualifier",
+        "unit",
+        "subpopulation",
+        "reference_point",
+    ]
 
 
 class FinalOutcomePopulationInline(admin.TabularInline):
@@ -43,10 +42,10 @@ class FinalOutcomePopulationInline(admin.TabularInline):
     autocomplete_fields = ["population"]
 
 
-class ADMEStudyTypeInline(admin.TabularInline):
-    model = ADMEStudyType
+class ADMEInvestigationTypeInline(admin.TabularInline):
+    model = ADMEInvestigationType
     extra = 1
-    autocomplete_fields = ["study_type"]
+    autocomplete_fields = ["investigation_type"]
 
 
 # Main model admin classes
@@ -54,11 +53,11 @@ class ADMEStudyTypeInline(admin.TabularInline):
 
 @admin.register(Endpointstudy)
 class EndpointstudyAdmin(admin.ModelAdmin):
-    list_display = ["novel_food", "testing_method", "test_type", "species", "sex"]
-    search_fields = ["novel_food__title", "testing_method__description"]
+    list_display = ["novel_food", "test_type", "test_type", "species", "sex"]
+    search_fields = ["novel_food__title", "test_type__description"]
     autocomplete_fields = [
         "novel_food",
-        "testing_method",
+        "test_type",
         "test_type",
         "species",
         "sex",
@@ -84,37 +83,42 @@ class EndpointAdmin(admin.ModelAdmin):
         "endpointstudy",
         "qualifier",
         "unit",
+        "subpopulation",
+    ]
+    search_fields = [
+        "reference_point",
+        "endpointstudy",
     ]
 
 
 @admin.register(Genotox)
 class GenotoxAdmin(admin.ModelAdmin):
-    list_display = ["novel_food", "testing_method", "guideline_qualifier"]
-    search_fields = ["novel_food__title", "testing_method__description"]
+    list_display = ["novel_food", "test_type", "guideline_qualifier"]
+    search_fields = ["novel_food__title", "test_type__description"]
     autocomplete_fields = [
         "novel_food",
-        "testing_method",
+        "test_type",
         "guideline_qualifier",
         "test_type",
-        "genotox_guideline",
+        "guideline",
     ]
 
 
 @admin.register(ADME)
 class ADMEAdmin(admin.ModelAdmin):
-    list_display = ["novel_food", "testing_method", "guideline_qualifier", "guideline"]
+    list_display = ["novel_food", "test_type", "guideline_qualifier", "guideline"]
     autocomplete_fields = [
         "novel_food",
-        "testing_method",
+        "test_type",
         "guideline_qualifier",
         "guideline",
     ]
-    search_fields = ["novel_food__title", "testing_method__description"]
-    inlines = [ADMEStudyTypeInline]
+    search_fields = ["novel_food__title", "test_type__description"]
+    inlines = [ADMEInvestigationTypeInline]
 
 
-@admin.register(StudyType)
-class StudyTypeAdmin(admin.ModelAdmin):
+@admin.register(InvestigationType)
+class InvestigationTypeAdmin(admin.ModelAdmin):
     search_fields = ["title"]
 
     def get_model_perms(self, request):
@@ -148,9 +152,5 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         "qualifier__description",
         "value",
     ]
-    autocomplete_fields = [
-        "outcome",
-        "qualifier",
-        "unit",
-    ]
+    autocomplete_fields = ["outcome", "qualifier", "unit", "endpoint"]
     inlines = [FinalOutcomePopulationInline]

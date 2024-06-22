@@ -4,21 +4,21 @@ from novel_food.models import (
     Allergenicity,
     AllergenicityNovelFood,
     BackgroundExposureAssessment,
-    Category,
     ChemDescriptor,
     Chemical,
     ChemicalSyn,
     ChemicalType,
     Family,
     FoodCategory,
+    FoodCategoryNovelFood,
     GenotoxFinalOutcome,
     Genus,
     NovelFood,
     NovelFoodCategory,
+    NovelFoodCategoryNovelFood,
     NovelFoodChemical,
     NovelFoodOrganism,
     NovelFoodSyn,
-    NutritionalDisadvantage,
     Organism,
     OrganismSyn,
     OrgType,
@@ -31,8 +31,13 @@ from taxonomies.util import Descriptor
 # from allergenicity.models import  Allergenicity
 
 
-class NovelFoodCategoryInline(admin.TabularInline):
-    model = NovelFoodCategory  # NovelFood.categories.through
+class NovelFoodCategoryNovelFoodInline(admin.TabularInline):
+    model = NovelFoodCategoryNovelFood
+    extra = 1
+
+
+class FoodCategoryNovelFoodInline(admin.TabularInline):
+    model = FoodCategoryNovelFood
     extra = 1
 
 
@@ -83,11 +88,6 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
 class HBGVInline(admin.TabularInline):
     model = HBGV
     autocomplete_fields = ["type", "novel_food", "exceeded", "substance"]
-    extra = 1
-
-
-class NutritionalDisadvantageInline(admin.TabularInline):
-    model = NutritionalDisadvantage
     extra = 1
 
 
@@ -154,7 +154,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             "General Information",
-            {"fields": ["opinion", "title", "nf_code", "vocab_id", "food_category"]},
+            {"fields": ["opinion", "title", "nf_code", "vocab_id"]},
         ),
         (
             "Toxicity",
@@ -163,6 +163,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
                     "tox_study_required",
                     "genotox_final_outcome",
                     "specific_toxicity",
+                    "final_toxicology_remarks",
                 ]
             },
         ),
@@ -172,7 +173,8 @@ class NovelFoodAdmin(admin.ModelAdmin):
                 "fields": [
                     "protein_digestibility",
                     "antinutritional_factors",
-                    "nutritional_disadvantage",
+                    "has_nutri_disadvantage",
+                    "nutri_disadvantage_explanation",
                 ],
             },
         ),
@@ -207,7 +209,8 @@ class NovelFoodAdmin(admin.ModelAdmin):
     inlines = [
         SubstanceOfConcernNovelFoodInline,
         NovelFoodSynInline,
-        NovelFoodCategoryInline,
+        FoodCategoryNovelFoodInline,
+        NovelFoodCategoryNovelFoodInline,
         NovelFoodChemicalInline,
         NovelFoodOrganismInline,
         BackgroundExposureAssessmentInline,
@@ -216,9 +219,9 @@ class NovelFoodAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition", "regulation"]
+@admin.register(NovelFoodCategory)
+class NovelFoodCategoryAdmin(admin.ModelAdmin):
+    list_display = ["title", "regulation", "definition"]
 
 
 @admin.register(FoodCategory)
@@ -503,15 +506,6 @@ class ChemicalAdmin(admin.ModelAdmin):
         )
 
     get_other_names.short_description = Descriptor.OTHER_NAMES.verbose
-
-
-@admin.register(NutritionalDisadvantage)
-class NutritionalDisadvantageAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
 
 
 @admin.register(ChemicalType)
