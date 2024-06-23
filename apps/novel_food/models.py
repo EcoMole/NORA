@@ -304,7 +304,7 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         null=True,
         help_text="STRAIN if microorganism / VARIETY if plant / "
-        "SUBSPECIES if animal / CEll_TYPE if cell culture",
+        "SUBSPECIES if animal",
     )
     is_gmo = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -326,27 +326,23 @@ class NovelFoodOrganism(models.Model):
         limit_choices_to={"taxonomy__code": "YESNO"},
         verbose_name="has QPS",
         db_column="id_has_qps",
-        help_text="Has qualified presumption of safety? (YESNO vocab)",
+        help_text="Has qualified presumption of safety? applies only if the organism is a "
+        "microorganism. (YESNO vocab)",
     )
-    cell_culture = models.ForeignKey(
+    cell_culture = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+    are_the_cells_modified = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="cell_culture_novel_foods",
-        limit_choices_to={"taxonomy__code": "STRAIN"},
-        db_column="id_cell_culture",
-        help_text="(STRAIN vocab)",
-    )
-    is_cell_culture_modified = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="is_cell_culture_modified_novel_foods",
+        related_name="are_the_cells_modified_novel_foods",
         limit_choices_to={"taxonomy__code": "YESNO"},
         verbose_name="is the cell culture modified",
-        db_column="id_is_cell_culture_modified",
+        db_column="id_are_the_cells_modified",
         help_text="Is the cell culture modified? (YESNO vocab)",
     )
 
@@ -470,7 +466,11 @@ class ChemDescriptor(models.Model):
     ]
     id = models.AutoField(primary_key=True, db_column="id_chem_descriptor")
     type = models.CharField(max_length=255, choices=TYPE_CHOICES)
-    value = models.CharField(max_length=255)
+    value = models.CharField(
+        max_length=255,
+        verbose_name="Descriptor",
+        help_text="contains e.g. the molecular formula itself if type is 'Molecular Formula', etc.",
+    )
     chemical = models.ForeignKey(
         Chemical, on_delete=models.CASCADE, related_name="chem_descriptors"
     )
@@ -500,7 +500,7 @@ class SubstanceOfConcernNovelFood(models.Model):
         related_name="substance_of_concern_substance_of_concern_novel_foods",
         limit_choices_to={"taxonomy__code": "PARAM"},
         db_column="id_sub_of_concern",
-        help_text="(PARAM vocab)",
+        help_text="Fill only if there is a substance of concern, if not leave blank. (PARAM vocab)",
     )
 
     class Meta:

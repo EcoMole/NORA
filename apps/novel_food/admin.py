@@ -46,11 +46,12 @@ class FoodCategoryNovelFoodInline(admin.TabularInline):
 class NovelFoodChemicalInline(admin.TabularInline):
     model = NovelFoodChemical
     extra = 1
+    autocomplete_fields = ["chemical"]
 
 
 class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
     model = NovelFoodOrganism
-    autocomplete_fields = ["org_part", "organism", "cell_culture"]
+    autocomplete_fields = ["org_part", "organism"]
     extra = 1
     fieldsets = [
         (
@@ -78,8 +79,7 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
             "if cell culture",
             {
                 "fields": [
-                    "cell_culture",
-                    "is_cell_culture_modified",
+                    "are_the_cells_modified",
                 ],
                 "classes": ["collapse"],
             },
@@ -112,7 +112,7 @@ class AllergenicityNovelFoodInline(admin.TabularInline):
 class SubstanceOfConcernNovelFoodInline(admin.TabularInline):
     model = SubstanceOfConcernNovelFood
     autocomplete_fields = ["substance_of_concern"]
-    extra = 1
+    extra = 0
 
 
 class OrganismSynInline(admin.TabularInline):
@@ -217,7 +217,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
         ),
     ]
     list_display = ["nf_code", "opinion", "outcome", "outcome_remarks"]
-    search_fields = ["nf_code", "title"]
+    search_fields = ["nf_code", "title", "vocab_id__name"]
     autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
     inlines = [
         SubstanceOfConcernNovelFoodInline,
@@ -379,6 +379,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     list_display = ["vocab_id", "get_iupac", "get_mol_form", "get_cas"]
     autocomplete_fields = ["vocab_id"]
     inlines = [ChemDescriptorInline, ChemicalSynInline]
+    search_fields = ["vocab_id"]
     readonly_fields = [
         "get_iupac",
         "get_mol_form",
