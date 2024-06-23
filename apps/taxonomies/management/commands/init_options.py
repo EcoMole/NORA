@@ -197,7 +197,7 @@ class Command(BaseCommand):
             Subgroup.objects.get_or_create(title=option)
 
     def create_investigation_types(self):
-        options = ['absorption', 'metabolism', 'digestibility', 'distribution', 'excretion', 'bioavailability', 'toxicokinetics', 'pharmacokinetics', 'unespecified']
+        options = ['absorption', 'metabolism', 'digestibility', 'distribution', 'excretion', 'bioavailability', 'toxicokinetics', 'pharmacokinetics', 'unspecified']
         for option in options:
             InvestigationType.objects.get_or_create(title=option)
 

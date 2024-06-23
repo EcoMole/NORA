@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from core.models import User, Contribution
 from administrative.models import Opinion, Panel, OpinionPanel, Question, OpinionQuestion, ScientificOfficer, OpinionSciOfficer, MandateType, Mandate, Applicant, QuestionApplicant
-from novel_food.models import NovelFood, Allergenicity, AllergenicityNovelFood, NovelFoodSyn, SynonymType, GenotoxFinalOutcome
+from novel_food.models import NovelFood, Allergenicity, AllergenicityNovelFood, NovelFoodSyn, SynonymType, GenotoxFinalOutcome, FoodCategory, FoodCategoryNovelFood
 from taxonomies.models import Taxonomy, TaxonomyNode
 import pandas as pd
 
@@ -223,8 +223,8 @@ class Command(BaseCommand):
             result_msg += 'missing substances of concern\n'
 
         r_specific_toxicity = row['specific toxicity – type']
+        toxicity_vocab = Taxonomy.objects.get(code='TOXICITY')
         if not pd.isna(r_specific_toxicity):
-            toxicity_vocab = Taxonomy.objects.get(code='TOXICITY')
             try:
                 toxicity_node = TaxonomyNode.objects.get(taxonomy=toxicity_vocab, extended_name=r_specific_toxicity.upper())
             except:
@@ -233,6 +233,33 @@ class Command(BaseCommand):
             
             novel_food_obj.specific_toxicity = toxicity_node
             novel_food_obj.save()
+
+        else:
+            toxicity_node = TaxonomyNode.objects.get(taxonomy=toxicity_vocab, extended_name='NONE')
+            novel_food_obj.specific_toxicity = toxicity_node
+            novel_food_obj.save()
+
+
+        r_food_category = row['food category']
+        if not pd.isna(r_food_category):
+            categories = r_food_category.split(',')
+            for category in categories:
+                food_category_obj = FoodCategory.objects.get(title=category.strip())
+                FoodCategoryNovelFood.objects.create(novel_food=novel_food_obj, food_category=food_category_obj)
+
+
+        r_genotox_outcome = row['genotox outcome']
+        r_toxicity_required = row['toxicology required']
+
+        if not pd.isna(r_genotox_outcome):
+            genotox_outcome_obj = GenotoxFinalOutcome.objects.get_or_create(title=r_genotox_outcome)[0]
+            novel_food_obj.genotox_final_outcome = genotox_outcome_obj
+            novel_food_obj.save()
+            if pd.isna(r_toxicity_required):
+                result_msg += 'toxicity required (y/n) missing\n'
+            else:
+                #novel_food_obj.tox_study_required = self.get_yes_no(r_toxicity_required) #TODO after fixing ToxicologyRequired
+                pass
 
 
         #Find contribution for this opinioon:

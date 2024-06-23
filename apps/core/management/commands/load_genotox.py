@@ -5,7 +5,7 @@ from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier
 from novel_food.models import NovelFood
 
 class Command(BaseCommand):
-    help = "Closes the specified poll for voting" #TODO fix
+    help = "TODO" #TODO
 
     outcomes = ['negative', 'positive', 'inconclusive']
 
@@ -27,23 +27,33 @@ class Command(BaseCommand):
         
         return None
     
-    def get_guideline(self, word): #TODO tady se bude menit slovnik
-        guideline, _ = Taxonomy.objects.get_or_create(code='GUIDELINE')
+    def get_guideline(self, word):
+        print('getting guideline for', word)
+        studyguideline = Taxonomy.objects.get(code='STUDYGUIDELINE')
+        guideline = Taxonomy.objects.get(code='GUIDELINE')
         if 'OECD TG' in word:
             number = word.split('OECD TG')[1].strip()
             #get the guideline node:
             try:
-                guideline_node = TaxonomyNode.objects.get(taxonomy=guideline, extended_name__icontains=f'OECD Guideline {number}')
+                guideline_node = TaxonomyNode.objects.exclude(taxonomy=guideline).get(extended_name__icontains=f'OECD Guideline {number}')
+                print('found guideline node')
                 return guideline_node
             # CHeck if it exists
             except TaxonomyNode.DoesNotExist:
-                guideline_node = TaxonomyNode.objects.create(taxonomy=guideline, extended_name=f'OECD Guideline {number}', code='NORA')
-                print(f'did not find oece guideline node {word}, creating')
+                guideline_node = TaxonomyNode.objects.create(taxonomy=studyguideline, extended_name=f'OECD Guideline {number}', code='NORA')
+                print(f'did not find guideline node {word}, creating')
                 return guideline_node
         
+            except TaxonomyNode.MultipleObjectsReturned:
+                print(f'multiple OECD guideline nodes {word}, returning first')
+                guideline_node = TaxonomyNode.objects.filter(taxonomy=guideline, extended_name__icontains=f'OECD Guideline {number}').first()
+                return guideline_node
+
         else:
-            print(f'did not find oece guideline node {word}, creating')
-            guideline_node = TaxonomyNode.objects.create(taxonomy=guideline, extended_name=word, code='NORA')
+            try:
+                guideline_node = TaxonomyNode.objects.get(taxonomy=studyguideline, extended_name=word)
+            except:
+                guideline_node = TaxonomyNode.objects.create(taxonomy=studyguideline, extended_name=word, code='NORA')
             return guideline_node
 
     def get_test_type(self, word):
@@ -52,7 +62,7 @@ class Command(BaseCommand):
             test_type_node = TaxonomyNode.objects.get(taxonomy=test_type_vocab, extended_name=word)
             return test_type_node
         except:
-            print(f'did not find test type node {word}, creating')
+            #print(f'did not find test type node {word}, creating')
             test_type_node = TaxonomyNode.objects.create(taxonomy=test_type_vocab, extended_name=word, code='NORA')
             return test_type_node
 
@@ -69,27 +79,31 @@ class Command(BaseCommand):
         else: #tady chci q number
             nf = NovelFood.objects.filter(title=r_study_nf_name).first()
 
+        if nf is None:
+            return
+
         according_to = GuidelineQualifier.objects.get_or_create(title='according to') 
 
         genotox_study = Genotox.objects.create(novel_food=nf, guideline_qualifier=according_to[0])  
 
         r_test_material = row['test material']
+        #if missing, report it
         genotox_study.test_material = r_test_material
         genotox_study.save()
 
-        r_guideline = row['guideline'] #TODO tady se zmeni slovnik
+        r_guideline = row['guideline']
         if not pd.isna(r_guideline):
             guideline_node = self.get_guideline(r_guideline)
-            genotox_study.genotox_guideline = guideline_node
+            genotox_study.guideline = guideline_node
             genotox_study.save()
 
         r_outcome = row['outcome']
+        #if missing, report it
         if not pd.isna(r_outcome):
             outcome_node = self.get_pos_neg(r_outcome)
             genotox_study.outcome = outcome_node
             genotox_study.save()
 
-        #TODO remarks-jeste chybi v modelech
 
         r_study_source = row['study source']
         study_source_node = StudySource.objects.get(title=r_study_source)
@@ -97,12 +111,14 @@ class Command(BaseCommand):
         genotox_study.save()
 
         r_test_type = row['test type']
-        test_type_node = self.get_test_type(r_test_type)
-        genotox_study.test_type = test_type_node
-        genotox_study.save()
+        #if missing, report it
+        if not pd.isna(r_test_type):
+            test_type_node = self.get_test_type(r_test_type)
+            genotox_study.test_type = test_type_node
+            genotox_study.save()
 
-        if not pd.isna(row['remark']):
-            genotox_study.remark = row['remark']
+        if not pd.isna(row['remarks']):
+            genotox_study.remarks = row['remarks']
             genotox_study.save()
         
 
