@@ -181,7 +181,9 @@ class Family(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_family")
     org_type = models.ForeignKey(
         OrgType,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=False,
         db_column="id_org_type",
         verbose_name="Organism Type",
     )
@@ -198,7 +200,9 @@ class Family(models.Model):
 
 class Genus(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_genus")
-    family = models.ForeignKey(Family, on_delete=models.CASCADE, db_column="id_family")
+    family = models.ForeignKey(
+        Family, on_delete=models.SET_NULL, null=True, blank=False, db_column="id_family"
+    )
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -211,6 +215,7 @@ class Genus(models.Model):
 
 
 class Organism(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_org")
     vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -220,10 +225,7 @@ class Organism(models.Model):
         help_text="(MTX vocab)",
         related_name="vocab_id_organisms",
         verbose_name="Organism vocabulary identification",
-        db_column="id_org",
-    )
-    genus = models.ForeignKey(
-        Genus, on_delete=models.CASCADE, null=True, blank=True, db_column="id_genus"
+        db_column="id_organism",
     )
 
     def __str__(self):
@@ -243,6 +245,41 @@ class OrganismSyn(models.Model):
     class Meta:
         db_table = "ORG_SYN"
         verbose_name = "Organism synonym"
+
+
+class Species(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_spec")
+    title = models.CharField(max_length=255, unique=True)
+    organism = models.ForeignKey(
+        Organism, on_delete=models.CASCADE, null=False, blank=False, db_column="id_org"
+    )
+    genus = models.ForeignKey(
+        Genus, on_delete=models.SET_NULL, null=True, blank=False, db_column="id_genus"
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "SPECIES"
+        verbose_name = "Species (taxonomy)"
+        verbose_name_plural = "📂 Species (taxonomy)"
+
+
+class ScientificName(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_sci_name")
+    title = models.CharField(max_length=255, unique=True)
+    species = models.ForeignKey(
+        Species, on_delete=models.CASCADE, null=False, blank=False, db_column="id_spec"
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "SCIENTIFIC_NAME"
+        verbose_name = "Scientific Name (taxonomy)"
+        verbose_name_plural = "📂 Scientific Names (taxonomy)"
 
 
 class NovelFoodOrganism(models.Model):
