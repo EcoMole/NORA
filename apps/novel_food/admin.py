@@ -271,27 +271,31 @@ class OrganismAdmin(admin.ModelAdmin):
     list_display = [
         "get_organism",
         "get_scientific_name",
-        # "get_parent_nodes",
         "get_is_from_vocab",
     ]
     fieldsets = [
         (
             "General Information",
-            {"fields": ["vocab_id"]},
-        ),
-        (
-            "Final Descriptors (Custom Descriptors + Vocabulary Descriptors)",
             {
                 "fields": [
+                    "vocab_id",
                     "get_scientific_name",
                 ]
+            },
+        ),
+        (
+            "Taxonomy Information",
+            {
+                "fields": ["get_vocab_tax_path", "get_custom_tax_path"]
             },  # "get_parent_nodes"
         ),
         # ("Custom Descriptors", {"fields": ["genus"]}),
     ]
     readonly_fields = [
         "get_scientific_name",
-    ]  # "get_parent_nodes"
+        "get_vocab_tax_path",
+        "get_custom_tax_path",
+    ]
     autocomplete_fields = [
         "vocab_id",
     ]  # "genus"
@@ -320,31 +324,42 @@ class OrganismAdmin(admin.ModelAdmin):
 
     get_organism.short_description = "Species"
 
-    # def get_parent_nodes(self, obj):
-    #     if obj.genus and obj.genus.family and obj.genus.family.org_type:
-    #         return (
-    #             f"{obj.genus.title} < "
-    #             f"{obj.genus.family.title} < "
-    #             f"{obj.genus.family.org_type.title}"
-    #         )
-    #     elif ancestors := obj.vocab_id.get_significant_ancestors():
-    #         ancestors = obj.vocab_id.get_significant_ancestors()
-    #         while len(ancestors) > 0 and ancestors[-1].code in [
-    #             "A0C5X",
-    #             "A0B8X",
-    #             "root",
-    #         ]:
-    #             # we do not need to display "All Lists (A0C5X)", "Natural sources (A0B8X)"
-    #             # and "root"
-    #             ancestors = ancestors[:-1]
-    #         res = ""
-    #         for ancestor in ancestors:
-    #             res += " < " + ancestor.name
-    #         return res.lstrip(" < ")
-    #     else:
-    #         return "😢"
+    def get_custom_tax_path(self, obj):
+        result = ""
+        if species := obj.species_set.all():
+            for spec in species:
+                if spec.genus and spec.genus.family and spec.genus.family.org_type:
+                    result += (
+                        f"{spec.genus.title} < "
+                        f"{spec.genus.family.title} < "
+                        f"{spec.genus.family.org_type.title}"
+                    )
+                    result += "\n"
+            result = result[:-1]
+            return result
+        else:
+            return "-"
 
-    # get_parent_nodes.short_description = "Taxonomy Path"
+    get_custom_tax_path.short_description = "Custom Taxonomy Path"
+
+    def get_vocab_tax_path(self, obj):
+        if ancestors := obj.vocab_id.get_significant_ancestors():
+            while len(ancestors) > 0 and ancestors[-1].code in [
+                "A0C5X",
+                "A0B8X",
+                "root",
+            ]:
+                # we do not need to display "All Lists (A0C5X)", "Natural sources (A0B8X)"
+                # and "root"
+                ancestors = ancestors[:-1]
+            res = ""
+            for ancestor in ancestors:
+                res += " < " + ancestor.name
+            return res.lstrip(" < ")
+        else:
+            return "😢"
+
+    get_vocab_tax_path.short_description = "Vocab Taxonomy Path"
 
 
 @admin.register(OrgType)
