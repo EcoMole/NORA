@@ -4,7 +4,6 @@ from util.admin_utils import duplicate_model
 from .models import (
     Composition,
     FoodForm,
-    FoodFormNovelFoodVariant,
     NovelFoodVariant,
     Parameter,
     ParameterType,
@@ -14,11 +13,6 @@ from .models import (
     RiskAssessmentRedFlags,
     RiskAssessmentRedFlagsNFVariant,
 )
-
-
-class FoodFormNFVariantInline(admin.TabularInline):
-    model = FoodFormNovelFoodVariant  # TODO change the name of the model
-    extra = 1
 
 
 class CompositionInline(admin.TabularInline):
@@ -46,9 +40,8 @@ class RiskAssessmentRedFlagsNFVariantInline(admin.TabularInline):
 
 @admin.register(NovelFoodVariant)
 class NovelFoodVariantAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["novel_food"]
+    autocomplete_fields = ["novel_food", "food_form"]
     inlines = [
-        FoodFormNFVariantInline,
         ProposedUseInline,
         CompositionInline,
         ProductionNovelFoodVariantInline,
