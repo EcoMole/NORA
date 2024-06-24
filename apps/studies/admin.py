@@ -1,4 +1,5 @@
 from django.contrib import admin
+from util.admin_utils import duplicate_model
 
 from .models import (
     ADME,
@@ -11,18 +12,6 @@ from .models import (
     InvestigationType,
     StudySource,
 )
-
-
-def duplicate_model(modeladmin, request, queryset):
-    for object in queryset:
-        # When a Django model instance's id (or primary key) is set to None and then saved,
-        # Django recognizes that this is a new record and
-        # automatically assigns it a new ID upon saving.
-        object.id = None
-        object.save()
-
-
-duplicate_model.short_description = "Duplicate selected records"
 
 
 class EndpointInline(admin.TabularInline):
@@ -89,6 +78,7 @@ class EndpointAdmin(admin.ModelAdmin):
         "reference_point",
         "endpointstudy",
     ]
+    actions = [duplicate_model]
 
 
 @admin.register(Genotox)
@@ -102,6 +92,7 @@ class GenotoxAdmin(admin.ModelAdmin):
         "test_type",
         "guideline",
     ]
+    actions = [duplicate_model]
 
 
 @admin.register(ADME)
@@ -115,6 +106,7 @@ class ADMEAdmin(admin.ModelAdmin):
     ]
     search_fields = ["novel_food__title", "test_type__description"]
     inlines = [ADMEInvestigationTypeInline]
+    actions = [duplicate_model]
 
 
 @admin.register(InvestigationType)
@@ -154,3 +146,4 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
     ]
     autocomplete_fields = ["outcome", "qualifier", "unit", "endpoint"]
     inlines = [FinalOutcomePopulationInline]
+    actions = [duplicate_model]

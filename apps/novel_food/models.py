@@ -249,7 +249,14 @@ class OrganismSyn(models.Model):
 
 class Species(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_spec")
-    title = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, verbose_name="Species Name")
+    scientific_name = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name="Scientific Name",
+    )
     organism = models.ForeignKey(
         Organism, on_delete=models.CASCADE, null=False, blank=False, db_column="id_org"
     )
@@ -258,28 +265,12 @@ class Species(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         db_table = "SPECIES"
         verbose_name = "Species (taxonomy)"
         verbose_name_plural = "📂 Species (taxonomy)"
-
-
-class ScientificName(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_sci_name")
-    title = models.CharField(max_length=255, unique=True)
-    species = models.ForeignKey(
-        Species, on_delete=models.CASCADE, null=False, blank=False, db_column="id_spec"
-    )
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        db_table = "SCIENTIFIC_NAME"
-        verbose_name = "Scientific Name (taxonomy)"
-        verbose_name_plural = "📂 Scientific Names (taxonomy)"
 
 
 class NovelFoodOrganism(models.Model):
@@ -528,6 +519,11 @@ class NovelFood(models.Model):
         ("partially_negative", "Partially Negative"),
         ("positive", "Positive"),
     ]
+    TOX_STUDY_REQUIRED_CHOICES = [
+        ("yes", "Yes"),
+        ("no", "No"),
+        ("no_new_data_added", "No new data added"),
+    ]
 
     # general info
     id = models.AutoField(primary_key=True, db_column="id_study")
@@ -555,16 +551,8 @@ class NovelFood(models.Model):
         related_name="specific_toxicity_novel_foods",
         help_text="if novel food has specific toxicity, specify which one. (TOXICITY vocab)",
     )
-    tox_study_required = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        db_column="id_tox_study_required",
-        verbose_name="Tox study required",
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
-        related_name="tox_study_required_novel_foods",
-        help_text="(YESNO vocab)",
+    tox_study_required = models.CharField(
+        choices=TOX_STUDY_REQUIRED_CHOICES, max_length=255, blank=True, null=True
     )
     genotox_final_outcome = models.ForeignKey(
         GenotoxFinalOutcome,
@@ -782,5 +770,5 @@ class HBGV(models.Model):
         return f"{self.novel_food.title} - {self.substance.name} - {self.type.name}"
 
     class Meta:
-        verbose_name = "Health-Based Guidence Value"
-        verbose_name_plural = "Health-Based Guidence Values"
+        verbose_name = "Health-Based Guidance Value"
+        verbose_name_plural = "Health-Based Guidance Values"

@@ -1,9 +1,9 @@
 from django.contrib import admin
+from util.admin_utils import duplicate_model
 
 from .models import (
     Composition,
     FoodForm,
-    FoodFormNovelFoodVariant,
     NovelFoodVariant,
     Parameter,
     ParameterType,
@@ -13,11 +13,6 @@ from .models import (
     RiskAssessmentRedFlags,
     RiskAssessmentRedFlagsNFVariant,
 )
-
-
-class FoodFormNFVariantInline(admin.TabularInline):
-    model = FoodFormNovelFoodVariant  # TODO change the name of the model
-    extra = 1
 
 
 class CompositionInline(admin.TabularInline):
@@ -45,14 +40,14 @@ class RiskAssessmentRedFlagsNFVariantInline(admin.TabularInline):
 
 @admin.register(NovelFoodVariant)
 class NovelFoodVariantAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["novel_food"]
+    autocomplete_fields = ["novel_food", "food_form"]
     inlines = [
-        FoodFormNFVariantInline,
         ProposedUseInline,
         CompositionInline,
         ProductionNovelFoodVariantInline,
         RiskAssessmentRedFlagsNFVariantInline,
     ]
+    actions = [duplicate_model]
 
 
 @admin.register(FoodForm)
@@ -79,6 +74,7 @@ class ParameterAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title"]
     list_filter = ["type"]
+    actions = [duplicate_model]
 
 
 @admin.register(Composition)
@@ -106,6 +102,7 @@ class ProposedUseTypeAdmin(admin.ModelAdmin):
     list_display = [
         "title",
     ]
+    actions = [duplicate_model]
 
 
 @admin.register(RiskAssessmentRedFlags)
