@@ -8,6 +8,7 @@ from taxonomies.models import (
     Taxonomy,
     TaxonomyNode,
 )
+from util.admin_utils import duplicate_model
 
 
 @admin.register(Population)
@@ -33,6 +34,7 @@ class PopulationAdmin(admin.ModelAdmin):
         "subgroup",
     ]
     autocomplete_fields = ["qualifier", "unit"]
+    actions = [duplicate_model]
 
 
 @admin.register(GuidelineQualifier)
@@ -63,3 +65,4 @@ class TaxonomyNodeAdmin(admin.ModelAdmin):
     search_fields = ["code", "short_name", "extended_name"]
     fields = ["code", "short_name", "extended_name", "taxonomy"]
     list_filter = ["taxonomy"]
+    actions = [duplicate_model]
