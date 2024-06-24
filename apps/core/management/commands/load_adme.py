@@ -8,7 +8,7 @@ from core.models import Contribution
 
 
 class Command(BaseCommand):
-    help = "TODO" #TODO
+    help = "Load ADME studies from csv"
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)

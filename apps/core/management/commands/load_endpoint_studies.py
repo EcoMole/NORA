@@ -174,9 +174,6 @@ class Command(BaseCommand):
 
         return result_msg
 
-
-
-
     def handle(self, *args: Any, **options: Any):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[''])
 

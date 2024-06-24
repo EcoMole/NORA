@@ -55,6 +55,7 @@ class Command(BaseCommand):
             try:
                 guideline_node = TaxonomyNode.objects.get(taxonomy=studyguideline, extended_name=word)
             except:
+                print(f'did not find guideline node {word}, creating')
                 guideline_node = TaxonomyNode.objects.create(taxonomy=studyguideline, extended_name=word, code='NORA')
             return guideline_node
 
@@ -135,9 +136,6 @@ class Command(BaseCommand):
                 pass
 
         return result_msg
-        
-        
-
 
     def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[''])
