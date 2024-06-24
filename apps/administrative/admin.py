@@ -1,6 +1,7 @@
 from core.models import Contribution
 from django.contrib import admin
 from django.utils.html import format_html
+from util.admin_utils import duplicate_model
 
 from .models import (
     Applicant,
@@ -74,6 +75,7 @@ class OpinionAdmin(admin.ModelAdmin):
         OpinionQuestionInline,
         OPScientificOfficerInline,
     ]
+    actions = [duplicate_model]
 
     def pdf_link(self, obj):
         if obj.pdf:
@@ -89,6 +91,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ["number"]
     search_fields = ["number"]
     inlines = [QuestionApplicantInline, MandateInline]
+    actions = [duplicate_model]
 
 
 @admin.register(Panel)
@@ -107,6 +110,7 @@ class ApplicantAdmin(admin.ModelAdmin):
 class MandateAdmin(admin.ModelAdmin):
     list_display = ["question", "mandate_type", "regulation"]
     search_fields = ["question", "mandate_type", "regulation"]
+    actions = [duplicate_model]
 
     def get_model_perms(self, request):
         """

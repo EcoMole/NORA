@@ -1,4 +1,5 @@
 from django.contrib import admin
+from util.admin_utils import duplicate_model
 
 from .models import (
     Composition,
@@ -53,6 +54,7 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProductionNovelFoodVariantInline,
         RiskAssessmentRedFlagsNFVariantInline,
     ]
+    actions = [duplicate_model]
 
 
 @admin.register(FoodForm)
@@ -79,6 +81,7 @@ class ParameterAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title"]
     list_filter = ["type"]
+    actions = [duplicate_model]
 
 
 @admin.register(Composition)
@@ -106,6 +109,7 @@ class ProposedUseTypeAdmin(admin.ModelAdmin):
     list_display = [
         "title",
     ]
+    actions = [duplicate_model]
 
 
 @admin.register(RiskAssessmentRedFlags)

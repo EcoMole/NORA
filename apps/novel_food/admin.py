@@ -29,6 +29,7 @@ from novel_food.models import (
     SynonymType,
 )
 from taxonomies.util import Descriptor
+from util.admin_utils import duplicate_model
 
 # from allergenicity.models import  Allergenicity
 
@@ -230,6 +231,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
         HBGVInline,
         AllergenicityNovelFoodInline,
     ]
+    actions = [duplicate_model]
 
 
 @admin.register(NovelFoodCategory)
@@ -296,6 +298,7 @@ class OrganismAdmin(admin.ModelAdmin):
     inlines = [SpeciesInline, OrganismSynInline]
     search_fields = ["vocab_id__name"]
     list_filter = [IsFromVocabFilter]
+    actions = [duplicate_model]
 
     def get_is_from_vocab(self, obj):
         return obj.vocab_id is not None
@@ -372,6 +375,7 @@ class SpeciesAdmin(admin.ModelAdmin):
     list_filter = ["genus"]
     autocomplete_fields = ["organism", "genus"]
     inlines = [ScientificNameInline]
+    actions = [duplicate_model]
 
 
 @admin.register(Chemical)
@@ -419,6 +423,7 @@ class ChemicalAdmin(admin.ModelAdmin):
             },
         ),
     ]
+    actions = [duplicate_model]
 
     @staticmethod
     def get_descriptors_to_display(custom_descriptors, vocab_descriptors):
