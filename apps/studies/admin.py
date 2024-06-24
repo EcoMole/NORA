@@ -53,7 +53,7 @@ class ADMEInvestigationTypeInline(admin.TabularInline):
 
 @admin.register(Endpointstudy)
 class EndpointstudyAdmin(admin.ModelAdmin):
-    list_display = ["novel_food", "test_type", "test_type", "species", "sex"]
+    list_display = ["novel_food", "test_type", "species", "sex"]
     search_fields = ["novel_food__title", "test_type__description"]
     autocomplete_fields = [
         "novel_food",

@@ -1,28 +1,23 @@
 from administrative.models import MandateType, Panel
 from composition.models import FoodForm, ParameterType, ProposedUseType
 from django.core.management.base import BaseCommand
-from novel_food.models import (
-    Allergenicity,
-    FoodCategory,
-    NovelFoodCategory,
-    SynonymType,
-)
-from taxonomies.models import Taxonomy, TaxonomyNode
-
+from novel_food.models import Allergenicity, NovelFoodCategory, FoodCategory, SynonymType
+from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier, Subgroup
+from studies.models import StudySource, InvestigationType
 
 class Command(BaseCommand):
     help = "command to initialize options in the database - panels, categories, mandates, allergenicity etc."
 
     def create_panels(self):
         for name in ["EFSA", "NDA", "GMO"]:
-            Panel.objects.get_or_create(panel=name)
+            Panel.objects.get_or_create(title=name)
 
     def create_novel_food_categories(self):
         legref, _ = Taxonomy.objects.get_or_create(code="LEGREF")
         # pridat do slovniku Comission Recommendation 97/618/EC
         # pridat do slovniku: Regulation (EC) No 2015/2283 Article 3
 
-        article_3 = TaxonomyNode.objects.get_or_create(
+        article_3, _ = TaxonomyNode.objects.get_or_create(
             code="NORA",
             taxonomy=legref,
             short_name="Regulation (EC) No 2015/2283 Article 3",
@@ -31,13 +26,13 @@ class Command(BaseCommand):
             of the European Parliament and of the Council and Commission Regulation (EC) No 1852/2001 Article 3£https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=OJ:JOL_2015_327_R_0001",
         )
 
-        recommendation = TaxonomyNode.objects.get_or_create(
+        recommendation, _ = TaxonomyNode.objects.get_or_create(
             code="NORA",
             taxonomy=legref,
             short_name="Commission Recommendation 97/618/EC",
         )
 
-        regulation_258_97 = TaxonomyNode.objects.get_or_create(
+        regulation_258_97 = TaxonomyNode.objects.get(
             taxonomy=legref, code="N124A"
         )
 
@@ -65,7 +60,7 @@ class Command(BaseCommand):
 
         for key, value in categories_2015_2283.items():
             NovelFoodCategory.objects.get_or_create(
-                title=key, definition=value, regulation=article_3[0]
+                title=key, definition=value, regulation=article_3
             )
 
         categories_97_618 = {
@@ -90,7 +85,7 @@ class Command(BaseCommand):
 
         for key, value in categories_97_618.items():
             NovelFoodCategory.objects.get_or_create(
-                title=key, definition=value, regulation=recommendation[0]
+                title=key, definition=value, regulation=recommendation
             )
 
         categories_258_97 = {
@@ -106,25 +101,13 @@ class Command(BaseCommand):
 
         for key, value in categories_258_97.items():
             NovelFoodCategory.objects.get_or_create(
-                title=key, definition=value, regulation=regulation_258_97[0]
+                title=key, definition=value, regulation=regulation_258_97
             )
 
     def create_mandates(self):
-        MandateType.objects.get_or_create(title="traditional_food")
-        MandateType.objects.get_or_create(title="nutrient_source")
-
-        novel_food = MandateType.objects.get_or_create(title="novel_food")
-
-        # Create children for novel food
-        MandateType.objects.get_or_create(
-            title="new_dossier", mandate_parent=novel_food[0]
-        )
-        MandateType.objects.get_or_create(
-            title="extension_of_use", mandate_parent=novel_food[0]
-        )
-        MandateType.objects.get_or_create(
-            title="nutrient_source", mandate_parent=novel_food[0]
-        )
+        options = ['NF: New dossier', 'NF: Extension of use', 'NF: nutrient source', 'Traditional food', 'Nutrient source']
+        for option in options:
+            MandateType.objects.get_or_create(title=option)
 
     def create_allergenicity(self):
         options = [
@@ -135,6 +118,7 @@ class Command(BaseCommand):
             "Possible primary sensitization",
             "Certainty",
             "N/A",
+            "No concerns"
         ]
         for option in options:
             Allergenicity.objects.get_or_create(title=option)
@@ -147,6 +131,7 @@ class Command(BaseCommand):
     def create_food_forms(self):
         options = [
             "powder",
+            "oil",
             "paste",
             "whole frozen",
             "whole dried",
@@ -159,7 +144,7 @@ class Command(BaseCommand):
             FoodForm.objects.get_or_create(title=option)
 
     def create_synonym_types(self):
-        options = ["synonym", "common name", "trade name"]
+        options = ["synonym", "common name", "trade name", "scientific name"]
         for option in options:
             SynonymType.objects.get_or_create(synonym_type=option)
 
@@ -171,6 +156,14 @@ class Command(BaseCommand):
             "Minerals",
             "Hoodigosides",
             "Vitamins",
+            "Residual solvents",
+            "Reaction by-products",
+            "Process contaminants",
+            "Antinutritional factors",
+            "Pesticides",
+            "Species identity",
+            "Cyanotoxins",
+            "Fatty acids"
         ]
         for option in options:
             ParameterType.objects.get_or_create(title=option)
@@ -187,6 +180,27 @@ class Command(BaseCommand):
         for option in options:
             ProposedUseType.objects.get_or_create(title=option)
 
+    def create_study_sources(self):
+        options = ['original', 'literature', 'Previous assessment', 'EFSA', 'N/A']
+        for option in options:
+            StudySource.objects.get_or_create(title=option)
+
+    def create_guideline_qualifiers(self):
+        options = ['according to', 'similar to']
+        for option in options:
+            GuidelineQualifier.objects.get_or_create(title=option)
+
+    def create_population_subgroups(self):
+        options = ['general population', 'infants', 'other children', 'adults, including pregnant and lactating women', 'adults, excluding pregnant and lactating women', 
+                   'pregnant and lactating women', 'adolescents']
+        for option in options:
+            Subgroup.objects.get_or_create(title=option)
+
+    def create_investigation_types(self):
+        options = ['absorption', 'metabolism', 'digestibility', 'distribution', 'excretion', 'bioavailability', 'toxicokinetics', 'pharmacokinetics', 'unspecified']
+        for option in options:
+            InvestigationType.objects.get_or_create(title=option)
+
     def handle(self, *args, **options):
         self.create_panels()
         self.create_allergenicity()
@@ -197,3 +211,7 @@ class Command(BaseCommand):
         self.create_proposed_use_types()
         self.create_novel_food_categories()
         self.create_mandates()
+        self.create_study_sources()
+        self.create_guideline_qualifiers()
+        self.create_population_subgroups()
+        self.create_investigation_types()
