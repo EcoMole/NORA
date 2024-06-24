@@ -181,7 +181,9 @@ class Family(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_family")
     org_type = models.ForeignKey(
         OrgType,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=False,
         db_column="id_org_type",
         verbose_name="Organism Type",
     )
@@ -198,7 +200,9 @@ class Family(models.Model):
 
 class Genus(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_genus")
-    family = models.ForeignKey(Family, on_delete=models.CASCADE, db_column="id_family")
+    family = models.ForeignKey(
+        Family, on_delete=models.SET_NULL, null=True, blank=False, db_column="id_family"
+    )
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -211,6 +215,7 @@ class Genus(models.Model):
 
 
 class Organism(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_org")
     vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -220,10 +225,7 @@ class Organism(models.Model):
         help_text="(MTX vocab)",
         related_name="vocab_id_organisms",
         verbose_name="Organism vocabulary identification",
-        db_column="id_org",
-    )
-    genus = models.ForeignKey(
-        Genus, on_delete=models.CASCADE, null=True, blank=True, db_column="id_genus"
+        db_column="id_organism",
     )
 
     def __str__(self):
@@ -243,6 +245,41 @@ class OrganismSyn(models.Model):
     class Meta:
         db_table = "ORG_SYN"
         verbose_name = "Organism synonym"
+
+
+class Species(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_spec")
+    title = models.CharField(max_length=255, unique=True)
+    organism = models.ForeignKey(
+        Organism, on_delete=models.CASCADE, null=False, blank=False, db_column="id_org"
+    )
+    genus = models.ForeignKey(
+        Genus, on_delete=models.SET_NULL, null=True, blank=False, db_column="id_genus"
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "SPECIES"
+        verbose_name = "Species (taxonomy)"
+        verbose_name_plural = "📂 Species (taxonomy)"
+
+
+class ScientificName(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_sci_name")
+    title = models.CharField(max_length=255, unique=True)
+    species = models.ForeignKey(
+        Species, on_delete=models.CASCADE, null=False, blank=False, db_column="id_spec"
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "SCIENTIFIC_NAME"
+        verbose_name = "Scientific Name (taxonomy)"
+        verbose_name_plural = "📂 Scientific Names (taxonomy)"
 
 
 class NovelFoodOrganism(models.Model):
@@ -267,7 +304,7 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         null=True,
         help_text="STRAIN if microorganism / VARIETY if plant / "
-        "SUBSPECIES if animal / CEll_TYPE if cell culture",
+        "SUBSPECIES if animal",
     )
     is_gmo = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -289,27 +326,23 @@ class NovelFoodOrganism(models.Model):
         limit_choices_to={"taxonomy__code": "YESNO"},
         verbose_name="has QPS",
         db_column="id_has_qps",
-        help_text="Has qualified presumption of safety? (YESNO vocab)",
+        help_text="Has qualified presumption of safety? applies only if the organism is a "
+        "microorganism. (YESNO vocab)",
     )
-    cell_culture = models.ForeignKey(
+    cell_culture = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+    are_the_cells_modified = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="cell_culture_novel_foods",
-        limit_choices_to={"taxonomy__code": "STRAIN"},
-        db_column="id_cell_culture",
-        help_text="(STRAIN vocab)",
-    )
-    is_cell_culture_modified = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="is_cell_culture_modified_novel_foods",
+        related_name="are_the_cells_modified_novel_foods",
         limit_choices_to={"taxonomy__code": "YESNO"},
         verbose_name="is the cell culture modified",
-        db_column="id_is_cell_culture_modified",
+        db_column="id_are_the_cells_modified",
         help_text="Is the cell culture modified? (YESNO vocab)",
     )
 
@@ -433,7 +466,11 @@ class ChemDescriptor(models.Model):
     ]
     id = models.AutoField(primary_key=True, db_column="id_chem_descriptor")
     type = models.CharField(max_length=255, choices=TYPE_CHOICES)
-    value = models.CharField(max_length=255)
+    value = models.CharField(
+        max_length=255,
+        verbose_name="Descriptor",
+        help_text="contains e.g. the molecular formula itself if type is 'Molecular Formula', etc.",
+    )
     chemical = models.ForeignKey(
         Chemical, on_delete=models.CASCADE, related_name="chem_descriptors"
     )
@@ -463,7 +500,7 @@ class SubstanceOfConcernNovelFood(models.Model):
         related_name="substance_of_concern_substance_of_concern_novel_foods",
         limit_choices_to={"taxonomy__code": "PARAM"},
         db_column="id_sub_of_concern",
-        help_text="(PARAM vocab)",
+        help_text="Fill only if there is a substance of concern, if not leave blank. (PARAM vocab)",
     )
 
     class Meta:

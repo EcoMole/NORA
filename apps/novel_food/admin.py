@@ -22,6 +22,8 @@ from novel_food.models import (
     Organism,
     OrganismSyn,
     OrgType,
+    ScientificName,
+    Species,
     StructureReported,
     SubstanceOfConcernNovelFood,
     SynonymType,
@@ -44,11 +46,12 @@ class FoodCategoryNovelFoodInline(admin.TabularInline):
 class NovelFoodChemicalInline(admin.TabularInline):
     model = NovelFoodChemical
     extra = 1
+    autocomplete_fields = ["chemical"]
 
 
 class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
     model = NovelFoodOrganism
-    autocomplete_fields = ["org_part", "organism", "cell_culture"]
+    autocomplete_fields = ["org_part", "organism"]
     extra = 1
     fieldsets = [
         (
@@ -76,8 +79,7 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
             "if cell culture",
             {
                 "fields": [
-                    "cell_culture",
-                    "is_cell_culture_modified",
+                    "are_the_cells_modified",
                 ],
                 "classes": ["collapse"],
             },
@@ -110,7 +112,7 @@ class AllergenicityNovelFoodInline(admin.TabularInline):
 class SubstanceOfConcernNovelFoodInline(admin.TabularInline):
     model = SubstanceOfConcernNovelFood
     autocomplete_fields = ["substance_of_concern"]
-    extra = 1
+    extra = 0
 
 
 class OrganismSynInline(admin.TabularInline):
@@ -131,6 +133,17 @@ class FamilyInline(admin.TabularInline):
 class GenusInline(admin.TabularInline):
     model = Genus
     extra = 1
+
+
+class ScientificNameInline(admin.TabularInline):
+    model = ScientificName
+    extra = 1
+
+
+class SpeciesInline(admin.TabularInline):
+    model = Species
+    extra = 1
+    autocomplete_fields = ["genus"]
 
 
 class OrganismInline(admin.TabularInline):
@@ -203,8 +216,9 @@ class NovelFoodAdmin(admin.ModelAdmin):
             },
         ),
     ]
-    list_display = ["nf_code", "opinion", "outcome"]
-    search_fields = ["nf_code", "title"]
+
+    list_display = ["nf_code", "opinion", "outcome", "outcome_remarks"]
+    search_fields = ["nf_code", "title", "vocab_id__name"]
     autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
     inlines = [
         SubstanceOfConcernNovelFoodInline,
@@ -256,7 +270,7 @@ class OrganismAdmin(admin.ModelAdmin):
     list_display = [
         "get_organism",
         "get_scientific_name",
-        "get_parent_nodes",
+        # "get_parent_nodes",
         "get_is_from_vocab",
     ]
     fieldsets = [
@@ -266,13 +280,21 @@ class OrganismAdmin(admin.ModelAdmin):
         ),
         (
             "Final Descriptors (Custom Descriptors + Vocabulary Descriptors)",
-            {"fields": ["get_scientific_name", "get_parent_nodes"]},
+            {
+                "fields": [
+                    "get_scientific_name",
+                ]
+            },  # "get_parent_nodes"
         ),
-        ("Custom Descriptors", {"fields": ["genus"]}),
+        # ("Custom Descriptors", {"fields": ["genus"]}),
     ]
-    readonly_fields = ["get_scientific_name", "get_parent_nodes"]
-    autocomplete_fields = ["vocab_id", "genus"]
-    inlines = [OrganismSynInline]
+    readonly_fields = [
+        "get_scientific_name",
+    ]  # "get_parent_nodes"
+    autocomplete_fields = [
+        "vocab_id",
+    ]  # "genus"
+    inlines = [SpeciesInline, OrganismSynInline]
     search_fields = ["vocab_id__name"]
     list_filter = [IsFromVocabFilter]
 
@@ -283,42 +305,44 @@ class OrganismAdmin(admin.ModelAdmin):
     get_is_from_vocab.short_description = "Is from Vocab"
 
     def get_scientific_name(self, obj):
-        if obj.organismsyn_set.filter(type__synonym_type="scientific name").exists():
-            return obj.organismsyn_set.get(type__synonym_type="scientific name").synonym
-        else:
-            return "😢"
+        scientific_names = []
+        for spec in obj.species_set.all():
+            for sci_name in spec.scientificname_set.all():
+                scientific_names.append(sci_name.title)
+        return ", ".join(scientific_names) if scientific_names else "😢"
 
-    get_scientific_name.short_description = "Scientific Name"
+    get_scientific_name.short_description = "Scientific Names"
 
     def get_organism(self, obj):
         return obj.vocab_id.name
 
     get_organism.short_description = "Species"
 
-    def get_parent_nodes(self, obj):
-        if obj.genus and obj.genus.family and obj.genus.family.org_type:
-            return (
-                f"{obj.genus.title} < "
-                f"{obj.genus.family.title} < "
-                f"{obj.genus.family.org_type.title}"
-            )
-        elif ancestors := obj.vocab_id.get_significant_ancestors():
-            ancestors = obj.vocab_id.get_significant_ancestors()
-            while len(ancestors) > 0 and ancestors[-1].code in [
-                "A0C5X",
-                "A0B8X",
-                "root",
-            ]:
-                # we do not need to display "All Lists (A0C5X)", "Natural sources (A0B8X)" and "root"
-                ancestors = ancestors[:-1]
-            res = ""
-            for ancestor in ancestors:
-                res += " < " + ancestor.name
-            return res.lstrip(" < ")
-        else:
-            return "😢"
+    # def get_parent_nodes(self, obj):
+    #     if obj.genus and obj.genus.family and obj.genus.family.org_type:
+    #         return (
+    #             f"{obj.genus.title} < "
+    #             f"{obj.genus.family.title} < "
+    #             f"{obj.genus.family.org_type.title}"
+    #         )
+    #     elif ancestors := obj.vocab_id.get_significant_ancestors():
+    #         ancestors = obj.vocab_id.get_significant_ancestors()
+    #         while len(ancestors) > 0 and ancestors[-1].code in [
+    #             "A0C5X",
+    #             "A0B8X",
+    #             "root",
+    #         ]:
+    #             # we do not need to display "All Lists (A0C5X)", "Natural sources (A0B8X)"
+    #             # and "root"
+    #             ancestors = ancestors[:-1]
+    #         res = ""
+    #         for ancestor in ancestors:
+    #             res += " < " + ancestor.name
+    #         return res.lstrip(" < ")
+    #     else:
+    #         return "😢"
 
-    get_parent_nodes.short_description = "Taxonomy Path"
+    # get_parent_nodes.short_description = "Taxonomy Path"
 
 
 @admin.register(OrgType)
@@ -342,11 +366,21 @@ class GenusAdmin(admin.ModelAdmin):
     autocomplete_fields = ["family"]
 
 
+@admin.register(Species)
+class SpeciesAdmin(admin.ModelAdmin):
+    list_display = ["title", "genus"]
+    search_fields = ["title"]
+    list_filter = ["genus"]
+    autocomplete_fields = ["organism", "genus"]
+    inlines = [ScientificNameInline]
+
+
 @admin.register(Chemical)
 class ChemicalAdmin(admin.ModelAdmin):
     list_display = ["vocab_id", "get_iupac", "get_mol_form", "get_cas"]
     autocomplete_fields = ["vocab_id"]
     inlines = [ChemDescriptorInline, ChemicalSynInline]
+    search_fields = ["vocab_id"]
     readonly_fields = [
         "get_iupac",
         "get_mol_form",
