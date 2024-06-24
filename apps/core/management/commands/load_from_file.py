@@ -222,7 +222,7 @@ class Command(BaseCommand):
             result_msg += 'missing HBGV\n'
 
         if row['substances of concern'] in ['yes', 'Yes']:
-            result_msg += 'missing substances of concern\n'
+            result_msg += 'Substances of concern not imported.\n'
 
         r_specific_toxicity = row['specific toxicity – type']
         toxicity_vocab = Taxonomy.objects.get(code='TOXICITY')

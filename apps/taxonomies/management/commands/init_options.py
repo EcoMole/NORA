@@ -144,7 +144,7 @@ class Command(BaseCommand):
             FoodForm.objects.get_or_create(title=option)
 
     def create_synonym_types(self):
-        options = ["synonym", "common name", "trade name", "scientific name"]
+        options = ["synonym", "common name", "trade name"]
         for option in options:
             SynonymType.objects.get_or_create(synonym_type=option)
 
@@ -170,12 +170,12 @@ class Command(BaseCommand):
 
     def create_proposed_use_types(self):
         options = [
-            "whole_foods",
-            "food_ingredients",
-            "food_supplements",
-            "infant_follow_on_formula",
-            "special_medical_purpose",
-            "total_diet_replacement",
+            "Whole foods",
+            "Food ingredients",
+            "Food supplements",
+            "Infant formula and follow-on formula",
+            "Food for special medical purposes",
+            "Total diet replacement for weight control",
         ]
         for option in options:
             ProposedUseType.objects.get_or_create(title=option)
@@ -191,8 +191,8 @@ class Command(BaseCommand):
             GuidelineQualifier.objects.get_or_create(title=option)
 
     def create_population_subgroups(self):
-        options = ['general population', 'infants', 'other children', 'adults, including pregnant and lactating women', 'adults, excluding pregnant and lactating women', 
-                   'pregnant and lactating women', 'adolescents']
+        options = ['General population', 'Infants', 'Other children', 'Adults, including pregnant and lactating women', 'Adults, excluding pregnant and lactating women', 
+                   'Pregnant and lactating women', 'Adolescents']
         for option in options:
             Subgroup.objects.get_or_create(title=option)
 
@@ -200,6 +200,9 @@ class Command(BaseCommand):
         options = ['absorption', 'metabolism', 'digestibility', 'distribution', 'excretion', 'bioavailability', 'toxicokinetics', 'pharmacokinetics', 'unspecified']
         for option in options:
             InvestigationType.objects.get_or_create(title=option)
+
+    def create_organism_types(self):
+        options = ['Plant', 'Microalgae', 'Fungi', 'Bacteria', 'Animal', 'Macroalgae']
 
     def handle(self, *args, **options):
         self.create_panels()
