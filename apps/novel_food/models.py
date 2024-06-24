@@ -119,7 +119,9 @@ class NovelFoodCategoryNovelFood(models.Model):
             f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
         )
         return (
-            self.novel_food_category + " - " + f"{self.novel_food.title}{nf_code_part}"
+            self.novel_food_category.title
+            + " - "
+            + f"{self.novel_food.title}{nf_code_part}"
         )
 
     class Meta:
