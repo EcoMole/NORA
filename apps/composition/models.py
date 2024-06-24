@@ -62,13 +62,20 @@ class Parameter(models.Model):
 
 
 class NovelFoodVariant(models.Model):
-    id_novel_food_variant = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_nf_variant")
     novel_food = models.ForeignKey(
         NovelFood,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
         db_column="study_id",
+    )
+    food_form = models.ForeignKey(
+        "FoodForm",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        db_column="id_food_form",
     )
 
     # django specific fields to get the models well tied together
@@ -77,11 +84,8 @@ class NovelFoodVariant(models.Model):
     )
 
     def __str__(self) -> str:
-        food_forms = ""
-        for foodform_novelfoodvariant in self.foodformnovelfoodvariant_set.all():
-            food_forms += f"{foodform_novelfoodvariant.food_form.title}, "
-        food_forms = food_forms[:-2]
-        return f"{self.novel_food.title} - {food_forms}"
+        food_form_part = f" - {self.food_form}" if self.food_form else ""
+        return self.novel_food.title + food_form_part
 
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"
@@ -115,7 +119,7 @@ class ProductionNovelFoodVariant(models.Model):
 
 
 class FoodForm(models.Model):
-    id_food_form = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_food_form")
     title = models.CharField(
         max_length=255,
         blank=False,
@@ -130,23 +134,6 @@ class FoodForm(models.Model):
         db_table = "FOOD_FORM"
         verbose_name = "Food Form"
         verbose_name_plural = "📂 Food Forms"
-
-
-class FoodFormNovelFoodVariant(models.Model):
-    """through table for Novel Food Variant and Food form"""
-
-    food_form = models.ForeignKey(
-        FoodForm, blank=False, null=False, on_delete=models.CASCADE
-    )
-    novel_food_variant = models.ForeignKey(
-        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
-    )
-
-    def __str__(self) -> str:
-        return f"{self.food_form} - {self.novel_food_variant}"
-
-    class Meta:
-        db_table = "FOOD_FORM_NF_VARIANT"
 
 
 class Composition(models.Model):

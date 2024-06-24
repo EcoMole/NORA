@@ -22,7 +22,6 @@ from novel_food.models import (
     Organism,
     OrganismSyn,
     OrgType,
-    ScientificName,
     Species,
     StructureReported,
     SubstanceOfConcernNovelFood,
@@ -133,11 +132,6 @@ class FamilyInline(admin.TabularInline):
 
 class GenusInline(admin.TabularInline):
     model = Genus
-    extra = 1
-
-
-class ScientificNameInline(admin.TabularInline):
-    model = ScientificName
     extra = 1
 
 
@@ -270,7 +264,6 @@ class IsFromVocabFilter(admin.SimpleListFilter):
 class OrganismAdmin(admin.ModelAdmin):
     list_display = [
         "get_organism",
-        "get_scientific_name",
         "get_is_from_vocab",
     ]
     fieldsets = [
@@ -279,20 +272,15 @@ class OrganismAdmin(admin.ModelAdmin):
             {
                 "fields": [
                     "vocab_id",
-                    "get_scientific_name",
                 ]
             },
         ),
         (
             "Taxonomy Information",
-            {
-                "fields": ["get_vocab_tax_path", "get_custom_tax_path"]
-            },  # "get_parent_nodes"
+            {"fields": ["get_vocab_tax_path", "get_custom_tax_path"]},
         ),
-        # ("Custom Descriptors", {"fields": ["genus"]}),
     ]
     readonly_fields = [
-        "get_scientific_name",
         "get_vocab_tax_path",
         "get_custom_tax_path",
     ]
@@ -309,15 +297,6 @@ class OrganismAdmin(admin.ModelAdmin):
 
     get_is_from_vocab.boolean = True
     get_is_from_vocab.short_description = "Is from Vocab"
-
-    def get_scientific_name(self, obj):
-        scientific_names = []
-        for spec in obj.species_set.all():
-            for sci_name in spec.scientificname_set.all():
-                scientific_names.append(sci_name.title)
-        return ", ".join(scientific_names) if scientific_names else "😢"
-
-    get_scientific_name.short_description = "Scientific Names"
 
     def get_organism(self, obj):
         return obj.vocab_id.name
@@ -385,11 +364,10 @@ class GenusAdmin(admin.ModelAdmin):
 
 @admin.register(Species)
 class SpeciesAdmin(admin.ModelAdmin):
-    list_display = ["title", "genus"]
-    search_fields = ["title"]
+    list_display = ["name", "scientific_name", "genus"]
+    search_fields = ["name", "scientific_name"]
     list_filter = ["genus"]
     autocomplete_fields = ["organism", "genus"]
-    inlines = [ScientificNameInline]
     actions = [duplicate_model]
 
 
