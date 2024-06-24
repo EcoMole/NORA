@@ -170,12 +170,12 @@ class Command(BaseCommand):
 
     def create_proposed_use_types(self):
         options = [
-            "Whole foods",
-            "Food ingredients",
-            "Food supplements",
-            "Infant formula and follow-on formula",
-            "Food for special medical purposes",
-            "Total diet replacement for weight control",
+            "whole_foods",
+            "food_ingredients",
+            "food_supplements",
+            "infant_follow_on_formula",
+            "special_medical_purpose",
+            "total_diet_replacement",
         ]
         for option in options:
             ProposedUseType.objects.get_or_create(title=option)
