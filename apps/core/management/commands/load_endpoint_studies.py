@@ -73,6 +73,17 @@ class Command(BaseCommand):
 
         unit = TaxonomyNode.objects.get(taxonomy=unit_vocab, extended_name=search_term)
         return amount, unit
+    
+    def get_reference_point(self, word):
+        endpoint_hgv_vocab = Taxonomy.objects.get(code='ENDPOINT_HGV')
+        ref_points_map = {
+            'NOAEL' : 'No observed adverse effect level',
+            'LOEL' : 'Lowest observable effect level',
+            'LOAEL' : 'Lowest observed adverse effect level',
+        }
+
+        rp = TaxonomyNode.objects.get(taxonomy=endpoint_hgv_vocab, extended_name=ref_points_map[word])
+        return rp
         
     def add_study(self, row):
         print(f'Adding endpoint study for NF {row["nf name"]}')
@@ -136,6 +147,20 @@ class Command(BaseCommand):
             endpoint_study.duration_unit = unit
 
         endpoint_study.save()
+
+        r_ref_point = row["reference point"]
+        if not pd.isna(r_ref_point):
+            if r_ref_point != 'NOAEL' and r_ref_point != 'LOAEL' and r_ref_point != 'LOEL':
+                result_msg += f' Reference point for endpoint study not imported.'
+            else:
+                ref_point_obj = self.get_reference_point(r_ref_point)
+                r_qualifier = row["qualifier"]
+                endpoint = Endpoint.objects.create(endpointstudy=endpoint_study, reference_point=ref_point_obj)
+                if not pd.isna(r_qualifier):
+                    qualifier_vocab = Taxonomy.objects.get(code='QUALIFIER')
+                    qualifier_node = TaxonomyNode.objects.get(taxonomy=qualifier_vocab, extended_name=r_qualifier)
+                    endpoint.qualifier = qualifier_node
+                
 
         if result_msg != 'Endpoint studies:': # We have to report something
             result_msg += '\n'

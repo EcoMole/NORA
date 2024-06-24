@@ -3,6 +3,8 @@ import pandas as pd
 from studies.models import Genotox, StudySource
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier
 from novel_food.models import NovelFood
+from administrative.models import Question, OpinionQuestion, Opinion
+from core.models import Contribution
 
 class Command(BaseCommand):
     help = "TODO" #TODO
@@ -68,28 +70,27 @@ class Command(BaseCommand):
 
 
     def add_study(self, row):
-        print('adding genotox study')
-        r_study_nf = row['nf code']
-        r_study_nf_name = row['nf name']
-        #r_study_q_number = row['question number'] #TODO
+        print('Adding genotox study for ', row['nf name'])
 
-        #find novel food with this code and name #TODO Better use q number
-        if not pd.isna(r_study_nf):
-            nf = NovelFood.objects.filter(nf_code=r_study_nf).first()
-        else: #tady chci q number
-            nf = NovelFood.objects.filter(title=r_study_nf_name).first()
-
-        if nf is None:
-            return
+        result_msg = 'Genotox:'
+        
+        r_question_number = row["question"]
+        question = Question.objects.get(number=r_question_number)
+        opinion_question = OpinionQuestion.objects.get(question=question)
+        opinion = opinion_question.opinion
+        novel_food = NovelFood.objects.get(opinion=opinion)
 
         according_to = GuidelineQualifier.objects.get_or_create(title='according to') 
 
-        genotox_study = Genotox.objects.create(novel_food=nf, guideline_qualifier=according_to[0])  
+        genotox_study = Genotox.objects.create(novel_food=novel_food, guideline_qualifier=according_to[0])  
 
         r_test_material = row['test material']
-        #if missing, report it
-        genotox_study.test_material = r_test_material
-        genotox_study.save()
+        
+        if not pd.isna(r_test_material):
+            genotox_study.test_material = r_test_material
+            genotox_study.save()
+        else:
+            result_msg += f"Test material missing." # if missing, report it
 
         r_guideline = row['guideline']
         if not pd.isna(r_guideline):
@@ -98,12 +99,13 @@ class Command(BaseCommand):
             genotox_study.save()
 
         r_outcome = row['outcome']
-        #if missing, report it
+        
         if not pd.isna(r_outcome):
             outcome_node = self.get_pos_neg(r_outcome)
             genotox_study.outcome = outcome_node
             genotox_study.save()
-
+        else:
+            result_msg += f"Outcome missing." # if missing, report it
 
         r_study_source = row['study source']
         study_source_node = StudySource.objects.get(title=r_study_source)
@@ -111,15 +113,29 @@ class Command(BaseCommand):
         genotox_study.save()
 
         r_test_type = row['test type']
-        #if missing, report it
         if not pd.isna(r_test_type):
             test_type_node = self.get_test_type(r_test_type)
             genotox_study.test_type = test_type_node
             genotox_study.save()
+        else:
+            result_msg += f"Test type missing." # if missing, report it
 
         if not pd.isna(row['remarks']):
             genotox_study.remarks = row['remarks']
             genotox_study.save()
+
+        if result_msg != 'Genotox:': # We have to report something
+            result_msg += '\n'
+
+            try:
+                contribution = Contribution.objects.get(opinion=opinion)
+                contribution.remarks = contribution.remarks + result_msg
+                contribution.save()
+            except:
+                pass
+
+        return result_msg
+        
         
 
 

@@ -9,17 +9,19 @@ from datetime import date
 import datetime
 
 class Command(BaseCommand):
-    help = "TODO" #TODO fix
+    help = "Load opinions and novel foods" 
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
 
     def import_opinion(self, row):
-        KN = User.objects.get(username='klara@ecomole.com') #FINAL delete create
+        KN = User.objects.get(username='klara@ecomole.com')
         MF = User.objects.get(username='marketa@mit.edu')
         LC = User.objects.get(username='lucie@ecomole.com')
 
         #TODO document type
+
+        print(f'importing opinion {row["title"]}')
 
         r_title = row['title']
         r_doi = row['doi']
@@ -168,7 +170,7 @@ class Command(BaseCommand):
         novel_food_obj.save()
 
         if row['nutritional – background exposure assessment'] == 'Yes':
-            result_msg += 'missing background exposure assessment (components of interest)\n'
+            result_msg += 'Background exposure assessment (components of interest) not imported.\n'
         
 
         r_nutr_disadvantages = row['nutritional – disadvantageous']
@@ -181,7 +183,7 @@ class Command(BaseCommand):
             novel_food_obj.save()
 
         if row['nutritional – antinutritional factors'] in ['Yes', 'yes']:
-            result_msg += 'missing antinutritional factors\n' #TODO Mozna nechteji konkretne
+            result_msg += 'Antinutritional factors not imported.\n' #TODO Mozna nechteji konkretne
 
         novel_food_obj.antinutritional_factors = self.get_yes_no(row['nutritional – antinutritional factors']) 
         novel_food_obj.save()
