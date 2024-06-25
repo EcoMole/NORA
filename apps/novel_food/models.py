@@ -285,6 +285,7 @@ class Species(models.Model):
 
 
 class NovelFoodOrganism(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_study_organism")
     novel_food = models.ForeignKey(
         "NovelFood", on_delete=models.CASCADE, db_column="id_study"
     )
