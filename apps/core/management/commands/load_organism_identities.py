@@ -49,9 +49,9 @@ class Command(BaseCommand):
         if ',' in row['species']:
             final_msg += 'Multiple species for one organism, fill in manually.\n'
             self.annotate(opinion, final_msg)
-            return #TODO jeste to zapsat
+            return 
         else:
-            species_obj = Species.objects.get_or_create(name=row['species'], genus=genus_obj[0], organism = organism_obj)
+            Species.objects.get_or_create(name=row['species'], genus=genus_obj[0], organism = organism_obj)
 
 
         # Connect Organism to Novel Food
@@ -70,6 +70,20 @@ class Command(BaseCommand):
         if not pd.isna(row['qps']):
             yes_no = TaxonomyNode.objects.get(code=row['qps'], taxonomy__code='YESNO')
             nf_organism.has_qps = yes_no
+
+        if not pd.isna(row['part']):
+            #Try to find the part in MTX
+            try:
+                part_obj = TaxonomyNode.objects.get(extended_name=row['part'], taxonomy__code='MTX')
+                nf_organism.org_part = part_obj
+            except TaxonomyNode.DoesNotExist:
+                final_msg += "Part used not found in vocabulary -> add it."
+
+        if not pd.isna(row['cell culture']):
+            nf_organism.cell_culture = row['cell culture']
+
+        if not pd.isna(row['cell culture modified']):
+            nf_organism.are_the_cells_modified = TaxonomyNode.objects.get(code=row['cell culture modified'], taxonomy__code='YESNO')
 
         nf_organism.save()
 
