@@ -33,6 +33,12 @@ class ProductionNovelFoodVariantInline(admin.TabularInline):
     readonly_fields = ("get_vocab_path",)
 
     def get_vocab_path(self, obj):
+        path = ""
+        if descendants := obj.process.get_significant_descendants():
+            for descendant in descendants:
+                path = descendant.name + " , " + path
+            path = path.rstrip(" , ") + " < "
+        path += obj.process.name.upper()
         if ancestors := obj.process.get_significant_ancestors():
             while len(ancestors) > 0 and ancestors[-1].code in [
                 "A0B95",  # <TaxonomyNode: Process (A0B95)>
@@ -41,12 +47,9 @@ class ProductionNovelFoodVariantInline(admin.TabularInline):
                 "root",
             ]:
                 ancestors = ancestors[:-1]
-            res = ""
             for ancestor in ancestors:
-                res += " < " + ancestor.name
-            return res  # .lstrip(" < ")
-        else:
-            return "-"
+                path += " < " + ancestor.name
+        return path
 
     get_vocab_path.short_description = "Vocab Path"
 
