@@ -9,15 +9,15 @@ from .models import (
     ParameterType,
     ProductionNovelFoodVariant,
     ProposedUse,
-    RiskAssessmentRedFlags,
-    RiskAssessmentRedFlagsNFVariant,
+    RiskAssessRedFlag,
+    RiskAssessRedFlagNFVariant,
 )
 
 
 class CompositionInline(admin.TabularInline):
     model = Composition
     extra = 1
-    autocomplete_fields = ["unit", "qualifier"]
+    autocomplete_fields = ["parameter", "unit", "qualifier"]
 
 
 class ProposedUseInline(admin.TabularInline):
@@ -32,9 +32,10 @@ class ProductionNovelFoodVariantInline(admin.TabularInline):
     autocomplete_fields = ["process"]
 
 
-class RiskAssessmentRedFlagsNFVariantInline(admin.TabularInline):
-    model = RiskAssessmentRedFlagsNFVariant
+class RiskAssessRedFlagNFVariantInline(admin.TabularInline):
+    model = RiskAssessRedFlagNFVariant
     extra = 1
+    autocomplete_fields = ["risk_assess_red_flag"]
 
 
 @admin.register(NovelFoodVariant)
@@ -44,7 +45,7 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProposedUseInline,
         CompositionInline,
         ProductionNovelFoodVariantInline,
-        RiskAssessmentRedFlagsNFVariantInline,
+        RiskAssessRedFlagNFVariantInline,
     ]
     actions = [duplicate_model]
 
@@ -74,6 +75,7 @@ class ParameterAdmin(admin.ModelAdmin):
     search_fields = ["title"]
     list_filter = ["type"]
     actions = [duplicate_model]
+    autocomplete_fields = ["vocab_id"]
 
 
 @admin.register(Composition)
@@ -96,8 +98,10 @@ class CompositionAdmin(admin.ModelAdmin):
         return {}
 
 
-@admin.register(RiskAssessmentRedFlags)
-class RiskAssessmentRedFlagsAdmin(admin.ModelAdmin):
+@admin.register(RiskAssessRedFlag)
+class RiskAssessRedFlagAdmin(admin.ModelAdmin):
+    search_fields = ["title"]
+
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.

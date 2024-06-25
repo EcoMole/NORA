@@ -78,11 +78,6 @@ class NovelFoodVariant(models.Model):
         db_column="id_food_form",
     )
 
-    # django specific fields to get the models well tied together
-    risk_assessment_red_flags = models.ManyToManyField(
-        "RiskAssessmentRedFlags", through="RiskAssessmentRedFlagsNFVariant"
-    )
-
     def __str__(self) -> str:
         food_form_part = f" - {self.food_form}" if self.food_form else ""
         return self.novel_food.title + food_form_part
@@ -241,28 +236,44 @@ class ProposedUse(models.Model):
         return f"{self.nf_variant} - {self.use_type}" + poupulation_part
 
 
-class RiskAssessmentRedFlags(models.Model):
-    id_risk_assessment_red_flags = models.AutoField(primary_key=True)
+class RiskAssessRedFlag(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_risk_assess_red_flag")
     title = models.CharField(
         max_length=255,
         blank=False,
         null=False,
-        help_text="Title of the risk assessment red flags",
+        help_text="Title of the risk assessment red flag",
     )
 
     def __str__(self):
         return self.title
 
+    class Meta:
+        db_table = "RISK_ASSESS_RED_FLAG"
+        verbose_name = "Risk assessment red flag"
+        verbose_name_plural = "Risk assessment red flags"
 
-class RiskAssessmentRedFlagsNFVariant(models.Model):
-    id_risk_assessment_red_flags_novel_food = models.AutoField(primary_key=True)
-    nf_variant = models.ForeignKey(
-        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
+
+class RiskAssessRedFlagNFVariant(models.Model):
+    id = models.AutoField(
+        primary_key=True, db_column="id_risk_assess_red_flag_nf_variant"
     )
-    risk_assessment = models.ForeignKey(
-        RiskAssessmentRedFlags, blank=False, null=False, on_delete=models.CASCADE
+    nf_variant = models.ForeignKey(
+        NovelFoodVariant,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_nf_variant",
+    )
+    risk_assess_red_flag = models.ForeignKey(
+        RiskAssessRedFlag,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_risk_assess_red_flag",
     )
 
     class Meta:
+        db_table = "RISK_ASSESS_RED_FLAG_NF_VARIANT"
         verbose_name = "Risk assessment red flag"
         verbose_name_plural = "Risk assessment red flags"
