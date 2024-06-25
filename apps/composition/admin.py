@@ -9,7 +9,6 @@ from .models import (
     ParameterType,
     ProductionNovelFoodVariant,
     ProposedUse,
-    ProposedUseType,
     RiskAssessmentRedFlags,
     RiskAssessmentRedFlagsNFVariant,
 )
@@ -95,14 +94,6 @@ class CompositionAdmin(admin.ModelAdmin):
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
-
-
-@admin.register(ProposedUseType)
-class ProposedUseTypeAdmin(admin.ModelAdmin):
-    list_display = [
-        "title",
-    ]
-    actions = [duplicate_model]
 
 
 @admin.register(RiskAssessmentRedFlags)

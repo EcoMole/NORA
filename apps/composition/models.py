@@ -204,48 +204,29 @@ class Composition(models.Model):
         return ""
 
 
-class ProposedUseType(models.Model):
-    id_use_type = models.AutoField(primary_key=True)
-    USE_CHOICES = [
-        ("whole_foods", "Whole foods"),
-        ("food_ingredients", "Food ingredients"),
-        ("food_supplements", "Food supplements"),
-        ("infant_follow_on_formula", "Infant formula and follow-on formula"),
-        ("special_medical_purpose", "Food for special medical purposes"),
-        ("total_diet_replacement", "Total diet replacement for weight control"),
-    ]
-    title = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False,
-        help_text="Title of the proposed use type",
-        choices=USE_CHOICES,
-    )
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        db_table = "PROPOSED_USE_TYPE"
-        verbose_name = "Proposed Use Type"
-        verbose_name_plural = "📂 Proposed Use Types"
-
-
 class ProposedUse(models.Model):
-    id_proposed_use = models.AutoField(primary_key=True)
+    USE_CHOICES = [
+        ("whole foods", "Whole foods"),
+        ("food ingredients", "Food ingredients"),
+        ("food supplements", "Food supplements"),
+        ("infant follow on formula", "Infant formula and follow-on formula"),
+        ("special medical purpose", "Food for special medical purposes"),
+        ("total diet replacement", "Total diet replacement for weight control"),
+    ]
+    id = models.AutoField(primary_key=True, db_column="id_proposed_use")
     nf_variant = models.ForeignKey(
         NovelFoodVariant,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_nf_variant",
     )
-    use_type = models.ForeignKey(
-        ProposedUseType,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
+    use_type = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        choices=USE_CHOICES,
     )
-
     population = models.ForeignKey(
         "taxonomies.Population",
         null=True,
@@ -256,7 +237,8 @@ class ProposedUse(models.Model):
     )
 
     def __str__(self):
-        return f"{self.nf_variant} - {self.use_type} - {self.population}"
+        poupulation_part = f" - {self.population}" if self.population else ""
+        return f"{self.nf_variant} - {self.use_type}" + poupulation_part
 
 
 class RiskAssessmentRedFlags(models.Model):
