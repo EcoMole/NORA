@@ -7,14 +7,13 @@ from administrative.models import Question, OpinionQuestion, Opinion
 
 
 class Command(BaseCommand):
-    help = "TODO" #TODO
+    help = "Script for loading chemical identities of Novel Foods."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
 
 
     def add_chemical_identity(self, row):
-        result_msg = 'Chemical Identity:'
 
         r_question_number = row["question"]
         question = Question.objects.get(number=r_question_number)

@@ -7,7 +7,6 @@ from novel_food.models import NovelFood
 from administrative.models import Question, OpinionQuestion, Opinion
 from core.models import Contribution
 from composition.models import NovelFoodVariant, ProposedUseType, FoodForm, ProposedUse
-from django.db import transaction
 
 class Command(BaseCommand):
     help = "TODO" #TODO
@@ -59,7 +58,8 @@ class Command(BaseCommand):
         novel_food = NovelFood.objects.get(opinion=opinion)
 
         if row['food forms'] == '?':
-            return
+            r_food_forms = 'powder'
+            result_msg += 'Food forms not specified, assuming powder - check.'
 
         r_proposed_use = row["proposed use"]
         r_food_forms = row["food forms"]

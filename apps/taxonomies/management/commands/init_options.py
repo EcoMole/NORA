@@ -1,7 +1,7 @@
 from administrative.models import MandateType, Panel
 from composition.models import FoodForm, ParameterType, ProposedUseType
 from django.core.management.base import BaseCommand
-from novel_food.models import Allergenicity, NovelFoodCategory, FoodCategory, SynonymType
+from novel_food.models import Allergenicity, NovelFoodCategory, FoodCategory, SynonymType, OrgType
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier, Subgroup
 from studies.models import StudySource, InvestigationType
 
@@ -204,6 +204,9 @@ class Command(BaseCommand):
     def create_organism_types(self):
         options = ['Plant', 'Microalgae', 'Fungi', 'Bacteria', 'Animal', 'Macroalgae']
 
+        for option in options:
+            OrgType.objects.get_or_create(title=option)
+
     def handle(self, *args, **options):
         self.create_panels()
         self.create_allergenicity()
@@ -218,3 +221,4 @@ class Command(BaseCommand):
         self.create_guideline_qualifiers()
         self.create_population_subgroups()
         self.create_investigation_types()
+        self.create_organism_types()
