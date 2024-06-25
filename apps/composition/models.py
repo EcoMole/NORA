@@ -1,5 +1,13 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from novel_food.models import NovelFood
+
+
+def validate_case_insensitive_parameter_title(value):
+    if Parameter.objects.filter(title__iexact=value).exists():
+        raise ValidationError(
+            "A parameter with this case-insensitive title already exists."
+        )
 
 
 class ParameterType(models.Model):
@@ -28,6 +36,7 @@ class Parameter(models.Model):
         unique=True,
         blank=False,
         null=False,
+        validators=[validate_case_insensitive_parameter_title],
         help_text="Parameter",
     )
     type = models.ForeignKey(
