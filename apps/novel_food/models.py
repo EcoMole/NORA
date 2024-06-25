@@ -499,7 +499,8 @@ class ChemicalSyn(models.Model):
 
 
 class SubstanceOfConcernNovelFood(models.Model):
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True, db_column="id_sub_of_concern_study")
+    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE, db_column="id_study")
     substance_of_concern = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
