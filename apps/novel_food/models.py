@@ -137,15 +137,16 @@ class NovelFoodCategoryNovelFood(models.Model):
 
 
 class SynonymType(models.Model):
-    id_synonym_type = models.AutoField(primary_key=True)
-    synonym_type = models.CharField(
+    id = models.AutoField(primary_key=True, db_column="id_syn")
+    title = models.CharField(
         max_length=255,
-        help_text="Type of synonym -e.g. common name, trade name, synonym",
+        help_text="Title of the synonym type e.g. common name, trade name, synonym",
+        db_column="synonym",
     )
     definition = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.synonym_type
+        return self.title
 
     class Meta:
         db_table = "SYNONYM"
@@ -154,9 +155,14 @@ class SynonymType(models.Model):
 
 
 class NovelFoodSyn(models.Model):
-    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    novel_food_synonym = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_study_syn")
+    syn_type = models.ForeignKey(
+        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+    )
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+    title = models.CharField(max_length=255, db_column="study_syn")
 
     def __str__(self):
         return ""
@@ -240,9 +246,12 @@ class Organism(models.Model):
 
 
 class OrganismSyn(models.Model):
-    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
-    organism = models.ForeignKey(Organism, on_delete=models.CASCADE)
-    synonym = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_org_syn")
+    syn_type = models.ForeignKey(
+        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+    )
+    organism = models.ForeignKey(Organism, on_delete=models.CASCADE, db_column="id_org")
+    title = models.CharField(max_length=255, db_column="org_syn")
 
     class Meta:
         db_table = "ORG_SYN"
@@ -474,9 +483,12 @@ class ChemDescriptor(models.Model):
 
 
 class ChemicalSyn(models.Model):
-    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
-    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
-    synonym = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_com_syn")
+    syn_type = models.ForeignKey(
+        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+    )
+    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE, db_column="id_com")
+    title = models.CharField(max_length=255, db_column="com_syn")
 
     class Meta:
         db_table = "COM_SYN"

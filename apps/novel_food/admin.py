@@ -154,7 +154,7 @@ class ChemDescriptorInline(admin.TabularInline):
 
 @admin.register(SynonymType)
 class SynonymAdmin(admin.ModelAdmin):
-    list_display = ["synonym_type"]
+    list_display = ["title"]
 
 
 @admin.register(NovelFood)
