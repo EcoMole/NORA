@@ -69,34 +69,45 @@ class Command(BaseCommand):
             return float(value), None, TaxonomyNode.objects.get(extended_name='Equal to', taxonomy__code='QUALIFIER')
 
     def add_composition(self, row):
-        print(f'Adding composition for nf: {row["nf name"]}')
+        print(f'Adding composition.')
 
         r_question_number = row["question"]
-        question = Question.objects.get(number=r_question_number)
+        try:
+            question = Question.objects.get(number=r_question_number)
+        except Question.DoesNotExist:
+            print('Question not found - returning')
+            return
         opinion_question = OpinionQuestion.objects.get(question=question)
         opinion = opinion_question.opinion
-        novel_food_obj = NovelFood.objects.get(opinion=opinion)
-
-        if pd.isna(row['value']):
+        try:
+            novel_food_obj = NovelFood.objects.get(opinion=opinion)
+        except NovelFood.DoesNotExist:
+            print('Novel food not found - returning')
             return
+
         # Get the proper variant
         r_food_form = row["food form"]
-        if pd.isna(r_food_form) == True: #Should only have one variant then
-            nf_variant = NovelFoodVariant.objects.get(novel_food=novel_food_obj)
-        else:
-            nf_variant = NovelFoodVariant.objects.get(novel_food=novel_food_obj, food_form__title=r_food_form)
 
-        #get the composition object
-        parameter = Parameter.objects.get(title=row['parameter'])
-        composition_obj = Composition.objects.get(novel_food_variant=nf_variant, parameter=parameter)
-        value, upper_value, qualifier = self.interpret_value(row['value'])
-        composition_obj.value = value
-        if upper_value:
-            composition_obj.upper_range_value = upper_value
-        composition_obj.qualifier = qualifier
-        if row['footnote']:
-            composition_obj.footnote = row['footnote']
-        composition_obj.save()
+        if not pd.isna(r_food_form):
+            print('Food form defined: ', r_food_form)
+            novel_food_variants = NovelFoodVariant.objects.filter(novel_food=novel_food_obj, food_form__title=r_food_form)
+
+        else:
+            print('Food form not defined')
+            novel_food_variants = NovelFoodVariant.objects.filter(novel_food=novel_food_obj)
+
+        for variant_obj in novel_food_variants:
+            parameter, _ = Parameter.objects.get_or_create(title=row['parameter']) #TODO zpracovat parameter
+            composition_obj, _ = Composition.objects.get_or_create(novel_food_variant=variant_obj, parameter=parameter)
+            if not composition_obj.value and pd.notna(row['value']):
+                value, upper_value, qualifier = self.interpret_value(row['value'])
+                composition_obj.value = value
+                if upper_value:
+                    composition_obj.upper_range_value = upper_value
+                composition_obj.qualifier = qualifier
+                if row['footnote']:
+                    composition_obj.footnote = row['footnote']
+                composition_obj.save()
 
 
     def handle(self, *args, **options):
