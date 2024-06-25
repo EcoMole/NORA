@@ -110,7 +110,7 @@ class ProductionNovelFoodVariant(models.Model):
 
     class Meta:
         verbose_name = "Production Process"
-        verbose_name_plural = "Production Process"
+        verbose_name_plural = "Production Processes"
 
 
 class FoodForm(models.Model):
@@ -232,8 +232,7 @@ class ProposedUse(models.Model):
     )
 
     def __str__(self):
-        poupulation_part = f" - {self.population}" if self.population else ""
-        return f"{self.nf_variant} - {self.use_type}" + poupulation_part
+        return ""
 
 
 class RiskAssessRedFlag(models.Model):
@@ -272,6 +271,9 @@ class RiskAssessRedFlagNFVariant(models.Model):
         on_delete=models.CASCADE,
         db_column="id_risk_assess_red_flag",
     )
+
+    def __str__(self):
+        return ""
 
     class Meta:
         db_table = "RISK_ASSESS_RED_FLAG_NF_VARIANT"

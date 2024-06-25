@@ -30,6 +30,25 @@ class ProductionNovelFoodVariantInline(admin.TabularInline):
     model = ProductionNovelFoodVariant
     extra = 1
     autocomplete_fields = ["process"]
+    readonly_fields = ("get_vocab_path",)
+
+    def get_vocab_path(self, obj):
+        if ancestors := obj.process.get_significant_ancestors():
+            while len(ancestors) > 0 and ancestors[-1].code in [
+                "A0B95",  # <TaxonomyNode: Process (A0B95)>
+                "A0B8V",  # <TaxonomyNode: Facets (A0B8V)>
+                "A0C5X",  # <TaxonomyNode: All Lists (A0C5X)>
+                "root",
+            ]:
+                ancestors = ancestors[:-1]
+            res = ""
+            for ancestor in ancestors:
+                res += " < " + ancestor.name
+            return res  # .lstrip(" < ")
+        else:
+            return "-"
+
+    get_vocab_path.short_description = "Vocab Path"
 
 
 class RiskAssessRedFlagNFVariantInline(admin.TabularInline):
