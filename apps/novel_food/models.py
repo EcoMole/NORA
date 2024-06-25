@@ -356,8 +356,9 @@ class NovelFoodOrganism(models.Model):
 
 
 class NovelFoodChemical(models.Model):
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    chemical = models.ForeignKey("Chemical", on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True, db_column="id_study_com")
+    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE, db_column="id_study")
+    chemical = models.ForeignKey("Chemical", on_delete=models.CASCADE, db_column="id_com")
 
     class Meta:
         db_table = "STUDY_COM"
@@ -367,8 +368,8 @@ class NovelFoodChemical(models.Model):
 
 # For possible future use only
 class ChemicalType(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_component_type")
-    title = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_com_type")
+    title = models.CharField(max_length=255, db_column="com_type")
     definition = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -379,8 +380,8 @@ class ChemicalType(models.Model):
 
 # For possible future use only
 class StructureReported(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_structure_reported")
-    title = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_com_structureShown")
+    title = models.CharField(max_length=255, db_column="com_structureShown")
     definition = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -390,7 +391,7 @@ class StructureReported(models.Model):
 
 
 class Chemical(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_component")
+    id = models.AutoField(primary_key=True, db_column="id_com")
     vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         db_column="id_rnc_efsa",
@@ -409,7 +410,7 @@ class Chemical(models.Model):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-        db_column="component_type",
+        db_column="id_comp_type",
         help_text="The majority of the chemical types are extracted from the OECD picklist"
         "(OECD 2012). More on the purpose of this field: 2013:EN-458 page:20",
     )
@@ -417,6 +418,7 @@ class Chemical(models.Model):
         # for possible future use
         StructureReported,
         on_delete=models.CASCADE,
+        db_column="id_com_structureShown",
         blank=True,
         null=True,
         help_text="This field is used to indicate what type of structure (either SMILES or InChI) "
@@ -467,7 +469,7 @@ class ChemDescriptor(models.Model):
             Descriptor.FLAVIS_NUMBER.verbose,
         ),
     ]
-    id = models.AutoField(primary_key=True, db_column="id_chem_descriptor")
+    id = models.AutoField(primary_key=True, db_column="id_com_descriptor")
     type = models.CharField(max_length=255, choices=TYPE_CHOICES)
     value = models.CharField(
         max_length=255,
@@ -475,11 +477,11 @@ class ChemDescriptor(models.Model):
         help_text="contains e.g. the molecular formula itself if type is 'Molecular Formula', etc.",
     )
     chemical = models.ForeignKey(
-        Chemical, on_delete=models.CASCADE, related_name="chem_descriptors"
+        Chemical, on_delete=models.CASCADE, related_name="chem_descriptors", db_column="id_com"
     )
 
     class Meta:
-        db_table = "CHEM_DESCRIPTOR"
+        db_table = "COM_DESCRIPTOR"
         verbose_name = "Custom Descriptor"
 
 
