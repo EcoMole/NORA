@@ -140,10 +140,30 @@ class Endpoint(models.Model):
     )
 
     def __str__(self) -> str:
-        res = self.endpointstudy.novel_food.title
-        if self.reference_point:
-            res += " - " + self.reference_point.name
-        return res
+        reference_point_part = (
+            f" - {self.reference_point.name}" if self.reference_point else ""
+        )
+        lovalue_part = f" {self.lovalue}" if self.lovalue else ""
+        unit_part = f" {self.unit.name}" if self.unit else ""
+        test_type_part = (
+            f" - {self.endpointstudy.test_type.name}"
+            if self.endpointstudy.test_type
+            else ""
+        )
+        species_part = (
+            f" - {self.endpointstudy.species.name}"
+            if self.endpointstudy.species
+            else ""
+        )
+
+        return (
+            self.endpointstudy.novel_food.title
+            + reference_point_part
+            + lovalue_part
+            + unit_part
+            + test_type_part
+            + species_part
+        )
 
     class Meta:
         db_table = "ENDPOINT"

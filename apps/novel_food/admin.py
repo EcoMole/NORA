@@ -79,6 +79,7 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
             "if cell culture",
             {
                 "fields": [
+                    "cell_culture",
                     "are_the_cells_modified",
                 ],
                 "classes": ["collapse"],
