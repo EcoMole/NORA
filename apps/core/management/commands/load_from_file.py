@@ -128,7 +128,7 @@ class Command(BaseCommand):
             return day
 
     def import_novel_food(self, row, opinion):
-        result_msg = 'Novel food: '
+        result_msg = 'Novel food: \n'
         r_nf_name = row['nf name']
         if pd.isna(row['nf code']):
             r_nf_code = None
@@ -219,10 +219,10 @@ class Command(BaseCommand):
             novel_food_obj.endocrine_disrupt_prop = self.get_yes_no(r_endocrine)
 
         if row['HBGV'] in ['yes', 'Yes']:
-            result_msg += 'missing HBGV\n'
+            result_msg += 'HBGV not imported.\n'
 
         if row['substances of concern'] in ['yes', 'Yes']:
-            result_msg += 'missing substances of concern\n'
+            result_msg += 'Substances of concern not imported.\n'
 
         r_specific_toxicity = row['specific toxicity – type']
         toxicity_vocab = Taxonomy.objects.get(code='TOXICITY')

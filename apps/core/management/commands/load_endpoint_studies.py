@@ -110,7 +110,7 @@ class Command(BaseCommand):
         if not pd.isna(row["test material"]):
             endpoint_study.test_material = row["test material"]
         else:
-            result_msg += f' Test material not found.'
+            result_msg += f' Test material missing.'
 
         mtx_vocab = Taxonomy.objects.get(code='MTX')
 
