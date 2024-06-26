@@ -68,6 +68,7 @@ class Contribution(models.Model):
         ("paused", "paused"),
         ("finished", "finished"),
     ]
+    id = models.AutoField(primary_key=True, db_column="id_contribution")
     opinion = models.ForeignKey(
         "administrative.Opinion",
         on_delete=models.CASCADE,
