@@ -1,9 +1,20 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from novel_food.models import NovelFood
 
 
+def validate_case_insensitive_parameter_title(value):
+    if Parameter.objects.filter(
+        Q(title__iexact=value) | Q(vocab_id__name__iexact=value)
+    ).exists():
+        raise ValidationError(
+            "A parameter with this case-insensitive title already exists."
+        )
+
+
 class ParameterType(models.Model):
-    id_parameter_type = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_parameter_type")
     title = models.CharField(
         max_length=255,
         unique=True,
@@ -22,12 +33,13 @@ class ParameterType(models.Model):
 
 
 class Parameter(models.Model):
-    id_parameter = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_parameter")
     title = models.CharField(
         max_length=255,
         unique=True,
         blank=False,
         null=False,
+        validators=[validate_case_insensitive_parameter_title],
         help_text="Parameter",
     )
     type = models.ForeignKey(
@@ -35,6 +47,7 @@ class Parameter(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
+        db_column="id_parameter_type",
     )
 
     # For possible future use only
@@ -78,11 +91,6 @@ class NovelFoodVariant(models.Model):
         db_column="id_food_form",
     )
 
-    # django specific fields to get the models well tied together
-    risk_assessment_red_flags = models.ManyToManyField(
-        "RiskAssessmentRedFlags", through="RiskAssessmentRedFlagsNFVariant"
-    )
-
     def __str__(self) -> str:
         food_form_part = f" - {self.food_form}" if self.food_form else ""
         return self.novel_food.title + food_form_part
@@ -96,8 +104,13 @@ class NovelFoodVariant(models.Model):
 class ProductionNovelFoodVariant(models.Model):
     """through table for Novel Food Variant and Production(taxonomy node)"""
 
-    id_novel_food_variant = models.ForeignKey(
-        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
+    id = models.AutoField(primary_key=True, db_column="id_production_nf_variant")
+    nf_variant = models.ForeignKey(
+        NovelFoodVariant,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_nf_variant",
     )
 
     process = models.ForeignKey(
@@ -108,14 +121,16 @@ class ProductionNovelFoodVariant(models.Model):
         related_name="process_production_novel_food_variants",
         limit_choices_to={"taxonomy__code": "MTX"},
         help_text="(MTX vocab)",
+        db_column="id_process",
     )
 
     def __str__(self):
         return ""
 
     class Meta:
+        db_table = "PRODUCTION_NF_VARIANT"
         verbose_name = "Production Process"
-        verbose_name_plural = "Production Process"
+        verbose_name_plural = "Production Processes"
 
 
 class FoodForm(models.Model):
@@ -137,18 +152,20 @@ class FoodForm(models.Model):
 
 
 class Composition(models.Model):
-    id_composition = models.AutoField(primary_key=True)
-    novel_food_variant = models.ForeignKey(
+    id = models.AutoField(primary_key=True, db_column="id_composition")
+    nf_variant = models.ForeignKey(
         NovelFoodVariant,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_nf_variant",
     )
     parameter = models.ForeignKey(
         Parameter,
         blank=False,
         null=False,
         on_delete=models.PROTECT,
+        db_column="id_parameter",
     )
     qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -204,48 +221,29 @@ class Composition(models.Model):
         return ""
 
 
-class ProposedUseType(models.Model):
-    id_use_type = models.AutoField(primary_key=True)
-    USE_CHOICES = [
-        ("whole_foods", "Whole foods"),
-        ("food_ingredients", "Food ingredients"),
-        ("food_supplements", "Food supplements"),
-        ("infant_follow_on_formula", "Infant formula and follow-on formula"),
-        ("special_medical_purpose", "Food for special medical purposes"),
-        ("total_diet_replacement", "Total diet replacement for weight control"),
-    ]
-    title = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False,
-        help_text="Title of the proposed use type",
-        choices=USE_CHOICES,
-    )
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        db_table = "PROPOSED_USE_TYPE"
-        verbose_name = "Proposed Use Type"
-        verbose_name_plural = "📂 Proposed Use Types"
-
-
 class ProposedUse(models.Model):
-    id_proposed_use = models.AutoField(primary_key=True)
+    USE_CHOICES = [
+        ("whole foods", "Whole foods"),
+        ("food ingredients", "Food ingredients"),
+        ("food supplements", "Food supplements"),
+        ("infant follow on formula", "Infant formula and follow-on formula"),
+        ("special medical purpose", "Food for special medical purposes"),
+        ("total diet replacement", "Total diet replacement for weight control"),
+    ]
+    id = models.AutoField(primary_key=True, db_column="id_proposed_use")
     nf_variant = models.ForeignKey(
         NovelFoodVariant,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_nf_variant",
     )
-    use_type = models.ForeignKey(
-        ProposedUseType,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
+    use_type = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        choices=USE_CHOICES,
     )
-
     population = models.ForeignKey(
         "taxonomies.Population",
         null=True,
@@ -256,31 +254,50 @@ class ProposedUse(models.Model):
     )
 
     def __str__(self):
-        return f"{self.nf_variant} - {self.use_type} - {self.population}"
+        return ""
 
 
-class RiskAssessmentRedFlags(models.Model):
-    id_risk_assessment_red_flags = models.AutoField(primary_key=True)
+class RiskAssessRedFlag(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_risk_assess_red_flag")
     title = models.CharField(
         max_length=255,
         blank=False,
         null=False,
-        help_text="Title of the risk assessment red flags",
+        help_text="Title of the risk assessment red flag",
     )
 
     def __str__(self):
         return self.title
 
+    class Meta:
+        db_table = "RISK_ASSESS_RED_FLAG"
+        verbose_name = "Risk assessment red flag"
+        verbose_name_plural = "Risk assessment red flags"
 
-class RiskAssessmentRedFlagsNFVariant(models.Model):
-    id_risk_assessment_red_flags_novel_food = models.AutoField(primary_key=True)
+
+class RiskAssessRedFlagNFVariant(models.Model):
+    id = models.AutoField(
+        primary_key=True, db_column="id_risk_assess_red_flag_nf_variant"
+    )
     nf_variant = models.ForeignKey(
-        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
+        NovelFoodVariant,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_nf_variant",
     )
-    risk_assessment = models.ForeignKey(
-        RiskAssessmentRedFlags, blank=False, null=False, on_delete=models.CASCADE
+    risk_assess_red_flag = models.ForeignKey(
+        RiskAssessRedFlag,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_risk_assess_red_flag",
     )
+
+    def __str__(self):
+        return ""
 
     class Meta:
+        db_table = "RISK_ASSESS_RED_FLAG_NF_VARIANT"
         verbose_name = "Risk assessment red flag"
         verbose_name_plural = "Risk assessment red flags"

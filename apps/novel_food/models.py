@@ -119,7 +119,9 @@ class NovelFoodCategoryNovelFood(models.Model):
             f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
         )
         return (
-            self.novel_food_category + " - " + f"{self.novel_food.title}{nf_code_part}"
+            self.novel_food_category.title
+            + " - "
+            + f"{self.novel_food.title}{nf_code_part}"
         )
 
     class Meta:
@@ -135,15 +137,16 @@ class NovelFoodCategoryNovelFood(models.Model):
 
 
 class SynonymType(models.Model):
-    id_synonym_type = models.AutoField(primary_key=True)
-    synonym_type = models.CharField(
+    id = models.AutoField(primary_key=True, db_column="id_syn")
+    title = models.CharField(
         max_length=255,
-        help_text="Type of synonym -e.g. common name, trade name, synonym",
+        help_text="Title of the synonym type e.g. common name, trade name, synonym",
+        db_column="synonym",
     )
     definition = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.synonym_type
+        return self.title
 
     class Meta:
         db_table = "SYNONYM"
@@ -152,9 +155,14 @@ class SynonymType(models.Model):
 
 
 class NovelFoodSyn(models.Model):
-    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    novel_food_synonym = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_study_syn")
+    syn_type = models.ForeignKey(
+        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+    )
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+    title = models.CharField(max_length=255, db_column="study_syn")
 
     def __str__(self):
         return ""
@@ -238,9 +246,12 @@ class Organism(models.Model):
 
 
 class OrganismSyn(models.Model):
-    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
-    organism = models.ForeignKey(Organism, on_delete=models.CASCADE)
-    synonym = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_org_syn")
+    syn_type = models.ForeignKey(
+        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+    )
+    organism = models.ForeignKey(Organism, on_delete=models.CASCADE, db_column="id_org")
+    title = models.CharField(max_length=255, db_column="org_syn")
 
     class Meta:
         db_table = "ORG_SYN"
@@ -274,6 +285,7 @@ class Species(models.Model):
 
 
 class NovelFoodOrganism(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_study_organism")
     novel_food = models.ForeignKey(
         "NovelFood", on_delete=models.CASCADE, db_column="id_study"
     )
@@ -344,8 +356,9 @@ class NovelFoodOrganism(models.Model):
 
 
 class NovelFoodChemical(models.Model):
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
-    chemical = models.ForeignKey("Chemical", on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True, db_column="id_study_com")
+    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE, db_column="id_study")
+    chemical = models.ForeignKey("Chemical", on_delete=models.CASCADE, db_column="id_com")
 
     class Meta:
         db_table = "STUDY_COM"
@@ -355,8 +368,8 @@ class NovelFoodChemical(models.Model):
 
 # For possible future use only
 class ChemicalType(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_component_type")
-    title = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_com_type")
+    title = models.CharField(max_length=255, db_column="com_type")
     definition = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -367,8 +380,8 @@ class ChemicalType(models.Model):
 
 # For possible future use only
 class StructureReported(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_structure_reported")
-    title = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_com_structureShown")
+    title = models.CharField(max_length=255, db_column="com_structureShown")
     definition = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -378,7 +391,7 @@ class StructureReported(models.Model):
 
 
 class Chemical(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_component")
+    id = models.AutoField(primary_key=True, db_column="id_com")
     vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         db_column="id_rnc_efsa",
@@ -397,7 +410,7 @@ class Chemical(models.Model):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-        db_column="component_type",
+        db_column="id_comp_type",
         help_text="The majority of the chemical types are extracted from the OECD picklist"
         "(OECD 2012). More on the purpose of this field: 2013:EN-458 page:20",
     )
@@ -405,6 +418,7 @@ class Chemical(models.Model):
         # for possible future use
         StructureReported,
         on_delete=models.CASCADE,
+        db_column="id_com_structureShown",
         blank=True,
         null=True,
         help_text="This field is used to indicate what type of structure (either SMILES or InChI) "
@@ -455,7 +469,7 @@ class ChemDescriptor(models.Model):
             Descriptor.FLAVIS_NUMBER.verbose,
         ),
     ]
-    id = models.AutoField(primary_key=True, db_column="id_chem_descriptor")
+    id = models.AutoField(primary_key=True, db_column="id_com_descriptor")
     type = models.CharField(max_length=255, choices=TYPE_CHOICES)
     value = models.CharField(
         max_length=255,
@@ -463,18 +477,21 @@ class ChemDescriptor(models.Model):
         help_text="contains e.g. the molecular formula itself if type is 'Molecular Formula', etc.",
     )
     chemical = models.ForeignKey(
-        Chemical, on_delete=models.CASCADE, related_name="chem_descriptors"
+        Chemical, on_delete=models.CASCADE, related_name="chem_descriptors", db_column="id_com"
     )
 
     class Meta:
-        db_table = "CHEM_DESCRIPTOR"
+        db_table = "COM_DESCRIPTOR"
         verbose_name = "Custom Descriptor"
 
 
 class ChemicalSyn(models.Model):
-    type = models.ForeignKey(SynonymType, on_delete=models.CASCADE)
-    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
-    synonym = models.CharField(max_length=255)
+    id = models.AutoField(primary_key=True, db_column="id_com_syn")
+    syn_type = models.ForeignKey(
+        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+    )
+    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE, db_column="id_com")
+    title = models.CharField(max_length=255, db_column="com_syn")
 
     class Meta:
         db_table = "COM_SYN"
@@ -482,7 +499,8 @@ class ChemicalSyn(models.Model):
 
 
 class SubstanceOfConcernNovelFood(models.Model):
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True, db_column="id_sub_of_concern_study")
+    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE, db_column="id_study")
     substance_of_concern = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,

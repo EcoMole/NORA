@@ -79,6 +79,10 @@ class TaxonomyNode(MPTTModel, SyncMixin):
 
         return ret
 
+    def get_significant_descendants(self):
+        descendants = list(self.get_descendants())
+        return descendants
+
     def get_significant_ancestors(self):
         ancestors = list(self.get_ancestors(ascending=True))
         if len(ancestors) > 1:

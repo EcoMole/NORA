@@ -9,16 +9,15 @@ from .models import (
     ParameterType,
     ProductionNovelFoodVariant,
     ProposedUse,
-    ProposedUseType,
-    RiskAssessmentRedFlags,
-    RiskAssessmentRedFlagsNFVariant,
+    RiskAssessRedFlag,
+    RiskAssessRedFlagNFVariant,
 )
 
 
 class CompositionInline(admin.TabularInline):
     model = Composition
     extra = 1
-    autocomplete_fields = ["unit", "qualifier"]
+    autocomplete_fields = ["parameter", "unit", "qualifier"]
 
 
 class ProposedUseInline(admin.TabularInline):
@@ -31,11 +30,34 @@ class ProductionNovelFoodVariantInline(admin.TabularInline):
     model = ProductionNovelFoodVariant
     extra = 1
     autocomplete_fields = ["process"]
+    readonly_fields = ("get_vocab_path",)
+
+    def get_vocab_path(self, obj):
+        path = ""
+        if descendants := obj.process.get_significant_descendants():
+            for descendant in descendants:
+                path = descendant.name + " , " + path
+            path = path.rstrip(" , ") + " < "
+        path += obj.process.name.upper()
+        if ancestors := obj.process.get_significant_ancestors():
+            while len(ancestors) > 0 and ancestors[-1].code in [
+                "A0B95",  # <TaxonomyNode: Process (A0B95)>
+                "A0B8V",  # <TaxonomyNode: Facets (A0B8V)>
+                "A0C5X",  # <TaxonomyNode: All Lists (A0C5X)>
+                "root",
+            ]:
+                ancestors = ancestors[:-1]
+            for ancestor in ancestors:
+                path += " < " + ancestor.name
+        return path
+
+    get_vocab_path.short_description = "Vocab Path"
 
 
-class RiskAssessmentRedFlagsNFVariantInline(admin.TabularInline):
-    model = RiskAssessmentRedFlagsNFVariant
+class RiskAssessRedFlagNFVariantInline(admin.TabularInline):
+    model = RiskAssessRedFlagNFVariant
     extra = 1
+    autocomplete_fields = ["risk_assess_red_flag"]
 
 
 @admin.register(NovelFoodVariant)
@@ -45,7 +67,7 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProposedUseInline,
         CompositionInline,
         ProductionNovelFoodVariantInline,
-        RiskAssessmentRedFlagsNFVariantInline,
+        RiskAssessRedFlagNFVariantInline,
     ]
     actions = [duplicate_model]
 
@@ -75,6 +97,7 @@ class ParameterAdmin(admin.ModelAdmin):
     search_fields = ["title"]
     list_filter = ["type"]
     actions = [duplicate_model]
+    autocomplete_fields = ["vocab_id"]
 
 
 @admin.register(Composition)
@@ -84,7 +107,7 @@ class CompositionAdmin(admin.ModelAdmin):
         "value",
         "upper_range_value",
         "unit",
-        "novel_food_variant",
+        "nf_variant",
         "qualifier",
         "type",
         "footnote",
@@ -97,16 +120,10 @@ class CompositionAdmin(admin.ModelAdmin):
         return {}
 
 
-@admin.register(ProposedUseType)
-class ProposedUseTypeAdmin(admin.ModelAdmin):
-    list_display = [
-        "title",
-    ]
-    actions = [duplicate_model]
+@admin.register(RiskAssessRedFlag)
+class RiskAssessRedFlagAdmin(admin.ModelAdmin):
+    search_fields = ["title"]
 
-
-@admin.register(RiskAssessmentRedFlags)
-class RiskAssessmentRedFlagsAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.

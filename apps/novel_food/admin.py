@@ -79,6 +79,7 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
             "if cell culture",
             {
                 "fields": [
+                    "cell_culture",
                     "are_the_cells_modified",
                 ],
                 "classes": ["collapse"],
@@ -153,7 +154,7 @@ class ChemDescriptorInline(admin.TabularInline):
 
 @admin.register(SynonymType)
 class SynonymAdmin(admin.ModelAdmin):
-    list_display = ["synonym_type"]
+    list_display = ["title"]
 
 
 @admin.register(NovelFood)
@@ -213,7 +214,12 @@ class NovelFoodAdmin(admin.ModelAdmin):
     ]
 
     list_display = ["nf_code", "opinion", "outcome", "outcome_remarks"]
-    search_fields = ["nf_code", "title", "vocab_id__name"]
+    search_fields = [
+        "nf_code",
+        "title",
+        "vocab_id__short_name",
+        "vocab_id__extended_name",
+    ]
     autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
     inlines = [
         SubstanceOfConcernNovelFoodInline,
@@ -289,7 +295,7 @@ class OrganismAdmin(admin.ModelAdmin):
         "vocab_id",
     ]  # "genus"
     inlines = [SpeciesInline, OrganismSynInline]
-    search_fields = ["vocab_id__name"]
+    search_fields = ["vocab_id__short_name", "vocab_id__extended_name"]
     list_filter = [IsFromVocabFilter]
     actions = [duplicate_model]
 
