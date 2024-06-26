@@ -107,7 +107,7 @@ class CompositionAdmin(admin.ModelAdmin):
         "value",
         "upper_range_value",
         "unit",
-        "novel_food_variant",
+        "nf_variant",
         "qualifier",
         "type",
         "footnote",

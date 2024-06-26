@@ -1,17 +1,20 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from novel_food.models import NovelFood
 
 
 def validate_case_insensitive_parameter_title(value):
-    if Parameter.objects.filter(title__iexact=value).exists():
+    if Parameter.objects.filter(
+        Q(title__iexact=value) | Q(vocab_id__name__iexact=value)
+    ).exists():
         raise ValidationError(
             "A parameter with this case-insensitive title already exists."
         )
 
 
 class ParameterType(models.Model):
-    id_parameter_type = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_parameter_type")
     title = models.CharField(
         max_length=255,
         unique=True,
@@ -30,7 +33,7 @@ class ParameterType(models.Model):
 
 
 class Parameter(models.Model):
-    id_parameter = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, db_column="id_parameter")
     title = models.CharField(
         max_length=255,
         unique=True,
@@ -44,6 +47,7 @@ class Parameter(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
+        db_column="id_parameter_type",
     )
 
     # For possible future use only
@@ -100,8 +104,13 @@ class NovelFoodVariant(models.Model):
 class ProductionNovelFoodVariant(models.Model):
     """through table for Novel Food Variant and Production(taxonomy node)"""
 
-    id_novel_food_variant = models.ForeignKey(
-        NovelFoodVariant, blank=False, null=False, on_delete=models.CASCADE
+    id = models.AutoField(primary_key=True, db_column="id_production_nf_variant")
+    nf_variant = models.ForeignKey(
+        NovelFoodVariant,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        db_column="id_nf_variant",
     )
 
     process = models.ForeignKey(
@@ -112,12 +121,14 @@ class ProductionNovelFoodVariant(models.Model):
         related_name="process_production_novel_food_variants",
         limit_choices_to={"taxonomy__code": "MTX"},
         help_text="(MTX vocab)",
+        db_column="id_process",
     )
 
     def __str__(self):
         return ""
 
     class Meta:
+        db_table = "PRODUCTION_NF_VARIANT"
         verbose_name = "Production Process"
         verbose_name_plural = "Production Processes"
 
@@ -141,18 +152,20 @@ class FoodForm(models.Model):
 
 
 class Composition(models.Model):
-    id_composition = models.AutoField(primary_key=True)
-    novel_food_variant = models.ForeignKey(
+    id = models.AutoField(primary_key=True, db_column="id_composition")
+    nf_variant = models.ForeignKey(
         NovelFoodVariant,
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        db_column="id_nf_variant",
     )
     parameter = models.ForeignKey(
         Parameter,
         blank=False,
         null=False,
         on_delete=models.PROTECT,
+        db_column="id_parameter",
     )
     qualifier = models.ForeignKey(
         "taxonomies.TaxonomyNode",
