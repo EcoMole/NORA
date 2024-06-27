@@ -44,7 +44,7 @@ class Command(BaseCommand):
 
         NovelFoodChemical.objects.create(novel_food=novel_food, chemical=chemical)
 
-        if custom:  # We have custom chemical -> we want to add IUPAC etc.
+        if custom:
             if not pd.isnull(row["IUPAC"]):
                 ChemDescriptor.objects.create(
                     chemical=chemical, type="IUPAC", value=row["IUPAC"]
@@ -78,7 +78,7 @@ class Command(BaseCommand):
             for synonym in synonyms:
                 if synonym:
                     ChemicalSyn.objects.create(
-                        chemical=chemical, title=synonym, type=common_name_synonym_type
+                        chemical=chemical, title=synonym, syn_type=common_name_synonym_type
                     )
 
     def handle(self, *args, **options):
@@ -86,5 +86,7 @@ class Command(BaseCommand):
         Chemical.objects.all().delete()
         ChemDescriptor.objects.all().delete()
         NovelFoodChemical.objects.all().delete()
-        for index, row in df.iterrows():
+        TaxonomyNode.objects.filter(taxonomy__code="PARAM", code="NORA").delete()
+
+        for _, row in df.iterrows():
             self.add_chemical_identity(row)
