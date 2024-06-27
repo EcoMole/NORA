@@ -9,7 +9,7 @@ from core.models import Contribution
 from composition.models import NovelFoodVariant, ProposedUseType, FoodForm, ProposedUse
 
 class Command(BaseCommand):
-    help = "TODO" #TODO
+    help = "Command to load NF variants"
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
