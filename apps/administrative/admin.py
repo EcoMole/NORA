@@ -65,6 +65,8 @@ class OpinionAdmin(admin.ModelAdmin):
         "publication_date",
         "adoption_date",
         "pdf_link",
+        "responsible_person",
+        "status"
     ]
     search_fields = ["title", "doi"]
     list_filter = ["publication_date"]
@@ -83,6 +85,22 @@ class OpinionAdmin(admin.ModelAdmin):
         return "No PDF"
 
     pdf_link.short_description = "PDF File"
+
+    def responsible_person(self, obj):
+        contribution = Contribution.objects.filter(opinion=obj).first()
+        if contribution:
+            user = contribution.user
+            return user.first_name
+        
+    responsible_person.short_description = "Responsible Person"
+
+    def status(self, obj):
+        contribution = Contribution.objects.filter(opinion=obj).first()
+        if contribution:
+            return contribution.status
+        
+    status.short_description = "Status"
+
 
 
 @admin.register(Question)

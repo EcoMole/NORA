@@ -43,7 +43,12 @@ class Command(BaseCommand):
         MF = User.objects.get(username="marketa@mit.edu")
         LC = User.objects.get(username="lucie@ecomole.com")
 
-        # TODO document type
+        if 'statement' in row['title'].lower():
+            doc_type = TaxonomyNode.objects.get(extended_name='EFSA statement', taxonomy__code='REF_TYPE')
+        elif 'technical report' in row['title'].lower():
+            doc_type = TaxonomyNode.objects.get(extended_name='EFSA technical report', taxonomy__code='REF_TYPE')
+        else:
+            doc_type = TaxonomyNode.objects.get(extended_name='EFSA opinion', taxonomy__code='REF_TYPE')
 
         print(f'importing opinion {row["title"]}')
 
@@ -54,7 +59,7 @@ class Command(BaseCommand):
         else:
             r_url = None
 
-        opinion_obj = Opinion.objects.create(title=r_title, doi=r_doi, url=r_url)
+        opinion_obj = Opinion.objects.create(title=r_title, doi=r_doi, url=r_url, document_type=doc_type)
 
         r_publication_date = row["publication date"]
         if not pd.isnull(r_publication_date):
@@ -76,13 +81,11 @@ class Command(BaseCommand):
 
         state = f"""Excel : {row['status']}\n"""
         if person == "KN":
-            Contribution.objects.create(opinion=opinion_obj, user=KN, remarks=state)
+            Contribution.objects.create(opinion=opinion_obj, user=KN, remarks=state, status='working_on')
         elif person == "MF":
-            Contribution.objects.create(opinion=opinion_obj, user=MF, remarks=state)
+            Contribution.objects.create(opinion=opinion_obj, user=MF, remarks=state, status='working_on')
         elif person == "LČ":
-            Contribution.objects.create(opinion=opinion_obj, user=LC, remarks=state)
-
-        status = row["status"]
+            Contribution.objects.create(opinion=opinion_obj, user=LC, remarks=state, status='working_on')
 
         # import panels
         panels = row["panel"].split(",")
@@ -96,7 +99,6 @@ class Command(BaseCommand):
         r_applicant = row["applicant"]
 
         questions = r_questions.split(",")
-        print(questions)
         for question in questions:
             question_obj = Question.objects.create(number=question.strip())
             if not pd.isna(r_applicant):
@@ -235,9 +237,7 @@ class Command(BaseCommand):
         if not pd.isna(r_category):
             categories = r_category.split(',')
             for category in categories:
-                print(category)
                 regulation, category = category.split(":") #find category which includes these two as substring:
-                print(regulation, category)
                 category_obj = NovelFoodCategory.objects.get(title__contains=category.strip(), regulation__extended_name__contains=regulation.strip())
                 # assign category to novel food
                 NovelFoodCategoryNovelFood.objects.create(novel_food=novel_food_obj, novel_food_category=category_obj)
@@ -262,12 +262,6 @@ class Command(BaseCommand):
                     novel_food=novel_food_obj,
                     title=trade_name.strip(),
                 )
-
-        """ r_genotox_final = row['genotox_final_outcome']
-        if not pd.isna(r_genotox_final):
-            novel_food_obj.genotox_final_outcome = GenotoxFinalOutcome.objects.get_or_create(title=r_genotox_final)[0]
-        else:
-            result_msg += 'genotox final outcome missing \n' #TODO musi byt ale jeste i tox required=True """
 
         r_outcome = row["outcome"]
         r_outcome_remarks = row["outcome remarks"]
@@ -330,11 +324,12 @@ class Command(BaseCommand):
             )[0]
             novel_food_obj.genotox_final_outcome = genotox_outcome_obj
             novel_food_obj.save()
-            if pd.isna(r_toxicity_required):
-                result_msg += "toxicity required (y/n) missing\n"
-            else:
-                # novel_food_obj.tox_study_required = self.get_yes_no(r_toxicity_required) #TODO after fixing ToxicologyRequired
-                pass
+            
+        if pd.isna(r_toxicity_required):
+            result_msg += "Toxicology required (Y/N) missing.\n"
+        else:
+            novel_food_obj.tox_study_required = r_toxicity_required
+            novel_food_obj.save()
 
         # Find contribution for this opinioon:
         try:

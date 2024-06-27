@@ -42,7 +42,7 @@ class ADMEInvestigationTypeInline(admin.TabularInline):
 
 @admin.register(Endpointstudy)
 class EndpointstudyAdmin(admin.ModelAdmin):
-    list_display = ["novel_food", "test_type", "species", "sex"]
+    list_display = ["novel_food", "test_type", "species", "study_source"]
     search_fields = ["novel_food__title", "test_type__description"]
     autocomplete_fields = [
         "novel_food",
@@ -83,7 +83,7 @@ class EndpointAdmin(admin.ModelAdmin):
 
 @admin.register(Genotox)
 class GenotoxAdmin(admin.ModelAdmin):
-    list_display = ["novel_food", "test_type", "guideline_qualifier"]
+    list_display = ["novel_food", "test_type", "study_source", "guideline"]
     search_fields = ["novel_food__title", "test_type__description"]
     autocomplete_fields = [
         "novel_food",
@@ -97,13 +97,21 @@ class GenotoxAdmin(admin.ModelAdmin):
 
 @admin.register(ADME)
 class ADMEAdmin(admin.ModelAdmin):
-    list_display = ["novel_food", "test_type", "guideline_qualifier", "guideline"]
+    list_display = ["novel_food", "test_type", "study_source", "investigation_types"]
     autocomplete_fields = [
         "novel_food",
         "test_type",
-        "guideline_qualifier",
         "guideline",
+        "guideline_qualifier",
     ]
+
+    def investigation_types(self, obj):
+        investigation_types = ADMEInvestigationType.objects.filter(adme=obj)
+        types = [i.investigation_type.title for i in investigation_types]
+        return ", ".join(types)
+    
+    investigation_types.short_description = "Investigation Types"
+
     search_fields = ["novel_food__title", "test_type__description"]
     inlines = [ADMEInvestigationTypeInline]
     actions = [duplicate_model]
