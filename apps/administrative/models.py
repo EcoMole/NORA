@@ -25,7 +25,7 @@ class Opinion(models.Model):
     )
     title = models.CharField(
         max_length=2000,
-        unique=True,
+        unique=False,
         blank=False,
         null=False,
         help_text="Title of the opinion",

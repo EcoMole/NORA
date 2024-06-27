@@ -26,6 +26,8 @@ from novel_food.models import (
     NovelFood,
     NovelFoodSyn,
     SynonymType,
+    NovelFoodCategory,
+    NovelFoodCategoryNovelFood
 )
 from taxonomies.models import Taxonomy, TaxonomyNode
 
@@ -89,23 +91,27 @@ class Command(BaseCommand):
             OpinionPanel.objects.create(opinion=opinion_obj, panel=panel_obj)
 
         # import questions
-        r_question = row["question"]
+        r_questions = row["question"]
         r_mandates = row["mandate"]
         r_applicant = row["applicant"]
 
-        question = Question.objects.create(number=r_question)
-        if not pd.isna(r_applicant):
-            applicant_obj, _ = Applicant.objects.get_or_create(title=r_applicant)
-            QuestionApplicant.objects.create(question=question, applicant=applicant_obj)
+        questions = r_questions.split(",")
+        print(questions)
+        for question in questions:
+            question_obj = Question.objects.create(number=question.strip())
+            if not pd.isna(r_applicant):
+                applicant_obj, _ = Applicant.objects.get_or_create(title=r_applicant)
+                QuestionApplicant.objects.create(question=question_obj, applicant=applicant_obj)
 
-        OpinionQuestion.objects.create(opinion=opinion_obj, question=question)
+            OpinionQuestion.objects.create(opinion=opinion_obj, question=question_obj)
 
-        if not pd.isna(r_mandates):
-            for mandate in r_mandates.split(","):
-                mandate_type_obj = MandateType.objects.get(title=mandate.strip())
-                Mandate.objects.create(question=question, mandate_type=mandate_type_obj)
-
-        # TODO regulation
+            if not pd.isna(r_mandates):
+                for mandate in r_mandates.split(","):
+                    if '?' in mandate: #TODO report it
+                        mandate = mandate.replace('?', '')
+                    mandate_type_obj = MandateType.objects.get(title=mandate.strip())
+                    Mandate.objects.create(question=question_obj, mandate_type=mandate_type_obj)
+            
 
         # Import scientific officers
         r_so = row["so"]
@@ -219,13 +225,23 @@ class Command(BaseCommand):
             )
             novel_food_obj.save()
 
-        if row["nutritional – antinutritional factors"] in ["Yes", "yes"]:
-            result_msg += "Antinutritional factors not imported.\n"  # TODO Mozna nechteji konkretne
-
         novel_food_obj.antinutritional_factors = self.get_yes_no(
             row["nutritional – antinutritional factors"]
         )
         novel_food_obj.save()
+
+        # TODO regulation
+        r_category = row["category"]
+        if not pd.isna(r_category):
+            categories = r_category.split(',')
+            for category in categories:
+                print(category)
+                regulation, category = category.split(":") #find category which includes these two as substring:
+                print(regulation, category)
+                category_obj = NovelFoodCategory.objects.get(title__contains=category.strip(), regulation__extended_name__contains=regulation.strip())
+                # assign category to novel food
+                NovelFoodCategoryNovelFood.objects.create(novel_food=novel_food_obj, novel_food_category=category_obj)
+
 
         r_common_names = row["nf - common name"]
         if not pd.isna(r_common_names):

@@ -1,5 +1,5 @@
 from administrative.models import MandateType, Panel
-from composition.models import FoodForm, ParameterType, ProposedUseType
+from composition.models import FoodForm, ParameterType
 from django.core.management.base import BaseCommand
 from novel_food.models import (
     Allergenicity,
@@ -37,6 +37,7 @@ class Command(BaseCommand):
             code="NORA",
             taxonomy=legref,
             short_name="Commission Recommendation 97/618/EC",
+            extended_name = "Commission Recommendation 97/618/EC"
         )
 
         regulation_258_97 = TaxonomyNode.objects.get(taxonomy=legref, code="N124A")
@@ -70,7 +71,7 @@ class Command(BaseCommand):
 
         categories_97_618 = {
             "1.1 - Chemicals": "1.1 Pure chemicals or simple mixtures from non-GM sources -  the source of the NF has a history of food use in the Community",
-            "1.2 - Chamicals": "1.2 Pure chemicals or simple mixtures from non-GM sources - the source of the NF has no history of food use in the Community",
+            "1.2 - Chemicals": "1.2 Pure chemicals or simple mixtures from non-GM sources - the source of the NF has no history of food use in the Community",
             "2.1 - Complex NF": "2.1 Complex NF from non-GM source - the source of the NF has a history of food use in the Community",
             "2.2 - Complex NF": "2.2 Complex NF from non-GM source - the source of the NF has no history of food use in the Community",
             "3.1 - Plants": "3.1 GM plants and their products - the host plant used for the genetic modification has a history of use as food or as a source of food in\
@@ -179,18 +180,6 @@ class Command(BaseCommand):
         for option in options:
             ParameterType.objects.get_or_create(title=option)
 
-    def create_proposed_use_types(self):
-        options = [
-            "whole_foods",
-            "food_ingredients",
-            "food_supplements",
-            "infant_follow_on_formula",
-            "special_medical_purpose",
-            "total_diet_replacement",
-        ]
-        for option in options:
-            ProposedUseType.objects.get_or_create(title=option)
-
     def create_study_sources(self):
         options = ["original", "literature", "Previous assessment", "EFSA", "N/A"]
         for option in options:
@@ -242,7 +231,6 @@ class Command(BaseCommand):
         self.create_food_forms()
         self.create_synonym_types()
         self.create_parameter_types()
-        self.create_proposed_use_types()
         self.create_novel_food_categories()
         self.create_mandates()
         self.create_study_sources()
