@@ -96,6 +96,8 @@ class Panel(models.Model):
 class OpinionPanel(models.Model):
     """through table for Opinion and Panel"""
 
+    id = models.AutoField(primary_key=True, db_column="id_op_panel")
+
     opinion = models.ForeignKey(
         Opinion,
         blank=False,
@@ -116,6 +118,11 @@ class OpinionPanel(models.Model):
 
     class Meta:
         db_table = "OP_AUTHOR"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["opinion", "panel"], name="unique_opinion_panel"
+            )
+        ]
 
 
 class Applicant(models.Model):
@@ -164,6 +171,8 @@ class MandateType(models.Model):
 class OpinionQuestion(models.Model):
     """through table for Opinion and Question"""
 
+    id = models.AutoField(primary_key=True, db_column="id_op_question")
+
     opinion = models.ForeignKey(
         Opinion,
         blank=False,
@@ -184,6 +193,11 @@ class OpinionQuestion(models.Model):
 
     class Meta:
         db_table = "OP_QUESTION"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["opinion", "question"], name="unique_opinion_question"
+            )
+        ]
 
 
 class ScientificOfficer(models.Model):
@@ -206,6 +220,8 @@ class ScientificOfficer(models.Model):
 class OpinionSciOfficer(models.Model):
     """through table for Opinion and Scientific Officer"""
 
+    id = models.AutoField(primary_key=True, db_column="id_op_sci_officer")
+
     opinion = models.ForeignKey(
         Opinion,
         blank=False,
@@ -225,6 +241,11 @@ class OpinionSciOfficer(models.Model):
 
     class Meta:
         db_table = "OP_SCI_OFFICER"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["opinion", "sci_officer"], name="unique_opinion_sci_officer"
+            )
+        ]
 
 
 class Mandate(models.Model):
@@ -270,8 +291,13 @@ class Mandate(models.Model):
 
 
 class QuestionApplicant(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True, db_column="id_question_applicant")
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, db_column="id_question"
+    )
+    applicant = models.ForeignKey(
+        Applicant, on_delete=models.CASCADE, db_column="id_applicant"
+    )
 
     def __str__(self) -> str:
         return f"{self.question} - {self.applicant}"
@@ -280,3 +306,8 @@ class QuestionApplicant(models.Model):
         db_table = "QUESTION_APPLICANT"
         verbose_name = "Question Applicant"
         verbose_name_plural = "📂 Question Applicants"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["applicant", "question"], name="unique_question_applicant"
+            )
+        ]
