@@ -48,7 +48,6 @@ class Command(BaseCommand):
 
     def interpret_value(self, value):
         qualifiers = ["<=", ">=", "<", ">"]
-        print(f"value: {value}")
 
         qualifier_vocab_map = {
             "<": "Less than",
@@ -61,7 +60,6 @@ class Command(BaseCommand):
         if (
             "-" in value
         ):  # We know its range, we want to get lower value and upper value
-            print("range")
             lower, upper = value.split("-")
             return (
                 float(lower.strip()),
@@ -72,10 +70,8 @@ class Command(BaseCommand):
             )
 
         elif any(qualifier in value for qualifier in qualifiers):
-            print("qualifier found")
             for qualifier in qualifiers:
                 if qualifier in value:
-                    print(f"matched qualifier {qualifier}")
                     return (
                         float(value.split(qualifier)[1].strip()),
                         None,
@@ -129,7 +125,6 @@ class Command(BaseCommand):
                 parameter, type = row["parameter"].split('(')
                 parameter = parameter.strip()
                 type = type.replace(')', '').strip()
-                print(f'parameter type: {type}')
                 parameter_type_obj = ParameterType.objects.get(title=type)
                 parameter_obj, _ = Parameter.objects.get_or_create(
                     title=parameter, type=parameter_type_obj
