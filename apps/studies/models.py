@@ -75,7 +75,9 @@ class Endpointstudy(models.Model):
         db_column="id_study_source",
     )
     remarks = models.TextField(null=True, blank=True)
-    test_material = models.CharField(max_length=255, null=True, blank=True)
+    test_material = models.CharField(
+        max_length=255, null=True, blank=True, db_column="testsubstance"
+    )
 
     def __str__(self) -> str:
         res = self.novel_food.title
@@ -90,6 +92,7 @@ class Endpointstudy(models.Model):
 
 
 class Endpoint(models.Model):
+    id = models.AutoField(primary_key=True, db_column="id_endpoint")
     endpointstudy = models.ForeignKey(
         Endpointstudy,
         on_delete=models.CASCADE,
@@ -102,7 +105,7 @@ class Endpoint(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
-        db_column="id_endpoint",
+        db_column="id_reference_point",
         related_name="endpoint_endpoints",
         help_text="(ENDPOINT_HGV vocab)",
     )
@@ -144,7 +147,6 @@ class Endpoint(models.Model):
             f" - {self.reference_point.name}" if self.reference_point else ""
         )
         lovalue_part = f" {self.lovalue}" if self.lovalue else ""
-        unit_part = f" {self.unit.name}" if self.unit else ""
         test_type_part = (
             f" - {self.endpointstudy.test_type.name}"
             if self.endpointstudy.test_type
@@ -160,7 +162,6 @@ class Endpoint(models.Model):
             self.endpointstudy.novel_food.title
             + reference_point_part
             + lovalue_part
-            + unit_part
             + test_type_part
             + species_part
         )
@@ -214,7 +215,7 @@ class FinalOutcome(models.Model):
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     uncertainty_factor = models.IntegerField(
-        null=True, blank=True, verbose_name="uncertainty factor"
+        null=True, blank=True, db_column="safety_factor"
     )
     remarks = models.TextField(
         null=True,
@@ -286,7 +287,7 @@ class FinalOutcomePopulation(models.Model):
 
 class StudySource(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_source")
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
 
     def __str__(self) -> str:
         return self.title
@@ -367,6 +368,12 @@ class ADMEInvestigationType(models.Model):
         db_table = "PKTK_INVESTIGATION_TYPE"
         verbose_name = "ADME Investigation Type"
         verbose_name_plural = "ADME Investigation Types"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["adme", "investigation_type"],
+                name="unique_adme_investigation_type",
+            )
+        ]
 
 
 class Genotox(models.Model):

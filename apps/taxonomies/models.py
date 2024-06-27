@@ -252,7 +252,9 @@ class Population(models.Model):
 
 class GuidelineQualifier(models.Model):
     id = models.BigAutoField(primary_key=True, db_column="id_quideline_qualifier")
-    title = models.CharField(max_length=255)
+    title = models.CharField(
+        max_length=255, db_column="guideline_qualifier", unique=True
+    )
 
     def __str__(self):
         return self.title
