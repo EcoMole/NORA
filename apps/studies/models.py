@@ -299,7 +299,7 @@ class StudySource(models.Model):
 class ADME(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_pktkade")
     novel_food = models.ForeignKey(
-        "novel_food.NovelFood", db_column="pktkade_study", on_delete=models.CASCADE
+        "novel_food.NovelFood", db_column="id_pktkade_study", on_delete=models.CASCADE
     )
     test_type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
