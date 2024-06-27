@@ -7,7 +7,7 @@ from administrative.models import Question, OpinionQuestion, Opinion
 from core.models import Contribution
 
 class Command(BaseCommand):
-    help = "TODO" #TODO
+    help = "Command to load genotox studies." 
 
     outcomes = ['negative', 'positive', 'inconclusive']
 
@@ -91,7 +91,7 @@ class Command(BaseCommand):
             genotox_study.test_material = r_test_material
             genotox_study.save()
         else:
-            result_msg += f"Test material missing." # if missing, report it
+            result_msg += f"Test material missing in Excel.\n" # if missing, report it
 
         r_guideline = row['guideline']
         if not pd.isna(r_guideline):
@@ -106,7 +106,7 @@ class Command(BaseCommand):
             genotox_study.outcome = outcome_node
             genotox_study.save()
         else:
-            result_msg += f"Outcome missing." # if missing, report it
+            result_msg += f"Outcome missing in Excel.\n"
 
         r_study_source = row['study source']
         study_source_node = StudySource.objects.get(title=r_study_source)
@@ -119,7 +119,7 @@ class Command(BaseCommand):
             genotox_study.test_type = test_type_node
             genotox_study.save()
         else:
-            result_msg += f"Test type missing." # if missing, report it
+            result_msg += f"Test type missing in Excel.\n" # if missing, report it
 
         if not pd.isna(row['remarks']):
             genotox_study.remarks = row['remarks']

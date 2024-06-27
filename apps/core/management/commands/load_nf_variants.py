@@ -1,15 +1,13 @@
-from typing import Any
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import pandas as pd
-from studies.models import StudySource, Endpoint, Endpointstudy
 from taxonomies.models import Taxonomy, TaxonomyNode, Subgroup, Population
 from novel_food.models import NovelFood
-from administrative.models import Question, OpinionQuestion, Opinion
+from administrative.models import Question, OpinionQuestion
 from core.models import Contribution
-from composition.models import NovelFoodVariant, ProposedUseType, FoodForm, ProposedUse
+from composition.models import NovelFoodVariant, FoodForm, ProposedUse
 
 class Command(BaseCommand):
-    help = "Command to load NF variants"
+    help = "Command to load NF variants."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -59,7 +57,7 @@ class Command(BaseCommand):
 
         if row['food forms'] == '?':
             r_food_forms = 'powder'
-            result_msg += 'Food forms not specified, assuming powder - check.'
+            result_msg += 'Food form missing, assuming powder - check and correct.'
 
         r_proposed_use = row["proposed use"]
         r_food_forms = row["food forms"]
@@ -67,8 +65,6 @@ class Command(BaseCommand):
         r_age = row["age"]
         r_age_qualifier = row["age qualifier"]
 
-        print(r_proposed_use)
-        proposed_use_obj = ProposedUseType.objects.get(title=r_proposed_use) 
         subgroup_obj = Subgroup.objects.get(title=r_target_subgroup)
 
         if not pd.isna(r_age):
@@ -82,14 +78,25 @@ class Command(BaseCommand):
         for food_form in food_forms:
             food_form_obj = FoodForm.objects.get_or_create(title=food_form.strip())
             nf_variant_obj = NovelFoodVariant.objects.get_or_create(novel_food=novel_food, food_form=food_form_obj[0])
-            ProposedUse.objects.create(nf_variant = nf_variant_obj[0], use_type=proposed_use_obj, population=population_obj[0])
+            ProposedUse.objects.create(nf_variant = nf_variant_obj[0], use_type=r_proposed_use, population=population_obj[0])
 
-
+    def create_empty_nf_variants(self):
+        # For each novel food that doesnt have any NF variant, create 1:
+        nf_list = NovelFood.objects.all()
+        for nf in nf_list:
+            nf_variants = NovelFoodVariant.objects.filter(novel_food=nf)
+            if not nf_variants:
+                NovelFoodVariant.objects.create(novel_food=nf)
+                print(f'Creating empty NF variant for {nf.title}')
     
-    def handle(self, *args: Any, **options: Any):
+    def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[''])
 
         NovelFoodVariant.objects.all().delete()
         Population.objects.all().delete()
+
         for index, row in df.iterrows():
             self.add_use(row)
+
+        # For each NF without any variant, create one
+        self.create_empty_nf_variants()

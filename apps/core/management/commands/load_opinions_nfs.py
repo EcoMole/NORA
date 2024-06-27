@@ -39,6 +39,7 @@ class Command(BaseCommand):
         parser.add_argument("csv_file", type=str)
 
     def import_opinion(self, row):
+        final_msg = '\nOpinion:\n'
         KN = User.objects.get(username="klara@ecomole.com")
         MF = User.objects.get(username="marketa@mit.edu")
         LC = User.objects.get(username="lucie@ecomole.com")
@@ -79,13 +80,17 @@ class Command(BaseCommand):
 
         person = row["person"]
 
-        state = f"""Excel : {row['status']}\n"""
+        if pd.isna(row['status']):
+            state = ''
+        else:
+            state = f"""Excel : {row['status']}\n"""
+        contribution = None
         if person == "KN":
-            Contribution.objects.create(opinion=opinion_obj, user=KN, remarks=state, status='working_on')
+            contribution = Contribution.objects.create(opinion=opinion_obj, user=KN, remarks=state, status='working_on')
         elif person == "MF":
-            Contribution.objects.create(opinion=opinion_obj, user=MF, remarks=state, status='working_on')
+            contribution = Contribution.objects.create(opinion=opinion_obj, user=MF, remarks=state, status='working_on')
         elif person == "LČ":
-            Contribution.objects.create(opinion=opinion_obj, user=LC, remarks=state, status='working_on')
+            contribution = Contribution.objects.create(opinion=opinion_obj, user=LC, remarks=state, status='working_on')
 
         # import panels
         panels = row["panel"].split(",")
@@ -109,11 +114,23 @@ class Command(BaseCommand):
 
             if not pd.isna(r_mandates):
                 for mandate in r_mandates.split(","):
-                    if '?' in mandate: #TODO report it
+                    if '?' in mandate:
+                        final_msg += 'Check mandate type.\n'
                         mandate = mandate.replace('?', '')
                     mandate_type_obj = MandateType.objects.get(title=mandate.strip())
-                    Mandate.objects.create(question=question_obj, mandate_type=mandate_type_obj)
-            
+                    mandate_obj = Mandate.objects.create(question=question_obj, mandate_type=mandate_type_obj)
+                    if not pd.isna(row['regulation']):
+                        if '2015/2283' in row['regulation']:
+                            mandate_obj.regulation = TaxonomyNode.objects.get(short_name='Regulation (EC) No 2015/2283 Article 3', taxonomy__code='LEGREF')
+                        if '258/93' in row['regulation']:
+                            mandate_obj.regulation = TaxonomyNode.objects.get(code="N124A", taxonomy__code='LEGREF')
+                        if '.' in row['regulation']:
+                            final_msg += 'Check for missing regulations.\n'
+                    mandate_obj.save()  
+
+        if contribution:
+            contribution.remarks += final_msg
+            contribution.save()
 
         # Import scientific officers
         r_so = row["so"]
@@ -232,7 +249,6 @@ class Command(BaseCommand):
         )
         novel_food_obj.save()
 
-        # TODO regulation
         r_category = row["category"]
         if not pd.isna(r_category):
             categories = r_category.split(',')
@@ -324,7 +340,7 @@ class Command(BaseCommand):
             )[0]
             novel_food_obj.genotox_final_outcome = genotox_outcome_obj
             novel_food_obj.save()
-            
+
         if pd.isna(r_toxicity_required):
             result_msg += "Toxicology required (Y/N) missing.\n"
         else:

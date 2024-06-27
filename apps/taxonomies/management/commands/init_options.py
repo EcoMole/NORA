@@ -176,6 +176,7 @@ class Command(BaseCommand):
             "Species identity",
             "Cyanotoxins",
             "Fatty acids",
+            "Cations"
         ]
         for option in options:
             ParameterType.objects.get_or_create(title=option)

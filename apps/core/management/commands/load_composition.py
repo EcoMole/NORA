@@ -22,15 +22,6 @@ class Command(BaseCommand):
         # Take all novel food variants:
         novel_food_variants = NovelFoodVariant.objects.all()
 
-        parameters = [
-            "Carbohydrates",
-            "Fat",
-            "Protein",
-            "Minerals",
-            "Moisture",
-            "Vitamins",
-        ]
-
         # create all 6 parameters
         carbs = Parameter.objects.create(title="Carbohydrates")
         fat = Parameter.objects.create(title="Fat")
@@ -123,24 +114,32 @@ class Command(BaseCommand):
         # Get the proper variant
         r_food_form = row["food form"]
 
-        if not pd.isna(r_food_form):
-            print("Food form defined: ", r_food_form)
+        if not pd.isna(r_food_form): # Food form defined
             novel_food_variants = NovelFoodVariant.objects.filter(
                 novel_food=novel_food_obj, food_form__title=r_food_form
             )
 
-        else:
-            print("Food form not defined")
+        else: # Food form not defined - use for all
             novel_food_variants = NovelFoodVariant.objects.filter(
                 novel_food=novel_food_obj
             )
 
         for variant_obj in novel_food_variants:
-            parameter, _ = Parameter.objects.get_or_create(
-                title=row["parameter"]
-            )  # TODO zpracovat parameter
+            if '(' in row["parameter"]:
+                parameter, type = row["parameter"].split('(')
+                parameter = parameter.strip()
+                type = type.replace(')', '').strip()
+                print(f'parameter type: {type}')
+                parameter_type_obj = ParameterType.objects.get(title=type)
+                parameter_obj, _ = Parameter.objects.get_or_create(
+                    title=parameter, type=parameter_type_obj
+                )
+
+            else:
+                parameter_obj, _ = Parameter.objects.get_or_create(title=row["parameter"]) 
+
             composition_obj, _ = Composition.objects.get_or_create(
-                nf_variant=variant_obj, parameter=parameter
+                nf_variant=variant_obj, parameter=parameter_obj
             )
             if not composition_obj.value and pd.notna(row["value"]):
                 value, upper_value, qualifier = self.interpret_value(row["value"])
@@ -151,6 +150,19 @@ class Command(BaseCommand):
                 if row["footnote"]:
                     composition_obj.footnote = row["footnote"]
                 composition_obj.save()
+            if pd.notna(row['unit']):
+                unit_obj = TaxonomyNode.objects.get(extended_name=row['unit'], taxonomy__code='UNIT')
+                composition_obj.unit = unit_obj
+                composition_obj.save()
+
+            if pd.isna(row['type']):
+                composition_obj.type = "specification"
+            elif row['type'] == 'other':
+                composition_obj.type = "other"
+            elif row['type'] == 'Characterisation':
+                composition_obj.type = 'characterisation'
+            composition_obj.save()
+            
 
     def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[""])

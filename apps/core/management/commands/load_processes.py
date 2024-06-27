@@ -3,17 +3,16 @@ from administrative.models import Opinion, OpinionQuestion, Question
 from composition.models import (
     NovelFoodVariant,
     ProductionNovelFoodVariant,
-    RiskAssessmentRedFlags,
-    RiskAssessmentRedFlagsNFVariant,
+    RiskAssessRedFlag,
+    RiskAssessRedFlagNFVariant,
 )
-from core.models import Contribution
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from novel_food.models import NovelFood
 from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "TODO"  # TODO
+    help = "Command to load production processes."  
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -55,18 +54,18 @@ class Command(BaseCommand):
             )
 
         if not pd.isna(row["red flag"]):
-            red_flag = RiskAssessmentRedFlags.objects.get_or_create(
+            red_flag = RiskAssessRedFlag.objects.get_or_create(
                 title=row["red flag"]
             )
-            RiskAssessmentRedFlagsNFVariant.objects.create(
-                nf_variant=nf_variant, risk_assessment=red_flag[0]
+            RiskAssessRedFlagNFVariant.objects.create(
+                nf_variant=nf_variant, risk_assess_red_flag=red_flag[0]
             )
 
     def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[""])
 
         ProductionNovelFoodVariant.objects.all().delete()
-        RiskAssessmentRedFlagsNFVariant.objects.all().delete()
+        RiskAssessRedFlagNFVariant.objects.all().delete()
 
         for index, row in df.iterrows():
             self.add_process_step(row)

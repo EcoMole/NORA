@@ -9,7 +9,7 @@ nf code,question,nf name,food form,process step,red flag
 2020/1651,EFSA-Q-2020-00284,mung bean protein,,Pasteurisation,
 2020/1651,EFSA-Q-2020-00284,mung bean protein,,Spray drying,
 NF 2019/1046,EFSA-Q-2019-00323,oil from Schizochytrium limacinum (strain FCC-3204),,Cultivation,
-NF 2019/1046,EFSA-Q-2019-00323,oil from Schizochytrium limacinum (strain FCC-3204),,Enzyme treatement,enzymes
+NF 2019/1046,EFSA-Q-2019-00323,oil from Schizochytrium limacinum (strain FCC-3204),,Enzyme treatment,enzymes
 NF 2019/1046,EFSA-Q-2019-00323,oil from Schizochytrium limacinum (strain FCC-3204),,Centrifugal separation,
 NF 2019/1046,EFSA-Q-2019-00323,oil from Schizochytrium limacinum (strain FCC-3204),,Filtration,
 NF 2019/1046,EFSA-Q-2019-00323,oil from Schizochytrium limacinum (strain FCC-3204),,pH adjustment > neutralization,
@@ -142,7 +142,7 @@ NF 2020/1621,EFSA-Q-2020-00488,apple fruit cell culture biomass,,Freeze-drying (
 ,EFSA-Q-2014-00232,synthetic trans‐resveratrol,,Purification,
 ,EFSA-Q-2014-00232,synthetic trans‐resveratrol,,Chemical synthesis > demethylation,
 ,EFSA-Q-2014-00232,synthetic trans‐resveratrol,,Crystallization,
-NF 2020/1606,EFSA-Q-2020-00747,galacto‐oligosaccharides (GOS),,Enzyme treatement,microorganisms
+NF 2020/1606,EFSA-Q-2020-00747,galacto‐oligosaccharides (GOS),,Enzyme treatment,microorganisms
 NF 2020/1606,EFSA-Q-2020-00747,galacto‐oligosaccharides (GOS),,,enzymes
 ,EFSA-Q-2007-059,Allanblackia seed oil,,Harvesting,
 ,EFSA-Q-2007-059,Allanblackia seed oil,,Post-harvest processing > seed removal,
@@ -159,7 +159,7 @@ NF 2020/1606,EFSA-Q-2020-00747,galacto‐oligosaccharides (GOS),,,enzymes
 ,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,puree,Post-harvest processing > skin removal,
 ,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,puree,Pasteurisation,
 ,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,puree,Storage,
-,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,concentrate,Enzyme treatement,
+,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,concentrate,Enzyme treatment,
 ,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,concentrate,Thermal treatment,
 ,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,concentrate,Cooling,
 ,EFSA-Q-2007-181,Tahitian Noni® ‘Morinda citrifolia (noni) fruit puree and concentrate’,concentrate,Centrifugal separation,
@@ -182,7 +182,7 @@ NF 2018/0401,EFSA-Q-2018-00374,2’‐fucosyllactose/difucosyllactose mixture,,S
 NF 2019/1014,EFSA-Q-2019-00395,pulp from Theobroma cacao L.,juice,Extraction > mechanical,
 NF 2019/1014,EFSA-Q-2019-00395,pulp from Theobroma cacao L.,juice,Freezing,
 NF 2019/1014,EFSA-Q-2019-00395,pulp from Theobroma cacao L.,juice,Pasteurisation,
-NF 2019/1014,EFSA-Q-2019-00395,pulp from Theobroma cacao L.,juice,Enzyme treatement,enzymes
+NF 2019/1014,EFSA-Q-2019-00395,pulp from Theobroma cacao L.,juice,Enzyme treatment,enzymes
 NF 2019/1014,EFSA-Q-2019-00395,pulp from Theobroma cacao L.,juice,Filtration,
 NF 2019/1014,EFSA-Q-2019-00395,pulp from Theobroma cacao L.,juice,Concentration / evaporation,
 NF 2020/2030,EFSA-Q-2021-00475,dried flowers of Clitoria ternatea L.,whole food,Cultivation,

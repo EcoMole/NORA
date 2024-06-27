@@ -12,7 +12,7 @@ from .models import (
     RiskAssessRedFlag,
     RiskAssessRedFlagNFVariant,
 )
-
+from core.models import Contribution
 
 class CompositionInline(admin.TabularInline):
     model = Composition
@@ -69,6 +69,35 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProductionNovelFoodVariantInline,
         RiskAssessRedFlagNFVariantInline,
     ]
+    list_display = [
+     "variant_str",
+     "food_form",
+     "responsible_person"
+    ]
+
+    def variant_str(self, obj):
+        return str(obj)
+    
+    variant_str.short_description = "NF Variant"
+
+    def food_form(self, obj):
+        return obj.food_form.title
+    
+    food_form.short_description = "Food form"
+
+    def responsible_person(self, obj):
+        # Get novel food for this variant
+        novel_food = obj.novel_food
+        # Get opinion for this novel food
+        opinion = novel_food.opinion
+        # Get contribution for this opinion
+        contribution = Contribution.objects.filter(opinion=opinion).first()
+        if contribution:
+            user = contribution.user
+            return user.first_name
+        
+    responsible_person.short_description = "Responsible Person"
+
     actions = [duplicate_model]
 
 
