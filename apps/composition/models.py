@@ -92,8 +92,20 @@ class NovelFoodVariant(models.Model):
     )
 
     def __str__(self) -> str:
+        novel_food_part = self.novel_food.title
+        novel_food_part += (
+            f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
+        )
         food_form_part = f" - {self.food_form}" if self.food_form else ""
-        return self.novel_food.title + food_form_part
+        questions_part = ""
+        if questions := [
+            oq.question for oq in self.novel_food.opinion.opinionquestion_set.all()
+        ]:
+            questions_part = " -"
+            for q in questions:
+                questions_part += f" {q.number},"
+            questions_part = questions_part[:-1]
+        return novel_food_part + food_form_part + questions_part
 
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"
