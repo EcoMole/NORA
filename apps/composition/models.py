@@ -6,7 +6,9 @@ from novel_food.models import NovelFood
 
 def validate_case_insensitive_parameter_title(value):
     if Parameter.objects.filter(
-        Q(title__iexact=value) | Q(vocab_id__name__iexact=value)
+        Q(title__iexact=value)
+        | Q(vocab_id__short_name__iexact=value)
+        | Q(vocab_id__extended_name__iexact=value)
     ).exists():
         raise ValidationError(
             "A parameter with this case-insensitive title already exists."
