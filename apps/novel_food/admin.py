@@ -1,3 +1,4 @@
+from core.models import Contribution
 from django.contrib import admin
 from novel_food.models import (
     HBGV,
@@ -29,7 +30,6 @@ from novel_food.models import (
 )
 from taxonomies.util import Descriptor
 from util.admin_utils import duplicate_model
-from core.models import Contribution
 
 # from allergenicity.models import  Allergenicity
 
@@ -160,6 +160,15 @@ class SynonymAdmin(admin.ModelAdmin):
 
 @admin.register(NovelFood)
 class NovelFoodAdmin(admin.ModelAdmin):
+    list_display = [
+        "nf_code",
+        "title",
+        "opinion_doi",
+        "outcome",
+        "responsible_person",
+        "status",
+    ]
+    list_display_links = ["nf_code", "title", "outcome", "responsible_person", "status"]
     # form = NovelFoodForm
     fieldsets = [
         (
@@ -214,11 +223,9 @@ class NovelFoodAdmin(admin.ModelAdmin):
         ),
     ]
 
-    list_display = ["nf_code", "title", "opinion_doi","outcome", "responsible_person", "status"]
-
     def opinion_doi(self, obj):
         return obj.opinion.doi
-    
+
     opinion_doi.short_description = "Opinion DOI"
 
     def responsible_person(self, obj):
@@ -226,14 +233,14 @@ class NovelFoodAdmin(admin.ModelAdmin):
         if contribution:
             user = contribution.user
             return user.first_name
-        
+
     responsible_person.short_description = "Responsible Person"
 
     def status(self, obj):
         contribution = Contribution.objects.filter(opinion=obj.opinion).first()
         if contribution:
             return contribution.status
-        
+
     status.short_description = "Status"
 
     search_fields = [

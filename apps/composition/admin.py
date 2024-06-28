@@ -1,3 +1,4 @@
+from core.models import Contribution
 from django.contrib import admin
 from util.admin_utils import duplicate_model
 
@@ -12,7 +13,7 @@ from .models import (
     RiskAssessRedFlag,
     RiskAssessRedFlagNFVariant,
 )
-from core.models import Contribution
+
 
 class CompositionInline(admin.TabularInline):
     model = Composition
@@ -69,21 +70,32 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProductionNovelFoodVariantInline,
         RiskAssessRedFlagNFVariantInline,
     ]
+    readonly_fields = ("get_question_numbers",)
+    list_display_links = ["get_novel_food", "food_form"]
     list_display = [
-     "variant_str",
-     "food_form",
-     "responsible_person"
+        "get_novel_food",
+        "food_form",
+        "get_question_numbers",
+        "responsible_person",
     ]
+    search_fields = ["novel_food__title", "novel_food__nf_code", "food_form__title"]
 
-    def variant_str(self, obj):
-        return str(obj)
-    
-    variant_str.short_description = "NF Variant"
+    def get_novel_food(self, obj):
+        return str(obj.novel_food)
 
-    def food_form(self, obj):
-        return obj.food_form.title
-    
-    food_form.short_description = "Food form"
+    get_novel_food.short_description = "Novel Food"
+
+    def get_question_numbers(self, obj):
+        result = ""
+        if questions := [
+            oq.question for oq in obj.novel_food.opinion.opinionquestion_set.all()
+        ]:
+            for q in questions:
+                result += f"{q.number}, "
+            result = result[:-2]
+        return result
+
+    get_question_numbers.short_description = "Question Number"
 
     def responsible_person(self, obj):
         # Get novel food for this variant
@@ -95,7 +107,7 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         if contribution:
             user = contribution.user
             return user.first_name
-        
+
     responsible_person.short_description = "Responsible Person"
 
     actions = [duplicate_model]

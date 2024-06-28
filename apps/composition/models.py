@@ -6,7 +6,9 @@ from novel_food.models import NovelFood
 
 def validate_case_insensitive_parameter_title(value):
     if Parameter.objects.filter(
-        Q(title__iexact=value) | Q(vocab_id__name__iexact=value)
+        Q(title__iexact=value)
+        | Q(vocab_id__short_name__iexact=value)
+        | Q(vocab_id__extended_name__iexact=value)
     ).exists():
         raise ValidationError(
             "A parameter with this case-insensitive title already exists."
@@ -92,8 +94,20 @@ class NovelFoodVariant(models.Model):
     )
 
     def __str__(self) -> str:
+        novel_food_part = self.novel_food.title
+        novel_food_part += (
+            f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
+        )
         food_form_part = f" - {self.food_form}" if self.food_form else ""
-        return self.novel_food.title + food_form_part
+        question_number_part = ""
+        if questions := [
+            oq.question for oq in self.novel_food.opinion.opinionquestion_set.all()
+        ]:
+            question_number_part = " -"
+            for q in questions:
+                question_number_part += f"{q.number}, "
+            question_number_part = question_number_part[:-2]
+        return novel_food_part + food_form_part + question_number_part
 
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"

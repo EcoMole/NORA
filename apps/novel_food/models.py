@@ -357,8 +357,12 @@ class NovelFoodOrganism(models.Model):
 
 class NovelFoodChemical(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_com")
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE, db_column="id_study")
-    chemical = models.ForeignKey("Chemical", on_delete=models.CASCADE, db_column="id_com")
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
+    chemical = models.ForeignKey(
+        "Chemical", on_delete=models.CASCADE, db_column="id_com"
+    )
 
     class Meta:
         db_table = "STUDY_COM"
@@ -477,7 +481,10 @@ class ChemDescriptor(models.Model):
         help_text="contains e.g. the molecular formula itself if type is 'Molecular Formula', etc.",
     )
     chemical = models.ForeignKey(
-        Chemical, on_delete=models.CASCADE, related_name="chem_descriptors", db_column="id_com"
+        Chemical,
+        on_delete=models.CASCADE,
+        related_name="chem_descriptors",
+        db_column="id_com",
     )
 
     class Meta:
@@ -500,7 +507,9 @@ class ChemicalSyn(models.Model):
 
 class SubstanceOfConcernNovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_sub_of_concern_study")
-    novel_food = models.ForeignKey("NovelFood", on_delete=models.CASCADE, db_column="id_study")
+    novel_food = models.ForeignKey(
+        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+    )
     substance_of_concern = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -709,8 +718,8 @@ class NovelFood(models.Model):
     )
 
     def __str__(self) -> str:
-        nf_code_part = f"{self.nf_code} - " if self.nf_code else ""
-        return nf_code_part + self.title
+        nf_code_part = f" ({self.nf_code})" if self.nf_code else ""
+        return self.title + nf_code_part
 
     class Meta:
         db_table = "STUDY"
