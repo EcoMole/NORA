@@ -81,10 +81,9 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
     search_fields = ["novel_food__title", "novel_food__nf_code", "food_form__title"]
 
     def get_novel_food(self, obj):
-        nf_code_part = f" ({obj.novel_food.nf_code})" if obj.novel_food.nf_code else ""
-        return obj.novel_food.title + nf_code_part
+        return str(obj.novel_food)
 
-    get_novel_food.short_description = "Novel Food (NF code)"
+    get_novel_food.short_description = "Novel Food"
 
     def get_question_numbers(self, obj):
         result = ""

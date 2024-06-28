@@ -80,10 +80,10 @@ class Endpointstudy(models.Model):
     )
 
     def __str__(self) -> str:
-        res = self.novel_food.title
-        if self.test_type:
-            res += " - " + self.test_type.name
-        return res
+        test_type_part = f" - {self.test_type.name}" if self.test_type else ""
+        species_part = f" - {self.species.name}" if self.species else ""
+
+        return self.novel_food.title + test_type_part + species_part
 
     class Meta:
         db_table = "ENDPOINTSTUDY"
@@ -147,24 +147,8 @@ class Endpoint(models.Model):
             f" - {self.reference_point.name}" if self.reference_point else ""
         )
         lovalue_part = f" {self.lovalue}" if self.lovalue else ""
-        test_type_part = (
-            f" - {self.endpointstudy.test_type.name}"
-            if self.endpointstudy.test_type
-            else ""
-        )
-        species_part = (
-            f" - {self.endpointstudy.species.name}"
-            if self.endpointstudy.species
-            else ""
-        )
 
-        return (
-            self.endpointstudy.novel_food.title
-            + reference_point_part
-            + lovalue_part
-            + test_type_part
-            + species_part
-        )
+        return str(self.endpointstudy) + reference_point_part + lovalue_part
 
     class Meta:
         db_table = "ENDPOINT"
@@ -214,7 +198,7 @@ class FinalOutcome(models.Model):
         related_name="unit_final_outcomes",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
-    uncertainty_factor = models.IntegerField(
+    uncertainity_factor = models.IntegerField(
         null=True, blank=True, db_column="safety_factor"
     )
     remarks = models.TextField(
