@@ -97,15 +97,15 @@ class NovelFoodVariant(models.Model):
             f" ({self.novel_food.nf_code})" if self.novel_food.nf_code else ""
         )
         food_form_part = f" - {self.food_form}" if self.food_form else ""
-        questions_part = ""
+        question_number_part = ""
         if questions := [
             oq.question for oq in self.novel_food.opinion.opinionquestion_set.all()
         ]:
-            questions_part = " -"
+            question_number_part = " -"
             for q in questions:
-                questions_part += f" {q.number},"
-            questions_part = questions_part[:-1]
-        return novel_food_part + food_form_part + questions_part
+                question_number_part += f"{q.number}, "
+            question_number_part = question_number_part[:-2]
+        return novel_food_part + food_form_part + question_number_part
 
     class Meta:
         db_table = "NOVEL_FOOD_VARIANT"

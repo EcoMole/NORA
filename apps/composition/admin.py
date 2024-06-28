@@ -70,17 +70,33 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProductionNovelFoodVariantInline,
         RiskAssessRedFlagNFVariantInline,
     ]
-    list_display = ["nf_variant_str", "food_form", "responsible_person"]
+    readonly_fields = ("get_question_numbers",)
+    list_display_links = ["get_novel_food", "food_form"]
+    list_display = [
+        "get_novel_food",
+        "food_form",
+        "get_question_numbers",
+        "responsible_person",
+    ]
+    search_fields = ["novel_food__title", "novel_food__nf_code", "food_form__title"]
 
-    def nf_variant_str(self, obj):
-        return str(obj)
+    def get_novel_food(self, obj):
+        nf_code_part = f" ({obj.novel_food.nf_code})" if obj.novel_food.nf_code else ""
+        return obj.novel_food.title + nf_code_part
 
-    nf_variant_str.short_description = "NF Variant"
+    get_novel_food.short_description = "Novel Food (NF code)"
 
-    def food_form(self, obj):
-        return obj.food_form.title
+    def get_question_numbers(self, obj):
+        result = ""
+        if questions := [
+            oq.question for oq in obj.novel_food.opinion.opinionquestion_set.all()
+        ]:
+            for q in questions:
+                result += f"{q.number}, "
+            result = result[:-2]
+        return result
 
-    food_form.short_description = "Food form"
+    get_question_numbers.short_description = "Question Number"
 
     def responsible_person(self, obj):
         # Get novel food for this variant
