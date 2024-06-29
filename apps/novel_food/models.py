@@ -667,7 +667,9 @@ class NovelFood(models.Model):
         related_name="instability_concerns_novel_foods",
         help_text="(YESNO vocab)",
     )
-    shelflife_value = models.FloatField(blank=True, null=True)
+    shelflife_value = models.DecimalField(
+        max_digits=10, decimal_places=4, blank=True, null=True
+    )
     shelflife_unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,

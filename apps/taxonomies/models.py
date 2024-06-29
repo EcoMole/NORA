@@ -208,12 +208,16 @@ class Population(models.Model):
         verbose_name="Age Qualifier",
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
     )
-    value = models.FloatField(
+    value = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
         null=True,
         blank=True,
         verbose_name="Age Value",
     )
-    upper_range_value = models.FloatField(
+    upper_range_value = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
         null=True,
         blank=True,
         verbose_name="Age Upper Value",

@@ -55,7 +55,9 @@ class Endpointstudy(models.Model):
         related_name="sex_endpointstudies",
         help_text="(MTX vocab)",
     )
-    study_duration = models.FloatField(null=True, blank=True, db_column="exp_duration")
+    study_duration = models.DecimalField(
+        max_digits=10, decimal_places=4, null=True, blank=True, db_column="exp_duration"
+    )
     duration_unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -119,7 +121,9 @@ class Endpoint(models.Model):
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
         help_text="(QUALIFIER vocab)",
     )
-    lovalue = models.FloatField(null=True, blank=True)
+    lovalue = models.DecimalField(
+        max_digits=10, decimal_places=4, null=True, blank=True
+    )
     unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
@@ -183,7 +187,9 @@ class FinalOutcome(models.Model):
         limit_choices_to={"taxonomy__code": "QUALIFIER"},
         help_text="(QUALIFIER vocab)",
     )
-    value = models.FloatField(
+    value = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
         db_column="risk_value",
         null=True,
         blank=True,
