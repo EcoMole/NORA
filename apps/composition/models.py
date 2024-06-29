@@ -41,7 +41,6 @@ class Parameter(models.Model):
         unique=True,
         blank=False,
         null=False,
-        validators=[validate_case_insensitive_parameter_title],
         help_text="Parameter",
     )
     type = models.ForeignKey(
