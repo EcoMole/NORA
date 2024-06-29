@@ -228,9 +228,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Email
-ADMINS = config(
-    "ADMINS", cast=Csv(cast=Csv(post_process=tuple), delimiter=";"), default=""
-)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = config("EMAIL_HOST", default="localhost")
