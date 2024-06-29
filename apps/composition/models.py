@@ -1,4 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.functions import Lower
 from novel_food.models import NovelFood
 
 
@@ -60,6 +62,23 @@ class Parameter(models.Model):
         db_table = "PARAMETER"
         verbose_name = "Parameter"
         verbose_name_plural = "📂 Parameters"
+
+        constraints = [
+            models.UniqueConstraint(
+                Lower("title"), name="unique_title_case_insensitive"
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        if (
+            Parameter.objects.filter(title__iexact=self.title)
+            .exclude(pk=self.pk)
+            .exists()
+        ):
+            raise ValidationError(
+                f'A model instance with title "{self.title}" already exists.'
+            )
+        super().save(*args, **kwargs)
 
 
 class NovelFoodVariant(models.Model):
