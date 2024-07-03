@@ -313,11 +313,20 @@ class OrganismAdmin(admin.ModelAdmin):
         ),
         (
             "Taxonomy Information",
-            {"fields": ["get_vocab_tax_path", "get_custom_tax_path"]},
+            {
+                "fields": [
+                    "get_vocab_species_name",
+                    "get_vocab_tax_path",
+                    "get_custom_species_name",
+                    "get_custom_tax_path",
+                ]
+            },
         ),
     ]
     readonly_fields = [
+        "get_vocab_species_name",
         "get_vocab_tax_path",
+        "get_custom_species_name",
         "get_custom_tax_path",
     ]
     autocomplete_fields = [
@@ -339,23 +348,13 @@ class OrganismAdmin(admin.ModelAdmin):
 
     get_organism.short_description = "Species"
 
-    def get_custom_tax_path(self, obj):
-        result = ""
-        if species := obj.species_set.all():
-            for spec in species:
-                if spec.genus and spec.genus.family and spec.genus.family.org_type:
-                    result += (
-                        f"{spec.genus.title} < "
-                        f"{spec.genus.family.title} < "
-                        f"{spec.genus.family.org_type.title}"
-                    )
-                    result += "\n"
-            result = result[:-1]
-            return result
+    def get_vocab_species_name(self, obj):
+        if species_names := obj.vocab_id.implicit_attributes.filter(code="A01"):
+            return "\n".join(sn.value for sn in species_names)
         else:
-            return "-"
+            return "😢"
 
-    get_custom_tax_path.short_description = "Custom Taxonomy Path"
+    get_vocab_species_name.short_description = "Vocab Species Name / Scientific Name"
 
     def get_vocab_tax_path(self, obj):
         if ancestors := obj.vocab_id.get_significant_ancestors():
@@ -375,6 +374,38 @@ class OrganismAdmin(admin.ModelAdmin):
             return "😢"
 
     get_vocab_tax_path.short_description = "Vocab Taxonomy Path"
+
+    def get_custom_species_name(self, obj):
+        if species := obj.species_set.all():
+            return "\n".join([f"{s.name} ({s.scientific_name})" for s in species])
+        return "-"
+
+    get_custom_species_name.short_description = "Custom Species Name (Scientific Name)"
+
+    def get_custom_tax_path(self, obj):
+        if species := obj.species_set.all():
+            result = ""
+            for spec in species:
+                result += spec.name if spec.name else "-"
+                result += (
+                    f" ({spec.scientific_name})" if spec.scientific_name else " (-)"
+                )
+                result += f" < {spec.genus.title}" if spec.genus else " < -"
+                result += (
+                    f" < {spec.genus.family.title}" if spec.genus.family else " < -"
+                )
+                result += (
+                    f" < {spec.genus.family.org_type.title}"
+                    if spec.genus.family.org_type
+                    else " < -"
+                )
+                result += "\n"
+            result = result[:-1]
+            return result
+        else:
+            return "-"
+
+    get_custom_tax_path.short_description = "Custom Taxonomy Path"
 
 
 @admin.register(OrgType)

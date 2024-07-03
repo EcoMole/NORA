@@ -181,8 +181,8 @@ class OrgType(models.Model):
 
     class Meta:
         db_table = "ORG_TYPE"
-        verbose_name = "Organism Type (taxonomy)"
-        verbose_name_plural = "📂 Organism Types (taxonomy)"
+        verbose_name = "Organism Type (custom taxonomy)"
+        verbose_name_plural = "📂 Organism Types (custom taxonomy)"
 
 
 class Family(models.Model):
@@ -202,8 +202,8 @@ class Family(models.Model):
 
     class Meta:
         db_table = "FAMILY"
-        verbose_name = "Family (taxonomy)"
-        verbose_name_plural = "📂 Families (taxonomy)"
+        verbose_name = "Family (custom taxonomy)"
+        verbose_name_plural = "📂 Families (custom taxonomy)"
 
 
 class Genus(models.Model):
@@ -218,8 +218,8 @@ class Genus(models.Model):
 
     class Meta:
         db_table = "GENUS"
-        verbose_name = "Genus (taxonomy)"
-        verbose_name_plural = "📂 Genera (taxonomy)"
+        verbose_name = "Genus (custom taxonomy)"
+        verbose_name_plural = "📂 Genera (custom taxonomy)"
 
 
 class Organism(models.Model):
@@ -280,8 +280,8 @@ class Species(models.Model):
 
     class Meta:
         db_table = "SPECIES"
-        verbose_name = "Species (taxonomy)"
-        verbose_name_plural = "📂 Species (taxonomy)"
+        verbose_name = "Species (custom taxonomy)"
+        verbose_name_plural = "📂 Species (custom taxonomy)"
 
 
 class NovelFoodOrganism(models.Model):
