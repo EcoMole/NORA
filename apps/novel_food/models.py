@@ -668,7 +668,7 @@ class NovelFood(models.Model):
         help_text="(YESNO vocab)",
     )
     shelflife_value = models.DecimalField(
-        max_digits=10, decimal_places=4, blank=True, null=True
+        max_digits=10, decimal_places=1, blank=True, null=True
     )
     shelflife_unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",

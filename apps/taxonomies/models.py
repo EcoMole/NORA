@@ -18,7 +18,9 @@ class Taxonomy(models.Model):
 
 
 class TaxonomyNode(MPTTModel, SyncMixin):
-    code = models.CharField(max_length=100, db_index=True)
+    code = models.CharField(
+        max_length=100, db_index=True, help_text="if creating new record use: NORA"
+    )
 
     taxonomy = models.ForeignKey(
         "Taxonomy", null=True, blank=False, on_delete=models.CASCADE
@@ -209,14 +211,14 @@ class Population(models.Model):
     )
     value = models.DecimalField(
         max_digits=10,
-        decimal_places=4,
+        decimal_places=1,
         null=True,
         blank=True,
         verbose_name="Age Value",
     )
     upper_range_value = models.DecimalField(
         max_digits=10,
-        decimal_places=4,
+        decimal_places=1,
         null=True,
         blank=True,
         verbose_name="Age Upper Value",
