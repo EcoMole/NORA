@@ -31,6 +31,8 @@ from novel_food.models import (
 from taxonomies.util import Descriptor
 from util.admin_utils import duplicate_model
 
+from extractor.models import FreqUsedVocabNode
+
 # from allergenicity.models import  Allergenicity
 
 
@@ -221,6 +223,12 @@ class NovelFoodAdmin(admin.ModelAdmin):
                 "fields": [("outcome", "outcome_remarks")],
             },
         ),
+        (
+            "extractor help texts",
+            {
+                "fields": [("get_org_part_tax_nodes")],
+            },
+        ),
     ]
 
     def opinion_doi(self, obj):
@@ -243,12 +251,24 @@ class NovelFoodAdmin(admin.ModelAdmin):
 
     status.short_description = "Status"
 
+    def get_org_part_tax_nodes(self, obj):
+        code_listings = FreqUsedVocabNode.objects.filter(field="org_part")
+        code_listings_display = []
+        for cl in code_listings:
+            cl_display = f"{cl.node.code} - {cl.node.name}"
+            cl_display += f" -- {cl.remarks}" if cl.remarks else ""
+            code_listings_display.append(cl_display)
+        return "\n".join(code_listings_display)
+
+    get_org_part_tax_nodes.short_description = "frequently used ORG PARTs"
+
     search_fields = [
         "nf_code",
         "title",
         "vocab_id__short_name",
         "vocab_id__extended_name",
     ]
+    readonly_fields = ["get_org_part_tax_nodes"]
     autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
     inlines = [
         SubstanceOfConcernNovelFoodInline,

@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "novel_food.apps.NovelFoodConfig",
     "taxonomies.apps.TaxonomiesConfig",
     "studies.apps.StudiesConfig",
+    "extractor.apps.ExtractorConfig",
     # Django's built-in apps
     "django.contrib.auth",
     "django.contrib.contenttypes",
