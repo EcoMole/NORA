@@ -352,7 +352,9 @@ class OrganismAdmin(admin.ModelAdmin):
         else:
             return "😢"
 
-    get_vocab_species_name.short_description = "Vocab Species Name / Scientific Name"
+    get_vocab_species_name.short_description = (
+        "Vocab Species Name or Vocab Scientific Name"
+    )
 
     def get_vocab_tax_path(self, obj):
         if ancestors := obj.vocab_id.get_significant_ancestors():
@@ -375,33 +377,36 @@ class OrganismAdmin(admin.ModelAdmin):
 
     def get_custom_species_name(self, obj):
         if species := obj.species_set.all():
-            return "\n".join([f"{s.name} ({s.scientific_name})" for s in species])
+            return "\n".join(
+                f"{s.name} - {s.scientific_name}" if s.scientific_name else s.name
+                for s in species
+            )
         return "-"
 
-    get_custom_species_name.short_description = "Custom Species Name (Scientific Name)"
+    get_custom_species_name.short_description = (
+        "Custom Species Name - Custom Scientific Name"
+    )
 
     def get_custom_tax_path(self, obj):
-        if species := obj.species_set.all():
-            result = ""
-            for spec in species:
-                result += spec.name if spec.name else "-"
-                result += (
-                    f" ({spec.scientific_name})" if spec.scientific_name else " (-)"
-                )
-                result += f" < {spec.genus.title}" if spec.genus else " < -"
-                result += (
-                    f" < {spec.genus.family.title}" if spec.genus.family else " < -"
-                )
-                result += (
-                    f" < {spec.genus.family.org_type.title}"
-                    if spec.genus.family.org_type
-                    else " < -"
-                )
-                result += "\n"
-            result = result[:-1]
-            return result
-        else:
+        species = obj.species_set.all()
+        if not species:
             return "-"
+
+        results = []
+        for s in species:
+            parts = [
+                s.name if s.name else "",
+                " - " if s.name and s.scientific_name else "",
+                s.scientific_name if s.scientific_name else "",
+                f" < {s.genus.title}" if s.genus else " < -",
+                f" < {s.genus.family.title}" if s.genus.family else " < -",
+                f" < {s.genus.family.org_type.title}"
+                if s.genus.family.org_type
+                else " < -",
+            ]
+            results.append("".join(parts))
+
+        return "\n".join(results)
 
     get_custom_tax_path.short_description = "Custom Taxonomy Path"
 
