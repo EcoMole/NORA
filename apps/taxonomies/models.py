@@ -171,7 +171,6 @@ class ExtendedTaxonomyNodeInformation(models.Model):
 
     key = models.CharField(max_length=3)
     index = models.IntegerField()
-
     value = models.CharField(max_length=25500)
 
 

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.postgres.aggregates import ArrayAgg
+from django.db.models import Q
 
 # Register your models here.
 from taxonomies.models import (
@@ -62,7 +64,20 @@ class TaxonomyAdmin(admin.ModelAdmin):
 @admin.register(TaxonomyNode)
 class TaxonomyNodeAdmin(admin.ModelAdmin):
     list_display = ["code", "name", "taxonomy"]
-    search_fields = ["code", "short_name", "extended_name"]
+    search_fields = ["code", "short_name", "extended_name", "scientific_names"]
     fields = ["code", "short_name", "extended_name", "taxonomy"]
     list_filter = ["taxonomy"]
     actions = [duplicate_model]
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .annotate(
+                scientific_names=ArrayAgg(
+                    "implicit_attributes__value",
+                    filter=Q(implicit_attributes__code="A01"),
+                    distinct=True,
+                )
+            )
+        )
