@@ -241,14 +241,14 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         "qualifier",
         "value",
         "unit",
-        "uncertainity_factor",
+        "uncertainty_factor",
     ]
     list_display_links = [
         "get_outcome",
         "qualifier",
         "value",
         "unit",
-        "uncertainity_factor",
+        "uncertainty_factor",
     ]
 
     search_fields = [
@@ -270,7 +270,7 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         "outcome__extended_name",
         "outcome__code",
         "value",
-        "uncertainity_factor",
+        "uncertainty_factor",
         "remarks",
     ]
     autocomplete_fields = ["outcome", "qualifier", "unit", "endpoint"]

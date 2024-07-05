@@ -79,7 +79,7 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
             {
                 "fields": [
                     "cell_culture",
-                    "are_the_cells_modified",
+                    "cells_modified",
                 ],
                 "classes": ["collapse"],
             },
@@ -167,14 +167,13 @@ class NovelFoodAdmin(admin.ModelAdmin):
         "status",
     ]
     list_display_links = ["nf_code", "title", "outcome", "responsible_person", "status"]
-    # form = NovelFoodForm
     fieldsets = [
         (
             "General Information",
             {"fields": ["opinion", "title", "nf_code", "vocab_id"]},
         ),
         (
-            "TOXICITY",
+            "TOXICOLOGY",
             {
                 "fields": [
                     "tox_study_required",

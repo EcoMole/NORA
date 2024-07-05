@@ -136,6 +136,7 @@ class ProductionNovelFoodVariant(models.Model):
         limit_choices_to={"taxonomy__code": "MTX"},
         help_text="(MTX vocab)",
         db_column="id_process",
+        verbose_name="Process Step",
     )
 
     def __str__(self):
@@ -144,7 +145,7 @@ class ProductionNovelFoodVariant(models.Model):
     class Meta:
         db_table = "PRODUCTION_NF_VARIANT"
         verbose_name = "Production Process"
-        verbose_name_plural = "Production Processes"
+        verbose_name_plural = "Production Process"
 
 
 class FoodForm(models.Model):
@@ -234,6 +235,10 @@ class Composition(models.Model):
     def __str__(self):
         return ""
 
+    class Meta:
+        verbose_name = "Composition"
+        verbose_name_plural = "Composition"
+
 
 class ProposedUse(models.Model):
     USE_CHOICES = [
@@ -265,10 +270,15 @@ class ProposedUse(models.Model):
         on_delete=models.SET_NULL,
         related_name="population_proposed_uses",
         db_column="id_age",
+        verbose_name="Target Population",
     )
 
     def __str__(self):
         return ""
+
+    class Meta:
+        verbose_name = "Proposed Use"
+        verbose_name_plural = "Proposed Use"
 
 
 class RiskAssessRedFlag(models.Model):
@@ -306,6 +316,7 @@ class RiskAssessRedFlagNFVariant(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_risk_assess_red_flag",
+        verbose_name="Red Flag",
     )
 
     def __str__(self):

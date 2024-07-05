@@ -198,6 +198,7 @@ class Population(models.Model):
         on_delete=models.SET_NULL,
         related_name="subgroup_populations",
         db_column="id_subgroup",
+        verbose_name="Target Population",
     )
     qualifier = models.ForeignKey(
         TaxonomyNode,
@@ -221,7 +222,7 @@ class Population(models.Model):
         decimal_places=1,
         null=True,
         blank=True,
-        verbose_name="Age Upper Value",
+        verbose_name="Age Upper Range Value",
         help_text="only if there is upper range value for age",
     )
     unit = models.ForeignKey(

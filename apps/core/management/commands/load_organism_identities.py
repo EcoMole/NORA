@@ -107,7 +107,7 @@ class Command(BaseCommand):
             nf_organism.cell_culture = row["cell culture"]
 
         if not pd.isna(row["cell culture modified"]):
-            nf_organism.are_the_cells_modified = TaxonomyNode.objects.get(
+            nf_organism.cells_modified = TaxonomyNode.objects.get(
                 code=row["cell culture modified"], taxonomy__code="YESNO"
             )
 

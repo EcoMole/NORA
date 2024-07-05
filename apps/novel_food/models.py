@@ -33,8 +33,8 @@ class AllergenicityNovelFood(models.Model):
 
     class Meta:
         db_table = "ALLERGENICITY_NOVEL_FOOD"
-        verbose_name = "Allergenicity Assignment"
-        verbose_name_plural = "Allergenicity Assignments"
+        verbose_name = "Allergenicity"
+        verbose_name_plural = "Allergenicity"
 
 
 class FoodCategory(models.Model):
@@ -157,7 +157,10 @@ class SynonymType(models.Model):
 class NovelFoodSyn(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_syn")
     syn_type = models.ForeignKey(
-        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+        SynonymType,
+        on_delete=models.CASCADE,
+        db_column="id_syn",
+        verbose_name="Synonym Type",
     )
     novel_food = models.ForeignKey(
         "NovelFood", on_delete=models.CASCADE, db_column="id_study"
@@ -248,7 +251,10 @@ class Organism(models.Model):
 class OrganismSyn(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_org_syn")
     syn_type = models.ForeignKey(
-        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+        SynonymType,
+        on_delete=models.CASCADE,
+        db_column="id_syn",
+        verbose_name="Synonym Type",
     )
     organism = models.ForeignKey(Organism, on_delete=models.CASCADE, db_column="id_org")
     title = models.CharField(max_length=255, db_column="org_syn")
@@ -333,20 +339,18 @@ class NovelFoodOrganism(models.Model):
         "microorganism. (YESNO vocab)",
     )
     cell_culture = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
+        max_length=255, blank=True, null=True, verbose_name="Cell Type (Cell Culture)"
     )
-    are_the_cells_modified = models.ForeignKey(
+    cells_modified = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="are_the_cells_modified_novel_foods",
+        related_name="cells_modified_novel_foods",
         limit_choices_to={"taxonomy__code": "YESNO"},
-        verbose_name="is the cell culture modified",
-        db_column="id_are_the_cells_modified",
-        help_text="Is the cell culture modified? (YESNO vocab)",
+        verbose_name="Cells Modified? (Cell Culture)",
+        db_column="id_cells_modified",
+        help_text="(YESNO vocab)",
     )
 
     class Meta:
@@ -495,7 +499,10 @@ class ChemDescriptor(models.Model):
 class ChemicalSyn(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_com_syn")
     syn_type = models.ForeignKey(
-        SynonymType, on_delete=models.CASCADE, db_column="id_syn"
+        SynonymType,
+        on_delete=models.CASCADE,
+        db_column="id_syn",
+        verbose_name="Synonym Type",
     )
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE, db_column="id_com")
     title = models.CharField(max_length=255, db_column="com_syn")
@@ -579,7 +586,11 @@ class NovelFood(models.Model):
         help_text="if novel food has specific toxicity, specify which one. (TOXICITY vocab)",
     )
     tox_study_required = models.CharField(
-        choices=TOX_STUDY_REQUIRED_CHOICES, max_length=255, blank=True, null=True
+        choices=TOX_STUDY_REQUIRED_CHOICES,
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Toxicology Required",
     )
     genotox_final_outcome = models.ForeignKey(
         GenotoxFinalOutcome,
@@ -588,6 +599,7 @@ class NovelFood(models.Model):
         null=True,
         db_column="id_is_genotoxic",
         related_name="genotox_final_outcome_novel_foods",
+        verbose_name="Genotoxicity Final Outcome",
     )
     final_toxicology_remarks = models.TextField(
         blank=True,
@@ -622,7 +634,7 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         db_column="id_has_nutri_disadvantage",
-        verbose_name="has Nutritional Disadvantage",
+        verbose_name="Nutritionally Disadvantageous",
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         related_name="has_nutri_disadvantage_novel_foods",
@@ -631,7 +643,7 @@ class NovelFood(models.Model):
     nutri_disadvantage_explanation = models.TextField(
         blank=True,
         null=True,
-        verbose_name="if Nutritional Disadvantage Explain Why",
+        verbose_name="Reason For Disadvantage",
         help_text="explanation in case the Novel Food has a nutritional disadvantage",
     )
 
@@ -668,7 +680,11 @@ class NovelFood(models.Model):
         help_text="(YESNO vocab)",
     )
     shelflife_value = models.DecimalField(
-        max_digits=10, decimal_places=1, blank=True, null=True
+        max_digits=10,
+        decimal_places=1,
+        blank=True,
+        null=True,
+        verbose_name="Shelf Life Value",
     )
     shelflife_unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -678,6 +694,7 @@ class NovelFood(models.Model):
         limit_choices_to={"taxonomy__code": "UNIT"},
         db_column="id_shelflife_unit",
         related_name="shelflife_unit_novel_foods",
+        verbose_name="Shelf Life Unit",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     endocrine_disrupt_prop = models.ForeignKey(
@@ -687,12 +704,16 @@ class NovelFood(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"taxonomy__code": "YESNO"},
         db_column="id_has_endocrine_disrupt_prop",
-        verbose_name="has endocrine disrupt properties",
+        verbose_name="Endocrine Disrupting Properties",
         related_name="endocrine_disrupt_prop_novel_foods",
         help_text="(YESNO vocab)",
     )
     outcome = models.CharField(
-        max_length=255, blank=True, null=True, choices=OUTCOME_CHOICES
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=OUTCOME_CHOICES,
+        verbose_name="Opinion Outcome",
     )
     outcome_remarks = models.TextField(
         blank=True,
@@ -746,6 +767,7 @@ class BackgroundExposureAssessment(models.Model):
         db_column="id_comp_of_interest",
         limit_choices_to={"taxonomy__code": "PARAM"},
         help_text="Compound of interest (PARAM vocab)",
+        verbose_name="Compound Assessed",
     )
 
     def __str__(self) -> str:
@@ -754,6 +776,7 @@ class BackgroundExposureAssessment(models.Model):
     class Meta:
         db_table = "BG_EXPO_ASSESSMENT"
         verbose_name = "Background exposure assessment"
+        verbose_name_plural = "Background exposure assessment"
 
 
 class HBGV(models.Model):
@@ -793,6 +816,7 @@ class HBGV(models.Model):
         limit_choices_to={"taxonomy__code": "YESNO"},
         db_column="id_exceeded",
         help_text="(YESNO vocab)",
+        verbose_name="Exceedance",
     )
 
     def __str__(self):

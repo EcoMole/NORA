@@ -89,8 +89,8 @@ class Panel(models.Model):
 
     class Meta:
         db_table = "PANEL"
-        verbose_name = "Panel"
-        verbose_name_plural = "📂 Panels"
+        verbose_name = "EFSA Panel"
+        verbose_name_plural = "📂 EFSA Panels"
 
 
 class OpinionPanel(models.Model):
@@ -111,6 +111,7 @@ class OpinionPanel(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_panel",
+        verbose_name="EFSA Panel",
     )
 
     def __str__(self) -> str:
@@ -118,6 +119,8 @@ class OpinionPanel(models.Model):
 
     class Meta:
         db_table = "OP_AUTHOR"
+        verbose_name = "EFSA Panel"
+        verbose_name_plural = "📂 EFSA Panels"
         constraints = [
             models.UniqueConstraint(
                 fields=["opinion", "panel"], name="unique_opinion_panel"
@@ -186,6 +189,7 @@ class OpinionQuestion(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_question",
+        verbose_name="Question Number",
     )
 
     def __str__(self) -> str:
@@ -193,6 +197,8 @@ class OpinionQuestion(models.Model):
 
     class Meta:
         db_table = "OP_QUESTION"
+        verbose_name = "Question"
+        verbose_name_plural = "📂 Questions"
         constraints = [
             models.UniqueConstraint(
                 fields=["opinion", "question"], name="unique_opinion_question"
@@ -234,6 +240,7 @@ class OpinionSciOfficer(models.Model):
         blank=False,
         null=False,
         on_delete=models.CASCADE,
+        verbose_name="Scientific Officer",
     )
 
     def __str__(self) -> str:
@@ -241,6 +248,8 @@ class OpinionSciOfficer(models.Model):
 
     class Meta:
         db_table = "OP_SCI_OFFICER"
+        verbose_name = "Scientific Officer"
+        verbose_name_plural = "📂 Scientific Officers"
         constraints = [
             models.UniqueConstraint(
                 fields=["opinion", "sci_officer"], name="unique_opinion_sci_officer"

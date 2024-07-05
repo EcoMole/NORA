@@ -122,7 +122,7 @@ class Endpoint(models.Model):
         help_text="(QUALIFIER vocab)",
     )
     lovalue = models.DecimalField(
-        max_digits=10, decimal_places=4, null=True, blank=True
+        max_digits=10, decimal_places=4, null=True, blank=True, verbose_name="Value"
     )
     unit = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -204,7 +204,7 @@ class FinalOutcome(models.Model):
         related_name="unit_final_outcomes",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
-    uncertainity_factor = models.IntegerField(
+    uncertainty_factor = models.IntegerField(
         null=True, blank=True, db_column="safety_factor"
     )
     remarks = models.TextField(
@@ -429,5 +429,5 @@ class Genotox(models.Model):
 
     class Meta:
         db_table = "GENOTOX"
-        verbose_name = "Genotox Study 🔬🧬"
-        verbose_name_plural = "Genotox Studies 🔬🧬"
+        verbose_name = "Genotoxicity Study 🔬🧬"
+        verbose_name_plural = "Genotoxicity Studies 🔬🧬"
