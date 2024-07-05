@@ -189,8 +189,10 @@ class NovelFoodAdmin(admin.ModelAdmin):
                 "fields": [
                     "protein_digestibility",
                     "antinutritional_factors",
-                    "has_nutri_disadvantage",
-                    "nutri_disadvantage_explanation",
+                    (
+                        "has_nutri_disadvantage",
+                        "nutri_disadvantage_explanation",
+                    ),
                 ],
             },
         ),

@@ -43,6 +43,22 @@ class ADMEInvestigationTypeInline(admin.TabularInline):
 @admin.register(Endpointstudy)
 class EndpointstudyAdmin(admin.ModelAdmin):
     list_display = ["get_novel_food", "test_type", "species", "study_source"]
+    fields = [
+        "novel_food",
+        "test_type",
+        "guideline_qualifier",
+        "guideline",
+        "species",
+        "sex",
+        (
+            "study_duration",
+            "duration_unit",
+        ),
+        "study_source",
+        "remarks",
+        "test_material",
+    ]
+
     list_display_links = ["test_type", "species", "study_source"]
     search_fields = [
         "novel_food__title",
@@ -90,6 +106,16 @@ class EndpointAdmin(admin.ModelAdmin):
         "qualifier",
         "lovalue",
         "unit",
+        "subpopulation",
+    ]
+    fields = [
+        "endpointstudy",
+        "reference_point",
+        "qualifier",
+        (
+            "lovalue",
+            "unit",
+        ),
         "subpopulation",
     ]
     list_display_links = [
@@ -249,6 +275,17 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         "value",
         "unit",
         "uncertainty_factor",
+    ]
+    fields = [
+        "endpoint",
+        "outcome",
+        "qualifier",
+        (
+            "value",
+            "unit",
+        ),
+        "uncertainty_factor",
+        "remarks",
     ]
 
     search_fields = [

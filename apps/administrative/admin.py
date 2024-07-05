@@ -66,7 +66,14 @@ class OpinionAdmin(admin.ModelAdmin):
         "adoption_date",
         "pdf_link",
         "responsible_person",
-        "status"
+        "status",
+    ]
+    list_display_links = [
+        "title",
+        "publication_date",
+        "adoption_date",
+        "responsible_person",
+        "status",
     ]
     search_fields = ["title", "doi"]
     list_filter = ["publication_date"]
@@ -91,16 +98,15 @@ class OpinionAdmin(admin.ModelAdmin):
         if contribution:
             user = contribution.user
             return user.first_name
-        
+
     responsible_person.short_description = "Responsible Person"
 
     def status(self, obj):
         contribution = Contribution.objects.filter(opinion=obj).first()
         if contribution:
             return contribution.status
-        
-    status.short_description = "Status"
 
+    status.short_description = "Status"
 
 
 @admin.register(Question)

@@ -28,9 +28,11 @@ class PopulationAdmin(admin.ModelAdmin):
     fields = [
         "subgroup",
         "qualifier",
-        "value",
-        "upper_range_value",
-        "unit",
+        (
+            "value",
+            "upper_range_value",
+            "unit",
+        ),
     ]
     list_filter = [
         "subgroup",
