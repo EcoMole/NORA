@@ -272,6 +272,9 @@ class ProposedUse(models.Model):
         db_column="id_age",
         verbose_name="Target Population",
     )
+    remarks = models.TextField(
+        blank=True, null=True, help_text="Can be used for comments on the population."
+    )
 
     def __str__(self):
         return ""

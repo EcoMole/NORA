@@ -264,14 +264,12 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         "get_endpointstudy",
         "get_endpoint",
         "get_outcome",
-        "qualifier",
         "value",
         "unit",
         "uncertainty_factor",
     ]
     list_display_links = [
         "get_outcome",
-        "qualifier",
         "value",
         "unit",
         "uncertainty_factor",
@@ -327,9 +325,11 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
             f" {obj.endpoint.qualifier.name}" if obj.endpoint.qualifier else ""
         )
         lovalue_part = f" {obj.endpoint.lovalue}" if obj.endpoint.lovalue else ""
-        unit_part = f" {obj.endpoint.unit}" if obj.endpoint.unit else ""
+        unit_part = f" {obj.endpoint.unit.name}" if obj.endpoint.unit else ""
         subpopulation_part = (
-            f" {obj.endpoint.subpopulation.name}" if obj.endpoint.subpopulation else ""
+            f" - {obj.endpoint.subpopulation.name}"
+            if obj.endpoint.subpopulation
+            else ""
         )
         return (
             reference_point_part

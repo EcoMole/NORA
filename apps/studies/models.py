@@ -151,8 +151,16 @@ class Endpoint(models.Model):
             f" - {self.reference_point.name}" if self.reference_point else ""
         )
         lovalue_part = f" {self.lovalue}" if self.lovalue else ""
+        subpopulation_part = (
+            f" - {self.subpopulation.name}" if self.subpopulation else ""
+        )
 
-        return str(self.endpointstudy) + reference_point_part + lovalue_part
+        return (
+            str(self.endpointstudy)
+            + reference_point_part
+            + lovalue_part
+            + subpopulation_part
+        )
 
     class Meta:
         db_table = "ENDPOINT"
