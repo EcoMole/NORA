@@ -265,15 +265,16 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         "get_endpoint",
         "get_outcome",
         "value",
-        "unit",
         "uncertainty_factor",
+        "get_populations",
     ]
     list_display_links = [
         "get_outcome",
         "value",
-        "unit",
         "uncertainty_factor",
+        "get_populations",
     ]
+    readonly_fields = ["get_populations"]
     fields = [
         "endpoint",
         "outcome",
@@ -316,6 +317,11 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         return str(obj.endpoint.endpointstudy)
 
     get_endpointstudy.short_description = "Endpoint Study"
+
+    def get_populations(self, obj):
+        return "; ".join([str(p.population) for p in obj.populations.all()])
+
+    get_populations.short_description = "Populations"
 
     def get_endpoint(self, obj):
         reference_point_part = (
