@@ -1,6 +1,8 @@
 from core.models import Contribution
+from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from util.admin_utils import duplicate_model
 
 from .models import (
@@ -16,6 +18,16 @@ from .models import (
     QuestionApplicant,
     ScientificOfficer,
 )
+
+
+class AdminURLWidget(forms.URLInput):
+    """if clicked on the field (url link) it will open in new tab"""
+
+    def render(self, name, value, attrs=None, renderer=None):
+        if value:
+            return mark_safe(f'<a href="{value}" target="_blank">{value}</a>')
+        else:
+            return super().render(name, value, attrs, renderer)
 
 
 class MandateInline(admin.TabularInline):
@@ -85,6 +97,12 @@ class OpinionAdmin(admin.ModelAdmin):
         OPScientificOfficerInline,
     ]
     actions = [duplicate_model]
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        """uses AdminURLWidget for the `url` field"""
+        if db_field.name == "url":
+            kwargs["widget"] = AdminURLWidget
+        return super().formfield_for_dbfield(db_field, **kwargs)
 
     def pdf_link(self, obj):
         if obj.pdf:
