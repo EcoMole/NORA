@@ -66,12 +66,21 @@ class TaxonomyAdmin(admin.ModelAdmin):
 @admin.register(TaxonomyNode)
 class TaxonomyNodeAdmin(admin.ModelAdmin):
     list_display = ["code", "name", "taxonomy"]
-    search_fields = ["code", "short_name", "extended_name", "scientific_names"]
+    search_fields = [
+        "code",
+        "short_name",
+        "extended_name",
+        "scientific_names",
+        "chem_descriptors",
+    ]
     fields = ["code", "short_name", "extended_name", "taxonomy"]
     list_filter = ["taxonomy"]
     actions = [duplicate_model]
 
     def get_queryset(self, request):
+        # annotating TaxnonomyNode queryset with scientific_names and chem_descriptors so
+        # that the user can search for TaxonomyNode instance by scientific name or
+        # chem descriptor(molecular formula or CAS number), if available.
         return (
             super()
             .get_queryset(request)
@@ -80,6 +89,12 @@ class TaxonomyNodeAdmin(admin.ModelAdmin):
                     "implicit_attributes__value",
                     filter=Q(implicit_attributes__code="A01"),
                     distinct=True,
-                )
+                ),
+                chem_descriptors=ArrayAgg(
+                    "implicit_attributes__value",
+                    filter=Q(implicit_attributes__code="CAS")
+                    | Q(implicit_attributes__code="MOLECULAR_FORMULA"),
+                    distinct=True,
+                ),
             )
         )
