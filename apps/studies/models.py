@@ -1,8 +1,7 @@
 from django.db import models
-from util.model_utils import DuplicateRelatedMixin
 
 
-class Endpointstudy(DuplicateRelatedMixin, models.Model):
+class Endpointstudy(models.Model):
     duplicate_related = ["endpoints"]
 
     id = models.AutoField(primary_key=True, db_column="id_tox")
@@ -171,7 +170,7 @@ class Endpoint(models.Model):
         verbose_name_plural = "📂 Endpoints"
 
 
-class FinalOutcome(DuplicateRelatedMixin, models.Model):
+class FinalOutcome(models.Model):
     duplicate_related = ["populations"]
 
     id = models.AutoField(primary_key=True, db_column="id_hazard")
@@ -303,7 +302,7 @@ class StudySource(models.Model):
         verbose_name_plural = "Study Sources"
 
 
-class ADME(DuplicateRelatedMixin, models.Model):
+class ADME(models.Model):
     duplicate_related = ["investigation_types"]
 
     id = models.AutoField(primary_key=True, db_column="id_pktkade")

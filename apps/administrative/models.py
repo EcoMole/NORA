@@ -1,8 +1,7 @@
 from django.db import models
-from util.model_utils import DuplicateRelatedMixin
 
 
-class Opinion(DuplicateRelatedMixin, models.Model):
+class Opinion(models.Model):
     OUTCOME_CHOICES = [
         ("positive", "Positive"),
         ("negative", "Negative"),
@@ -54,7 +53,7 @@ class Opinion(DuplicateRelatedMixin, models.Model):
         verbose_name_plural = "Opinions 📄"
 
 
-class Question(DuplicateRelatedMixin, models.Model):
+class Question(models.Model):
     duplicate_related = ["applicants", "mandates"]
 
     id = models.AutoField(primary_key=True, db_column="id_question")

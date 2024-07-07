@@ -2,7 +2,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from novel_food.models import NovelFood
-from util.model_utils import DuplicateRelatedMixin
 
 
 def validate_case_insensitive_parameter_title(value):
@@ -77,7 +76,7 @@ class Parameter(models.Model):
         verbose_name_plural = "📂 Parameters"
 
 
-class NovelFoodVariant(DuplicateRelatedMixin, models.Model):
+class NovelFoodVariant(models.Model):
     duplicate_related = [
         "productions",
         "compositions",

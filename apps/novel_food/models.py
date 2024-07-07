@@ -1,7 +1,6 @@
 from administrative.models import Opinion
 from django.db import models
 from taxonomies.util import Descriptor
-from util.model_utils import DuplicateRelatedMixin
 
 
 class Allergenicity(models.Model):
@@ -236,7 +235,7 @@ class Genus(models.Model):
         verbose_name_plural = "📂 Genera (custom taxonomy)"
 
 
-class Organism(DuplicateRelatedMixin, models.Model):
+class Organism(models.Model):
     duplicate_related = ["species", "synonyms"]
 
     id = models.AutoField(primary_key=True, db_column="id_org")
@@ -424,7 +423,7 @@ class StructureReported(models.Model):
         verbose_name_plural = "📂 Structures reported (future use)"
 
 
-class Chemical(DuplicateRelatedMixin, models.Model):
+class Chemical(models.Model):
     duplicate_related = ["chem_descriptors", "synonyms"]
 
     id = models.AutoField(primary_key=True, db_column="id_com")
@@ -580,7 +579,7 @@ class GenotoxFinalOutcome(models.Model):
         verbose_name_plural = "Genotoxicity final outcomes"
 
 
-class NovelFood(DuplicateRelatedMixin, models.Model):
+class NovelFood(models.Model):
     OUTCOME_CHOICES = [
         ("negative", "Negative"),
         ("partially_negative", "Partially Negative"),
