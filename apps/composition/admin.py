@@ -87,9 +87,7 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
 
     def get_question_numbers(self, obj):
         result = ""
-        if questions := [
-            oq.question for oq in obj.novel_food.opinion.opinionquestion_set.all()
-        ]:
+        if questions := [oq.question for oq in obj.novel_food.opinion.questions.all()]:
             for q in questions:
                 result += f"{q.number}, "
             result = result[:-2]
@@ -137,7 +135,6 @@ class ParameterAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title"]
     list_filter = ["type"]
-    actions = [duplicate_model]
     autocomplete_fields = ["vocab_id"]
 
 

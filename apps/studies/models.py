@@ -1,7 +1,10 @@
 from django.db import models
+from util.model_utils import DuplicateRelatedMixin
 
 
-class Endpointstudy(models.Model):
+class Endpointstudy(DuplicateRelatedMixin, models.Model):
+    duplicate_related = ["endpoints"]
+
     id = models.AutoField(primary_key=True, db_column="id_tox")
     novel_food = models.ForeignKey(
         "novel_food.NovelFood", on_delete=models.CASCADE, db_column="id_study"
@@ -99,7 +102,7 @@ class Endpoint(models.Model):
         Endpointstudy,
         on_delete=models.CASCADE,
         db_column="id_tox",
-        related_name="endpointstudy_endpoints",
+        related_name="endpoints",
     )
     reference_point = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -168,7 +171,9 @@ class Endpoint(models.Model):
         verbose_name_plural = "📂 Endpoints"
 
 
-class FinalOutcome(models.Model):
+class FinalOutcome(DuplicateRelatedMixin, models.Model):
+    duplicate_related = ["populations"]
+
     id = models.AutoField(primary_key=True, db_column="id_hazard")
     endpoint = models.ForeignKey(
         Endpoint,
@@ -252,7 +257,10 @@ class InvestigationType(models.Model):
 class FinalOutcomePopulation(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_hazard_age")
     final_outcome = models.ForeignKey(
-        FinalOutcome, db_column="id_hazard", on_delete=models.CASCADE
+        FinalOutcome,
+        db_column="id_hazard",
+        on_delete=models.CASCADE,
+        related_name="populations",
     )
     population = models.ForeignKey(
         "taxonomies.Population",
@@ -295,7 +303,9 @@ class StudySource(models.Model):
         verbose_name_plural = "Study Sources"
 
 
-class ADME(models.Model):
+class ADME(DuplicateRelatedMixin, models.Model):
+    duplicate_related = ["investigation_types"]
+
     id = models.AutoField(primary_key=True, db_column="id_pktkade")
     novel_food = models.ForeignKey(
         "novel_food.NovelFood", db_column="id_pktkade_study", on_delete=models.CASCADE
@@ -351,7 +361,12 @@ class ADME(models.Model):
 
 class ADMEInvestigationType(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_pktkade_investigation_type")
-    adme = models.ForeignKey(ADME, db_column="id_pktkade", on_delete=models.CASCADE)
+    adme = models.ForeignKey(
+        ADME,
+        db_column="id_pktkade",
+        on_delete=models.CASCADE,
+        related_name="investigation_types",
+    )
     investigation_type = models.ForeignKey(
         InvestigationType, db_column="id_investigation_type", on_delete=models.CASCADE
     )

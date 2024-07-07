@@ -377,7 +377,7 @@ class OrganismAdmin(admin.ModelAdmin):
     get_vocab_tax_path.short_description = "Vocab Taxonomy Path"
 
     def get_custom_species_name(self, obj):
-        if species := obj.species_set.all():
+        if species := obj.species.all():
             return "\n".join(
                 f"{s.name} - {s.scientific_name}" if s.scientific_name else s.name
                 for s in species
@@ -389,7 +389,7 @@ class OrganismAdmin(admin.ModelAdmin):
     )
 
     def get_custom_tax_path(self, obj):
-        species = obj.species_set.all()
+        species = obj.species.all()
         if not species:
             return "-"
 

@@ -1,6 +1,7 @@
 from administrative.models import Opinion
 from django.db import models
 from taxonomies.util import Descriptor
+from util.model_utils import DuplicateRelatedMixin
 
 
 class Allergenicity(models.Model):
@@ -29,6 +30,7 @@ class AllergenicityNovelFood(models.Model):
         on_delete=models.CASCADE,
         db_column="id_study",
         verbose_name="Novel Food",
+        related_name="allergenicities",
     )
 
     class Meta:
@@ -57,7 +59,10 @@ class FoodCategoryNovelFood(models.Model):
         FoodCategory, on_delete=models.CASCADE, db_column="id_food_category"
     )
     novel_food = models.ForeignKey(
-        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+        "NovelFood",
+        on_delete=models.CASCADE,
+        db_column="id_study",
+        related_name="food_categories",
     )
 
     def __str__(self) -> str:
@@ -108,7 +113,10 @@ class NovelFoodCategory(models.Model):
 class NovelFoodCategoryNovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_sub_type_study")
     novel_food = models.ForeignKey(
-        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+        "NovelFood",
+        on_delete=models.CASCADE,
+        db_column="id_study",
+        related_name="novel_food_categories",
     )
     novel_food_category = models.ForeignKey(
         NovelFoodCategory, on_delete=models.CASCADE, db_column="id_sub_type"
@@ -163,7 +171,10 @@ class NovelFoodSyn(models.Model):
         verbose_name="Synonym Type",
     )
     novel_food = models.ForeignKey(
-        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+        "NovelFood",
+        on_delete=models.CASCADE,
+        db_column="id_study",
+        related_name="synonyms",
     )
     title = models.CharField(max_length=255, db_column="study_syn")
 
@@ -225,7 +236,9 @@ class Genus(models.Model):
         verbose_name_plural = "📂 Genera (custom taxonomy)"
 
 
-class Organism(models.Model):
+class Organism(DuplicateRelatedMixin, models.Model):
+    duplicate_related = ["species", "synonyms"]
+
     id = models.AutoField(primary_key=True, db_column="id_org")
     vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -256,7 +269,9 @@ class OrganismSyn(models.Model):
         db_column="id_syn",
         verbose_name="Synonym Type",
     )
-    organism = models.ForeignKey(Organism, on_delete=models.CASCADE, db_column="id_org")
+    organism = models.ForeignKey(
+        Organism, on_delete=models.CASCADE, db_column="id_org", related_name="synonyms"
+    )
     title = models.CharField(max_length=255, db_column="org_syn")
 
     class Meta:
@@ -275,7 +290,12 @@ class Species(models.Model):
         verbose_name="Scientific Name",
     )
     organism = models.ForeignKey(
-        Organism, on_delete=models.CASCADE, null=False, blank=False, db_column="id_org"
+        Organism,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        db_column="id_org",
+        related_name="species",
     )
     genus = models.ForeignKey(
         Genus, on_delete=models.SET_NULL, null=True, blank=False, db_column="id_genus"
@@ -293,7 +313,10 @@ class Species(models.Model):
 class NovelFoodOrganism(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_organism")
     novel_food = models.ForeignKey(
-        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+        "NovelFood",
+        on_delete=models.CASCADE,
+        db_column="id_study",
+        related_name="organisms",
     )
     organism = models.ForeignKey(
         Organism, on_delete=models.CASCADE, db_column="id_organism"
@@ -362,7 +385,10 @@ class NovelFoodOrganism(models.Model):
 class NovelFoodChemical(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_com")
     novel_food = models.ForeignKey(
-        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+        "NovelFood",
+        on_delete=models.CASCADE,
+        db_column="id_study",
+        related_name="chemicals",
     )
     chemical = models.ForeignKey(
         "Chemical", on_delete=models.CASCADE, db_column="id_com"
@@ -398,7 +424,9 @@ class StructureReported(models.Model):
         verbose_name_plural = "📂 Structures reported (future use)"
 
 
-class Chemical(models.Model):
+class Chemical(DuplicateRelatedMixin, models.Model):
+    duplicate_related = ["chem_descriptors", "synonyms"]
+
     id = models.AutoField(primary_key=True, db_column="id_com")
     vocab_id = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -504,7 +532,9 @@ class ChemicalSyn(models.Model):
         db_column="id_syn",
         verbose_name="Synonym Type",
     )
-    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE, db_column="id_com")
+    chemical = models.ForeignKey(
+        Chemical, on_delete=models.CASCADE, db_column="id_com", related_name="synonyms"
+    )
     title = models.CharField(max_length=255, db_column="com_syn")
 
     class Meta:
@@ -515,7 +545,10 @@ class ChemicalSyn(models.Model):
 class SubstanceOfConcernNovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_sub_of_concern_study")
     novel_food = models.ForeignKey(
-        "NovelFood", on_delete=models.CASCADE, db_column="id_study"
+        "NovelFood",
+        on_delete=models.CASCADE,
+        db_column="id_study",
+        related_name="substances_of_concern",
     )
     substance_of_concern = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -547,7 +580,7 @@ class GenotoxFinalOutcome(models.Model):
         verbose_name_plural = "Genotoxicity final outcomes"
 
 
-class NovelFood(models.Model):
+class NovelFood(DuplicateRelatedMixin, models.Model):
     OUTCOME_CHOICES = [
         ("negative", "Negative"),
         ("partially_negative", "Partially Negative"),
@@ -557,6 +590,17 @@ class NovelFood(models.Model):
         ("yes", "Yes"),
         ("no", "No"),
         ("no_new_data_added", "No new data added"),
+    ]
+    duplicate_related = [
+        "substances_of_concern",
+        "hbgvs",
+        "bg_expo_assessments",
+        "chemicals",
+        "organisms",
+        "synonyms",
+        "novel_food_categories",
+        "food_categories",
+        "allergenicities",
     ]
 
     # general info
@@ -755,7 +799,7 @@ class BackgroundExposureAssessment(models.Model):
     novel_food = models.ForeignKey(
         NovelFood,
         on_delete=models.CASCADE,
-        related_name="novel_food_bg_expo_assessments",
+        related_name="bg_expo_assessments",
         db_column="id_study",
     )
     comp_of_interest = models.ForeignKey(
@@ -784,7 +828,7 @@ class HBGV(models.Model):
     novel_food = models.ForeignKey(
         NovelFood,
         on_delete=models.CASCADE,
-        related_name="novel_food_hbgvs",
+        related_name="hbgvs",
         db_column="id_study",
     )
     type = models.ForeignKey(

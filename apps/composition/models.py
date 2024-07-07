@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from novel_food.models import NovelFood
+from util.model_utils import DuplicateRelatedMixin
 
 
 def validate_case_insensitive_parameter_title(value):
@@ -76,7 +77,14 @@ class Parameter(models.Model):
         verbose_name_plural = "📂 Parameters"
 
 
-class NovelFoodVariant(models.Model):
+class NovelFoodVariant(DuplicateRelatedMixin, models.Model):
+    duplicate_related = [
+        "productions",
+        "compositions",
+        "proposed_uses",
+        "risk_assess_red_flags",
+    ]
+
     id = models.AutoField(primary_key=True, db_column="id_nf_variant")
     novel_food = models.ForeignKey(
         NovelFood,
@@ -100,9 +108,7 @@ class NovelFoodVariant(models.Model):
         )
         food_form_part = f" - {self.food_form}" if self.food_form else ""
         question_number_part = ""
-        if questions := [
-            oq.question for oq in self.novel_food.opinion.opinionquestion_set.all()
-        ]:
+        if questions := [oq.question for oq in self.novel_food.opinion.questions.all()]:
             question_number_part = " -"
             for q in questions:
                 question_number_part += f"{q.number}, "
@@ -125,6 +131,7 @@ class ProductionNovelFoodVariant(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_nf_variant",
+        related_name="productions",
     )
 
     process = models.ForeignKey(
@@ -174,6 +181,7 @@ class Composition(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_nf_variant",
+        related_name="compositions",
     )
     parameter = models.ForeignKey(
         Parameter,
@@ -256,6 +264,7 @@ class ProposedUse(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_nf_variant",
+        related_name="proposed_uses",
     )
     use_type = models.CharField(
         max_length=255,
@@ -312,6 +321,7 @@ class RiskAssessRedFlagNFVariant(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_nf_variant",
+        related_name="risk_assess_red_flags",
     )
     risk_assess_red_flag = models.ForeignKey(
         RiskAssessRedFlag,

@@ -73,6 +73,7 @@ class Contribution(models.Model):
         "administrative.Opinion",
         on_delete=models.CASCADE,
         db_column="id_op",
+        related_name="contributions",
     )
     user = models.ForeignKey(
         User,

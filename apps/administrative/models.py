@@ -1,14 +1,15 @@
 from django.db import models
+from util.model_utils import DuplicateRelatedMixin
 
-# from taxonomies.models import TaxonomyNode
 
-
-class Opinion(models.Model):
+class Opinion(DuplicateRelatedMixin, models.Model):
     OUTCOME_CHOICES = [
         ("positive", "Positive"),
         ("negative", "Negative"),
         ("partially_negative", "Partially Negative"),
     ]
+    duplicate_related = ["contributions", "panels", "questions", "sci_officers"]
+
     id = models.AutoField(primary_key=True, db_column="id_op")
     document_type = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -53,7 +54,9 @@ class Opinion(models.Model):
         verbose_name_plural = "Opinions 📄"
 
 
-class Question(models.Model):
+class Question(DuplicateRelatedMixin, models.Model):
+    duplicate_related = ["applicants", "mandates"]
+
     id = models.AutoField(primary_key=True, db_column="id_question")
     number = models.CharField(
         max_length=255,
@@ -104,6 +107,7 @@ class OpinionPanel(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_op",
+        related_name="panels",
     )
     panel = models.ForeignKey(
         Panel,
@@ -182,6 +186,7 @@ class OpinionQuestion(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_op",
+        related_name="questions",
     )
     question = models.ForeignKey(
         Question,
@@ -234,6 +239,7 @@ class OpinionSciOfficer(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_op",
+        related_name="sci_officers",
     )
     sci_officer = models.ForeignKey(
         ScientificOfficer,
@@ -268,6 +274,7 @@ class Mandate(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_question",
+        related_name="mandates",
     )
     mandate_type = models.ForeignKey(
         MandateType,
@@ -302,7 +309,10 @@ class Mandate(models.Model):
 class QuestionApplicant(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_question_applicant")
     question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, db_column="id_question"
+        Question,
+        on_delete=models.CASCADE,
+        db_column="id_question",
+        related_name="applicants",
     )
     applicant = models.ForeignKey(
         Applicant, on_delete=models.CASCADE, db_column="id_applicant"
