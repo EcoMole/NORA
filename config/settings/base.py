@@ -34,6 +34,7 @@ DEBUG = config("DEBUG", cast=bool, default=False)
 # reassigned in devel settings, where it is needed for reset password email
 FRONTEND_DOMAIN = ""
 
+DJANGO_ADMIN_SITE_HEADER = "NOvel food Risk Assessment (NORA)"
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default=[])
 

@@ -9,6 +9,7 @@ CSRF_COOKIE_AGE = 1800  # 30 minutes
 
 # in development needed for reset password email
 FRONTEND_DOMAIN = "localhost:5173"
+DJANGO_ADMIN_SITE_HEADER = "Nora LOCAL DEVELOPMENT"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
