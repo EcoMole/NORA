@@ -1,6 +1,8 @@
+from decouple import Csv, config
+
 from .base import *  # noqa F403 F401
 
-ALLOWED_HOSTS = ["159.65.120.133"]  # '*'
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default=[])
 
 DJANGO_ADMIN_SITE_HEADER = "NOvel food Risk Assessment (NORA)"
 
