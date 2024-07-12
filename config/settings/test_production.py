@@ -4,7 +4,8 @@ from .base import *  # noqa F403 F401
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default=[])
 
-DJANGO_ADMIN_SITE_HEADER = "Nora TEST"
+SITE_TITLE = "TEST"
+DJANGO_ADMIN_SITE_HEADER = "NORA TEST"
 
 # to use only https:
 # SESSION_COOKIE_SECURE = True

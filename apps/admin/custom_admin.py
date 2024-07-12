@@ -5,7 +5,7 @@ from django.contrib.admin import AdminSite
 class CustomAdminSite(AdminSite):
     site_header = settings.DJANGO_ADMIN_SITE_HEADER  # default: "Django Administration"
     index_title = "Administration"  # default: "Site administration"
-    site_title = "NORA"  # default: "Django site admin"
+    site_title = settings.SITE_TITLE  # default: "Django site admin"
     # url for link "View site" in the top right corner of Django admin
     site_url = (
         "https://" + settings.FRONTEND_DOMAIN if settings.FRONTEND_DOMAIN else "/"

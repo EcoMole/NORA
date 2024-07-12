@@ -2,6 +2,9 @@ from .base import *  # noqa F403
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]  # '*'
 
+SITE_TITLE = "LOCAL DEVELOPMENT"
+DJANGO_ADMIN_SITE_HEADER = "LOCAL DEVELOPMENT"
+
 CSRF_TRUSTED_ORIGINS = ["https://127.0.0.1:5173", "https://localhost:5173"]
 CSRF_COOKIE_SAMESITE = "Strict"
 CSRF_COOKIE_SECURE = True
