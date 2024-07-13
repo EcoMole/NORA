@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Load environment variables from .env file located in the same directory as the script
-source .env
+# Set the script to fail if any command fails
+set -e
+
+# need to specify the whole path because cron job runs in a different environment.
+# When running through cron, the current directory is typically the home directory of
+# the user who owns the cron job, not the directory where this script file and the .env file reside
+source /opt/Nora/NORA/.env
 
 DATE=$(date +'%Y-%m-%d_%H-%M-%S')
 echo "$DATE   $DB_NAME - Creating backup"
