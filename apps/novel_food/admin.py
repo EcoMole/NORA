@@ -447,7 +447,7 @@ class ChemicalAdmin(admin.ModelAdmin):
     list_display = ["vocab_id", "get_iupac", "get_mol_form", "get_cas"]
     autocomplete_fields = ["vocab_id"]
     inlines = [ChemDescriptorInline, ChemicalSynInline]
-    search_fields = ["vocab_id"]
+    search_fields = ["vocab_id__short_name", "vocab_id__extended_name"]
     readonly_fields = [
         "get_iupac",
         "get_mol_form",
