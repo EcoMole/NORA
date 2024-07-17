@@ -79,7 +79,7 @@ class OpinionAdmin(admin.ModelAdmin):
         "publication_date",
         "adoption_date",
         "pdf_link",
-        "contributions",
+        "get_contributions",
     ]
     list_display_links = [
         "title",
@@ -110,16 +110,13 @@ class OpinionAdmin(admin.ModelAdmin):
 
     pdf_link.short_description = "PDF File"
 
-    def contributions(self, obj):
-        contributions = Contribution.objects.filter(opinion=obj).values_list(
-            "user__first_name", "status"
-        )
+    def get_contributions(self, obj):
         result = "<br>".join(
-            [f"{contribution[0]} - {contribution[1]}" for contribution in contributions]
+            [str(contribution) for contribution in obj.contributions.all()]
         )
         return format_html(result)
 
-    contributions.short_description = "Contributions"
+    get_contributions.short_description = "Contributions"
 
 
 @admin.register(Question)

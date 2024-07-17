@@ -90,6 +90,9 @@ class Contribution(models.Model):
         null=True,
     )
 
+    def __str__(self) -> str:
+        return f"{self.user} - {self.status}"
+
     class Meta:
         db_table = "CONTRIBUTION"
         verbose_name = "Contribution 👩🏻‍🤝‍👩🏼"
