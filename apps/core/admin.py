@@ -48,9 +48,16 @@ class HasEmailVerified(admin.SimpleListFilter):
 
 @admin.register(Contribution)
 class ContributionAdmin(admin.ModelAdmin):
-    list_display = ("opinion", "user", "status", "remarks")
+    list_display = ("get_opinion", "user", "status", "remarks")
     list_filter = ("status", "user")
     search_fields = ("opinion__title", "remarks")
+    autocomplete_fields = ("opinion", "user")
+
+    def get_opinion(self, obj):
+        """displays the opinion title in multiple lines if the title is too long"""
+        return obj.opinion.title
+
+    get_opinion.short_description = "Opinion"
 
 
 @admin.register(models.User)
