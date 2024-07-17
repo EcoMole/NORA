@@ -21,13 +21,15 @@ from .models import (
 
 
 class AdminURLWidget(forms.URLInput):
-    """if clicked on the field (url link) it will open in new tab"""
+    """Widget that shows an input field and a clickable URL next to it."""
 
     def render(self, name, value, attrs=None, renderer=None):
         if value:
-            return mark_safe(f'<a href="{value}" target="_blank">{value}</a>')
+            link_html = mark_safe(f'<a href="{value}" target="_blank">{value}</a>')
         else:
-            return super().render(name, value, attrs, renderer)
+            link_html = ""
+        input_html = super().render(name, value, attrs, renderer)
+        return mark_safe(f"{input_html}<p>{link_html}</p>")
 
 
 class MandateInline(admin.TabularInline):
