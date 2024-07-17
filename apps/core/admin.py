@@ -1,6 +1,7 @@
 from core import models
 from django.contrib import admin  # noqa: F401
 from django.contrib.auth.admin import UserAdmin
+from django.utils.html import format_html
 from import_export import fields
 from import_export.admin import ExportActionMixin
 from import_export.resources import ModelResource
@@ -64,9 +65,9 @@ class ContributionAdmin(admin.ModelAdmin):
 class TheUserAdmin(ExportActionMixin, UserAdmin):
     list_display = [
         "username",
-        "email",
         "first_name",
         "last_name",
+        "get_groups",
         "is_superuser",
         "is_staff",
         "email_verified",
@@ -75,6 +76,11 @@ class TheUserAdmin(ExportActionMixin, UserAdmin):
     list_filter = (HasEmailVerified,) + UserAdmin.list_filter
 
     resource_class = UserResource  # for django-import-export
+
+    def get_groups(self, obj):
+        return format_html("<br>".join([group.name for group in obj.groups.all()]))
+
+    get_groups.short_description = "Groups"
 
     def get_queryset(self, request):
         return User.objects.annotate_email_verified()
