@@ -9,7 +9,8 @@ class FreqUsedVocabNodeAdmin(admin.ModelAdmin):
     list_display_links = ["field", "entity", "node"]
     list_filter = ["field__title"]
     search_fields = [
-        "node__name",
+        "node__short_name",
+        "node__extended_name",
         "node__code",
         "entity",
     ]
