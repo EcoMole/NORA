@@ -79,18 +79,15 @@ class OpinionAdmin(admin.ModelAdmin):
         "publication_date",
         "adoption_date",
         "pdf_link",
-        "responsible_person",
-        "status",
+        "contributions",
     ]
     list_display_links = [
         "title",
         "publication_date",
         "adoption_date",
-        "responsible_person",
-        "status",
     ]
     search_fields = ["title", "doi"]
-    list_filter = ["publication_date"]
+    list_filter = ["publication_date", "contributions"]
     autocomplete_fields = ["document_type"]
     inlines = [
         ContributionInline,
@@ -113,20 +110,16 @@ class OpinionAdmin(admin.ModelAdmin):
 
     pdf_link.short_description = "PDF File"
 
-    def responsible_person(self, obj):
-        contribution = Contribution.objects.filter(opinion=obj).first()
-        if contribution:
-            user = contribution.user
-            return user.first_name
+    def contributions(self, obj):
+        contributions = Contribution.objects.filter(opinion=obj).values_list(
+            "user__first_name", "status"
+        )
+        result = "<br>".join(
+            [f"{contribution[0]} - {contribution[1]}" for contribution in contributions]
+        )
+        return format_html(result)
 
-    responsible_person.short_description = "Responsible Person"
-
-    def status(self, obj):
-        contribution = Contribution.objects.filter(opinion=obj).first()
-        if contribution:
-            return contribution.status
-
-    status.short_description = "Status"
+    contributions.short_description = "Contributions"
 
 
 @admin.register(Question)
