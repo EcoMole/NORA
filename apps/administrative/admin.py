@@ -72,6 +72,42 @@ class ContributionInline(admin.TabularInline):
     extra = 1
 
 
+class HasContributor(admin.SimpleListFilter):
+    title = "Contributor"
+    parameter_name = "has_contributor"
+
+    def lookups(self, request, model_admin):
+        contributors = (
+            Contribution.objects.filter(opinion__isnull=False)
+            .values_list("user__first_name", flat=True)
+            .distinct()
+        )
+        result = [(contrib, contrib) for contrib in contributors]
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(contributions__user__first_name=self.value())
+
+
+class HasContributorStatus(admin.SimpleListFilter):
+    title = "Contributor Status"
+    parameter_name = "has_contributor_status"
+
+    def lookups(self, request, model_admin):
+        statuses = (
+            Contribution.objects.filter(opinion__isnull=False)
+            .values_list("status", flat=True)
+            .distinct()
+        )
+        result = [(status, status) for status in statuses]
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(contributions__status=self.value())
+
+
 @admin.register(Opinion)
 class OpinionAdmin(admin.ModelAdmin):
     list_display = [
@@ -87,7 +123,7 @@ class OpinionAdmin(admin.ModelAdmin):
         "adoption_date",
     ]
     search_fields = ["title", "doi"]
-    list_filter = ["publication_date", "contributions"]
+    list_filter = [HasContributor, HasContributorStatus]
     autocomplete_fields = ["document_type"]
     inlines = [
         ContributionInline,
