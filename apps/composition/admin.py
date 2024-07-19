@@ -1,5 +1,6 @@
 from core.models import Contribution
 from django.contrib import admin
+from django.utils.html import format_html
 from util.admin_utils import duplicate_model
 
 from .models import (
@@ -61,8 +62,58 @@ class RiskAssessRedFlagNFVariantInline(admin.TabularInline):
     autocomplete_fields = ["risk_assess_red_flag"]
 
 
+class HasContributor(admin.SimpleListFilter):
+    title = "Opinion Contributor"
+    parameter_name = "has_opinion_contributor"
+
+    def lookups(self, request, model_admin):
+        contributors = (
+            Contribution.objects.filter(opinion__isnull=False)
+            .values_list("user__first_name", flat=True)
+            .distinct()
+        )
+        result = [(contrib, contrib) for contrib in contributors]
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(
+                novel_food__opinion__contributions__user__first_name=self.value()
+            )
+
+
+class HasContributorStatus(admin.SimpleListFilter):
+    title = "Opinion Contributor Status"
+    parameter_name = "has_opinion_contributor_status"
+
+    def lookups(self, request, model_admin):
+        statuses = (
+            Contribution.objects.filter(opinion__isnull=False)
+            .values_list("status", flat=True)
+            .distinct()
+        )
+        result = [(status, status) for status in statuses]
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(
+                novel_food__opinion__contributions__status=self.value()
+            )
+
+
 @admin.register(NovelFoodVariant)
 class NovelFoodVariantAdmin(admin.ModelAdmin):
+    list_display = [
+        "get_novel_food",
+        "food_form",
+        "get_question_numbers",
+        "get_contributions",
+    ]
+    list_display_links = ["get_novel_food", "food_form"]
+    readonly_fields = ("get_question_numbers",)
+    list_filter = [HasContributor, HasContributorStatus, "food_form"]
+    search_fields = ["novel_food__title", "novel_food__nf_code", "food_form__title"]
     autocomplete_fields = ["novel_food", "food_form"]
     inlines = [
         ProposedUseInline,
@@ -70,43 +121,33 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProductionNovelFoodVariantInline,
         RiskAssessRedFlagNFVariantInline,
     ]
-    readonly_fields = ("get_question_numbers",)
-    list_display_links = ["get_novel_food", "food_form"]
-    list_display = [
-        "get_novel_food",
-        "food_form",
-        "get_question_numbers",
-        "responsible_person",
-    ]
-    search_fields = ["novel_food__title", "novel_food__nf_code", "food_form__title"]
 
     def get_novel_food(self, obj):
         return str(obj.novel_food)
 
     get_novel_food.short_description = "Novel Food"
+    get_novel_food.admin_order_field = "novel_food__title"
 
     def get_question_numbers(self, obj):
-        result = ""
-        if questions := [oq.question for oq in obj.novel_food.opinion.questions.all()]:
-            for q in questions:
-                result += f"{q.number}, "
-            result = result[:-2]
-        return result
+        questions = [oq.question for oq in obj.novel_food.opinion.questions.all()]
+
+        if not questions:
+            return ""
+
+        question_numbers = ", ".join([str(q.number) for q in questions])
+        return question_numbers
 
     get_question_numbers.short_description = "Question Number"
+    get_question_numbers.admin_order_field = (
+        "novel_food__opinion__questions__question__number"
+    )
 
-    def responsible_person(self, obj):
-        # Get novel food for this variant
-        novel_food = obj.novel_food
-        # Get opinion for this novel food
-        opinion = novel_food.opinion
-        # Get contribution for this opinion
-        contribution = Contribution.objects.filter(opinion=opinion).first()
-        if contribution:
-            user = contribution.user
-            return user.first_name
+    def get_contributions(self, obj):
+        contributions = Contribution.objects.filter(opinion=obj.novel_food.opinion)
+        result = "<br>".join([str(contribution) for contribution in contributions])
+        return format_html(result)
 
-    responsible_person.short_description = "Responsible Person"
+    get_contributions.short_description = "Opinion Contributions"
 
     actions = [duplicate_model]
 

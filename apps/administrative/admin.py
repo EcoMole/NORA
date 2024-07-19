@@ -69,7 +69,7 @@ class QuestionInline(admin.TabularInline):
 
 class ContributionInline(admin.TabularInline):
     model = Contribution
-    extra = 1
+    extra = 0
 
 
 class HasContributor(admin.SimpleListFilter):
@@ -145,6 +145,7 @@ class OpinionAdmin(admin.ModelAdmin):
         return "No PDF"
 
     pdf_link.short_description = "PDF File"
+    pdf_link.admin_order_field = "pdf"
 
     def get_contributions(self, obj):
         result = "<br>".join(
@@ -153,6 +154,7 @@ class OpinionAdmin(admin.ModelAdmin):
         return format_html(result)
 
     get_contributions.short_description = "Contributions"
+    get_contributions.admin_order_field = "contributions__user__first_name"
 
 
 @admin.register(Question)

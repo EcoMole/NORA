@@ -1,5 +1,6 @@
 from core.models import Contribution
 from django.contrib import admin
+from django.utils.html import format_html
 from novel_food.models import (
     HBGV,
     Allergenicity,
@@ -156,6 +157,44 @@ class SynonymAdmin(admin.ModelAdmin):
     list_display = ["title"]
 
 
+class HasContributor(admin.SimpleListFilter):
+    title = "Opinion Contributor"
+    parameter_name = "has_opinion_contributor"
+
+    def lookups(self, request, model_admin):
+        contributors = (
+            Contribution.objects.filter(opinion__isnull=False)
+            .values_list("user__first_name", flat=True)
+            .distinct()
+        )
+        result = [(contrib, contrib) for contrib in contributors]
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(
+                opinion__contributions__user__first_name=self.value()
+            )
+
+
+class HasContributorStatus(admin.SimpleListFilter):
+    title = "Opinion Contributor Status"
+    parameter_name = "has_opinion_contributor_status"
+
+    def lookups(self, request, model_admin):
+        statuses = (
+            Contribution.objects.filter(opinion__isnull=False)
+            .values_list("status", flat=True)
+            .distinct()
+        )
+        result = [(status, status) for status in statuses]
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(opinion__contributions__status=self.value())
+
+
 @admin.register(NovelFood)
 class NovelFoodAdmin(admin.ModelAdmin):
     list_display = [
@@ -163,10 +202,10 @@ class NovelFoodAdmin(admin.ModelAdmin):
         "title",
         "opinion_doi",
         "outcome",
-        "responsible_person",
-        "status",
+        "get_contributions",
     ]
-    list_display_links = ["nf_code", "title", "outcome", "responsible_person", "status"]
+    list_display_links = ["nf_code", "title", "outcome", "get_contributions"]
+    list_filter = ["outcome", HasContributor, HasContributorStatus]
     fieldsets = [
         (
             "General Information",
@@ -226,21 +265,14 @@ class NovelFoodAdmin(admin.ModelAdmin):
         return obj.opinion.doi
 
     opinion_doi.short_description = "Opinion DOI"
+    opinion_doi.admin_order_field = "opinion__doi"
 
-    def responsible_person(self, obj):
-        contribution = Contribution.objects.filter(opinion=obj.opinion).first()
-        if contribution:
-            user = contribution.user
-            return user.first_name
+    def get_contributions(self, obj):
+        contributions = Contribution.objects.filter(opinion=obj.opinion)
+        result = "<br>".join([str(contribution) for contribution in contributions])
+        return format_html(result)
 
-    responsible_person.short_description = "Responsible Person"
-
-    def status(self, obj):
-        contribution = Contribution.objects.filter(opinion=obj.opinion).first()
-        if contribution:
-            return contribution.status
-
-    status.short_description = "Status"
+    get_contributions.short_description = "Opinion Contributions"
 
     search_fields = [
         "nf_code",
@@ -299,7 +331,12 @@ class IsFromVocabFilter(admin.SimpleListFilter):
 class OrganismAdmin(admin.ModelAdmin):
     list_display = [
         "get_organism",
+        "get_custom_species_name",
         "get_is_from_vocab",
+    ]
+    list_display_links = [
+        "get_organism",
+        "get_custom_species_name",
     ]
     fieldsets = [
         (
@@ -345,7 +382,8 @@ class OrganismAdmin(admin.ModelAdmin):
     def get_organism(self, obj):
         return obj.vocab_id.name
 
-    get_organism.short_description = "Species"
+    get_organism.short_description = "Organism vocabulary identification"
+    get_organism.admin_order_field = "vocab_id__short_name"
 
     def get_vocab_species_name(self, obj):
         if species_names := obj.vocab_id.implicit_attributes.filter(code="A01"):
@@ -387,6 +425,7 @@ class OrganismAdmin(admin.ModelAdmin):
     get_custom_species_name.short_description = (
         "Custom Species Name - Custom Scientific Name"
     )
+    get_custom_species_name.admin_order_field = "species__name"
 
     def get_custom_tax_path(self, obj):
         species = obj.species.all()
@@ -491,17 +530,14 @@ class ChemicalAdmin(admin.ModelAdmin):
 
     @staticmethod
     def get_descriptors_to_display(custom_descriptors, vocab_descriptors):
-        result = ""
+        descriptors = []
         if custom_descriptors.exists():
-            for descriptor in custom_descriptors:
-                result += descriptor.value + ", "
+            descriptors.extend([descriptor.value for descriptor in custom_descriptors])
         if vocab_descriptors.exists():
-            for attr in vocab_descriptors:
-                result += attr.value + ", "
-        if result == "":
+            descriptors.extend([attr.value for attr in vocab_descriptors])
+        if not descriptors:
             return "😢"
-        else:
-            return result[:-2]
+        return ", ".join(descriptors)
 
     def get_iupac(self, obj):
         return self.get_descriptors_to_display(

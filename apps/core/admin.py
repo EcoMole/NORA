@@ -59,6 +59,7 @@ class ContributionAdmin(admin.ModelAdmin):
         return obj.opinion.title
 
     get_opinion.short_description = "Opinion"
+    get_opinion.admin_order_field = "opinion__title"
 
 
 @admin.register(models.User)
@@ -81,6 +82,7 @@ class TheUserAdmin(ExportActionMixin, UserAdmin):
         return format_html("<br>".join([group.name for group in obj.groups.all()]))
 
     get_groups.short_description = "Groups"
+    get_groups.admin_order_field = "groups__name"
 
     def get_queryset(self, request):
         return User.objects.annotate_email_verified()
