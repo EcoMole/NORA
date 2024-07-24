@@ -67,18 +67,17 @@ class HasContributor(admin.SimpleListFilter):
     parameter_name = "has_opinion_contributor"
 
     def lookups(self, request, model_admin):
-        contributors = (
-            Contribution.objects.filter(opinion__isnull=False)
-            .values_list("user__first_name", flat=True)
-            .distinct()
-        )
-        result = [(contrib, contrib) for contrib in contributors]
-        return result
+        return (
+            Contribution.objects.filter(opinion__isnull=False).values_list(
+                "user__id", "user__first_name"
+            )
+        ).distinct()
 
     def queryset(self, request, queryset):
         if self.value():
+            # self.value() is the id of the selected contributor
             return queryset.filter(
-                novel_food__opinion__contributions__user__first_name=self.value()
+                novel_food__opinion__contributions__user__id=self.value()
             )
 
 
@@ -87,16 +86,15 @@ class HasContributorStatus(admin.SimpleListFilter):
     parameter_name = "has_opinion_contributor_status"
 
     def lookups(self, request, model_admin):
-        statuses = (
+        return (
             Contribution.objects.filter(opinion__isnull=False)
-            .values_list("status", flat=True)
+            .values_list("status", "status")
             .distinct()
         )
-        result = [(status, status) for status in statuses]
-        return result
 
     def queryset(self, request, queryset):
         if self.value():
+            # self.value() is the status of the selected contributor
             return queryset.filter(
                 novel_food__opinion__contributions__status=self.value()
             )

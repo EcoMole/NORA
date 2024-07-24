@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models import Subquery
+from taxonomies.models import Subgroup, TaxonomyNode
 from util.admin_utils import duplicate_model
 
 from .models import (
@@ -96,6 +98,7 @@ class EndpointstudyAdmin(admin.ModelAdmin):
         return str(obj.novel_food)
 
     get_novel_food.short_description = "Novel Food"
+    get_novel_food.admin_order_field = "novel_food__title"
 
 
 @admin.register(Endpoint)
@@ -155,6 +158,7 @@ class EndpointAdmin(admin.ModelAdmin):
         return str(obj.endpointstudy)
 
     get_endpointstudy.short_description = "Endpoint Study"
+    get_endpointstudy.admin_order_field = "endpointstudy__novel_food__title"
 
 
 @admin.register(Genotox)
@@ -188,6 +192,28 @@ class GenotoxAdmin(admin.ModelAdmin):
         return str(obj.novel_food)
 
     get_novel_food.short_description = "Novel Food"
+    get_novel_food.admin_order_field = "novel_food__title"
+
+
+class InvestigationTypeFilter(admin.SimpleListFilter):
+    title = "Investigation Type"
+    parameter_name = "investigation_type"
+
+    def lookups(self, request, model_admin):
+        return InvestigationType.objects.all().values_list("id", "title")
+
+    def queryset(self, request, queryset):
+        if self.value():
+            # self.value() is the id of the selected investigation type
+            adme_ids = (
+                ADMEInvestigationType.objects.filter(
+                    investigation_type__id=self.value()
+                )
+                .select_related("adme")
+                .values_list("adme__id", flat=True)
+            )
+            return queryset.filter(id__in=Subquery(adme_ids))
+        return queryset
 
 
 @admin.register(ADME)
@@ -211,9 +237,7 @@ class ADMEAdmin(admin.ModelAdmin):
         "test_material",
         "remarks",
     ]
-    list_filter = [
-        "study_source",
-    ]
+    list_filter = ["study_source", InvestigationTypeFilter]
     autocomplete_fields = [
         "novel_food",
         "test_type",
@@ -234,6 +258,7 @@ class ADMEAdmin(admin.ModelAdmin):
         return str(obj.novel_food)
 
     get_novel_food.short_description = "Novel Food"
+    get_novel_food.admin_order_field = "novel_food__title"
 
 
 @admin.register(InvestigationType)
@@ -256,6 +281,44 @@ class StudySourceAdmin(admin.ModelAdmin):
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
+
+
+class SubgroupFilter(admin.SimpleListFilter):
+    title = "Subgroup"
+    parameter_name = "subgroup"
+
+    def lookups(self, request, model_admin):
+        return (
+            # filter all subgroups that are connected to at least one final outcome
+            Subgroup.objects.filter(
+                subgroup_populations__population_outcome_populations__final_outcome__isnull=False
+            )
+            .distinct()
+            .values_list("id", "title")
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            # self.value() is the id of the selected population.subgroup
+            return queryset.filter(populations__population__subgroup__id=self.value())
+
+
+class OutcomeFilter(admin.SimpleListFilter):
+    title = "Outcome"
+    parameter_name = "outcome"
+
+    def lookups(self, request, model_admin):
+        outcomes = TaxonomyNode.objects.filter(
+            outcome_final_outcomes__isnull=False
+        ).distinct()
+        return [
+            (o.id, o.short_name if o.short_name else o.extended_name) for o in outcomes
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            # self.value() is the id of the selected TaxonomyNode (outcome)
+            return queryset.filter(outcome__id=self.value())
 
 
 @admin.register(FinalOutcome)
@@ -309,6 +372,7 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         "uncertainty_factor",
         "remarks",
     ]
+    list_filter = [SubgroupFilter, OutcomeFilter]
     autocomplete_fields = ["outcome", "qualifier", "unit", "endpoint"]
     inlines = [FinalOutcomePopulationInline]
     actions = [duplicate_model]
@@ -317,6 +381,7 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         return str(obj.endpoint.endpointstudy)
 
     get_endpointstudy.short_description = "Endpoint Study"
+    get_endpointstudy.admin_order_field = "endpoint__endpointstudy"
 
     def get_populations(self, obj):
         return "; ".join([str(p.population) for p in obj.populations.all()])
@@ -346,8 +411,10 @@ class FinalOutcomeAdmin(admin.ModelAdmin):
         )
 
     get_endpoint.short_description = "Endpoint"
+    get_endpoint.admin_order_field = "endpoint__reference_point__short_name"
 
     def get_outcome(self, obj):
         return str(obj.outcome)
 
     get_outcome.short_description = "Outcome"
+    get_outcome.admin_order_field = "outcome__short_name"

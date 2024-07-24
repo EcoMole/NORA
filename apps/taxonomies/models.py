@@ -239,7 +239,7 @@ class Population(models.Model):
 
     def __str__(self):
         repr = ""
-        if self.qualifier:
+        if self.qualifier and self.qualifier.name:
             repr += self.qualifier.name
         if self.value:
             repr += f" {self.value}"
@@ -248,7 +248,7 @@ class Population(models.Model):
         if self.unit:
             repr += f" {self.unit.name}"
 
-        return f"{self.subgroup} - {repr}"
+        return f"{self.subgroup} - {repr}" if repr else str(self.subgroup)
 
     class Meta:
         db_table = "AGE"

@@ -16,7 +16,13 @@ from util.admin_utils import duplicate_model
 @admin.register(Population)
 class PopulationAdmin(admin.ModelAdmin):
     list_display = [
-        "subgroup",
+        "get_subgroup",
+        "qualifier",
+        "value",
+        "upper_range_value",
+        "unit",
+    ]
+    list_display_links = [
         "qualifier",
         "value",
         "upper_range_value",
@@ -39,6 +45,12 @@ class PopulationAdmin(admin.ModelAdmin):
     ]
     autocomplete_fields = ["qualifier", "unit"]
     actions = [duplicate_model]
+
+    def get_subgroup(self, obj):
+        return obj.subgroup.title
+
+    get_subgroup.short_description = "Subgroup"
+    get_subgroup.admin_order_field = "subgroup__title"
 
 
 @admin.register(GuidelineQualifier)
@@ -65,7 +77,8 @@ class TaxonomyAdmin(admin.ModelAdmin):
 
 @admin.register(TaxonomyNode)
 class TaxonomyNodeAdmin(admin.ModelAdmin):
-    list_display = ["code", "name", "taxonomy"]
+    list_display = ["code", "get_name", "taxonomy"]
+    list_display_links = ["code", "get_name", "taxonomy"]
     search_fields = [
         "code",
         "short_name",
@@ -98,3 +111,9 @@ class TaxonomyNodeAdmin(admin.ModelAdmin):
                 ),
             )
         )
+
+    def get_name(self, obj):
+        return obj.name
+
+    get_name.short_description = "Name"
+    get_name.admin_order_field = "short_name"
