@@ -89,3 +89,12 @@ def duplicate_model(modeladmin, request, queryset):
 
 
 duplicate_model.short_description = "Duplicate selected records"
+
+
+def reorder_models(app, model_order):
+    """
+    Reorders the models of an app in the Django admin.
+    The order of the models is set by the order of the model names in the model_order list.
+    """
+    model_order_dict = dict(zip(model_order, range(len(model_order))))
+    app["models"].sort(key=lambda x: model_order_dict.get(x["object_name"], 0))

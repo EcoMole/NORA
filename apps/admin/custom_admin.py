@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.admin import AdminSite
+from util.admin_utils import reorder_models
 
 
 class CustomAdminSite(AdminSite):
@@ -43,21 +44,20 @@ class CustomAdminSite(AdminSite):
         for app in app_list:
             if app["app_label"] == "django_celery_beat":  # Periodic Tasks
                 model_order = [
-                    "Intervals",
-                    "Crontabs",
-                    "Clocked",
-                    "Periodic tasks",
-                    "Solar events",
+                    "IntervalSchedule",
+                    "CrontabSchedule",
+                    "ClockedSchedule",
+                    "PeriodicTask",
+                    "SolarSchedule",
                 ]
-                model_order_dict = dict(zip(model_order, range(len(model_order))))
-                app["models"].sort(key=lambda x: model_order_dict.get(x["name"], 0))
+                reorder_models(app, model_order)
 
             elif app["app_label"] == "django_celery_results":  # Celery Results
-                model_order = [
-                    "Task results",
-                    "Group results",
-                ]
-                model_order_dict = dict(zip(model_order, range(len(model_order))))
-                app["models"].sort(key=lambda x: model_order_dict.get(x["name"], 0))
+                model_order = ["TaskResult", "GroupResult"]
+                reorder_models(app, model_order)
+
+            elif app["app_label"] == "studies":
+                model_order = ["ADME", "Genotox", "Endpointstudy", "FinalOutcome"]
+                reorder_models(app, model_order)
 
         return app_list
