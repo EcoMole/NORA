@@ -112,6 +112,7 @@ class OpinionAdmin(admin.ModelAdmin):
         "title",
         "publication_date",
         "adoption_date",
+        "url",
         "pdf_link",
         "get_contributions",
     ]
