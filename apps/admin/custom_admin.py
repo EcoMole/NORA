@@ -24,6 +24,7 @@ class CustomAdminSite(AdminSite):
             "composition",
             "studies",
             "taxonomies",
+            "extractor",
             "auth",  # Authentication and Authorization
             "account",  # Accounts
             "django_celery_beat",  # Periodic Tasks
@@ -31,7 +32,6 @@ class CustomAdminSite(AdminSite):
             "sites",  # Sites
             "authtoken",  # Auth Token
             "socialaccount",  # Social Accounts
-            "extractor",
         ]
 
         app_order_dict = dict(zip(app_order, range(len(app_order))))

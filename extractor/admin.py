@@ -18,7 +18,7 @@ class FieldTitleFilter(admin.SimpleListFilter):
 
 @admin.register(FreqUsedVocabNode)
 class FreqUsedVocabNodeAdmin(admin.ModelAdmin):
-    list_display = ["field", "entity", "node"]
+    list_display = ["field", "entity", "get_code", "node"]
     list_display_links = ["field", "entity", "node"]
     list_filter = [FieldTitleFilter]
     search_fields = [
@@ -28,6 +28,11 @@ class FreqUsedVocabNodeAdmin(admin.ModelAdmin):
         "entity",
     ]
     autocomplete_fields = ["node"]
+
+    def get_code(self, obj):
+        return obj.node.code
+
+    get_code.short_description = "Code"
 
 
 @admin.register(VocabNodeField)
