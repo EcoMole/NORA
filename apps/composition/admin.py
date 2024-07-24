@@ -114,10 +114,10 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
     search_fields = ["novel_food__title", "novel_food__nf_code", "food_form__title"]
     autocomplete_fields = ["novel_food", "food_form"]
     inlines = [
-        ProposedUseInline,
-        CompositionInline,
         ProductionNovelFoodVariantInline,
         RiskAssessRedFlagNFVariantInline,
+        CompositionInline,
+        ProposedUseInline,
     ]
 
     def get_novel_food(self, obj):

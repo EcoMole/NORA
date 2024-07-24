@@ -208,14 +208,15 @@ class NovelFoodAdmin(admin.ModelAdmin):
             {"fields": ["opinion", "title", "nf_code", "vocab_id"]},
         ),
         (
-            "TOXICOLOGY",
+            "STABILITY",
             {
                 "fields": [
-                    "tox_study_required",
-                    "genotox_final_outcome",
-                    "specific_toxicity",
-                    "final_toxicology_remarks",
-                ]
+                    "sufficient_data",
+                    "food_matrices",
+                    "instability_concerns",
+                    ("shelflife_value", "shelflife_unit"),
+                ],
+                "description": "This section is for stability related fields",
             },
         ),
         (
@@ -232,15 +233,14 @@ class NovelFoodAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "STABILITY",
+            "TOXICOLOGY",
             {
                 "fields": [
-                    "sufficient_data",
-                    "food_matrices",
-                    "instability_concerns",
-                    ("shelflife_value", "shelflife_unit"),
-                ],
-                "description": "This section is for stability related fields",
+                    "tox_study_required",
+                    "genotox_final_outcome",
+                    "specific_toxicity",
+                    "final_toxicology_remarks",
+                ]
             },
         ),
         (
@@ -278,15 +278,15 @@ class NovelFoodAdmin(admin.ModelAdmin):
     ]
     autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
     inlines = [
-        SubstanceOfConcernNovelFoodInline,
-        NovelFoodSynInline,
-        FoodCategoryNovelFoodInline,
         NovelFoodCategoryNovelFoodInline,
+        NovelFoodSynInline,
         NovelFoodChemicalInline,
         NovelFoodOrganismInline,
+        FoodCategoryNovelFoodInline,
         BackgroundExposureAssessmentInline,
-        HBGVInline,
         AllergenicityNovelFoodInline,
+        SubstanceOfConcernNovelFoodInline,
+        HBGVInline,
     ]
     actions = [duplicate_model]
 
