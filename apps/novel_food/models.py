@@ -617,17 +617,6 @@ class NovelFood(models.Model):
     )
 
     # toxicity
-    specific_toxicity = models.ForeignKey(
-        "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        db_column="id_toxicity",
-        verbose_name="Specific Toxicity",
-        on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "TOXICITY"},
-        related_name="specific_toxicity_novel_foods",
-        help_text="if novel food has specific toxicity, specify which one. (TOXICITY vocab)",
-    )
     tox_study_required = models.CharField(
         choices=TOX_STUDY_REQUIRED_CHOICES,
         max_length=255,
@@ -812,6 +801,9 @@ class SpecificToxicity(models.Model):
         on_delete=models.CASCADE,
         related_name="specific_toxicities",
     )
+
+    def __str__(self):
+        return str(self.novel_food) + " - " + str(self.specific_toxicity)
 
     class Meta:
         db_table = "SPECIFIC_TOXICITY"

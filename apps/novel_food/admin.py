@@ -245,7 +245,6 @@ class NovelFoodAdmin(admin.ModelAdmin):
                 "fields": [
                     "tox_study_required",
                     "genotox_final_outcome",
-                    "specific_toxicity",
                     "final_toxicology_remarks",
                 ]
             },
@@ -283,7 +282,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
         "vocab_id__short_name",
         "vocab_id__extended_name",
     ]
-    autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id", "specific_toxicity"]
+    autocomplete_fields = ["opinion", "shelflife_unit", "vocab_id"]
     inlines = [
         NovelFoodCategoryNovelFoodInline,
         NovelFoodSynInline,
