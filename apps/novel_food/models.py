@@ -793,6 +793,38 @@ class NovelFood(models.Model):
         verbose_name_plural = "Novel Foods 🥬"
 
 
+class SpecificToxicity(models.Model):
+    specific_toxicity = models.ForeignKey(
+        "taxonomies.TaxonomyNode",
+        null=False,
+        blank=False,
+        db_column="id_toxicity",
+        verbose_name="Specific Toxicity",
+        on_delete=models.CASCADE,
+        limit_choices_to={"taxonomy__code": "TOXICITY"},
+        related_name="novel_foods",
+        help_text="if novel food has specific toxicity, specify which one. (TOXICITY vocab)",
+    )
+    novel_food = models.ForeignKey(
+        NovelFood,
+        null=False,
+        blank=False,
+        on_delete=models.CASCADE,
+        related_name="specific_toxicities",
+    )
+
+    class Meta:
+        db_table = "SPECIFIC_TOXICITY"
+        verbose_name = "Specific Toxicity"
+        verbose_name_plural = "Specific Toxicities"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["novel_food", "specific_toxicity"],
+                name="unique_specific_toxicity_novel_food",
+            ),
+        ]
+
+
 class BackgroundExposureAssessment(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_bg_exp_assessment")
     novel_food = models.ForeignKey(

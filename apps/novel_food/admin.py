@@ -25,6 +25,7 @@ from novel_food.models import (
     OrganismSyn,
     OrgType,
     Species,
+    SpecificToxicity,
     StructureReported,
     SubstanceOfConcernNovelFood,
     SynonymType,
@@ -35,6 +36,12 @@ from util.admin_utils import duplicate_model
 
 class NovelFoodCategoryNovelFoodInline(admin.TabularInline):
     model = NovelFoodCategoryNovelFood
+    extra = 1
+
+
+class SpecificToxicityInline(admin.TabularInline):
+    model = SpecificToxicity
+    autocomplete_fields = ["specific_toxicity"]
     extra = 1
 
 
@@ -284,6 +291,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
         NovelFoodOrganismInline,
         FoodCategoryNovelFoodInline,
         BackgroundExposureAssessmentInline,
+        SpecificToxicityInline,
         AllergenicityNovelFoodInline,
         SubstanceOfConcernNovelFoodInline,
         HBGVInline,
