@@ -249,8 +249,8 @@ class InvestigationType(models.Model):
 
     class Meta:
         db_table = "INVESTIGATION_TYPE"
-        verbose_name = "ADME Investigation Type"
-        verbose_name_plural = "ADME Investigation Types"
+        verbose_name = "Investigation Type"
+        verbose_name_plural = "Investigation Types"
 
 
 class FinalOutcomePopulation(models.Model):
