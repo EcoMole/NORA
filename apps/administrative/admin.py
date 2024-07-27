@@ -113,7 +113,6 @@ class OpinionAdmin(admin.ModelAdmin):
         "publication_date",
         "adoption_date",
         "url",
-        "pdf_link",
         "get_contributions",
     ]
     list_display_links = [
@@ -137,14 +136,6 @@ class OpinionAdmin(admin.ModelAdmin):
         if db_field.name == "url":
             kwargs["widget"] = AdminURLWidget
         return super().formfield_for_dbfield(db_field, **kwargs)
-
-    def pdf_link(self, obj):
-        if obj.pdf:
-            return format_html('<a href="{}" target="_blank">PDF</a>', obj.pdf.url)
-        return "No PDF"
-
-    pdf_link.short_description = "PDF File"
-    pdf_link.admin_order_field = "pdf"
 
     def get_contributions(self, obj):
         result = "<br>".join(

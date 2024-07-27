@@ -40,9 +40,6 @@ class Opinion(models.Model):
     adoption_date = models.DateField(
         blank=True, null=True, help_text="Date of adoption"
     )
-    # upload_to='pdfs/' parameter in the FileField specifies
-    # the subdirectory within the MEDIA_ROOT where the files will be saved
-    pdf = models.FileField(upload_to="pdfs/", null=True, blank=True)
 
     def __str__(self) -> str:
         return self.title
