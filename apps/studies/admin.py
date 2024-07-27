@@ -103,31 +103,31 @@ class EndpointstudyAdmin(admin.ModelAdmin):
 
 @admin.register(Endpoint)
 class EndpointAdmin(admin.ModelAdmin):
-    # list_display = [
-    #     "get_endpointstudy",
-    #     "reference_point",
-    #     "qualifier",
-    #     "lovalue",
-    #     "unit",
-    #     "subpopulation",
-    # ]
-    # fields = [
-    #     "endpointstudy",
-    #     "reference_point",
-    #     "qualifier",
-    #     (
-    #         "lovalue",
-    #         "unit",
-    #     ),
-    #     "subpopulation",
-    # ]
-    # list_display_links = [
-    #     "reference_point",
-    #     "qualifier",
-    #     "lovalue",
-    #     "unit",
-    #     "subpopulation",
-    # ]
+    list_display = [
+        "get_endpointstudy",
+        "reference_point",
+        "qualifier",
+        "lovalue",
+        "unit",
+        "subpopulation",
+    ]
+    fields = [
+        "endpointstudy",
+        "reference_point",
+        "qualifier",
+        (
+            "lovalue",
+            "unit",
+        ),
+        "subpopulation",
+    ]
+    list_display_links = [
+        "reference_point",
+        "qualifier",
+        "lovalue",
+        "unit",
+        "subpopulation",
+    ]
     search_fields = [
         "endpointstudy__novel_food__title",
         "endpointstudy__novel_food__nf_code",
@@ -152,13 +152,13 @@ class EndpointAdmin(admin.ModelAdmin):
         "unit",
         "subpopulation",
     ]
-    # actions = [duplicate_model]
+    actions = [duplicate_model]
 
-    # def get_endpointstudy(self, obj):
-    #     return str(obj.endpointstudy)
+    def get_endpointstudy(self, obj):
+        return str(obj.endpointstudy)
 
-    # get_endpointstudy.short_description = "Endpoint Study"
-    # get_endpointstudy.admin_order_field = "endpointstudy__novel_food__title"
+    get_endpointstudy.short_description = "Endpoint Study"
+    get_endpointstudy.admin_order_field = "endpointstudy__novel_food__title"
 
     def get_model_perms(self, request):
         """
