@@ -290,10 +290,10 @@ class NovelFoodAdmin(admin.ModelAdmin):
         NovelFoodOrganismInline,
         FoodCategoryNovelFoodInline,
         BackgroundExposureAssessmentInline,
-        SpecificToxicityInline,
         AllergenicityNovelFoodInline,
         SubstanceOfConcernNovelFoodInline,
         HBGVInline,
+        SpecificToxicityInline,
     ]
     actions = [duplicate_model]
 
