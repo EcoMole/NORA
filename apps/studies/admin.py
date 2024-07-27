@@ -160,12 +160,6 @@ class EndpointAdmin(admin.ModelAdmin):
     get_endpointstudy.short_description = "Endpoint Study"
     get_endpointstudy.admin_order_field = "endpointstudy__novel_food__title"
 
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
-
 
 @admin.register(Genotox)
 class GenotoxAdmin(admin.ModelAdmin):

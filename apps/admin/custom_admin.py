@@ -57,7 +57,13 @@ class CustomAdminSite(AdminSite):
                 reorder_models(app, model_order)
 
             elif app["app_label"] == "studies":
-                model_order = ["ADME", "Genotox", "Endpointstudy", "FinalOutcome"]
+                model_order = [
+                    "ADME",
+                    "Genotox",
+                    "Endpointstudy",
+                    "Endpoint",
+                    "FinalOutcome",
+                ]
                 reorder_models(app, model_order)
 
         return app_list
