@@ -4,7 +4,8 @@ from django.db import models
 from model_utils import Choices
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-from util.sync_mixin import SyncMixin
+
+from utils.sync_mixin import SyncMixin
 
 
 class Taxonomy(models.Model):

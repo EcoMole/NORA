@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.admin import AdminSite
-from util.admin_utils import reorder_models
+
+from utils.admin_utils import reorder_models
 
 
 class CustomAdminSite(AdminSite):

@@ -10,7 +10,8 @@ from taxonomies.models import (
     Taxonomy,
     TaxonomyNode,
 )
-from util.admin_utils import duplicate_model
+
+from utils.admin_utils import duplicate_model
 
 
 @admin.register(Population)

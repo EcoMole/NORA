@@ -3,7 +3,8 @@ from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from util.admin_utils import duplicate_model
+
+from utils.admin_utils import duplicate_model
 
 from .models import (
     Applicant,

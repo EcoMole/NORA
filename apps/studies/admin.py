@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.db.models import Subquery
 from taxonomies.models import Subgroup, TaxonomyNode
-from util.admin_utils import duplicate_model
+
+from utils.admin_utils import duplicate_model
 
 from .models import (
     ADME,

@@ -31,7 +31,8 @@ from novel_food.models import (
     SynonymType,
 )
 from taxonomies.util import Descriptor
-from util.admin_utils import duplicate_model
+
+from utils.admin_utils import duplicate_model
 
 
 class NovelFoodCategoryNovelFoodInline(admin.TabularInline):

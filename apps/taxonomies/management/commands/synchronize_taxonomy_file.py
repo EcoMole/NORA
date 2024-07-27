@@ -14,7 +14,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
 from lxml import etree
 from taxonomies.models import ImplicitAttribute, Taxonomy, TaxonomyNode
-from util.sync_mixin import SyncMixin  # noqa: F401
+
+from utils.sync_mixin import SyncMixin  # noqa: F401
 
 log = logging.getLogger("taxonomies.synchronize")
 

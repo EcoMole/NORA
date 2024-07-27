@@ -1,7 +1,8 @@
 from core.models import Contribution
 from django.contrib import admin
 from django.utils.html import format_html
-from util.admin_utils import duplicate_model
+
+from utils.admin_utils import duplicate_model
 
 from .models import (
     Composition,
