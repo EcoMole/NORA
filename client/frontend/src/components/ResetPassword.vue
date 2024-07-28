@@ -25,9 +25,7 @@
         :rules="rules.password1"
       ></v-text-field>
 
-      <div class="text-subtitle-1 text-medium-emphasis">
-        Repeat New Password
-      </div>
+      <div class="text-subtitle-1 text-medium-emphasis">Repeat New Password</div>
       <v-text-field
         :append-inner-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
         :type="passwordVisible ? 'text' : 'password'"
@@ -65,9 +63,9 @@
   </v-form>
   <v-card v-else>
     <v-alert title="Problem with a password resetting link">
-      The link by which you are attempting to reset your password is not valid.
-      If you came here by accident, you can ignore this. If you are sure that
-      you have the correct link, please get in contact with us.</v-alert
+      The link by which you are attempting to reset your password is not valid. If you came here by
+      accident, you can ignore this. If you are sure that you have the correct link, please get in
+      contact with us.</v-alert
     >
     <v-btn
       :to="{ name: 'home-page' }"
@@ -82,9 +80,9 @@
   </v-card>
 </template>
 <script>
-import axios from "@/libs/axios";
-import { passwordRules, password2Rules } from "@/libs/form-rules";
-import { useMainStore } from "@/stores/main";
+import axios from '@/libs/axios'
+import { passwordRules, password2Rules } from '@/libs/form-rules'
+import { useMainStore } from '@/stores/main'
 
 export default {
   data() {
@@ -93,30 +91,30 @@ export default {
       passwordVisible: false,
       mainStore: null,
       user: {
-        username: "",
-        password1: "",
-        password2: "",
-        uid: "",
-        token: "",
-      },
-    };
+        username: '',
+        password1: '',
+        password2: '',
+        uid: '',
+        token: ''
+      }
+    }
   },
   created() {
-    this.mainStore = useMainStore();
-    this.user.username = this.$route.query.username;
-    this.user.uid = this.$route.query.uid;
-    this.user.token = this.$route.query.token;
+    this.mainStore = useMainStore()
+    this.user.username = this.$route.query.username
+    this.user.uid = this.$route.query.uid
+    this.user.token = this.$route.query.token
   },
   computed: {
     queryParamsOk() {
-      return !!this.user.username && !!this.user.uid && !!this.user.token;
+      return !!this.user.username && !!this.user.uid && !!this.user.token
     },
     rules() {
       return {
         password1: passwordRules,
-        password2: password2Rules(this.user.password1, this.user.password2),
-      };
-    },
+        password2: password2Rules(this.user.password1, this.user.password2)
+      }
+    }
   },
   methods: {
     resetPassword() {
@@ -125,16 +123,16 @@ export default {
           uid: this.user.uid,
           token: this.user.token,
           new_password1: this.user.password1,
-          new_password2: this.user.password2,
+          new_password2: this.user.password2
         })
         .then(() => {
-          this.mainStore.handleSuccess("Password has been reset.");
-          this.$router.push({ name: "home-page" });
+          this.mainStore.handleSuccess('Password has been reset.')
+          this.$router.push({ name: 'home-page' })
         })
         .catch((error) => {
-          this.mainStore.handleError(error.response.data);
-        });
-    },
-  },
-};
+          this.mainStore.handleError(error.response.data)
+        })
+    }
+  }
+}
 </script>

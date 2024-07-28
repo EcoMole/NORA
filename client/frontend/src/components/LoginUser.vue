@@ -13,9 +13,7 @@
         :rules="rules.email"
       ></v-text-field>
 
-      <div
-        class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
-      >
+      <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
         Password
       </div>
 
@@ -34,9 +32,7 @@
 
       <v-card class="mb-12" color="surface-variant" variant="tonal">
         <v-card-text class="text-medium-emphasis text-caption">
-          <span>
-            If you have forgotten your password, you can reset your password
-          </span>
+          <span> If you have forgotten your password, you can reset your password </span>
           <a href="#" @click="$emit('reset-password')">here</a>
           <span>.</span>
         </v-card-text>
@@ -57,9 +53,9 @@
   </v-form>
 </template>
 <script>
-import axios from "@/libs/axios";
-import { useMainStore } from "@/stores/main";
-import { basicRule, emailRules } from "@/libs/form-rules";
+import axios from '@/libs/axios'
+import { useMainStore } from '@/stores/main'
+import { basicRule, emailRules } from '@/libs/form-rules'
 
 export default {
   data: function () {
@@ -67,36 +63,36 @@ export default {
       visible: false,
       valid: false,
       user: {
-        email: "",
-        password: "",
+        email: '',
+        password: ''
       },
       mainStore: null,
       rules: {
         basic: basicRule,
-        email: emailRules,
-      },
-    };
+        email: emailRules
+      }
+    }
   },
   created() {
-    this.mainStore = useMainStore();
+    this.mainStore = useMainStore()
   },
 
   methods: {
     logIn() {
-      this.mainStore.closeSnackbar();
+      this.mainStore.closeSnackbar()
       axios
-        .post("/api/v1/auth/login/", {
+        .post('/api/v1/auth/login/', {
           email: this.user.email,
-          password: this.user.password,
+          password: this.user.password
         })
         .then(() => {
-          this.mainStore.authenticate();
-          this.mainStore.loadData();
+          this.mainStore.authenticate()
+          this.mainStore.loadData()
         })
         .catch((error) => {
-          this.mainStore.handleError(error.response.data);
-        });
-    },
-  },
-};
+          this.mainStore.handleError(error.response.data)
+        })
+    }
+  }
+}
 </script>

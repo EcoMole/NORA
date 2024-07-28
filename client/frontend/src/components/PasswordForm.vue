@@ -6,12 +6,7 @@
   </v-avatar>
   <v-container style="max-width: 400px">
     <v-form @submit.prevent="submitForm">
-      <v-text-field
-        v-model="username"
-        disabled
-        label="Username"
-        :readonly="true"
-      ></v-text-field>
+      <v-text-field v-model="username" disabled label="Username" :readonly="true"></v-text-field>
       <v-text-field
         :append-inner-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
         :type="passwordVisible ? 'text' : 'password'"
@@ -40,9 +35,7 @@
         :rules="rules.password2"
       ></v-text-field>
       <div class="d-flex justify-between">
-        <v-btn color="secondary" variant="tonal" @click="$emit('cancel')"
-          >Cancel</v-btn
-        >
+        <v-btn color="secondary" variant="tonal" @click="$emit('cancel')">Cancel</v-btn>
         <v-spacer></v-spacer>
         <v-btn type="submit" color="tertiary">Submit</v-btn>
       </div>
@@ -51,41 +44,41 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import axios from "axios";
-import { basicRule, passwordRules, password2Rules } from "@/libs/form-rules";
-import { useMainStore } from "@/stores/main";
-import { getInitials } from "@/libs/utils";
+import { computed, ref } from 'vue'
+import axios from 'axios'
+import { basicRule, passwordRules, password2Rules } from '@/libs/form-rules'
+import { useMainStore } from '@/stores/main'
+import { getInitials } from '@/libs/utils'
 
-const passwordVisible = ref(false);
+const passwordVisible = ref(false)
 const rules = computed(() => ({
   basic: basicRule,
   password1: passwordRules,
-  password2: password2Rules(data.value.new_password1, data.value.new_password2),
-}));
+  password2: password2Rules(data.value.new_password1, data.value.new_password2)
+}))
 
 const props = defineProps({
-  user: Object,
-});
-const username = ref(props.user.username);
-const initials = getInitials(props.user.firstName, props.user.lastName);
+  user: Object
+})
+const username = ref(props.user.username)
+const initials = getInitials(props.user.firstName, props.user.lastName)
 
 const data = ref({
-  old_password: "",
-  new_password1: "",
-  new_password2: "",
-});
-const mainStore = useMainStore();
-const emit = defineEmits(["submit", "cancel"]);
+  old_password: '',
+  new_password1: '',
+  new_password2: ''
+})
+const mainStore = useMainStore()
+const emit = defineEmits(['submit', 'cancel'])
 async function submitForm() {
   await axios
-    .post("/api/v1/auth/password/change/", data.value)
+    .post('/api/v1/auth/password/change/', data.value)
     .then(() => {
-      mainStore.handleSuccess("Password has been changed");
-      emit("submit");
+      mainStore.handleSuccess('Password has been changed')
+      emit('submit')
     })
     .catch((error) => {
-      mainStore.handleError(error.response.data);
-    });
+      mainStore.handleError(error.response.data)
+    })
 }
 </script>

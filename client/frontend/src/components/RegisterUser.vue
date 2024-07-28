@@ -36,17 +36,10 @@
           We will send you an email with a link to confirm your email address.
         </v-card-text>
       </v-card>
-      <v-checkbox
-        v-model="user.terms"
-        color="primary"
-        active-color="primary"
-        :rules="rules.terms"
-      >
+      <v-checkbox v-model="user.terms" color="primary" active-color="primary" :rules="rules.terms">
         <template #label>
           I agree to site&nbsp;
-          <a href="http://www.example.com/" target="_blank">
-            terms and conditions</a
-          >
+          <a href="http://www.example.com/" target="_blank"> terms and conditions</a>
         </template>
       </v-checkbox>
 
@@ -69,9 +62,9 @@
 </template>
 
 <script>
-import axios from "@/libs/axios";
-import { emailRules, passwordRules, password2Rules } from "@/libs/form-rules";
-import { useMainStore } from "@/stores/main";
+import axios from '@/libs/axios'
+import { emailRules, passwordRules, password2Rules } from '@/libs/form-rules'
+import { useMainStore } from '@/stores/main'
 
 export default {
   data() {
@@ -82,17 +75,17 @@ export default {
       // If any field is invalid, Vuetify sets the value of `valid` to false.
 
       user: {
-        email: "",
-        password1: "",
-        password2: "",
-        terms: false,
+        email: '',
+        password1: '',
+        password2: '',
+        terms: false
       },
       passwordVisible: false,
-      mainStore: null,
-    };
+      mainStore: null
+    }
   },
   created() {
-    this.mainStore = useMainStore();
+    this.mainStore = useMainStore()
   },
   computed: {
     rules() {
@@ -100,32 +93,30 @@ export default {
         email: emailRules,
         password1: passwordRules,
         password2: password2Rules(this.user.password1, this.user.password2),
-        terms: [
-          (v) => !!v || "Agreeing to the terms and conditions is required",
-        ],
-      };
-    },
+        terms: [(v) => !!v || 'Agreeing to the terms and conditions is required']
+      }
+    }
   },
 
   methods: {
     async register() {
-      this.mainStore.closeSnackbar();
+      this.mainStore.closeSnackbar()
       axios
-        .post("/api/v1/auth/registration/", {
+        .post('/api/v1/auth/registration/', {
           email: this.user.email,
           username: this.user.email,
           password1: this.user.password1,
-          password2: this.user.password2,
+          password2: this.user.password2
         })
         .then(() => {
           this.mainStore.handleSuccess(
-            "Registration successful. Please confirm your email before you can log in."
-          );
+            'Registration successful. Please confirm your email before you can log in.'
+          )
         })
         .catch((error) => {
-          this.mainStore.handleError(error.response.data);
-        });
-    },
-  },
-};
+          this.mainStore.handleError(error.response.data)
+        })
+    }
+  }
+}
 </script>

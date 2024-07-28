@@ -15,8 +15,7 @@
 
       <v-card class="mb-12" color="surface-variant" variant="tonal">
         <v-card-text class="text-medium-emphasis text-caption">
-          We will send you an email containing a link with which you can reset
-          your password.
+          We will send you an email containing a link with which you can reset your password.
         </v-card-text>
       </v-card>
 
@@ -45,41 +44,39 @@
   </v-form>
 </template>
 <script>
-import axios from "@/libs/axios";
-import { emailRules } from "@/libs/form-rules";
-import { useMainStore } from "@/stores/main";
+import axios from '@/libs/axios'
+import { emailRules } from '@/libs/form-rules'
+import { useMainStore } from '@/stores/main'
 
 export default {
   data() {
     return {
       valid: false,
       rules: {
-        email: emailRules,
+        email: emailRules
       },
       user: {
-        email: "",
+        email: ''
       },
-      mainStore: null,
-    };
+      mainStore: null
+    }
   },
   created() {
-    this.mainStore = useMainStore();
+    this.mainStore = useMainStore()
   },
   methods: {
     requestPasswordReset() {
       axios
-        .post("/api/v1/auth/request-password-reset/", {
-          email: this.user.email,
+        .post('/api/v1/auth/request-password-reset/', {
+          email: this.user.email
         })
         .then(() => {
-          this.mainStore.handleSuccess(
-            "Email with the reset link has been sent."
-          );
+          this.mainStore.handleSuccess('Email with the reset link has been sent.')
         })
         .catch((error) => {
-          this.mainStore.handleError(error.response.data);
-        });
-    },
-  },
-};
+          this.mainStore.handleError(error.response.data)
+        })
+    }
+  }
+}
 </script>

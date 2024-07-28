@@ -36,13 +36,19 @@ onBeforeMount(() => {
   mainStore.initializeApp()
 })
 onMounted(() => {
-  setInterval(() => {
-    if (mainStore.isAuthenticated) {
-      mainStore.refreshAccessToken()
-    }
-  }, 1000 * 60 * 4)
-  setInterval(() => {
-    mainStore.setCsrfToken()
-  }, 1000 * 60 * 25)
+  setInterval(
+    () => {
+      if (mainStore.isAuthenticated) {
+        mainStore.refreshAccessToken()
+      }
+    },
+    1000 * 60 * 4
+  )
+  setInterval(
+    () => {
+      mainStore.setCsrfToken()
+    },
+    1000 * 60 * 25
+  )
 })
 </script>

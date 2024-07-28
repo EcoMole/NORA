@@ -1,10 +1,10 @@
-import axios from "@/libs/axios";
-import { defineStore } from "pinia";
+import axios from '@/libs/axios'
+import { defineStore } from 'pinia'
 
-import errorMessageParser from "@/libs/error-message-parser";
+import errorMessageParser from '@/libs/error-message-parser'
 
 export const useMainStore = defineStore({
-  id: "auth",
+  id: 'auth',
   state: () => ({
     isAuthenticated: false,
     appInitialized: false,
@@ -16,108 +16,108 @@ export const useMainStore = defineStore({
       lastName: null,
       isSuperuser: null,
       isStaff: null,
-      extraData: null,
+      extraData: null
     },
     settings: {
-      adminPath: null,
+      adminPath: null
     },
     snackbar: {
       show: false,
-      color: "",
-      message: "",
-      icon: "",
-      timeout: 4000,
-    },
+      color: '',
+      message: '',
+      icon: '',
+      timeout: 4000
+    }
   }),
   getters: {},
   actions: {
     async initializeApp() {
       try {
-        await this.refreshAccessToken();
+        await this.refreshAccessToken()
         if (this.isAuthenticated) {
-          this.loadData();
+          this.loadData()
         }
       } finally {
-        this.appInitialized = true;
-        this.setCsrfToken();
+        this.appInitialized = true
+        this.setCsrfToken()
       }
     },
     async refreshAccessToken() {
       try {
-        await axios.post("/api/v1/auth/token/refresh/");
-        this.isAuthenticated = true;
+        await axios.post('/api/v1/auth/token/refresh/')
+        this.isAuthenticated = true
       } catch (error) {
-        this.isAuthenticated = false;
+        this.isAuthenticated = false
       }
     },
     async loadData() {
-      this.fetchSettings();
-      this.fetchUser();
+      this.fetchSettings()
+      this.fetchUser()
     },
     async fetchSettings() {
-      axios.get("/api/v1/settings/").then((response) => {
-        this.settings.adminPath = response.data.django_admin_path || null;
-      });
+      axios.get('/api/v1/settings/').then((response) => {
+        this.settings.adminPath = response.data.django_admin_path || null
+      })
     },
     async fetchUser() {
       axios
-        .get("/api/v1/user/")
+        .get('/api/v1/user/')
         .then((response) => {
-          this.user.pk = response.data.pk;
-          this.user.username = response.data.username;
-          this.user.email = response.data.email;
-          this.user.firstName = response.data.first_name;
-          this.user.lastName = response.data.last_name;
-          this.user.isSuperuser = response.data.is_superuser;
-          this.user.isStaff = response.data.is_staff;
-          this.user.extraData = response.data.extra_data;
+          this.user.pk = response.data.pk
+          this.user.username = response.data.username
+          this.user.email = response.data.email
+          this.user.firstName = response.data.first_name
+          this.user.lastName = response.data.last_name
+          this.user.isSuperuser = response.data.is_superuser
+          this.user.isStaff = response.data.is_staff
+          this.user.extraData = response.data.extra_data
         })
         .catch((error) => {
           if (error.response?.status == 401) {
-            this.isAuthenticated = false;
+            this.isAuthenticated = false
           }
-        });
+        })
     },
     setCsrfToken() {
-      axios.get("/api/v1/csrf/");
+      axios.get('/api/v1/csrf/')
     },
     authenticate() {
-      this.isAuthenticated = true;
+      this.isAuthenticated = true
     },
     deauthenticate() {
-      this.isAuthenticated = false;
+      this.isAuthenticated = false
     },
     async logOut() {
       axios
-        .post("/api/v1/auth/logout/")
+        .post('/api/v1/auth/logout/')
         .then(() => {
-          this.isAuthenticated = false;
-          this.handleSuccess("You have been successfully logged out.");
+          this.isAuthenticated = false
+          this.handleSuccess('You have been successfully logged out.')
         })
         .catch((error) => {
-          this.handleError(error.response.data);
-        });
+          this.handleError(error.response.data)
+        })
     },
     handleSuccess(successMessage) {
       Object.assign(this.snackbar, {
         message: successMessage,
-        color: "secondary",
-        icon: "mdi-check",
+        color: 'secondary',
+        icon: 'mdi-check',
         show: true,
-        timeout: 5000,
-      });
+        timeout: 5000
+      })
     },
     handleError(errorMessage) {
       Object.assign(this.snackbar, {
         message: errorMessageParser(errorMessage),
-        color: "tertiary",
-        icon: "mdi-exclamation",
+        color: 'tertiary',
+        icon: 'mdi-exclamation',
         timeout: 12000,
-        show: true,
-      });
+        show: true
+      })
     },
     closeSnackbar() {
-      this.snackbar.show = false;
-    },
-  },
-});
+      this.snackbar.show = false
+    }
+  }
+})
