@@ -1,12 +1,14 @@
 import { fileURLToPath, URL } from 'node:url'
 import vuetify from 'vite-plugin-vuetify'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-
-const devURLBase = 'http://127.0.0.1:8000/'
-
 /* eslint-disable */
 export default defineConfig(({ command, mode }) => {
+  // Get the correct env file based on the mode
+  const env = loadEnv(mode, process.cwd())
+
+  // Use the environment variable
+  const URLBase = env.VITE_API_URL
   /* eslint-enable */
   // base configuration: used in both development and production:
   const baseConfig = {
@@ -21,20 +23,23 @@ export default defineConfig(({ command, mode }) => {
     // development configuration: base configuration extended for configuratiion used only in development
     return {
       ...baseConfig,
+      define: {
+        'process.env.VITE_API_URL': JSON.stringify(URLBase)
+      },
       server: {
         proxy: {
           '/api/': {
-            target: devURLBase,
+            target: URLBase,
             changeOrigin: true,
             ws: true
           },
           '/static/': {
-            target: devURLBase,
+            target: URLBase,
             changeOrigin: true,
             ws: true
           },
           '/media/': {
-            target: devURLBase,
+            target: URLBase,
             changeOrigin: true,
             ws: true
           }
