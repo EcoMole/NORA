@@ -9,7 +9,7 @@ class CustomAccountAdapter(DefaultAccountAdapter):
     def send_mail(self, template_prefix, email, context):
         # Creating custom email template for password reset email
         if template_prefix == "account/email/password_reset_key":
-            # example of context["password_reset_url"] = 'https://127.0.0.1:8000/api/v1/auth/
+            # example of context["password_reset_url"] = 'http://127.0.0.1:8000/api/v1/auth/
             # not-used-url-but-has-to-be-here/3v/bzx5zy-585a0b72554ea329ad1dfb55192650e2/'
             url = urlparse(context["password_reset_url"])
             kwargs = resolve(url.path).kwargs

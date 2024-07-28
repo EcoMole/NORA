@@ -34,7 +34,7 @@ class TestCustomAccountAdapter:
         token = fake.uuid4()
         netloc = fake.domain_name()
         context = {
-            "password_reset_url": f"https://{netloc}/api/v1/auth/not-used-url-but-has-to-be-here/"
+            "password_reset_url": f"http://{netloc}/api/v1/auth/not-used-url-but-has-to-be-here/"
             f"{uid}/{token}/",
             "user": user,
         }
@@ -51,7 +51,7 @@ class TestCustomAccountAdapter:
                 "You're receiving this email because you or someone else has requested a "
                 "password reset for your user account.",
                 "Click the link below to reset your password.",
-                f"https://{domain}/reset-your-password-here/?username="
+                f"http://{domain}/reset-your-password-here/?username="
                 f"{user.username}&uid={uid}&token={token}",
                 f"The link will be valid for {pswd_timeout_in_days} days.",
             )

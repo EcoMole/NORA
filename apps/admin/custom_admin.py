@@ -10,7 +10,7 @@ class CustomAdminSite(AdminSite):
     site_title = settings.SITE_TITLE  # default: "Django site admin"
     # url for link "View site" in the top right corner of Django admin
     site_url = (
-        "https://" + settings.FRONTEND_DOMAIN if settings.FRONTEND_DOMAIN else "/"
+        "http://" + settings.FRONTEND_DOMAIN if settings.FRONTEND_DOMAIN else "/"
     )  # default: "/"
 
     # Override the admin presentation order of the apps and models

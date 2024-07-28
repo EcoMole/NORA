@@ -1,3 +1,5 @@
+from allauth.account.admin import EmailAddressAdmin as BaseEmailAddressAdmin
+from allauth.account.models import EmailAddress
 from core import models
 from django.contrib import admin  # noqa: F401
 from django.contrib.auth.admin import UserAdmin
@@ -6,6 +8,7 @@ from import_export import fields
 from import_export.admin import ExportActionMixin
 from import_export.resources import ModelResource
 
+from .forms import CustomEmailAddressAdminForm
 from .models import Contribution, User
 
 
@@ -92,3 +95,11 @@ class TheUserAdmin(ExportActionMixin, UserAdmin):
 
     email_verified.boolean = True
     email_verified.admin_order_field = "_email_verified"
+
+
+class CustomEmailAddressAdmin(BaseEmailAddressAdmin):
+    form = CustomEmailAddressAdminForm
+
+
+admin.site.unregister(EmailAddress)
+admin.site.register(EmailAddress, CustomEmailAddressAdmin)

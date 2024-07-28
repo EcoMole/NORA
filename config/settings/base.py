@@ -130,7 +130,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 # then we want the user to be redirected to the LOGIN_URL after verification,
 # so we specified our LOGIN_URL:
-LOGIN_URL = "https://localhost:5173/"
+LOGIN_URL = "http://localhost:5173/"
 # ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 # needed for custom email templates (password reset email etc.)
