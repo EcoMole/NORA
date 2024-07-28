@@ -125,15 +125,27 @@ export default {
         },
         {
           title: 'Opinions',
-          icon: 'mdi-database',
+          icon: 'mdi-file-document-edit',
           value: 'opinions',
           routerLink: 'opinions-page'
         },
         {
-          title: 'Actions',
-          icon: 'mdi-file-document-edit',
-          value: 'actions',
-          routerLink: 'actions-page'
+          title: 'Novel Foods',
+          icon: 'mdi-database',
+          value: 'novelFoods',
+          routerLink: 'novel-foods-page'
+        },
+        {
+          title: 'Organisms',
+          icon: 'mdi-database',
+          value: 'organisms',
+          routerLink: 'organisms-page'
+        },
+        {
+          title: 'Chemicals',
+          icon: 'mdi-database',
+          value: 'chemicals',
+          routerLink: 'chemicals-page'
         },
         {
           title: 'User',

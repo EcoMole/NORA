@@ -25,9 +25,19 @@ export default new createRouter({
       component: () => import('@/pages/OpinionsPage.vue')
     },
     {
-      path: '/actions/',
-      name: 'actions-page',
-      component: () => import('@/pages/ActionsPage.vue')
+      path: '/novle-foods/',
+      name: 'novel-foods-page',
+      component: () => import('@/pages/NovelFoodsPage.vue')
+    },
+    {
+      path: '/organisms/',
+      name: 'organisms-page',
+      component: () => import('@/pages/OrganismsPage.vue')
+    },
+    {
+      path: '/chemicals/',
+      name: 'chemicals-page',
+      component: () => import('@/pages/ChemicalsPage.vue')
     },
     {
       path: '/user/',
