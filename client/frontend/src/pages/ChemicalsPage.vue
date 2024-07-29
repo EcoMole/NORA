@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       dateImput: null,
-      showInColumns: [],
+      showInColumns: ["Name"],
       showInDetails: [],
       sortBy: [{ key: 'calories', order: 'asc' }],
       headers: [],
@@ -132,6 +132,9 @@ export default {
       ]
       this.headers = allHeaders.filter((header) => this.showInColumns.includes(header.text))
     }
+  },
+  mounted() {
+    this.updateHeaders()
   }
 }
 </script>

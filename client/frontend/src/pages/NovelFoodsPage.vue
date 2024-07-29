@@ -10,7 +10,13 @@
             multiple
             label="Display in columns"
             v-model="showInColumns"
-            :items="['Allergenicity', 'NF Code', 'Novel Food Title', 'Was Tox Study Required', 'Has Nutri Disadvantage']"
+            :items="[
+              'Allergenicity',
+              'NF Code',
+              'Novel Food Title',
+              'Was Tox Study Required',
+              'Has Nutri Disadvantage'
+            ]"
           ></v-combobox>
         </v-row>
         <v-row>
@@ -51,7 +57,7 @@ export default {
   },
   data() {
     return {
-      showInColumns: [],
+      showInColumns: ['NF Code'],
       headers: [],
       novelFoods: [
         {
@@ -93,10 +99,12 @@ export default {
         { text: 'Novel Food Title', value: 'novelFoodTitle' },
         { text: 'Was Tox Study Required', value: 'wasToxStudyRequired' },
         { text: 'Has Nutri Disadvantage', value: 'hasNutriDisadvantage' }
-      ];
-      this.headers = allHeaders.filter(header => this.showInColumns.includes(header.text));
+      ]
+      this.headers = allHeaders.filter((header) => this.showInColumns.includes(header.text))
     }
   },
-
+  mounted() {
+    this.updateHeaders()
+  }
 }
 </script>

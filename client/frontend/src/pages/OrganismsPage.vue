@@ -53,7 +53,7 @@ export default {
   },
   data() {
     return {
-      showInColumns: [],
+      showInColumns: ["Species"],
       headers: [],
       organisms: [
         {
