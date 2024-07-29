@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       showInColumns: ["Species"],
+      showInDetails: [],
       headers: [],
       organisms: [
         {
@@ -92,12 +93,12 @@ export default {
   methods: {
     updateHeaders() {
       const allHeaders = [
-        { text: 'Genus', value: 'genus' },
-        { text: 'Family', value: 'family' },
-        { text: 'Species', value: 'species' },
-        { text: 'Is GMO', value: 'isGMO' }
+        { title: 'Genus', key: 'genus' },
+        { title: 'Family', key: 'family' },
+        { title: 'Species', key: 'species' },
+        { title: 'Is GMO', key: 'isGMO' }
       ];
-      this.headers = allHeaders.filter(header => this.showInColumns.includes(header.text));
+      this.headers = allHeaders.filter(header => this.showInColumns.includes(header.title));
     }
   },
   mounted() {

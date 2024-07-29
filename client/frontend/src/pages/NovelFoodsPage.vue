@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       showInColumns: ['NF Code'],
+      showInDetails: [],
       headers: [],
       novelFoods: [
         {
@@ -94,13 +95,13 @@ export default {
   methods: {
     updateHeaders() {
       const allHeaders = [
-        { text: 'Allergenicity', value: 'allergenicity' },
-        { text: 'NF Code', value: 'nfCode' },
-        { text: 'Novel Food Title', value: 'novelFoodTitle' },
-        { text: 'Was Tox Study Required', value: 'wasToxStudyRequired' },
-        { text: 'Has Nutri Disadvantage', value: 'hasNutriDisadvantage' }
+        { title: 'Allergenicity', key: 'allergenicity' },
+        { title: 'NF Code', key: 'nfCode' },
+        { title: 'Novel Food Title', key: 'novelFoodTitle' },
+        { title: 'Was Tox Study Required', key: 'wasToxStudyRequired' },
+        { title: 'Has Nutri Disadvantage', key: 'hasNutriDisadvantage' }
       ]
-      this.headers = allHeaders.filter((header) => this.showInColumns.includes(header.text))
+      this.headers = allHeaders.filter((header) => this.showInColumns.includes(header.title))
     }
   },
   mounted() {

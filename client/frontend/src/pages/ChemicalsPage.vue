@@ -125,12 +125,12 @@ export default {
   methods: {
     updateHeaders() {
       const allHeaders = [
-        { text: 'Name', value: 'name' },
-        { text: 'Synonym', value: 'synonym' },
-        { text: 'CAS number', value: 'cas_number' },
-        { text: 'Molecular Formula', value: 'molecular_formula' }
+        { title: 'Name', key: 'name' },
+        { title: 'Synonym', key: 'synonym' },
+        { title: 'CAS number', key: 'cas_number' },
+        { title: 'Molecular Formula', key: 'molecular_formula' }
       ]
-      this.headers = allHeaders.filter((header) => this.showInColumns.includes(header.text))
+      this.headers = allHeaders.filter((header) => this.showInColumns.includes(header.title))
     }
   },
   mounted() {
