@@ -235,7 +235,7 @@ export default {
     dialog: false,
     headers: [],
     newFilter: {
-      include: true,
+      include: "",
       title: '',
       subtitle: '',
       qualifier: '',
@@ -345,10 +345,10 @@ export default {
       },
       {
         allergenicity: 'High',
-        nfCode: 'NF002',
-        novelFoodTitle: 'Engineered Probiotics',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: true,
+        nfCode: 'NF002, NF302',
+        novelFoodTitle: 'Engineered Probiotics, Yeast Cultures',
+        wasToxStudyRequired: "true, false",
+        hasNutriDisadvantage: "true, true",
         opinionURL: 'http://example.com/nf002',
         opinionDOI: '10.1234/nf002',
         publicationDate: '2023-02-15',
@@ -359,7 +359,7 @@ export default {
         finalOutcomeRemarks: 'High allergenicity concerns'
       },
       {
-        allergenicity: 'Moderate',
+        allergenicity: 'Moderate, Low',
         nfCode: 'NF003',
         novelFoodTitle: 'Algae-based Omega 3',
         wasToxStudyRequired: false,
@@ -375,10 +375,10 @@ export default {
       },
       {
         allergenicity: 'Unknown',
-        nfCode: 'NF004',
-        novelFoodTitle: 'Synthetic Vanillin',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: true,
+        nfCode: 'NF004, NF010, NF003',
+        novelFoodTitle: 'Synthetic Vanillin, Artificial Sweeteners, Algae-based Omega 3',
+        wasToxStudyRequired: "true, true, false",
+        hasNutriDisadvantage: "true, false, false",
         opinionURL: 'http://example.com/nf004',
         opinionDOI: '10.1234/nf004',
         publicationDate: '2020-06-12',
@@ -389,7 +389,7 @@ export default {
         finalOutcomeRemarks: 'Requires labeling'
       },
       {
-        allergenicity: 'Low',
+        allergenicity: 'Low, Moderate',
         nfCode: 'NF005',
         novelFoodTitle: 'Insect Protein',
         wasToxStudyRequired: true,
