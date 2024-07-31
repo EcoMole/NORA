@@ -3,7 +3,7 @@
     <h1>Novel Foods</h1>
     <v-btn @click="loadData">Load Data</v-btn>
     <ul v-if="data">
-      <li v-for="item in data.mymodels" :key="item.id">{{ item.title }} ({{ item.nfCode }})</li>
+      <li v-for="item in data.novelFoods" :key="item.id">{{ item.title }} ({{ item.nfCode }})</li>
     </ul>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
 
     const GET_NOVEL_FOODS = gql`
       query {
-        mymodels {
+        novelFoods {
           id
           title
           nfCode

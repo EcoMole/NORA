@@ -10,7 +10,7 @@ class NovelFoodType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    mymodels = graphene.List(NovelFoodType)
+    novel_foods = graphene.List(NovelFoodType)
 
-    def resolve_mymodels(self, info):
+    def resolve_novel_foods(self, info):
         return NovelFood.objects.all()

@@ -30,6 +30,9 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
   // Combine the authentication link and the HTTP link
   link: authLink.concat(httpLink), // First use authLink to set headers, then httpLink to handle the HTTP connection
+
+  connectToDevTools: true, // Enable Apollo DevTools in browser
+
   // Use in-memory cache for better performance
   cache: new InMemoryCache() // Apollo's standard caching mechanism to store query results in memory
 })
