@@ -124,6 +124,12 @@ export default {
           routerLink: 'dashboard-page'
         },
         {
+          title: 'Graphql',
+          icon: 'mdi-file-document-edit',
+          value: 'graphql',
+          routerLink: 'graphql-page'
+        },
+        {
           title: 'Opinions',
           icon: 'mdi-file-document-edit',
           value: 'opinions',

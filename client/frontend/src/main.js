@@ -6,23 +6,23 @@ import { setupStore } from '@/stores'
 import router from '@/router'
 import vuetify from '@/plugins/vuetify'
 import { ApolloClients } from '@vue/apollo-composable'
-import apolloClient from '@/libs/apollo-client'
+import client from '@/libs/apollo-client'
 
-const app = createApp(App);
+const app = createApp(App)
 
 // Provide Apollo Client
 app.provide(ApolloClients, {
-  default: apolloClient, // Provide the Apollo Client instance as the default client
-});
+  default: client // Provide the Apollo Client instance as the default client
+})
 
 // Setup store
-setupStore(app);
+setupStore(app)
 
 // Use Vuetify
-app.use(vuetify);
+app.use(vuetify)
 
 // Use Vue Router
-app.use(router);
+app.use(router)
 
 // Mount the app
-app.mount('#app');
+app.mount('#app')

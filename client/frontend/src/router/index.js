@@ -20,6 +20,11 @@ export default new createRouter({
       component: () => import('@/pages/DashboardPage.vue')
     },
     {
+      path: '/graphql/',
+      name: 'graphql-page',
+      component: () => import('@/pages/GraphqlPage.vue')
+    },
+    {
       path: '/opinions/',
       name: 'opinions-page',
       component: () => import('@/pages/OpinionsPage.vue')
