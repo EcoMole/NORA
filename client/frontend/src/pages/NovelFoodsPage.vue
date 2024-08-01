@@ -29,12 +29,6 @@
             </v-row>
           </v-col>
           <v-col cols="3">
-            <v-row class="justify-center">
-              <v-btn style="min-height: 50px" color="primary">
-                <v-icon left>mdi-export</v-icon>
-                Export
-              </v-btn>
-            </v-row>
             <v-row class="mt-8 justify-center">
               <v-btn @click="renderTable" style="min-height: 50px" color="secondary">
                 <v-icon left>mdi-magnify</v-icon>
