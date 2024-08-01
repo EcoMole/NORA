@@ -1,9 +1,16 @@
 <template>
   <div>
     <h1>Novel Foods</h1>
-    <v-btn @click="loadData">Load Data</v-btn>
-    <ul v-if="data">
-      <li v-for="item in data.novelFoods" :key="item.id">{{ item.title }} ({{ item.nfCode }})</li>
+    <v-btn @click="loadNovelFoods">Load Data</v-btn>
+    <ul v-if="novelFoodsData">
+      <li v-for="item in novelFoodsData.novelFoods" :key="item.id">{{ item.title }} ({{ item.nfCode }})</li>
+    </ul>
+  </div>
+  <div>
+    <h1>Opinions</h1>
+    <v-btn @click="loadOpinions">Load Data</v-btn>
+    <ul v-if="opinionsData">
+      <li v-for="item in opinionsData.opinions" :key="item.id">{{ item.url }} ({{ item.doi }})</li>
     </ul>
   </div>
 </template>
@@ -15,7 +22,8 @@ import { useApolloClient } from '@vue/apollo-composable';
 
 export default {
   setup() {
-    const data = ref(null);
+    const novelFoodsData = ref(null);
+    const opinionsData = ref(null);
     const loading = ref(false);
     const error = ref(null);
 
@@ -31,13 +39,37 @@ export default {
       }
     `;
 
-    const loadData = async () => {
+    const GET_OPINIONS = gql`
+      query {
+        opinions {
+          id
+          url
+          doi
+        }
+      }
+    `;
+
+    const loadNovelFoods = async () => {
       loading.value = true;
       try {
         const result = await client.query({
           query: GET_NOVEL_FOODS
         });
-        data.value = result.data;
+        novelFoodsData.value = result.data;
+      } catch (err) {
+        error.value = err;
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const loadOpinions = async () => {
+      loading.value = true;
+      try {
+        const result = await client.query({
+          query: GET_OPINIONS
+        });
+        opinionsData.value = result.data;
       } catch (err) {
         error.value = err;
       } finally {
@@ -46,10 +78,12 @@ export default {
     };
 
     return {
-      data,
+      novelFoodsData,
+      opinionsData,
       loading,
       error,
-      loadData
+      loadNovelFoods,
+      loadOpinions
     };
   }
 }

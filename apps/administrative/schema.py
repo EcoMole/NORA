@@ -10,7 +10,7 @@ class OpinionType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    mymodels = graphene.List(OpinionType)
+    opinions = graphene.List(OpinionType)
 
-    def resolve_mymodels(self, info):
+    def resolve_opinions(self, info):
         return Opinion.objects.all()
