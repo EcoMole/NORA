@@ -29,7 +29,6 @@
             </v-row>
           </v-col>
           <v-col cols="3">
-
             <v-row class="mt-8 justify-center">
               <v-btn @click="renderTable" style="min-height: 50px" color="secondary">
                 <v-icon left>mdi-magnify</v-icon>
@@ -142,8 +141,8 @@
     </div>
 
     <!-- Add Filter Dialog -->
-    <v-dialog v-model="dialog" max-width="500px">
-      <v-card>
+    <v-dialog v-model="dialog" max-width="700px">
+      <v-card class="pa-4">
         <v-card-title>
           <span class="headline"> {{ this.dataEntities[newFilter.title]?.subtitle || '' }}</span>
         </v-card-title>
@@ -151,43 +150,54 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-select
-                  v-model="newFilter.include"
-                  :items="['include', 'exclude']"
-                  label="Include / Exclude"
-                ></v-select>
+                <v-row class="d-flex align-center">
+                  <v-span>In result</v-span>
+                  <v-select
+                    v-model="newFilter.include"
+                    :items="['include', 'exclude']"
+                    label="Include / Exclude"
+                    class="ml-6"
+                    variant="underlined"
+                    max-width="140px"
+                  ></v-select>
+                  <v-autocomplete
+                    v-model="newFilter.title"
+                    :items="Object.keys(dataEntities)"
+                    label="Title"
+                    class="ml-6"
+                    variant="underlined"
+                    @change="updateSubtitle"
+                  ></v-autocomplete>
+                </v-row>
               </v-col>
               <v-col cols="12">
-                <v-autocomplete
-                  v-model="newFilter.title"
-                  :items="Object.keys(dataEntities)"
-                  label="Title"
-                  @change="updateSubtitle"
-                ></v-autocomplete>
+                <v-row class="d-flex align-center">
+                  <v-span>which</v-span>
+                  <v-autocomplete
+                    v-model="newFilter.qualifier"
+                    :items="dataEntities[newFilter.title]?.qualifiers || []"
+                    label="Qualifier"
+                    max-width="180px"
+                    variant="underlined"
+                    class="ml-6"
+                  ></v-autocomplete>
+                  <v-text-field v-if="newFilter.title == 'date of publication' ? true : false" variant="underlined" v-model="newFilter.value" label="Date" type="date" class="ml-6"></v-text-field>
+                  <v-text-field v-else variant="underlined" v-model="newFilter.value" label="Value" class="ml-6"></v-text-field>
+                </v-row>
               </v-col>
 
-              <v-col cols="12">
-                <v-autocomplete
-                  v-model="newFilter.qualifier"
-                  :items="dataEntities[newFilter.title]?.qualifiers || []"
-                  label="Qualifier"
-                ></v-autocomplete>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-model="newFilter.value" label="Value"></v-text-field>
-              </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="text-center mt-3">
                 <p>
-                  {{ this.dataEntities[newFilter.title]?.detail || '' }}
+                  {{ dataEntities[newFilter.title]?.detail || '' }}
                 </p>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="mb-4">
           <v-spacer></v-spacer>
-          <v-btn color="secondary" text @click="dialog = false">Close</v-btn>
-          <v-btn color="primary" text @click="addFilter">Save</v-btn>
+          <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+          <v-btn color="secondary" class="mr-2 ml-5" text @click="addFilter">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -211,7 +221,6 @@
           </v-btn>
         </v-row>
       </v-col>
-
     </v-row>
 
     <v-row class="d-flex justify-center">
@@ -230,7 +239,7 @@ export default {
     dialog: false,
     headers: [],
     newFilter: {
-      include: "",
+      include: '',
       title: '',
       subtitle: '',
       qualifier: '',
@@ -241,25 +250,25 @@ export default {
         subtitle: 'production process',
         qualifiers: ['contains', 'is'],
         detail:
-          'this is more information and explanation about the filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+          'this is more information and explanation about the production process filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       },
       'opinion regulation': {
         subtitle: 'administrative',
         qualifiers: ['contains', 'is'],
         detail:
-          'this is more information and explanation about the filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+          'this is more information and explanation about the opinion regulation filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       },
       'date of publication': {
         subtitle: 'administrative',
         qualifiers: ['is', 'greater than', 'less than'],
         detail:
-          'this is more information and explanation about the filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+          'this is more information and explanation about the date of publication filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       },
       'type mandate': {
         subtitle: 'administrative',
         qualifiers: ['contains', 'is'],
         detail:
-          'this is more information and explanation about the filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+          'this is more information and explanation about the type mandate filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       }
     },
     expandedItems: {},
@@ -320,7 +329,7 @@ export default {
         subtitle: 'administrative',
         qualifier: 'is',
         value: 'Regulation (EC) No 2015/2283 Article 10'
-      },
+      }
     ],
     opinions: [
       {
@@ -342,8 +351,8 @@ export default {
         allergenicity: 'High',
         nfCode: 'NF002, NF302',
         novelFoodTitle: 'Engineered Probiotics, Yeast Cultures',
-        wasToxStudyRequired: "true, false",
-        hasNutriDisadvantage: "true, true",
+        wasToxStudyRequired: 'true, false',
+        hasNutriDisadvantage: 'true, true',
         opinionURL: 'http://example.com/nf002',
         opinionDOI: '10.1234/nf002',
         publicationDate: '2023-02-15',
@@ -372,8 +381,8 @@ export default {
         allergenicity: 'Unknown',
         nfCode: 'NF004, NF010, NF003',
         novelFoodTitle: 'Synthetic Vanillin, Artificial Sweeteners, Algae-based Omega 3',
-        wasToxStudyRequired: "true, true, false",
-        hasNutriDisadvantage: "true, false, false",
+        wasToxStudyRequired: 'true, true, false',
+        hasNutriDisadvantage: 'true, false, false',
         opinionURL: 'http://example.com/nf004',
         opinionDOI: '10.1234/nf004',
         publicationDate: '2020-06-12',
@@ -572,7 +581,7 @@ export default {
       })
       this.dialog = false
       this.newFilter = {
-        include: true,
+        include: '',
         title: '',
         subtitle: '',
         qualifier: '',
