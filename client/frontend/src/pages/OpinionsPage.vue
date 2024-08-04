@@ -1,207 +1,251 @@
 <template>
   <div>
-    <h1>Opinions</h1>
+    <h1>Novel Foods</h1>
   </div>
-  <div v-if="showFilterInterface">
-    <v-div>
-      <v-container>
-        <v-row class="mt-5">
-          <v-col cols="9">
-            <v-row>
-              <v-combobox
+  <v-row
+    class="mt-8 d-flex justify-center"
+    v-if="(selected.length > 0 && createdFilters.length > 0) || !showFilterInterface ? true : false"
+  >
+    <v-btn
+      v-if="showFilterInterface"
+      @click="renderTable"
+      style="min-height: 50px"
+      color="secondary"
+    >
+      <v-icon left>mdi-magnify</v-icon>
+      Show the result
+    </v-btn>
+    <v-btn v-else @click="showFilterInterface = true" style="min-height: 50px" color="secondary">
+      <v-icon left>mdi-replay</v-icon>
+      new search
+    </v-btn>
+  </v-row>
+
+  <v-row v-if="showFilterInterface">
+    <v-col cols="7">
+      <v-row class="d-flex justify-center">
+        <h2>Selected filters</h2>
+      </v-row>
+      <div class="mt-3">
+        <v-data-iterator
+          item-value="id"
+          :items="createdFilters"
+          :items-per-page="8"
+          :search="searchFilter"
+        >
+          <template v-slot:header>
+            <v-toolbar class="px-2" style="background-color: transparent">
+              <v-text-field
+                v-model="searchFilter"
+                density="comfortable"
+                placeholder="Search selected filters"
+                prepend-inner-icon="mdi-magnify"
+                style="max-width: 300px"
+                variant="solo"
                 clearable
-                chips
-                multiple
-                label="Display in columns"
-                v-model="showInColumns"
-                :items="showOptions"
-              ></v-combobox>
-            </v-row>
-            <v-row>
-              <v-combobox
-                clearable
-                chips
-                multiple
-                v-model="showInDetails"
-                label="Display in details"
-                :items="showOptions"
-              ></v-combobox>
-            </v-row>
-          </v-col>
-          <v-col cols="3">
-            <v-row class="mt-8 justify-center">
-              <v-btn @click="renderTable" style="min-height: 50px" color="secondary">
-                <v-icon left>mdi-magnify</v-icon>
-                Perform Search
+                hide-details
+                v-if="createdFilters.length > 1 ? true : false"
+              ></v-text-field>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" variant="outlined" @click="dialog = true">
+                <v-icon left>mdi-plus</v-icon>
+                Select Filter
               </v-btn>
+            </v-toolbar>
+          </template>
+          <template v-slot:default="{ items }">
+            <v-row>
+              <v-col v-for="(item, i) in items" :key="i" cols="12">
+                <v-card border>
+                  <v-card-title>
+                    <h3>{{ item.raw.title }}</h3>
+                  </v-card-title>
+
+                  <v-card-text>
+                    {{ item.raw.subtitle }}
+                  </v-card-text>
+
+                  <v-table density="compact" class="text-caption">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <b>{{ item.raw.include ? 'include' : 'exclude' }}</b>
+                        </td>
+                        <td>
+                          <b>{{ item.raw.title }}</b>
+                        </td>
+                        <td>which</td>
+                        <td>
+                          <b>{{ item.raw.qualifier }}</b>
+                        </td>
+                        <td>
+                          <b>{{ item.raw.value }}</b>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="tertiary" text @click="removeItem(i)">Remove</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
             </v-row>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-div>
-
-    <div class="mt-8">
-      <v-data-iterator
-        item-value="id"
-        :items="createdFilters"
-        :items-per-page="8"
-        :search="searchFilter"
-      >
-        <template v-slot:header>
-          <v-toolbar class="px-2" style="background-color: transparent">
-            <v-text-field
-              v-model="searchFilter"
-              density="comfortable"
-              placeholder="Search created filters"
-              prepend-inner-icon="mdi-magnify"
-              style="max-width: 300px"
-              variant="solo"
-              clearable
-              hide-details
-            ></v-text-field>
+          </template>
+          <!--! adjust the data-iteration so that it has infinite scroll down and there is no need for footer with pages. -->
+        </v-data-iterator>
+      </div>
+    </v-col>
+    <v-divider :thickness="2" vertical></v-divider>
+    <v-col cols="4">
+      <v-row class="d-flex justify-center">
+        <h2>Selected data to retrieve</h2>
+      </v-row>
+      <v-row>
+        <v-container>
+          <v-row v-if="selected.length > 1 ? true : false" class="mb-2">
             <v-spacer></v-spacer>
-            <v-btn color="primary" variant="outlined" @click="dialog = true">
-              <v-icon left>mdi-plus</v-icon>
-              Add Filter
+            <v-btn color="tertiary" @click="selected = []" size="x-small" variant="text">
+              <v-icon left>mdi-close</v-icon>
+              clear all
             </v-btn>
-          </v-toolbar>
-        </template>
-        <template v-slot:default="{ items }">
-          <v-row>
-            <v-col v-for="(item, i) in items" :key="i" cols="12" md="6">
-              <v-card border>
-                <v-card-title>
-                  <h3>{{ item.raw.title }}</h3>
-                </v-card-title>
+          </v-row>
+          <v-row align="center" justify="start">
+            <v-col
+              v-for="(selection, i) in selections"
+              :key="selection.text"
+              class="py-1 pe-0"
+              cols="auto"
+            >
+              <v-chip
+                :disabled="loading"
+                closable
+                @click:close="selected.splice(i, 1)"
+                variant="elevated"
+                rounded
+                :color="this.theme.global.current.value.dark ? 'black' : 'white'"
+              >
+                <v-icon :icon="selection.icon" start></v-icon>
 
-                <v-card-text>
-                  {{ item.raw.subtitle }}
-                </v-card-text>
+                {{ selection.text }}
+              </v-chip>
+            </v-col>
 
-                <v-table density="compact" class="text-caption">
-                  <thead>
-                    <tr>
-                      <th class="text-left">Include / Exclude</th>
-                      <th class="text-left">Filter</th>
-                      <th class="text-left">Qualifier</th>
-                      <th class="text-left">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <b>{{ item.raw.include ? 'include' : 'exclude' }}</b>
-                      </td>
-                      <td>
-                        <b>{{ item.raw.title }}</b>
-                      </td>
-                      <td>
-                        <b>{{ item.raw.qualifier }}</b>
-                      </td>
-                      <td>
-                        <b>{{ item.raw.value }}</b>
-                      </td>
-                    </tr>
-                  </tbody>
-                </v-table>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="tertiary" text @click="removeItem(i)">Remove</v-btn>
-                </v-card-actions>
-              </v-card>
+            <v-col v-if="!allSelected" cols="12">
+              <v-text-field
+                ref="searchField"
+                v-model="search"
+                density="comfortable"
+                placeholder="Search available data"
+                prepend-inner-icon="mdi-magnify"
+                style="max-width: 300px"
+                variant="outlined"
+                clearable
+                hide-details
+              ></v-text-field>
             </v-col>
           </v-row>
-        </template>
+        </v-container>
 
-        <template v-slot:footer="{ page, pageCount, prevPage, nextPage }">
-          <div class="d-flex align-center justify-center pa-4">
-            <v-btn
-              :disabled="page === 1"
-              icon="mdi-arrow-left"
-              density="comfortable"
-              variant="tonal"
-              rounded
-              @click="prevPage"
-            ></v-btn>
+        <v-container>
+          <v-list bg-color="rgba(0, 0, 0, 0)">
+            <template v-for="item in categories">
+              <v-list-item
+                v-if="!selected.includes(item)"
+                :key="item.text"
+                :disabled="loading"
+                @click="selected.push(item)"
+                rounded="xl"
+              >
+                <template v-slot:prepend>
+                  <v-icon :disabled="loading" :icon="item.icon"></v-icon>
+                </template>
 
-            <div class="mx-2 text-caption">Page {{ page }} of {{ pageCount }}</div>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item>
+            </template>
+          </v-list>
+        </v-container>
+      </v-row>
+    </v-col>
+  </v-row>
+  <!-- Add Filter Dialog -->
+  <v-dialog v-model="dialog" max-width="700px">
+    <v-card class="pa-4">
+      <v-card-title>
+        <span class="headline"> {{ this.dataEntities[newFilter.title]?.subtitle || '' }}</span>
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-row class="d-flex align-center">
+                <v-span>In result</v-span>
+                <v-select
+                  v-model="newFilter.include"
+                  :items="['include', 'exclude']"
+                  label="Include / Exclude"
+                  class="ml-6"
+                  variant="underlined"
+                  max-width="140px"
+                  horo
+                ></v-select>
+                <v-autocomplete
+                  v-model="newFilter.title"
+                  :items="Object.keys(dataEntities)"
+                  label="Title"
+                  class="ml-6"
+                  variant="underlined"
+                  @change="updateSubtitle"
+                ></v-autocomplete>
+              </v-row>
+            </v-col>
+            <v-col cols="12">
+              <v-row class="d-flex align-center">
+                <v-span>which</v-span>
+                <v-autocomplete
+                  v-model="newFilter.qualifier"
+                  :items="dataEntities[newFilter.title]?.qualifiers || []"
+                  label="Qualifier"
+                  max-width="180px"
+                  variant="underlined"
+                  class="ml-6"
+                ></v-autocomplete>
+                <v-text-field
+                  v-if="newFilter.title == 'date of publication' ? true : false"
+                  variant="underlined"
+                  v-model="newFilter.value"
+                  label="Date"
+                  type="date"
+                  class="ml-6"
+                ></v-text-field>
+                <v-text-field
+                  v-else
+                  variant="underlined"
+                  v-model="newFilter.value"
+                  label="Value"
+                  class="ml-6"
+                ></v-text-field>
+              </v-row>
+            </v-col>
 
-            <v-btn
-              :disabled="page >= pageCount"
-              icon="mdi-arrow-right"
-              density="comfortable"
-              variant="tonal"
-              rounded
-              @click="nextPage"
-            ></v-btn>
-          </div>
-        </template>
-      </v-data-iterator>
-    </div>
+            <v-col cols="12" class="text-center mt-3">
+              <p>
+                {{ dataEntities[newFilter.title]?.detail || '' }}
+              </p>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions class="mb-4">
+        <v-spacer></v-spacer>
+        <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+        <v-btn color="secondary" class="mr-2 ml-5" text @click="addFilter">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
-    <!-- Add Filter Dialog -->
-    <v-dialog v-model="dialog" max-width="700px">
-      <v-card class="pa-4">
-        <v-card-title>
-          <span class="headline"> {{ this.dataEntities[newFilter.title]?.subtitle || '' }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-row class="d-flex align-center">
-                  <v-span>In result</v-span>
-                  <v-select
-                    v-model="newFilter.include"
-                    :items="['include', 'exclude']"
-                    label="Include / Exclude"
-                    class="ml-6"
-                    variant="underlined"
-                    max-width="140px"
-                  ></v-select>
-                  <v-autocomplete
-                    v-model="newFilter.title"
-                    :items="Object.keys(dataEntities)"
-                    label="Title"
-                    class="ml-6"
-                    variant="underlined"
-                    @change="updateSubtitle"
-                  ></v-autocomplete>
-                </v-row>
-              </v-col>
-              <v-col cols="12">
-                <v-row class="d-flex align-center">
-                  <v-span>which</v-span>
-                  <v-autocomplete
-                    v-model="newFilter.qualifier"
-                    :items="dataEntities[newFilter.title]?.qualifiers || []"
-                    label="Qualifier"
-                    max-width="180px"
-                    variant="underlined"
-                    class="ml-6"
-                  ></v-autocomplete>
-                  <v-text-field v-if="newFilter.title == 'date of publication' ? true : false" variant="underlined" v-model="newFilter.value" label="Date" type="date" class="ml-6"></v-text-field>
-                  <v-text-field v-else variant="underlined" v-model="newFilter.value" label="Value" class="ml-6"></v-text-field>
-                </v-row>
-              </v-col>
-
-              <v-col cols="12" class="text-center mt-3">
-                <p>
-                  {{ dataEntities[newFilter.title]?.detail || '' }}
-                </p>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions class="mb-4">
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="dialog = false">Close</v-btn>
-          <v-btn color="secondary" class="mr-2 ml-5" text @click="addFilter">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
   <div v-if="!showFilterInterface">
     <v-row class="mb-8">
       <v-col cols="4"> </v-col>
@@ -232,8 +276,105 @@
 </template>
 
 <script>
+import { useTheme } from 'vuetify'
+
+// icon: 'mdi-rice'
+// icon: 'mdi-alert-outline'
+// icon: 'mdi-hazard-lights'
+// icon: 'mdi-shield-alert'
+
 export default {
   data: () => ({
+    open: ['Users'],
+    admins: [
+      ['Management', 'mdi-account-multiple-outline'],
+      ['Settings', 'mdi-cog-outline']
+    ],
+    cruds: [
+      ['Create', 'mdi-plus-outline'],
+      ['Read', 'mdi-file-outline'],
+      ['Update', 'mdi-update'],
+      ['Delete', 'mdi-delete']
+    ],
+    items: [
+
+      {
+        // administrative
+        text: 'NF Code',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'Novel Food Title',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'Opinion URL',
+        icon: 'mdi-file-document-outline'
+      },
+            {
+        text: 'Opinion DOI',
+        icon: 'mdi-file-document-outline'
+      },
+            {
+        text: 'Publication Date',
+        icon: 'mdi-file-document-outline'
+      },
+
+      {
+        // nutrition
+        text: 'Has Nutri Disadvantage',
+        icon: 'mdi-nutrition'
+      },
+      {
+        // allergenicity
+        text: 'Allergenicity',
+        icon: 'mdi-peanut-off'
+      },
+      {
+        // ADME
+        text: 'ADME studies',
+        icon: 'mdi-pill'
+      },
+            {
+        // toxicology
+        text: 'Was Tox Study Required',
+        icon: 'mdi-test-tube'
+      },
+      {
+        text: 'Endpoint studies',
+        icon: 'mdi-test-tube'
+      },
+      {
+        text: 'Genotox studies',
+        icon: 'mdi-test-tube'
+      },
+      {
+        text: 'Final Outcome',
+        icon: 'mdi-test-tube'
+      },
+      {
+        text: 'Final Outcome Remarks',
+        icon: 'mdi-test-tube'
+      }
+    ],
+    showOptions: [
+      'Allergenicity',
+      'NF Code',
+      'Novel Food Title',
+      'Was Tox Study Required',
+      'Has Nutri Disadvantage',
+      'Opinion URL',
+      'Opinion DOI',
+      'Publication Date',
+      'ADME studies',
+      'Endpoint studies',
+      'Genotox studies',
+      'Final Outcome',
+      'Final Outcome Remarks'
+    ],
+    loading: false,
+    search: '',
+    selected: [],
     showFilterInterface: true,
     searchFilter: '',
     dialog: false,
@@ -272,21 +413,7 @@ export default {
       }
     },
     expandedItems: {},
-    showOptions: [
-      'Allergenicity',
-      'NF Code',
-      'Novel Food Title',
-      'Was Tox Study Required',
-      'Has Nutri Disadvantage',
-      'Opinion URL',
-      'Opinion DOI',
-      'Publication Date',
-      'ADME studies',
-      'Endpoint studies',
-      'Genotox studies',
-      'Final Outcome',
-      'Final Outcome Remarks'
-    ],
+
     showInColumns: [],
     showInDetails: [],
     createdFilters: [
@@ -560,6 +687,15 @@ export default {
     ]
   }),
   methods: {
+    next() {
+      this.loading = true
+
+      setTimeout(() => {
+        this.search = ''
+        this.selected = []
+        this.loading = false
+      }, 2000)
+    },
     renderTable() {
       this.updateHeaders()
       this.showFilterInterface = false
@@ -612,6 +748,40 @@ export default {
   },
   mounted() {
     this.updateHeaders()
+  },
+  computed: {
+    allSelected() {
+      return this.selected.length === this.items.length
+    },
+    categories() {
+      const search = this.search.toLowerCase()
+
+      if (!search) return this.items
+
+      return this.items.filter((item) => {
+        const text = item.text.toLowerCase()
+
+        return text.indexOf(search) > -1
+      })
+    },
+    selections() {
+      const selections = []
+
+      for (const selection of this.selected) {
+        selections.push(selection)
+      }
+
+      return selections
+    }
+  },
+
+  watch: {
+    selected() {
+      this.search = ''
+    }
+  },
+  created() {
+    this.theme = useTheme()
   }
 }
 </script>
