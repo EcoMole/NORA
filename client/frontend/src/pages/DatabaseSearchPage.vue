@@ -77,15 +77,28 @@
                 v-if="createdFilters.length > 1 ? true : false"
               ></v-text-field>
               <v-spacer></v-spacer> -->
-        <v-btn color="secondary" variant="outlined" @click="dialog = true" rounded="m">
-          <v-icon left>mdi-plus</v-icon>
-          Add Filter
-        </v-btn>
+        <v-row class="d-flex justify-center mt-4">
+          <v-btn color="secondary" variant="outlined" @click="dialog = true">
+            <v-icon left>mdi-plus</v-icon>
+            Add Filter
+          </v-btn>
+        </v-row>
         <v-row v-for="(item, i) in createdFilters" :key="i" class="d-flex justify-end mb-0">
+          <v-col v-if="i != 0" cols="12">
+            <v-row class="d-flex justify-center">
+              <v-span>and</v-span>
+            </v-row>
+          </v-col>
           <v-col cols="12" class="mr-0 mb-0">
-            <v-card border class="pa-3 mb-0 mr-2" style="position: relative; overflow: visible">
+            <v-card
+              border
+              class="pa-3 mb-0 mr-2"
+              elevation="3"
+              style="position: relative; overflow: visible"
+              rounded="xl"
+            >
               <v-btn
-                :style="{ position: 'absolute', bottom: '-16px', right: '-16px' }"
+                :style="{ position: 'absolute', right: '-16px' }"
                 fab
                 color="tertiary"
                 size="x-small"
@@ -94,13 +107,8 @@
               >
                 <v-icon>mdi-close</v-icon>
               </v-btn>
-              <v-card-title>
-                <h3>{{ item.title }}</h3>
-              </v-card-title>
 
-              <v-card-text>
-                {{ item.subtitle }}
-              </v-card-text>
+              <v-card-subtitle class="text-h6"> {{ item.title }} </v-card-subtitle>
 
               <v-table>
                 <tbody>
@@ -123,11 +131,6 @@
               </v-table>
             </v-card>
           </v-col>
-          <v-col cols="12">
-            <v-row class="d-flex justify-center">
-              <v-span>and</v-span>
-            </v-row>
-          </v-col>
         </v-row>
       </div>
     </v-col>
@@ -145,11 +148,17 @@
             text="Select data you would like to see"
             type="tertiary"
             density="“compact”"
-            rounded="xl"
+            rounded="md"
           ></v-alert>
           <v-row v-if="selected.length > 1 ? true : false" class="mb-2">
             <v-spacer></v-spacer>
-            <v-btn @click="selected = []" color="tertiary" size="x-small" min-height="30">
+            <v-btn
+              @click="selected = []"
+              color="tertiary"
+              size="x-small"
+              min-height="30"
+              rounded="md"
+            >
               <v-icon left>mdi-close</v-icon>
               all
             </v-btn>
@@ -165,9 +174,9 @@
                 :disabled="loading"
                 size="large"
                 closable
+                elevation="3"
                 @click:close="selected.splice(i, 1)"
                 variant="elevated"
-                rounded
                 :color="this.theme.global.current.value.dark ? 'black' : 'white'"
               >
                 <v-icon :icon="selection.icon" start></v-icon>
@@ -190,7 +199,6 @@
             variant="outlined"
             clearable
             hide-details
-            rounded="xl"
           ></v-text-field>
           <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
             <template v-for="item in categories">
@@ -199,7 +207,6 @@
                 :key="item.text"
                 :disabled="loading"
                 @click="selected.push(item)"
-                rounded="xl"
               >
                 <template v-slot:prepend>
                   <v-icon :disabled="loading" :icon="item.icon"></v-icon>
@@ -283,7 +290,7 @@
       </v-card-text>
       <v-card-actions class="mb-4">
         <v-spacer></v-spacer>
-        <v-btn color="primary" rounded="m" text @click="dialog = false">Close</v-btn>
+        <v-btn color="tertiary" rounded="m" text @click="dialog = false">Close</v-btn>
         <v-btn color="secondary" rounded="m" class="mr-2 ml-5" text @click="addFilter">Save</v-btn>
       </v-card-actions>
     </v-card>
