@@ -24,9 +24,9 @@
         :readonly="true"
       ></v-text-field>
       <div class="d-flex justify-between">
-        <v-btn color="secondary" variant="tonal" @click="$emit('cancel')">Cancel</v-btn>
+        <v-btn color="tertiary" variant="tonal" @click="$emit('cancel')">Cancel</v-btn>
         <v-spacer></v-spacer>
-        <v-btn type="submit" color="tertiary">Submit</v-btn>
+        <v-btn type="submit" color="secondary">Submit</v-btn>
       </div>
     </v-form>
   </v-container>

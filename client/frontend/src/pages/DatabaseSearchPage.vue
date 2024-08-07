@@ -64,75 +64,163 @@
       <v-row class="d-flex justify-center">
         <h1 style="color: #a9a9a9">Novel Food Filters</h1>
       </v-row>
-      <div class="mt-3">
-        <!-- <v-text-field
-                v-model="searchFilter"
-                density="comfortable"
-                placeholder="Search created filters"
-                prepend-inner-icon="mdi-magnify"
-                style="max-width: 300px"
-                variant="solo"
-                clearable
-                hide-details
-                v-if="createdFilters.length > 1 ? true : false"
-              ></v-text-field>
-              <v-spacer></v-spacer> -->
-        <v-row class="d-flex justify-center mt-4">
-          <v-btn color="secondary" variant="outlined" @click="dialog = true">
+
+      <v-row class="d-flex justify-center mt-4">
+        <v-text-field
+          v-model="searchFilter"
+          density="comfortable"
+          placeholder="Search created filters"
+          prepend-inner-icon="mdi-magnify"
+          style="max-width: 300px"
+          variant="solo"
+          clearable
+          rounded
+          hide-details
+          v-if="createdFilters.length > 1 ? true : false"
+        ></v-text-field>
+        <v-spacer></v-spacer>
+        <v-btn
+          v-if="createdFilters.length > 1 ? true : false"
+          @click="createdFilters = []"
+          color="tertiary"
+          size="x-small"
+          min-height="30"
+        >
+          <v-icon left>mdi-close</v-icon>
+          all</v-btn
+        >
+      </v-row>
+
+      <v-row class="d-flex justify-end mb-0">
+        <v-col cols="12" class="mb-0 mr-1">
+          <v-btn
+            v-if="!dialog"
+            color="secondary"
+            :variant="createdFilters.length > 0 ? 'tonal' : 'elevated'"
+            @click="dialog = true"
+          >
             <v-icon left>mdi-plus</v-icon>
             Add Filter
           </v-btn>
-        </v-row>
-        <v-row v-for="(item, i) in createdFilters" :key="i" class="d-flex justify-end mb-0">
-          <v-col v-if="i != 0" cols="12">
-            <v-row class="d-flex justify-center">
-              <v-span>and</v-span>
-            </v-row>
-          </v-col>
-          <v-col cols="12" class="mr-0 mb-0">
-            <v-card
-              border
-              class="pa-3 mb-0 mr-2"
-              elevation="3"
-              style="position: relative; overflow: visible"
-              rounded="xl"
-            >
+          <v-card v-else class="pa-2 mb-0" rounded="xl" elevation="6" density="compact">
+            <v-card-subtitle class="text-h6 pt-4 pb-0 mb-0">
+              {{ this.dataEntities[newFilter.title]?.subtitle || '' }}
+            </v-card-subtitle>
+            <v-card-text class="pb-0">
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-row class="d-flex align-center">
+                      <v-span>All Novel Foods</v-span>
+                      <v-select
+                        v-model="newFilter.include"
+                        :items="['must have', 'must not have']"
+                        class="ml-6"
+                        variant="underlined"
+                        max-width="140px"
+                        horo
+                      ></v-select>
+                      <v-autocomplete
+                        v-model="newFilter.title"
+                        :items="Object.keys(dataEntities)"
+                        class="ml-6"
+                        variant="underlined"
+                        @change="updateSubtitle"
+                      ></v-autocomplete>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-row class="d-flex align-center">
+                      <v-span>which</v-span>
+                      <v-autocomplete
+                        v-model="newFilter.qualifier"
+                        :items="dataEntities[newFilter.title]?.qualifiers || []"
+                        max-width="180px"
+                        variant="underlined"
+                        class="ml-6"
+                      ></v-autocomplete>
+                      <v-text-field
+                        v-if="newFilter.title == 'date of publication' ? true : false"
+                        variant="underlined"
+                        v-model="newFilter.value"
+                        type="date"
+                        class="ml-6"
+                      ></v-text-field>
+                      <v-text-field
+                        v-else
+                        variant="underlined"
+                        v-model="newFilter.value"
+                        label="Value"
+                        class="ml-6"
+                      ></v-text-field>
+                    </v-row>
+                  </v-col>
+
+                  <v-col v-if="dataEntities[newFilter.title]?.detail" cols="12" class="text-center">
+                    <p>
+                      {{ dataEntities[newFilter.title]?.detail }}
+                    </p>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions class="mb-1 pt-0">
+              <v-spacer></v-spacer>
+              <v-btn color="tertiary" variant="tonal" @click="dialog = false">Cancel</v-btn>
               <v-btn
-                :style="{ position: 'absolute', right: '-16px' }"
-                fab
-                color="tertiary"
-                size="x-small"
-                min-height="30"
-                @click="removeItem(i)"
+                color="secondary"
+                :disabled="
+                  !newFilter.include || !newFilter.title || !newFilter.qualifier || !newFilter.value
+                "
+                variant="elevated"
+                class="mr-2 ml-5"
+                @click="addFilter"
+                >Save</v-btn
               >
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row v-for="(item, i) in createdFilters" :key="i" class="d-flex justify-end mb-0">
+        <v-col v-if="i != 0 || dialog == true" cols="12">
+          <v-row class="d-flex justify-center">
+            <v-span>and</v-span>
+          </v-row>
+        </v-col>
+        <v-col cols="12" class="mb-0 mr-1">
+          <v-card
+            border
+            class="pa-2 mb-0"
+            elevation="3"
+            style="position: relative; overflow: visible"
+            rounded="xl"
+          >
+            <v-btn
+              :style="{ position: 'absolute', right: '-16px' }"
+              fab
+              color="tertiary"
+              size="x-small"
+              min-height="30"
+              @click="removeItem(i)"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
 
-              <v-card-subtitle class="text-h6"> {{ item.title }} </v-card-subtitle>
-
-              <v-table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <b>{{ item.include }}</b>
-                    </td>
-                    <td>
-                      <b>{{ item.title }}</b>
-                    </td>
-                    <td>which</td>
-                    <td>
-                      <b>{{ item.qualifier }}</b>
-                    </td>
-                    <td>
-                      <b>{{ item.value }}</b>
-                    </td>
-                  </tr>
-                </tbody>
-              </v-table>
-            </v-card>
-          </v-col>
-        </v-row>
-      </div>
+            <v-card-subtitle class="text-h6 pt-3 pb-2 mb-0"> {{ item.title }} </v-card-subtitle>
+            <v-card-text class="pt-0 mt-0">
+              Novel Foods <b>{{ item.include }}</b> {{ ' ' }}
+              <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
+                item.title
+              }}</v-chip
+              >{{ ' ' }}which <b>{{ item.qualifier }}</b
+              >{{ ' ' }}
+              <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
+                item.value
+              }}</v-chip>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-col>
     <v-divider :thickness="2" vertical class="ml-0"></v-divider>
     <v-col cols="4">
@@ -220,81 +308,6 @@
       </v-row>
     </v-col>
   </v-row>
-  <!-- Filter Dialog -->
-  <v-dialog v-model="dialog" max-width="700px">
-    <v-card class="pa-4">
-      <v-card-title>
-        <span class="headline"> {{ this.dataEntities[newFilter.title]?.subtitle || '' }}</span>
-      </v-card-title>
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-row class="d-flex align-center">
-                <v-span>All Novel Foods</v-span>
-                <v-select
-                  v-model="newFilter.include"
-                  :items="['must have', 'must not have']"
-                  label="Include / Exclude"
-                  class="ml-6"
-                  variant="underlined"
-                  max-width="140px"
-                  horo
-                ></v-select>
-                <v-autocomplete
-                  v-model="newFilter.title"
-                  :items="Object.keys(dataEntities)"
-                  label="Title"
-                  class="ml-6"
-                  variant="underlined"
-                  @change="updateSubtitle"
-                ></v-autocomplete>
-              </v-row>
-            </v-col>
-            <v-col cols="12">
-              <v-row class="d-flex align-center">
-                <v-span>which</v-span>
-                <v-autocomplete
-                  v-model="newFilter.qualifier"
-                  :items="dataEntities[newFilter.title]?.qualifiers || []"
-                  label="Qualifier"
-                  max-width="180px"
-                  variant="underlined"
-                  class="ml-6"
-                ></v-autocomplete>
-                <v-text-field
-                  v-if="newFilter.title == 'date of publication' ? true : false"
-                  variant="underlined"
-                  v-model="newFilter.value"
-                  label="Date"
-                  type="date"
-                  class="ml-6"
-                ></v-text-field>
-                <v-text-field
-                  v-else
-                  variant="underlined"
-                  v-model="newFilter.value"
-                  label="Value"
-                  class="ml-6"
-                ></v-text-field>
-              </v-row>
-            </v-col>
-
-            <v-col cols="12" class="text-center mt-3">
-              <p>
-                {{ dataEntities[newFilter.title]?.detail || '' }}
-              </p>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-      <v-card-actions class="mb-4">
-        <v-spacer></v-spacer>
-        <v-btn color="tertiary" rounded="m" text @click="dialog = false">Close</v-btn>
-        <v-btn color="secondary" rounded="m" class="mr-2 ml-5" text @click="addFilter">Save</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
 
   <div v-if="!showFilterInterface">
     <v-row class="d-flex justify-center">
@@ -695,7 +708,7 @@ export default {
       }
     },
     addFilter() {
-      this.createdFilters.push({
+      this.createdFilters.unshift({
         id: this.createdFilters.length + 1,
         include: this.newFilter.include,
         title: this.newFilter.title,
