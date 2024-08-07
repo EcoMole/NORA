@@ -65,15 +65,7 @@
         <h1 style="color: #a9a9a9">Novel Food Filters</h1>
       </v-row>
       <div class="mt-3">
-        <v-data-iterator
-          item-value="id"
-          :items="createdFilters"
-          :items-per-page="8"
-          :search="searchFilter"
-        >
-          <template v-slot:header>
-            <v-toolbar class="px-2 mb-4" style="background-color: transparent">
-              <v-text-field
+        <!-- <v-text-field
                 v-model="searchFilter"
                 density="comfortable"
                 placeholder="Search created filters"
@@ -84,60 +76,59 @@
                 hide-details
                 v-if="createdFilters.length > 1 ? true : false"
               ></v-text-field>
-              <v-spacer></v-spacer>
-              <v-btn color="secondary" variant="outlined" @click="dialog = true" rounded="m">
-                <v-icon left>mdi-plus</v-icon>
-                Add Filter
+              <v-spacer></v-spacer> -->
+        <v-btn color="secondary" variant="outlined" @click="dialog = true" rounded="m">
+          <v-icon left>mdi-plus</v-icon>
+          Add Filter
+        </v-btn>
+        <v-row v-for="(item, i) in createdFilters" :key="i" class="d-flex justify-end mb-0">
+          <v-col cols="12" class="mr-0 mb-0">
+            <v-card border class="pa-3 mb-0 mr-2" style="position: relative; overflow: visible">
+              <v-btn
+                :style="{ position: 'absolute', bottom: '-16px', right: '-16px' }"
+                fab
+                color="tertiary"
+                size="x-small"
+                min-height="30"
+                @click="removeItem(i)"
+              >
+                <v-icon>mdi-close</v-icon>
               </v-btn>
-            </v-toolbar>
-          </template>
-          <template v-slot:default="{ items }">
-            <v-row v-for="(item, i) in items" :key="i" class="d-flex justify-end mb-0">
-              <v-col cols="12" class="mr-0 mb-0">
-                <v-card border class="pa-3 mb-0 mr-2">
-                  <v-card-title>
-                    <h3>{{ item.raw.title }}</h3>
-                  </v-card-title>
+              <v-card-title>
+                <h3>{{ item.title }}</h3>
+              </v-card-title>
 
-                  <v-card-text>
-                    {{ item.raw.subtitle }}
-                  </v-card-text>
+              <v-card-text>
+                {{ item.subtitle }}
+              </v-card-text>
 
-                  <v-table>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <b>{{ item.raw.include }}</b>
-                        </td>
-                        <td>
-                          <b>{{ item.raw.title }}</b>
-                        </td>
-                        <td>which</td>
-                        <td>
-                          <b>{{ item.raw.qualifier }}</b>
-                        </td>
-                        <td>
-                          <b>{{ item.raw.value }}</b>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="tertiary" rounded="m" text @click="removeItem(i)">Remove</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-col>
-              <v-col cols="12">
-                <v-row class="d-flex justify-center">
-                  <v-span>and</v-span>
-                </v-row>
-              </v-col>
+              <v-table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <b>{{ item.include }}</b>
+                    </td>
+                    <td>
+                      <b>{{ item.title }}</b>
+                    </td>
+                    <td>which</td>
+                    <td>
+                      <b>{{ item.qualifier }}</b>
+                    </td>
+                    <td>
+                      <b>{{ item.value }}</b>
+                    </td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <v-row class="d-flex justify-center">
+              <v-span>and</v-span>
             </v-row>
-          </template>
-          <!--! adjust the data-iteration so that it has infinite scroll down and there is no need for footer with pages. -->
-        </v-data-iterator>
+          </v-col>
+        </v-row>
       </div>
     </v-col>
     <v-divider :thickness="2" vertical class="ml-0"></v-divider>
@@ -158,9 +149,9 @@
           ></v-alert>
           <v-row v-if="selected.length > 1 ? true : false" class="mb-2">
             <v-spacer></v-spacer>
-            <v-btn color="tertiary" @click="selected = []" size="x-small" variant="text">
+            <v-btn @click="selected = []" color="tertiary" size="x-small" min-height="30">
               <v-icon left>mdi-close</v-icon>
-              clear all
+              all
             </v-btn>
           </v-row>
           <v-row align="center" justify="start">
