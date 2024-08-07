@@ -35,11 +35,11 @@
           Add Filter
         </v-btn>
       </v-row>
-      <v-row v-else class="d-flex justify-end mb-0 mt-3">
-        <v-col cols="12" class="mb-0 mr-1">
-          <v-card class="pa-2 mb-0" rounded="xl" elevation="6" density="compact">
-            <v-card-subtitle class="text-h6 pt-4 pb-0 mb-0">
-              {{ this.dataEntities[newFilter.title]?.subtitle || '' }}
+      <v-row v-else class="d-flex justify-end mb-0">
+        <v-col cols="12" class="mr-1">
+          <v-card class="pa-2" rounded="xl" elevation="6" density="compact">
+            <v-card-subtitle class="text-h6 pt-4">
+              {{ this.availableFilters[newFilter.title]?.group || '' }}
             </v-card-subtitle>
             <v-card-text class="pb-0">
               <v-container>
@@ -53,11 +53,10 @@
                         class="ml-6"
                         variant="underlined"
                         max-width="140px"
-                        horo
                       ></v-select>
                       <v-autocomplete
                         v-model="newFilter.title"
-                        :items="Object.keys(dataEntities)"
+                        :items="Object.keys(availableFilters)"
                         class="ml-6"
                         variant="underlined"
                         @change="updateSubtitle"
@@ -69,31 +68,27 @@
                       <span>which</span>
                       <v-autocomplete
                         v-model="newFilter.qualifier"
-                        :items="dataEntities[newFilter.title]?.qualifiers || []"
+                        :items="availableFilters[newFilter.title]?.qualifiers || []"
                         max-width="180px"
                         variant="underlined"
                         class="ml-6"
                       ></v-autocomplete>
                       <v-text-field
-                        v-if="newFilter.title == 'date of publication' ? true : false"
                         variant="underlined"
                         v-model="newFilter.value"
-                        type="date"
-                        class="ml-6"
-                      ></v-text-field>
-                      <v-text-field
-                        v-else
-                        variant="underlined"
-                        v-model="newFilter.value"
-                        label="Value"
+                        :type="availableFilters[newFilter.title]?.type"
                         class="ml-6"
                       ></v-text-field>
                     </v-row>
                   </v-col>
 
-                  <v-col v-if="dataEntities[newFilter.title]?.detail" cols="12" class="text-center">
+                  <v-col
+                    v-if="availableFilters[newFilter.title]?.description"
+                    cols="12"
+                    class="text-center"
+                  >
                     <p>
-                      {{ dataEntities[newFilter.title]?.detail }}
+                      {{ availableFilters[newFilter.title]?.description }}
                     </p>
                   </v-col>
                 </v-row>
@@ -141,7 +136,9 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
 
-            <v-card-subtitle class="text-h6 pt-3 pb-2 mb-0"> {{ item.title }} </v-card-subtitle>
+            <v-card-subtitle class="text-h6 pt-3 pb-2 mb-0">
+              {{ item.group }}
+            </v-card-subtitle>
             <v-card-text class="pt-0 mt-0">
               Novel Foods <b>{{ item.include }}</b> {{ ' ' }}
               <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
@@ -222,7 +219,7 @@
             style="max-width: 300px"
             variant="outlined"
             clearable
-            hide-details
+            hide-descriptions
           ></v-text-field>
           <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
             <template v-for="item in categories">
@@ -398,40 +395,44 @@ export default {
     newFilter: {
       include: '',
       title: '',
-      subtitle: '',
+      group: '',
       qualifier: '',
       value: ''
     },
-    dataEntities: {
+    availableFilters: {
       'production process': {
-        subtitle: 'production process',
+        group: 'production process',
+        type: 'text',
         qualifiers: ['contains', 'is'],
-        detail:
+        description:
           'this is more information and explanation about the production process filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       },
       'opinion regulation': {
-        subtitle: 'administrative',
+        group: 'administrative',
+        type: 'text',
         qualifiers: ['contains', 'is'],
-        detail:
+        description:
           'this is more information and explanation about the opinion regulation filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       },
       'date of publication': {
-        subtitle: 'administrative',
+        group: 'administrative',
+        type: 'date',
         qualifiers: ['is', 'greater than', 'less than'],
-        detail:
+        description:
           'this is more information and explanation about the date of publication filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       },
       'type mandate': {
-        subtitle: 'administrative',
+        group: 'administrative',
+        type: 'text',
         qualifiers: ['contains', 'is'],
-        detail:
+        description:
           'this is more information and explanation about the type mandate filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
       }
     },
     expandedItems: {},
 
     showInColumns: [],
-    showInDetails: [],
+    showIndescriptions: [],
     addedFilters: [],
     opinions: [
       {
@@ -676,9 +677,9 @@ export default {
       this.showFilterInterface = false
     },
     updateSubtitle() {
-      const selectedEntity = this.dataEntities[this.newFilter.title]
-      if (selectedEntity) {
-        this.newFilter.subtitle = selectedEntity.subtitle
+      const selectedAttribute = this.availableFilters[this.newFilter.title]
+      if (selectedAttribute) {
+        this.newFilter.group = selectedAttribute.group
       }
     },
     addFilter() {
@@ -686,7 +687,7 @@ export default {
         id: this.addedFilters.length + 1,
         include: this.newFilter.include,
         title: this.newFilter.title,
-        subtitle: this.newFilter.subtitle,
+        group: this.availableFilters[this.newFilter.title]?.group || '',
         qualifier: this.newFilter.qualifier,
         value: this.newFilter.value
       })
@@ -694,7 +695,7 @@ export default {
       this.newFilter = {
         include: '',
         title: '',
-        subtitle: '',
+        group: '',
         qualifier: '',
         value: ''
       }
