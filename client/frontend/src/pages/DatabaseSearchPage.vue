@@ -9,25 +9,11 @@
         <h1 style="color: #a9a9a9">Novel Food Filters</h1>
       </v-row>
 
-      <v-row class="d-flex justify-center align-center mt-5">
-        <v-text-field
-          :disabled="dialog"
-          v-if="createdFilters.length > 1 ? true : false"
-          v-model="searchFilter"
-          class="ml-4"
-          density="comfortable"
-          placeholder="Search created filters"
-          prepend-inner-icon="mdi-magnify"
-          max-width="300px"
-          variant="solo"
-          clearable
-          rounded
-          hide-details
-        ></v-text-field>
+      <v-row class="mt-7">
         <v-spacer></v-spacer>
         <v-btn
-          v-if="createdFilters.length > 1 ? true : false"
-          @click="createdFilters = []"
+          v-if="addedFilters.length > 1 ? true : false"
+          @click="addedFilters = []"
           color="tertiary"
           size="x-small"
           min-height="30"
@@ -39,12 +25,11 @@
         >
       </v-row>
 
-      <v-row v-if="!dialog" class="d-flex justify-center mb-0 mt-12">
+      <v-row v-if="!addingFilter" class="d-flex justify-center">
         <v-btn
           color="secondary"
-          :variant="createdFilters.length > 0 ? 'tonal' : 'elevated'"
-          @click="dialog = true"
-          class="mb-0"
+          :variant="addedFilters.length > 0 ? 'tonal' : 'elevated'"
+          @click="addingFilter = true"
         >
           <v-icon left>mdi-plus</v-icon>
           Add Filter
@@ -116,7 +101,7 @@
             </v-card-text>
             <v-card-actions class="mb-1 pt-0">
               <v-spacer></v-spacer>
-              <v-btn color="tertiary" variant="tonal" @click="dialog = false">Cancel</v-btn>
+              <v-btn color="tertiary" variant="tonal" @click="addingFilter = false">Cancel</v-btn>
               <v-btn
                 color="secondary"
                 :disabled="
@@ -131,8 +116,8 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-for="(item, i) in createdFilters" :key="i" class="d-flex justify-end mb-0">
-        <v-row class="d-flex justify-center mb-0" v-if="i != 0 || dialog == true">
+      <v-row v-for="(item, i) in addedFilters" :key="i" class="d-flex justify-end mb-0">
+        <v-row class="d-flex justify-center mb-0" v-if="i != 0 || addingFilter == true">
           <span class="mt-0">and</span>
         </v-row>
         <v-col cols="12" class="mb-0 mr-1">
@@ -408,8 +393,7 @@ export default {
     search: '',
     selected: [],
     showFilterInterface: true,
-    searchFilter: '',
-    dialog: false,
+    addingFilter: false,
     headers: [],
     newFilter: {
       include: '',
@@ -448,7 +432,7 @@ export default {
 
     showInColumns: [],
     showInDetails: [],
-    createdFilters: [],
+    addedFilters: [],
     opinions: [
       {
         allergenicity: 'Low',
@@ -698,15 +682,15 @@ export default {
       }
     },
     addFilter() {
-      this.createdFilters.unshift({
-        id: this.createdFilters.length + 1,
+      this.addedFilters.unshift({
+        id: this.addedFilters.length + 1,
         include: this.newFilter.include,
         title: this.newFilter.title,
         subtitle: this.newFilter.subtitle,
         qualifier: this.newFilter.qualifier,
         value: this.newFilter.value
       })
-      this.dialog = false
+      this.addingFilter = false
       this.newFilter = {
         include: '',
         title: '',
@@ -716,7 +700,7 @@ export default {
       }
     },
     removeItem(index) {
-      this.createdFilters.splice(index, 1)
+      this.addedFilters.splice(index, 1)
     },
     updateHeaders() {
       const allHeaders = [
