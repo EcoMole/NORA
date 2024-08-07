@@ -2,64 +2,8 @@
   <div>
     <h1>Database Search</h1>
   </div>
-  <v-row v-if="showFilterInterface" class="d-flex justify-center mt-4 mb-6">
-    <v-btn
-      elevation="14"
-      :disabled="selected.length < 1"
-      @click="renderTable"
-      style="z-index: 2"
-      color="secondary"
-      position="fixed"
-      location="bottom right"
-      class="mb-8 mr-10"
-      :ripple="false"
-      size="large"
-      min-height="50px"
-    >
-      <v-icon left class="mr-2">mdi-table</v-icon>
-      Show data
-    </v-btn>
-  </v-row>
-  <v-row v-else class="mt-4 mb-6">
-    <v-col cols="4"> </v-col>
-    <v-col cols="4">
-      <v-row class="justify-center">
-        <v-hover v-slot="{ isHovering, props }">
-          <v-btn
-            v-bind="props"
-            :elevation="isHovering ? 14 : 4"
-            @click="showFilterInterface = true"
-            size="large"
-            min-height="50px"
-            color="tertiary"
-            position="fixed"
-            location="bottom right"
-            class="mb-8 mr-10"
-            :ripple="false"
-          >
-            <v-icon left>mdi-replay</v-icon>
-            new search
-          </v-btn>
-        </v-hover>
-      </v-row>
-    </v-col>
-    <v-col cols="4">
-      <v-row class="justify-center">
-        <v-btn
-          min-height="50px"
-          color="primary"
-          position="fixed"
-          location="upper right"
-          class="mb-4 mr-8"
-        >
-          <v-icon left>mdi-download</v-icon>
-          Export
-        </v-btn>
-      </v-row>
-    </v-col>
-  </v-row>
 
-  <v-row v-if="showFilterInterface">
+  <v-row v-if="showFilterInterface" class="mt-4">
     <v-col cols="7">
       <v-row class="d-flex justify-center">
         <h1 style="color: #a9a9a9">Novel Food Filters</h1>
@@ -314,14 +258,53 @@
         </v-container>
       </v-row>
     </v-col>
+    <v-btn
+      elevation="14"
+      :disabled="selected.length < 1"
+      @click="renderTable"
+      style="z-index: 2"
+      color="secondary"
+      position="fixed"
+      location="bottom right"
+      class="mb-8 mr-10"
+      :ripple="false"
+      size="large"
+      min-height="50px"
+    >
+      <v-icon left class="mr-2">mdi-table</v-icon>
+      Show data
+    </v-btn>
   </v-row>
 
-  <div v-if="!showFilterInterface">
+  <div v-else>
+    <v-row class="justify-end">
+      <v-btn min-height="50px" color="primary">
+        <v-icon left>mdi-download</v-icon>
+        Export
+      </v-btn>
+    </v-row>
     <v-row class="d-flex justify-center">
       <v-sheet elevation="1" class="mt-2">
         <v-data-table :headers="headers" :items="opinions"></v-data-table>
       </v-sheet>
     </v-row>
+    <v-hover v-slot="{ isHovering, props }">
+      <v-btn
+        v-bind="props"
+        :elevation="isHovering ? 14 : 4"
+        @click="showFilterInterface = true"
+        size="large"
+        min-height="50px"
+        color="tertiary"
+        position="fixed"
+        location="bottom right"
+        class="mb-8 mr-10"
+        :ripple="false"
+      >
+        <v-icon left>mdi-replay</v-icon>
+        new search
+      </v-btn>
+    </v-hover>
   </div>
 </template>
 
