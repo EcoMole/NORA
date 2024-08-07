@@ -20,9 +20,9 @@ export default new createRouter({
       component: () => import('@/pages/DashboardPage.vue')
     },
     {
-      path: '/opinions/',
-      name: 'opinions-page',
-      component: () => import('@/pages/OpinionsPage.vue')
+      path: '/database-search/',
+      name: 'database-search-page',
+      component: () => import('@/pages/DatabaseSearchPage.vue')
     },
     {
       path: '/novle-foods/',

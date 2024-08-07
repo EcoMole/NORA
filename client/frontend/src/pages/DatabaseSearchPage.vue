@@ -1,30 +1,68 @@
 <template>
   <div>
-    <h1>Novel Foods</h1>
+    <h1>Database Search</h1>
   </div>
-  <v-row
-    class="mt-8 d-flex justify-center"
-    v-if="(selected.length > 0 && createdFilters.length > 0) || !showFilterInterface ? true : false"
-  >
+  <v-row v-if="showFilterInterface" class="d-flex justify-center mt-4 mb-6">
     <v-btn
-      v-if="showFilterInterface"
+      elevation="14"
+      :disabled="selected.length < 1"
       @click="renderTable"
-      style="min-height: 50px"
+      style="z-index: 2"
       color="secondary"
+      position="fixed"
+      location="bottom right"
+      class="mb-8 mr-10"
+      :ripple="false"
+      size="large"
+      min-height="50px"
     >
-      <v-icon left>mdi-magnify</v-icon>
-      Show the result
+      <v-icon left class="mr-2">mdi-table</v-icon>
+      Show data
     </v-btn>
-    <v-btn v-else @click="showFilterInterface = true" style="min-height: 50px" color="secondary">
-      <v-icon left>mdi-replay</v-icon>
-      new search
-    </v-btn>
+  </v-row>
+  <v-row v-else class="mt-4 mb-6">
+    <v-col cols="4"> </v-col>
+    <v-col cols="4">
+      <v-row class="justify-center">
+        <v-hover v-slot="{ isHovering, props }">
+          <v-btn
+            v-bind="props"
+            :elevation="isHovering ? 14 : 4"
+            @click="showFilterInterface = true"
+            size="large"
+            min-height="50px"
+            color="tertiary"
+            position="fixed"
+            location="bottom right"
+            class="mb-8 mr-10"
+            :ripple="false"
+          >
+            <v-icon left>mdi-replay</v-icon>
+            new search
+          </v-btn>
+        </v-hover>
+      </v-row>
+    </v-col>
+    <v-col cols="4">
+      <v-row class="justify-center">
+        <v-btn
+          min-height="50px"
+          color="primary"
+          position="fixed"
+          location="upper right"
+          class="mb-4 mr-8"
+        >
+          <v-icon left>mdi-download</v-icon>
+          Export
+        </v-btn>
+      </v-row>
+    </v-col>
   </v-row>
 
   <v-row v-if="showFilterInterface">
     <v-col cols="7">
       <v-row class="d-flex justify-center">
-        <h2>Selected filters</h2>
+        <h1 style="color: #a9a9a9">Novel Food Filters</h1>
       </v-row>
       <div class="mt-3">
         <v-data-iterator
@@ -34,11 +72,11 @@
           :search="searchFilter"
         >
           <template v-slot:header>
-            <v-toolbar class="px-2" style="background-color: transparent">
+            <v-toolbar class="px-2 mb-4" style="background-color: transparent">
               <v-text-field
                 v-model="searchFilter"
                 density="comfortable"
-                placeholder="Search selected filters"
+                placeholder="Search created filters"
                 prepend-inner-icon="mdi-magnify"
                 style="max-width: 300px"
                 variant="solo"
@@ -47,16 +85,16 @@
                 v-if="createdFilters.length > 1 ? true : false"
               ></v-text-field>
               <v-spacer></v-spacer>
-              <v-btn color="primary" variant="outlined" @click="dialog = true">
+              <v-btn color="secondary" variant="outlined" @click="dialog = true" rounded="m">
                 <v-icon left>mdi-plus</v-icon>
-                Select Filter
+                Add Filter
               </v-btn>
             </v-toolbar>
           </template>
           <template v-slot:default="{ items }">
-            <v-row>
-              <v-col v-for="(item, i) in items" :key="i" cols="12">
-                <v-card border>
+            <v-row v-for="(item, i) in items" :key="i" class="d-flex justify-end mb-0">
+              <v-col cols="12" class="mr-0 mb-0">
+                <v-card border class="pa-3 mb-0 mr-2">
                   <v-card-title>
                     <h3>{{ item.raw.title }}</h3>
                   </v-card-title>
@@ -65,11 +103,11 @@
                     {{ item.raw.subtitle }}
                   </v-card-text>
 
-                  <v-table density="compact" class="text-caption">
+                  <v-table>
                     <tbody>
                       <tr>
                         <td>
-                          <b>{{ item.raw.include ? 'include' : 'exclude' }}</b>
+                          <b>{{ item.raw.include }}</b>
                         </td>
                         <td>
                           <b>{{ item.raw.title }}</b>
@@ -87,9 +125,14 @@
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="tertiary" text @click="removeItem(i)">Remove</v-btn>
+                    <v-btn color="tertiary" rounded="m" text @click="removeItem(i)">Remove</v-btn>
                   </v-card-actions>
                 </v-card>
+              </v-col>
+              <v-col cols="12">
+                <v-row class="d-flex justify-center">
+                  <v-span>and</v-span>
+                </v-row>
               </v-col>
             </v-row>
           </template>
@@ -97,13 +140,22 @@
         </v-data-iterator>
       </div>
     </v-col>
-    <v-divider :thickness="2" vertical></v-divider>
+    <v-divider :thickness="2" vertical class="ml-0"></v-divider>
     <v-col cols="4">
       <v-row class="d-flex justify-center">
-        <h2>Selected data to retrieve</h2>
+        <h1 style="color: #a9a9a9">Novel Food Data</h1>
       </v-row>
       <v-row>
         <v-container>
+          <v-alert
+            class="mb-3"
+            v-if="selected.length < 1"
+            icon="$warning"
+            text="Select data you would like to see"
+            type="tertiary"
+            density="“compact”"
+            rounded="xl"
+          ></v-alert>
           <v-row v-if="selected.length > 1 ? true : false" class="mb-2">
             <v-spacer></v-spacer>
             <v-btn color="tertiary" @click="selected = []" size="x-small" variant="text">
@@ -120,6 +172,7 @@
             >
               <v-chip
                 :disabled="loading"
+                size="large"
                 closable
                 @click:close="selected.splice(i, 1)"
                 variant="elevated"
@@ -131,25 +184,24 @@
                 {{ selection.text }}
               </v-chip>
             </v-col>
-
-            <v-col v-if="!allSelected" cols="12">
-              <v-text-field
-                ref="searchField"
-                v-model="search"
-                density="comfortable"
-                placeholder="Search available data"
-                prepend-inner-icon="mdi-magnify"
-                style="max-width: 300px"
-                variant="outlined"
-                clearable
-                hide-details
-              ></v-text-field>
-            </v-col>
           </v-row>
         </v-container>
 
-        <v-container>
-          <v-list bg-color="rgba(0, 0, 0, 0)">
+        <v-container class="mt-4">
+          <v-text-field
+            v-if="!allSelected"
+            ref="searchField"
+            v-model="search"
+            density="comfortable"
+            placeholder="Search available data"
+            prepend-inner-icon="mdi-magnify"
+            style="max-width: 300px"
+            variant="outlined"
+            clearable
+            hide-details
+            rounded="xl"
+          ></v-text-field>
+          <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
             <template v-for="item in categories">
               <v-list-item
                 v-if="!selected.includes(item)"
@@ -170,7 +222,7 @@
       </v-row>
     </v-col>
   </v-row>
-  <!-- Add Filter Dialog -->
+  <!-- Filter Dialog -->
   <v-dialog v-model="dialog" max-width="700px">
     <v-card class="pa-4">
       <v-card-title>
@@ -181,10 +233,10 @@
           <v-row>
             <v-col cols="12">
               <v-row class="d-flex align-center">
-                <v-span>In result</v-span>
+                <v-span>All Novel Foods</v-span>
                 <v-select
                   v-model="newFilter.include"
-                  :items="['include', 'exclude']"
+                  :items="['must have', 'must not have']"
                   label="Include / Exclude"
                   class="ml-6"
                   variant="underlined"
@@ -240,33 +292,13 @@
       </v-card-text>
       <v-card-actions class="mb-4">
         <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="dialog = false">Close</v-btn>
-        <v-btn color="secondary" class="mr-2 ml-5" text @click="addFilter">Save</v-btn>
+        <v-btn color="primary" rounded="m" text @click="dialog = false">Close</v-btn>
+        <v-btn color="secondary" rounded="m" class="mr-2 ml-5" text @click="addFilter">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 
   <div v-if="!showFilterInterface">
-    <v-row class="mb-8">
-      <v-col cols="4"> </v-col>
-      <v-col cols="4">
-        <v-row class="justify-center">
-          <v-btn @click="showFilterInterface = true" style="min-height: 50px" color="secondary">
-            <v-icon left>mdi-replay</v-icon>
-            new search
-          </v-btn>
-        </v-row>
-      </v-col>
-      <v-col cols="4">
-        <v-row class="justify-center">
-          <v-btn style="min-height: 50px" color="primary">
-            <v-icon left>mdi-export</v-icon>
-            Export
-          </v-btn>
-        </v-row>
-      </v-col>
-    </v-row>
-
     <v-row class="d-flex justify-center">
       <v-sheet elevation="1" class="mt-2">
         <v-data-table v-model:sort-by="sortBy" :headers="headers" :items="opinions"></v-data-table>
@@ -297,7 +329,6 @@ export default {
       ['Delete', 'mdi-delete']
     ],
     items: [
-
       {
         // administrative
         text: 'NF Code',
@@ -311,11 +342,11 @@ export default {
         text: 'Opinion URL',
         icon: 'mdi-file-document-outline'
       },
-            {
+      {
         text: 'Opinion DOI',
         icon: 'mdi-file-document-outline'
       },
-            {
+      {
         text: 'Publication Date',
         icon: 'mdi-file-document-outline'
       },
@@ -335,7 +366,7 @@ export default {
         text: 'ADME studies',
         icon: 'mdi-pill'
       },
-            {
+      {
         // toxicology
         text: 'Was Tox Study Required',
         icon: 'mdi-test-tube'
@@ -416,48 +447,7 @@ export default {
 
     showInColumns: [],
     showInDetails: [],
-    createdFilters: [
-      {
-        id: 1,
-        include: true,
-        title: 'production process',
-        subtitle: 'production process',
-        qualifier: 'contains',
-        value: 'solvent steps'
-      },
-      {
-        id: 2,
-        include: false,
-        title: 'production process',
-        subtitle: 'production process',
-        qualifier: 'contains',
-        value: 'enzymes'
-      },
-      {
-        id: 3,
-        include: true,
-        title: 'date of publication',
-        subtitle: 'administrative',
-        qualifier: 'greater than',
-        value: '01.07.2018'
-      },
-      {
-        id: 4,
-        include: false,
-        title: 'type mandate',
-        subtitle: 'administrative',
-        qualifier: 'is',
-        value: 'extension of use'
-      },
-      {
-        id: 6,
-        include: true,
-        title: 'opinion regulation',
-        subtitle: 'administrative',
-        qualifier: 'is',
-        value: 'Regulation (EC) No 2015/2283 Article 10'
-      }
-    ],
+    createdFilters: [],
     opinions: [
       {
         allergenicity: 'Low',

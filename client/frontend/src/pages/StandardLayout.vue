@@ -124,10 +124,10 @@ export default {
           routerLink: 'dashboard-page'
         },
         {
-          title: 'Opinions',
-          icon: 'mdi-file-document-edit',
-          value: 'opinions',
-          routerLink: 'opinions-page'
+          title: 'Database Search',
+          icon: 'mdi-database',
+          value: 'databaseSearch',
+          routerLink: 'database-search-page'
         },
         {
           title: 'Novel Foods',
