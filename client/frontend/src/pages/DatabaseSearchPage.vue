@@ -9,7 +9,7 @@
         <h1 style="color: #a9a9a9">Novel Food Filters</h1>
       </v-row>
 
-      <v-row class="mt-7">
+      <v-row class="mt-4">
         <v-spacer></v-spacer>
         <v-btn
           v-if="addedFilters.length > 1 ? true : false"
@@ -25,7 +25,7 @@
         >
       </v-row>
 
-      <v-row v-if="!addingFilter" class="d-flex justify-center">
+      <v-row v-if="!addingFilter" class="d-flex justify-center mt-5">
         <v-btn
           color="secondary"
           :variant="addedFilters.length > 0 ? 'tonal' : 'elevated'"
@@ -82,11 +82,7 @@
                     </v-row>
                   </v-col>
 
-                  <v-col
-                    v-if="availableFilters[newFilter.title]?.description"
-                    cols="12"
-                    class="text-center"
-                  >
+                  <v-col v-if="availableFilters[newFilter.title]?.description" cols="12">
                     <p>
                       {{ availableFilters[newFilter.title]?.description }}
                     </p>
@@ -111,21 +107,14 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-for="(item, i) in addedFilters" :key="i" class="d-flex justify-end mb-0">
+      <v-row v-for="(filter, i) in addedFilters" :key="i" class="mb-0">
         <v-row class="d-flex justify-center mb-0" v-if="i != 0 || addingFilter == true">
           <span class="mt-0">and</span>
         </v-row>
-        <v-col cols="12" class="mb-0 mr-1">
-          <v-card
-            border
-            class="pa-2 mb-0"
-            elevation="3"
-            style="position: relative; overflow: visible"
-            rounded="xl"
-          >
+        <v-col cols="12" class="mb-0">
+          <v-card class="pa-2 mb-0 mr-1" elevation="3" style="position: relative" rounded="xl">
             <v-btn
               :style="{ position: 'absolute', right: '+8px' }"
-              fab
               color="tertiary"
               size="x-small"
               min-height="30"
@@ -137,17 +126,17 @@
             </v-btn>
 
             <v-card-subtitle class="text-h6 pt-3 pb-2 mb-0">
-              {{ item.group }}
+              {{ filter.group }}
             </v-card-subtitle>
-            <v-card-text class="pt-0 mt-0">
-              Novel Foods <b>{{ item.include }}</b> {{ ' ' }}
+            <v-card-text class="pt-0">
+              Novel Foods <b>{{ filter.include }}</b> {{ ' ' }}
               <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                item.title
+                filter.title
               }}</v-chip
-              >{{ ' ' }}which <b>{{ item.qualifier }}</b
+              >{{ ' ' }}which <b>{{ filter.qualifier }}</b
               >{{ ' ' }}
               <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                item.value
+                filter.value
               }}</v-chip>
             </v-card-text>
           </v-card>
@@ -159,7 +148,7 @@
       <v-row class="d-flex justify-center">
         <h1 style="color: #a9a9a9">Novel Food Data</h1>
       </v-row>
-      <v-row>
+      <v-row class="mt-3">
         <v-container>
           <v-alert
             class="mb-3"
@@ -167,10 +156,9 @@
             icon="$warning"
             text="Select data you would like to see"
             type="secondary"
-            density="“compact”"
             rounded="md"
           ></v-alert>
-          <v-row v-if="selected.length > 1 ? true : false" class="mb-2">
+          <v-row v-if="selected.length > 1" class="mb-2">
             <v-spacer></v-spacer>
             <v-btn
               @click="selected = []"
@@ -184,7 +172,7 @@
               all
             </v-btn>
           </v-row>
-          <v-row align="center" justify="start">
+          <v-row class="mt-0">
             <v-col
               v-for="(selection, i) in selections"
               :key="selection.text"
