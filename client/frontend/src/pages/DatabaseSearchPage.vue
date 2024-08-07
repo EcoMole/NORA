@@ -65,18 +65,20 @@
         <h1 style="color: #a9a9a9">Novel Food Filters</h1>
       </v-row>
 
-      <v-row class="d-flex justify-center mt-4">
+      <v-row class="d-flex justify-center align-center mt-5">
         <v-text-field
+          :disabled="dialog"
+          v-if="createdFilters.length > 1 ? true : false"
           v-model="searchFilter"
+          class="ml-4"
           density="comfortable"
           placeholder="Search created filters"
           prepend-inner-icon="mdi-magnify"
-          style="max-width: 300px"
+          max-width="300px"
           variant="solo"
           clearable
           rounded
           hide-details
-          v-if="createdFilters.length > 1 ? true : false"
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-btn
@@ -85,24 +87,28 @@
           color="tertiary"
           size="x-small"
           min-height="30"
+          class="mr-6"
+          variant="tonal"
         >
           <v-icon left>mdi-close</v-icon>
           all</v-btn
         >
       </v-row>
 
-      <v-row class="d-flex justify-end mb-0">
+      <v-row v-if="!dialog" class="d-flex justify-center mb-0 mt-12">
+        <v-btn
+          color="secondary"
+          :variant="createdFilters.length > 0 ? 'tonal' : 'elevated'"
+          @click="dialog = true"
+          class="mb-0"
+        >
+          <v-icon left>mdi-plus</v-icon>
+          Add Filter
+        </v-btn>
+      </v-row>
+      <v-row v-else class="d-flex justify-end mb-0 mt-3">
         <v-col cols="12" class="mb-0 mr-1">
-          <v-btn
-            v-if="!dialog"
-            color="secondary"
-            :variant="createdFilters.length > 0 ? 'tonal' : 'elevated'"
-            @click="dialog = true"
-          >
-            <v-icon left>mdi-plus</v-icon>
-            Add Filter
-          </v-btn>
-          <v-card v-else class="pa-2 mb-0" rounded="xl" elevation="6" density="compact">
+          <v-card class="pa-2 mb-0" rounded="xl" elevation="6" density="compact">
             <v-card-subtitle class="text-h6 pt-4 pb-0 mb-0">
               {{ this.dataEntities[newFilter.title]?.subtitle || '' }}
             </v-card-subtitle>
@@ -111,7 +117,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-row class="d-flex align-center">
-                      <v-span>All Novel Foods</v-span>
+                      <span>All Novel Foods</span>
                       <v-select
                         v-model="newFilter.include"
                         :items="['must have', 'must not have']"
@@ -131,7 +137,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-row class="d-flex align-center">
-                      <v-span>which</v-span>
+                      <span>which</span>
                       <v-autocomplete
                         v-model="newFilter.qualifier"
                         :items="dataEntities[newFilter.title]?.qualifiers || []"
@@ -182,11 +188,9 @@
         </v-col>
       </v-row>
       <v-row v-for="(item, i) in createdFilters" :key="i" class="d-flex justify-end mb-0">
-        <v-col v-if="i != 0 || dialog == true" cols="12">
-          <v-row class="d-flex justify-center">
-            <v-span>and</v-span>
-          </v-row>
-        </v-col>
+        <v-row class="d-flex justify-center mb-0" v-if="i != 0 || dialog == true">
+          <span class="mt-0">and</span>
+        </v-row>
         <v-col cols="12" class="mb-0 mr-1">
           <v-card
             border
@@ -196,12 +200,14 @@
             rounded="xl"
           >
             <v-btn
-              :style="{ position: 'absolute', right: '-16px' }"
+              :style="{ position: 'absolute', right: '+8px' }"
               fab
               color="tertiary"
               size="x-small"
               min-height="30"
               @click="removeItem(i)"
+              variant="tonal"
+              style="z-index: 2"
             >
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -234,7 +240,7 @@
             v-if="selected.length < 1"
             icon="$warning"
             text="Select data you would like to see"
-            type="tertiary"
+            type="secondary"
             density="“compact”"
             rounded="md"
           ></v-alert>
@@ -246,6 +252,7 @@
               size="x-small"
               min-height="30"
               rounded="md"
+              variant="tonal"
             >
               <v-icon left>mdi-close</v-icon>
               all
@@ -312,7 +319,7 @@
   <div v-if="!showFilterInterface">
     <v-row class="d-flex justify-center">
       <v-sheet elevation="1" class="mt-2">
-        <v-data-table v-model:sort-by="sortBy" :headers="headers" :items="opinions"></v-data-table>
+        <v-data-table :headers="headers" :items="opinions"></v-data-table>
       </v-sheet>
     </v-row>
   </div>
