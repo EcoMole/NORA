@@ -737,7 +737,7 @@ export default {
       )
     },
     availableAttrsSearched() {
-      const availableAttrsSearch = this.availableAttrsSearch.toLowerCase()
+      const availableAttrsSearch = this.availableAttrsSearch?.toLowerCase()
 
       if (!availableAttrsSearch) return this.availableAttrs
 
@@ -746,13 +746,6 @@ export default {
 
         return text.indexOf(availableAttrsSearch) > -1
       })
-    }
-  },
-
-  watch: {
-    selectedAttrs() {
-      console.log('selectedAttrs changed')
-      this.availableAttrsSearch = ''
     }
   },
   created() {
