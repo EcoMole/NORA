@@ -251,11 +251,24 @@
 
   <div v-else>
     <v-row class="justify-end mr-5">
-      <v-btn min-height="50px" color="primary">
-        <v-icon left>mdi-download</v-icon>
-        Export
-      </v-btn>
+      <v-menu :rounded="'lg'">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" min-height="50px" color="primary">
+            <v-icon left>mdi-download</v-icon>
+            Export
+          </v-btn>
+        </template>
+        <v-list density="compact">
+          <v-list-item v-for="(item, index) in exportOptions" :key="index" :value="index">
+            <template v-slot:prepend>
+              <v-icon :icon="item.icon"></v-icon>
+            </template>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-row>
+
     <v-row class="d-flex justify-center">
       <v-sheet elevation="1" class="mt-2">
         <v-data-table :headers="headers" :items="opinions"></v-data-table>
@@ -306,6 +319,10 @@ import { useTheme } from 'vuetify'
 export default {
   data: () => ({
     open: ['Users'],
+    exportOptions: [
+      { title: 'displayed data', icon: 'mdi-table' },
+      { title: 'the whole database', icon: 'mdi-database' }
+    ],
     admins: [
       ['Management', 'mdi-account-multiple-outline'],
       ['Settings', 'mdi-cog-outline']
