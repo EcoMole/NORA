@@ -71,8 +71,9 @@
                   </v-col>
                   <v-col cols="12">
                     <v-row class="d-flex align-center">
-                      <span>which</span>
+                      <span v-if="newFilter.title">which</span>
                       <v-autocomplete
+                        :disabled="!newFilter.title"
                         v-model="newFilter.qualifier"
                         :items="availableFilters[newFilter.title]?.qualifiers || []"
                         max-width="180px"
@@ -84,6 +85,7 @@
                         v-model="newFilter.value"
                         :type="availableFilters[newFilter.title]?.type"
                         class="ml-6"
+                        :disabled="!newFilter.title"
                       ></v-text-field>
                     </v-row>
                   </v-col>
@@ -98,7 +100,7 @@
             </v-card-text>
             <v-card-actions class="mb-1 pt-0">
               <v-spacer></v-spacer>
-              <v-btn color="tertiary" variant="tonal" @click="addingFilter = false">Cancel</v-btn>
+              <v-btn color="tertiary" variant="tonal" @click="cancelNewFilter">Cancel</v-btn>
               <v-btn
                 color="secondary"
                 :disabled="!addFilterValid"
@@ -209,6 +211,7 @@
             style="max-width: 300px"
             variant="outlined"
             clearable
+            hide-details
           ></v-text-field>
           <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
             <template v-for="attr in availableAttrsSearched">
@@ -664,6 +667,16 @@ export default {
     ]
   }),
   methods: {
+    cancelNewFilter() {
+      this.addingFilter = false
+      this.newFilter = {
+        include: '',
+        title: '',
+        group: '',
+        qualifier: '',
+        value: ''
+      }
+    },
     newSearch() {
       this.showFilterInterface = true
       this.addedFilters = []
