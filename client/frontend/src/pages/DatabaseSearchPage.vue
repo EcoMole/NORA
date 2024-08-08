@@ -37,7 +37,13 @@
       </v-row>
       <v-row v-else class="d-flex justify-end mb-0">
         <v-col cols="12" class="mr-1">
-          <v-card class="pa-2" rounded="xl" elevation="6" density="compact">
+          <v-card
+            class="pa-2"
+            rounded="xl"
+            elevation="6"
+            density="compact"
+            @keyup.enter="addFilter"
+          >
             <v-card-subtitle class="text-h6 pt-4">
               {{ this.availableFilters[newFilter.title]?.group || '' }}
             </v-card-subtitle>
@@ -95,9 +101,7 @@
               <v-btn color="tertiary" variant="tonal" @click="addingFilter = false">Cancel</v-btn>
               <v-btn
                 color="secondary"
-                :disabled="
-                  !newFilter.include || !newFilter.title || !newFilter.qualifier || !newFilter.value
-                "
+                :disabled="!addFilterValid"
                 variant="elevated"
                 class="mr-2 ml-5"
                 @click="addFilter"
@@ -174,13 +178,12 @@
           </v-row>
           <v-row class="mt-0">
             <v-col
-              v-for="(selection, i) in selections"
-              :key="selection.text"
+              v-for="(attr, i) in selectedAttributes"
+              :key="attr.text"
               class="py-1 pe-0"
               cols="auto"
             >
               <v-chip
-                :disabled="loading"
                 size="large"
                 closable
                 elevation="3"
@@ -188,9 +191,9 @@
                 variant="elevated"
                 :color="this.theme.global.current.value.dark ? 'black' : 'white'"
               >
-                <v-icon :icon="selection.icon" start></v-icon>
+                <v-icon :icon="attr.icon" start></v-icon>
 
-                {{ selection.text }}
+                {{ attr.text }}
               </v-chip>
             </v-col>
           </v-row>
@@ -214,11 +217,10 @@
               <v-list-item
                 v-if="!selected.includes(item)"
                 :key="item.text"
-                :disabled="loading"
                 @click="selected.push(item)"
               >
                 <template v-slot:prepend>
-                  <v-icon :disabled="loading" :icon="item.icon"></v-icon>
+                  <v-icon :icon="item.icon"></v-icon>
                 </template>
 
                 <v-list-item-title v-text="item.text"></v-list-item-title>
@@ -374,7 +376,6 @@ export default {
       'Final Outcome',
       'Final Outcome Remarks'
     ],
-    loading: false,
     search: '',
     selected: [],
     showFilterInterface: true,
@@ -651,15 +652,6 @@ export default {
     ]
   }),
   methods: {
-    next() {
-      this.loading = true
-
-      setTimeout(() => {
-        this.search = ''
-        this.selected = []
-        this.loading = false
-      }, 2000)
-    },
     renderTable() {
       this.updateHeaders()
       this.showFilterInterface = false
@@ -671,21 +663,23 @@ export default {
       }
     },
     addFilter() {
-      this.addedFilters.unshift({
-        id: this.addedFilters.length + 1,
-        include: this.newFilter.include,
-        title: this.newFilter.title,
-        group: this.availableFilters[this.newFilter.title]?.group || '',
-        qualifier: this.newFilter.qualifier,
-        value: this.newFilter.value
-      })
-      this.addingFilter = false
-      this.newFilter = {
-        include: '',
-        title: '',
-        group: '',
-        qualifier: '',
-        value: ''
+      if (this.addFilterValid) {
+        this.addedFilters.unshift({
+          id: this.addedFilters.length + 1,
+          include: this.newFilter.include,
+          title: this.newFilter.title,
+          group: this.availableFilters[this.newFilter.title]?.group || '',
+          qualifier: this.newFilter.qualifier,
+          value: this.newFilter.value
+        })
+        this.addingFilter = false
+        this.newFilter = {
+          include: '',
+          title: '',
+          group: '',
+          qualifier: '',
+          value: ''
+        }
       }
     },
     removeItem(index) {
@@ -717,6 +711,14 @@ export default {
     allSelected() {
       return this.selected.length === this.items.length
     },
+    addFilterValid() {
+      return (
+        this.newFilter.include &&
+        this.newFilter.title &&
+        this.newFilter.qualifier &&
+        this.newFilter.value
+      )
+    },
     categories() {
       const search = this.search.toLowerCase()
 
@@ -728,14 +730,14 @@ export default {
         return text.indexOf(search) > -1
       })
     },
-    selections() {
-      const selections = []
+    selectedAttributes() {
+      const selectedAttributes = []
 
       for (const selection of this.selected) {
-        selections.push(selection)
+        selectedAttributes.push(selection)
       }
 
-      return selections
+      return selectedAttributes
     }
   },
 
