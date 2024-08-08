@@ -156,16 +156,16 @@
         <v-container>
           <v-alert
             class="mb-3"
-            v-if="selected.length < 1"
+            v-if="selectedAttrs.length < 1"
             icon="$warning"
             text="Select data you would like to see"
-            type="secondary"
+            color="secondary"
             rounded="md"
           ></v-alert>
-          <v-row v-if="selected.length > 1" class="mb-2">
+          <v-row v-if="selectedAttrs.length > 1" class="mb-2">
             <v-spacer></v-spacer>
             <v-btn
-              @click="selected = []"
+              @click="selectedAttrs = []"
               color="tertiary"
               size="x-small"
               min-height="30"
@@ -178,7 +178,7 @@
           </v-row>
           <v-row class="mt-0">
             <v-col
-              v-for="(attr, i) in selectedAttributes"
+              v-for="(attr, i) in selectedAttrs"
               :key="attr.text"
               class="py-1 pe-0"
               cols="auto"
@@ -187,7 +187,7 @@
                 size="large"
                 closable
                 elevation="3"
-                @click:close="selected.splice(i, 1)"
+                @click:close="selectedAttrs.splice(i, 1)"
                 variant="elevated"
                 :color="this.theme.global.current.value.dark ? 'black' : 'white'"
               >
@@ -202,28 +202,26 @@
         <v-container class="mt-4">
           <v-text-field
             v-if="!allSelected"
-            ref="searchField"
-            v-model="search"
+            v-model="availableAttrsSearch"
             density="comfortable"
             placeholder="Search available data"
             prepend-inner-icon="mdi-magnify"
             style="max-width: 300px"
             variant="outlined"
             clearable
-            hide-descriptions
           ></v-text-field>
           <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
-            <template v-for="item in categories">
+            <template v-for="attr in availableAttrsSearched">
               <v-list-item
-                v-if="!selected.includes(item)"
-                :key="item.text"
-                @click="selected.push(item)"
+                v-if="!selectedAttrs.includes(attr)"
+                :key="attr.text"
+                @click="selectedAttrs.push(attr)"
               >
                 <template v-slot:prepend>
-                  <v-icon :icon="item.icon"></v-icon>
+                  <v-icon :icon="attr.icon"></v-icon>
                 </template>
 
-                <v-list-item-title v-text="item.text"></v-list-item-title>
+                <v-list-item-title>{{ attr.text }}</v-list-item-title>
               </v-list-item>
             </template>
           </v-list>
@@ -232,7 +230,7 @@
     </v-col>
     <v-btn
       elevation="14"
-      :disabled="selected.length < 1"
+      :disabled="selectedAttrs.length < 1"
       @click="renderTable"
       style="z-index: 2"
       color="secondary"
@@ -249,7 +247,7 @@
   </v-row>
 
   <div v-else>
-    <v-row class="justify-end">
+    <v-row class="justify-end mr-5">
       <v-btn min-height="50px" color="primary">
         <v-icon left>mdi-download</v-icon>
         Export
@@ -264,19 +262,33 @@
       <v-btn
         v-bind="props"
         :elevation="isHovering ? 14 : 4"
-        @click="showFilterInterface = true"
-        size="large"
+        @click="newSearch"
+        size="small"
         min-height="50px"
         color="tertiary"
+        style="margin-bottom: 98px"
         position="fixed"
         location="bottom right"
-        class="mb-8 mr-10"
+        class="mr-10"
         :ripple="false"
       >
         <v-icon left>mdi-replay</v-icon>
         new search
       </v-btn>
     </v-hover>
+    <v-btn
+      elevation="24"
+      @click="showFilterInterface = true"
+      min-height="50px"
+      color="secondary"
+      position="fixed"
+      location="bottom right"
+      class="mb-8 mr-10"
+      :ripple="false"
+    >
+      <v-icon left>mdi-replay</v-icon>
+      edit search
+    </v-btn>
   </div>
 </template>
 
@@ -301,7 +313,7 @@ export default {
       ['Update', 'mdi-update'],
       ['Delete', 'mdi-delete']
     ],
-    items: [
+    availableAttrs: [
       {
         // administrative
         text: 'NF Code',
@@ -376,8 +388,8 @@ export default {
       'Final Outcome',
       'Final Outcome Remarks'
     ],
-    search: '',
-    selected: [],
+    availableAttrsSearch: '',
+    selectedAttrs: [],
     showFilterInterface: true,
     addingFilter: false,
     headers: [],
@@ -652,6 +664,11 @@ export default {
     ]
   }),
   methods: {
+    newSearch() {
+      this.showFilterInterface = true
+      this.addedFilters = []
+      this.selectedAttrs = []
+    },
     renderTable() {
       this.updateHeaders()
       this.showFilterInterface = false
@@ -709,7 +726,7 @@ export default {
   },
   computed: {
     allSelected() {
-      return this.selected.length === this.items.length
+      return this.selectedAttrs.length === this.availableAttrs.length
     },
     addFilterValid() {
       return (
@@ -719,31 +736,23 @@ export default {
         this.newFilter.value
       )
     },
-    categories() {
-      const search = this.search.toLowerCase()
+    availableAttrsSearched() {
+      const availableAttrsSearch = this.availableAttrsSearch.toLowerCase()
 
-      if (!search) return this.items
+      if (!availableAttrsSearch) return this.availableAttrs
 
-      return this.items.filter((item) => {
-        const text = item.text.toLowerCase()
+      return this.availableAttrs.filter((attr) => {
+        const text = attr.text.toLowerCase()
 
-        return text.indexOf(search) > -1
+        return text.indexOf(availableAttrsSearch) > -1
       })
-    },
-    selectedAttributes() {
-      const selectedAttributes = []
-
-      for (const selection of this.selected) {
-        selectedAttributes.push(selection)
-      }
-
-      return selectedAttributes
     }
   },
 
   watch: {
-    selected() {
-      this.search = ''
+    selectedAttrs() {
+      console.log('selectedAttrs changed')
+      this.availableAttrsSearch = ''
     }
   },
   created() {
