@@ -256,7 +256,6 @@
           <v-btn
             v-bind="{ ...hoverProps, ...menuProps }"
             :elevation="isHovering ? 14 : 4"
-            @click="newSearch"
             size="small"
             min-height="40px"
             color="primary"
@@ -281,74 +280,66 @@
       </v-list>
     </v-menu>
 
-    <v-row class="d-flex justify-center">
-      <v-sheet elevation="1" class="mt-2">
+    <v-row v-if="tableStyle == grouped" class="d-flex justify-center">
+      <v-sheet elevation="1" class="mt-2 pa-4">
+        <v-data-table
+          :headers="firstLevelHeaders"
+          :items="firstLevelData"
+          style="font-size: 12px"
+          density="compact"
+        >
+          <template v-slot:[`item.firstLevelColumn1Content`]="{ item }">
+            <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+              <v-data-table
+                style="font-size: 12px"
+                density="compact"
+                hide-default-footer
+                :headers="secondLevelHeaders1"
+                :items="item.firstLevelColumn1Content"
+              >
+                <template v-slot:[`item.secondLevelColumn2Content`]="{ item }">
+                  <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+                    <v-data-table
+                      style="font-size: 12px"
+                      density="compact"
+                      hide-default-footer
+                      :headers="thirdLevelHeaders1"
+                      :items="item.secondLevelColumn2Content"
+                    ></v-data-table>
+                  </v-sheet> </template
+              ></v-data-table>
+            </v-sheet>
+          </template>
+          <template v-slot:[`item.firstLevelColumn2Content`]="{ item }">
+            <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+              <v-data-table
+                style="font-size: 12px"
+                density="compact"
+                hide-default-footer
+                :headers="secondLevelHeaders2"
+                :items="item.firstLevelColumn2Content"
+              ></v-data-table>
+            </v-sheet>
+          </template>
+          <template v-slot:[`item.firstLevelColumn3Content`]="{ item }">
+            <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+              <v-data-table
+                style="font-size: 12px"
+                density="compact"
+                hide-default-footer
+                :headers="secondLevelHeaders3"
+                :items="item.firstLevelColumn3Content"
+              ></v-data-table>
+            </v-sheet>
+          </template>
+        </v-data-table>
+      </v-sheet>
+    </v-row>
+    <v-row v-else class="d-flex justify-center">
+      <v-sheet elevation="1" class="mt-2 pa-4">
         <v-data-table :headers="headers" :items="opinions"></v-data-table>
       </v-sheet>
     </v-row>
-    <v-row>
-      <v-sheet rounded border elevation="3">
-        <v-data-table
-          style="font-size: 12px"
-          :items="simpleTableItems"
-          :headers="simpleTableHeaders"
-          density="compact"
-        ></v-data-table>
-      </v-sheet>
-    </v-row>
-    <v-container>
-      <v-data-table
-        :headers="firstLevelHeaders"
-        :items="firstLevelData"
-        style="font-size: 12px"
-        density="compact"
-      >
-        <template v-slot:[`item.firstLevelColumn1Content`]="{ item }">
-          <v-sheet outlined border elevation="2" class="pa-2 ma-3">
-            <v-data-table
-              style="font-size: 12px"
-              density="compact"
-              hide-default-footer
-              :headers="secondLevelHeaders1"
-              :items="item.firstLevelColumn1Content"
-            >
-              <template v-slot:[`item.secondLevelColumn2Content`]="{ item }">
-                <v-sheet outlined border elevation="2" class="pa-2 ma-3">
-                  <v-data-table
-                    style="font-size: 12px"
-                    density="compact"
-                    hide-default-footer
-                    :headers="thirdLevelHeaders1"
-                    :items="item.secondLevelColumn2Content"
-                  ></v-data-table>
-                </v-sheet> </template
-            ></v-data-table>
-          </v-sheet>
-        </template>
-        <template v-slot:[`item.firstLevelColumn2Content`]="{ item }">
-          <v-sheet outlined border elevation="2" class="pa-2 ma-3">
-            <v-data-table
-              style="font-size: 12px"
-              density="compact"
-              hide-default-footer
-              :headers="secondLevelHeaders2"
-              :items="item.firstLevelColumn2Content"
-            ></v-data-table>
-          </v-sheet>
-        </template>
-        <template v-slot:[`item.firstLevelColumn3Content`]="{ item }">
-          <v-sheet outlined border elevation="2" class="pa-2 ma-3">
-            <v-data-table
-              style="font-size: 12px"
-              density="compact"
-              hide-default-footer
-              :headers="secondLevelHeaders3"
-              :items="item.firstLevelColumn3Content"
-            ></v-data-table>
-          </v-sheet>
-        </template>
-      </v-data-table>
-    </v-container>
     <v-hover v-slot="{ isHovering, props }">
       <v-btn
         v-bind="props"
@@ -367,6 +358,53 @@
         new search
       </v-btn>
     </v-hover>
+    <v-sheet
+      elevation="24"
+      position="fixed"
+      location="bottom"
+      class="mb-8 px-5"
+      rounded="lg"
+      border
+    >
+      <v-row class="d-flex align-center">
+        <!-- Label for false value -->
+        <v-col class="text-right">
+          <label
+            for="custom-switch"
+            :style="{ fontWeight: tableStyle == grouped ? 'bold' : 'normal' }"
+            >{{ grouped }}
+            <v-tooltip activator="parent" location="left"
+              >Shows a single value for all rows that share the same value.</v-tooltip
+            ></label
+          >
+        </v-col>
+
+        <!-- v-switch component -->
+        <v-col>
+          <v-switch
+            density="compact"
+            v-model="tableStyle"
+            id="custom-switch"
+            hide-details
+            :false-value="grouped"
+            :true-value="repeated"
+          ></v-switch>
+        </v-col>
+
+        <!-- Label for true value -->
+        <v-col>
+          <label
+            for="custom-switch"
+            :style="{ fontWeight: tableStyle == repeated ? 'bold' : 'normal' }"
+          >
+            {{ repeated }}
+            <v-tooltip activator="parent" location="right"
+              >Repeats each value for all rows that share the same value.</v-tooltip
+            ></label
+          >
+        </v-col>
+      </v-row>
+    </v-sheet>
     <v-btn
       elevation="24"
       @click="showFilterInterface = true"
@@ -393,6 +431,9 @@ import { useTheme } from 'vuetify'
 
 export default {
   data: () => ({
+    grouped: 'grouped',
+    repeated: 'repeated',
+    tableStyle: 'grouped',
     firstLevelHeaders: [
       { title: 'NF code', value: 'nfCode', align: 'center' },
       { title: 'Question', value: 'firstLevelColumn1Content', align: 'center' },
@@ -496,32 +537,6 @@ export default {
           { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
           { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
         ]
-      }
-    ],
-    simpleTableHeaders: [
-      { title: 'Name', value: 'name' },
-      { title: 'Species', value: 'species' },
-      { title: 'Diet', value: 'diet' },
-      { title: 'Habitat', value: 'habitat' }
-    ],
-    simpleTableItems: [
-      {
-        name: 'African Elephant',
-        species: 'Loxodonta africana',
-        diet: 'Herbivore',
-        habitat: 'Savanna, Forests'
-      },
-      {
-        name: 'African Elephant',
-        species: 'Loxodonta africana',
-        diet: 'Herbivore',
-        habitat: 'Savanna, Forests'
-      },
-      {
-        name: 'African Elephant',
-        species: 'Loxodonta africana',
-        diet: 'Herbivore',
-        habitat: 'Savanna, Forests'
       }
     ],
     open: ['Users'],
