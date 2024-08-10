@@ -990,3 +990,9 @@ export default {
   }
 }
 </script>
+
+<style>
+th {
+  color: #b3b3b3;
+}
+</style>
