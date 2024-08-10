@@ -250,24 +250,36 @@
   </v-row>
 
   <div v-else>
-    <v-row class="justify-end mr-5">
-      <v-menu :rounded="'lg'">
-        <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" min-height="50px" color="primary">
+    <v-menu :rounded="'lg'">
+      <template v-slot:activator="{ props: menuProps }">
+        <v-hover v-slot="{ isHovering, props: hoverProps }">
+          <v-btn
+            v-bind="{ ...hoverProps, ...menuProps }"
+            :elevation="isHovering ? 14 : 4"
+            @click="newSearch"
+            size="small"
+            min-height="40px"
+            color="primary"
+            style="margin-top: 98px"
+            position="fixed"
+            location="top right"
+            class="mr-10"
+            :ripple="false"
+          >
             <v-icon left>mdi-download</v-icon>
             Export
           </v-btn>
-        </template>
-        <v-list density="compact">
-          <v-list-item v-for="(item, index) in exportOptions" :key="index" :value="index">
-            <template v-slot:prepend>
-              <v-icon :icon="item.icon"></v-icon>
-            </template>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-row>
+        </v-hover>
+      </template>
+      <v-list density="compact">
+        <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i">
+          <template v-slot:prepend>
+            <v-icon :icon="option.icon"></v-icon>
+          </template>
+          <v-list-item-title>{{ option.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <v-row class="d-flex justify-center">
       <v-sheet elevation="1" class="mt-2">
@@ -320,7 +332,7 @@ export default {
   data: () => ({
     open: ['Users'],
     exportOptions: [
-      { title: 'displayed data', icon: 'mdi-table' },
+      { title: 'the search result', icon: 'mdi-table' },
       { title: 'the whole database', icon: 'mdi-database' }
     ],
     admins: [
