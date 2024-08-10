@@ -286,6 +286,69 @@
         <v-data-table :headers="headers" :items="opinions"></v-data-table>
       </v-sheet>
     </v-row>
+    <v-row>
+      <v-sheet rounded border elevation="3">
+        <v-data-table
+          style="font-size: 12px"
+          :items="simpleTableItems"
+          :headers="simpleTableHeaders"
+          density="compact"
+        ></v-data-table>
+      </v-sheet>
+    </v-row>
+    <v-container>
+      <v-data-table
+        :headers="firstLevelHeaders"
+        :items="firstLevelData"
+        style="font-size: 12px"
+        density="compact"
+      >
+        <template v-slot:[`item.firstLevelColumn1Content`]="{ item }">
+          <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+            <v-data-table
+              style="font-size: 12px"
+              density="compact"
+              hide-default-footer
+              :headers="secondLevelHeaders1"
+              :items="item.firstLevelColumn1Content"
+            >
+              <template v-slot:[`item.secondLevelColumn2Content`]="{ item }">
+                <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+                  <v-data-table
+                    style="font-size: 12px"
+                    density="compact"
+                    hide-default-footer
+                    :headers="thirdLevelHeaders1"
+                    :items="item.secondLevelColumn2Content"
+                  ></v-data-table>
+                </v-sheet> </template
+            ></v-data-table>
+          </v-sheet>
+        </template>
+        <template v-slot:[`item.firstLevelColumn2Content`]="{ item }">
+          <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+            <v-data-table
+              style="font-size: 12px"
+              density="compact"
+              hide-default-footer
+              :headers="secondLevelHeaders2"
+              :items="item.firstLevelColumn2Content"
+            ></v-data-table>
+          </v-sheet>
+        </template>
+        <template v-slot:[`item.firstLevelColumn3Content`]="{ item }">
+          <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+            <v-data-table
+              style="font-size: 12px"
+              density="compact"
+              hide-default-footer
+              :headers="secondLevelHeaders3"
+              :items="item.firstLevelColumn3Content"
+            ></v-data-table>
+          </v-sheet>
+        </template>
+      </v-data-table>
+    </v-container>
     <v-hover v-slot="{ isHovering, props }">
       <v-btn
         v-bind="props"
@@ -330,6 +393,137 @@ import { useTheme } from 'vuetify'
 
 export default {
   data: () => ({
+    firstLevelHeaders: [
+      { title: 'NF code', value: 'nfCode', align: 'center' },
+      { title: 'Question', value: 'firstLevelColumn1Content', align: 'center' },
+      { title: 'firstLevel Column2', value: 'firstLevelColumn2Content', align: 'center' },
+      { title: 'firstLevel Column3', value: 'firstLevelColumn3Content', align: 'center' }
+    ],
+    secondLevelHeaders1: [
+      { title: 'Question Number', value: 'secondLevelColumn1Content', align: 'center' },
+      { title: 'Applicant', value: 'secondLevelColumn2Content', align: 'center' }
+    ],
+    secondLevelHeaders2: [
+      { title: 'secondLevel Column 1', value: 'secondLevelColumn1Content', align: 'center' },
+      { title: 'secondLevel Column 2', value: 'secondLevelColumn2Content', align: 'center' }
+    ],
+    secondLevelHeaders3: [
+      { title: 'secondLevel Column 1', value: 'secondLevelColumn1Content', align: 'center' },
+      { title: 'secondLevel Column 2', value: 'secondLevelColumn2Content', align: 'center' }
+    ],
+    thirdLevelHeaders1: [
+      { title: 'Name', value: 'thirdLevelColumn1Content', align: 'center' },
+      { title: 'Surname', value: 'thirdLevelColumn2Content', align: 'center' }
+    ],
+    firstLevelData: [
+      {
+        nfCode: 'NF876897',
+        firstLevelColumn1Content: [
+          {
+            secondLevelColumn1Content: 'Q 87687',
+            secondLevelColumn2Content: [
+              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
+              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
+            ]
+          },
+          {
+            secondLevelColumn1Content: 'Q 867987',
+            secondLevelColumn2Content: [
+              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
+              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
+            ]
+          }
+        ],
+        firstLevelColumn2Content: [
+          { secondLevelColumn1Content: 'Q 876858', secondLevelColumn2Content: 'Value 1-1' },
+          { secondLevelColumn1Content: 'Q 7658980', secondLevelColumn2Content: 'Value 1-2' }
+        ],
+        firstLevelColumn3Content: [
+          { secondLevelColumn1Content: 'Q 97968', secondLevelColumn2Content: 'Value 1-1' },
+          { secondLevelColumn1Content: 'Q058957867', secondLevelColumn2Content: 'Value 1-2' }
+        ]
+      },
+      {
+        nfCode: 'NF768',
+        firstLevelColumn1Content: [
+          {
+            secondLevelColumn1Content: 'Q 058967',
+            secondLevelColumn2Content: [
+              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
+              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
+            ]
+          },
+          {
+            secondLevelColumn1Content: 'Q 97968',
+            secondLevelColumn2Content: [
+              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
+              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
+            ]
+          }
+        ],
+        firstLevelColumn2Content: [
+          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
+          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
+        ],
+        firstLevelColumn3Content: [
+          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
+          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
+        ]
+      },
+      {
+        nfCode: 'NF987897',
+        firstLevelColumn1Content: [
+          {
+            secondLevelColumn1Content: 'Q 876858',
+            secondLevelColumn2Content: [
+              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
+              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
+            ]
+          },
+          {
+            secondLevelColumn1Content: 'Q 7658980',
+            secondLevelColumn2Content: [
+              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
+              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
+            ]
+          }
+        ],
+        firstLevelColumn2Content: [
+          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
+          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
+        ],
+        firstLevelColumn3Content: [
+          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
+          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
+        ]
+      }
+    ],
+    simpleTableHeaders: [
+      { title: 'Name', value: 'name' },
+      { title: 'Species', value: 'species' },
+      { title: 'Diet', value: 'diet' },
+      { title: 'Habitat', value: 'habitat' }
+    ],
+    simpleTableItems: [
+      {
+        name: 'African Elephant',
+        species: 'Loxodonta africana',
+        diet: 'Herbivore',
+        habitat: 'Savanna, Forests'
+      },
+      {
+        name: 'African Elephant',
+        species: 'Loxodonta africana',
+        diet: 'Herbivore',
+        habitat: 'Savanna, Forests'
+      },
+      {
+        name: 'African Elephant',
+        species: 'Loxodonta africana',
+        diet: 'Herbivore',
+        habitat: 'Savanna, Forests'
+      }
+    ],
     open: ['Users'],
     exportOptions: [
       { title: 'the search result', icon: 'mdi-table' },
@@ -464,7 +658,6 @@ export default {
     },
     expandedItems: {},
 
-    showInColumns: [],
     showIndescriptions: [],
     addedFilters: [],
     opinions: [
@@ -760,7 +953,9 @@ export default {
         { title: 'Final Outcome', key: 'finalOutcomes' },
         { title: 'Final Outcome Remarks', key: 'finalOutcomeRemarks' }
       ]
-      this.headers = allHeaders.filter((header) => this.showInColumns.includes(header.title))
+      this.headers = allHeaders.filter((header) =>
+        this.selectedAttrs.map((attr) => attr.text).includes(header.title)
+      )
     }
   },
   mounted() {
