@@ -281,7 +281,7 @@
     </v-menu>
 
     <v-row v-if="tableStyle == grouped" class="d-flex justify-center">
-      <v-sheet elevation="1" class="mt-2 pa-4">
+      <v-sheet elevation="2" class="mt-2 pa-4">
         <v-data-table
           :headers="firstLevelHeaders"
           :items="firstLevelData"
@@ -289,7 +289,7 @@
           density="compact"
         >
           <template v-slot:[`item.firstLevelColumn1Content`]="{ item }">
-            <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+            <v-sheet>
               <v-data-table
                 style="font-size: 12px"
                 density="compact"
@@ -298,7 +298,7 @@
                 :items="item.firstLevelColumn1Content"
               >
                 <template v-slot:[`item.secondLevelColumn2Content`]="{ item }">
-                  <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+                  <v-sheet>
                     <v-data-table
                       style="font-size: 12px"
                       density="compact"
@@ -311,7 +311,7 @@
             </v-sheet>
           </template>
           <template v-slot:[`item.firstLevelColumn2Content`]="{ item }">
-            <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+            <v-sheet>
               <v-data-table
                 style="font-size: 12px"
                 density="compact"
@@ -322,7 +322,7 @@
             </v-sheet>
           </template>
           <template v-slot:[`item.firstLevelColumn3Content`]="{ item }">
-            <v-sheet outlined border elevation="2" class="pa-2 ma-3">
+            <v-sheet>
               <v-data-table
                 style="font-size: 12px"
                 density="compact"
@@ -436,13 +436,13 @@ export default {
     tableStyle: 'grouped',
     firstLevelHeaders: [
       { title: 'NF code', value: 'nfCode', align: 'center' },
-      { title: 'Question', value: 'firstLevelColumn1Content', align: 'center' },
-      { title: 'firstLevel Column2', value: 'firstLevelColumn2Content', align: 'center' },
-      { title: 'firstLevel Column3', value: 'firstLevelColumn3Content', align: 'center' }
+      { title: '', value: 'firstLevelColumn1Content', align: 'center' },
+      { title: '', value: 'firstLevelColumn2Content', align: 'center' },
+      { title: '', value: 'firstLevelColumn3Content', align: 'center' }
     ],
     secondLevelHeaders1: [
       { title: 'Question Number', value: 'secondLevelColumn1Content', align: 'center' },
-      { title: 'Applicant', value: 'secondLevelColumn2Content', align: 'center' }
+      { title: '', value: 'secondLevelColumn2Content', align: 'center' }
     ],
     secondLevelHeaders2: [
       { title: 'secondLevel Column 1', value: 'secondLevelColumn1Content', align: 'center' },
@@ -453,8 +453,8 @@ export default {
       { title: 'secondLevel Column 2', value: 'secondLevelColumn2Content', align: 'center' }
     ],
     thirdLevelHeaders1: [
-      { title: 'Name', value: 'thirdLevelColumn1Content', align: 'center' },
-      { title: 'Surname', value: 'thirdLevelColumn2Content', align: 'center' }
+      { title: 'Applicant Name', value: 'thirdLevelColumn1Content', align: 'center' },
+      { title: 'Applicant Surname', value: 'thirdLevelColumn2Content', align: 'center' }
     ],
     firstLevelData: [
       {
@@ -1008,6 +1008,6 @@ export default {
 
 <style>
 th {
-  color: #b3b3b3;
+  color: #a6cf98;
 }
 </style>
