@@ -24,6 +24,8 @@ django-mptt = "^0.13.4"
 colorlog = "^6.7.0"
 pandas = "^2.2.2"
 lxml = "^4.6.1"
+graphene-django = "^3.2.2"
+django-graphql-jwt = "^0.3.4"
 
 [tool.poetry.group.prod.dependencies]
 gunicorn = "^22.0.0"

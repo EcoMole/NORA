@@ -25,6 +25,11 @@ export default new createRouter({
       component: () => import('@/pages/DatabaseSearchPage.vue')
     },
     {
+      path: '/graphql/',
+      name: 'graphql-page',
+      component: () => import('@/pages/GraphqlPage.vue')
+    },
+    {
       path: '/novle-foods/',
       name: 'novel-foods-page',
       component: () => import('@/pages/NovelFoodsPage.vue')
