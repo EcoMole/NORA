@@ -1,4 +1,5 @@
 import graphene
+from administrative.schema import OpinionType  # noqa
 from graphene_django.types import DjangoObjectType
 
 from .models import NovelFood
