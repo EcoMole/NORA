@@ -3,7 +3,9 @@
     <h1>Novel Foods</h1>
     <v-btn @click="loadNovelFoods">Load Data</v-btn>
     <ul v-if="novelFoodsData">
-      <li v-for="item in novelFoodsData.novelFoods" :key="item.id">{{ item.title }} ({{ item.nfCode }})</li>
+      <li v-for="item in novelFoodsData.novelFoods" :key="item.id">
+        {{ item.title }} ({{ item.nfCode }})
+      </li>
     </ul>
   </div>
   <div>
@@ -16,18 +18,18 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
-import { ref } from 'vue';
-import { useApolloClient } from '@vue/apollo-composable';
+import gql from 'graphql-tag'
+import { ref } from 'vue'
+import { useApolloClient } from '@vue/apollo-composable'
 
 export default {
   setup() {
-    const novelFoodsData = ref(null);
-    const opinionsData = ref(null);
-    const loading = ref(false);
-    const error = ref(null);
+    const novelFoodsData = ref(null)
+    const opinionsData = ref(null)
+    const loading = ref(false)
+    const error = ref(null)
 
-    const { client } = useApolloClient();
+    const { client } = useApolloClient()
 
     const GET_NOVEL_FOODS = gql`
       query {
@@ -37,45 +39,137 @@ export default {
           nfCode
         }
       }
-    `;
+    `
 
-    const GET_OPINIONS = gql`
+    const GET_ALL_DATA = gql`
       query {
         opinions {
           id
-          url
+          documentType {
+            id
+            shortName
+            extendedName
+          }
+          title
           doi
+          url
+          publicationDate
+          adoptionDate
+          panels {
+            id
+            panel {
+              id
+              title
+            }
+          }
+          questions {
+            id
+            question {
+              id
+              number
+            }
+          }
+          sciOfficers {
+            id
+            sciOfficer {
+              id
+              firstName
+              middleName
+              lastName
+            }
+          }
+        }
+        questions {
+          id
+          number
+          applicants {
+            id
+            applicant {
+              id
+              title
+            }
+          }
+          mandates {
+            id
+            mandateType {
+              id
+              title
+              definition
+            }
+            regulation {
+              id
+              shortName
+              extendedName
+            }
+          }
+        }
+        panels {
+          id
+          title
+        }
+        applicants {
+          id
+          title
+        }
+        mandateTypes {
+          id
+          title
+          definition
+        }
+        scientificOfficers {
+          id
+          firstName
+          middleName
+          lastName
+        }
+        mandates {
+          id
+          question {
+            id
+            number
+          }
+          mandateType {
+            id
+            title
+            definition
+          }
+          regulation {
+            id
+            shortName
+            extendedName
+          }
         }
       }
-    `;
+    `
 
     const loadNovelFoods = async () => {
-      loading.value = true;
+      loading.value = true
       try {
         const result = await client.query({
           query: GET_NOVEL_FOODS
-        });
-        novelFoodsData.value = result.data;
+        })
+        novelFoodsData.value = result.data
       } catch (err) {
-        error.value = err;
+        error.value = err
       } finally {
-        loading.value = false;
+        loading.value = false
       }
-    };
+    }
 
     const loadOpinions = async () => {
-      loading.value = true;
+      loading.value = true
       try {
         const result = await client.query({
-          query: GET_OPINIONS
-        });
-        opinionsData.value = result.data;
+          query: GET_ALL_DATA
+        })
+        opinionsData.value = result.data
+        console.log(result.data)
       } catch (err) {
-        error.value = err;
+        error.value = err
       } finally {
-        loading.value = false;
+        loading.value = false
       }
-    };
+    }
 
     return {
       novelFoodsData,
@@ -84,7 +178,7 @@ export default {
       error,
       loadNovelFoods,
       loadOpinions
-    };
+    }
   }
 }
 </script>
