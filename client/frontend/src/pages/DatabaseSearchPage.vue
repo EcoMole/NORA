@@ -423,7 +423,9 @@
 
 <script>
 import { useTheme } from 'vuetify'
-
+import gql from 'graphql-tag'
+// for Composition API apollo provider:
+// import { useApolloClient } from '@vue/apollo-composable'
 // icon: 'mdi-rice'
 // icon: 'mdi-alert-outline'
 // icon: 'mdi-hazard-lights'
@@ -908,6 +910,73 @@ export default {
     ]
   }),
   methods: {
+    async fetchData() {
+      try {
+        const GET_ALL_DATA = gql`
+          query {
+            novelFoods {
+              id
+              opinion {
+                id
+                documentType {
+                  id
+                  shortName
+                  extendedName
+                }
+                title
+                doi
+                url
+                publicationDate
+                adoptionDate
+                panels {
+                  id
+                  title
+                }
+                sciOfficers {
+                  id
+                  firstName
+                  middleName
+                  lastName
+                }
+                questions {
+                  id
+                  number
+                  applicants {
+                    id
+                    title
+                  }
+                  mandates {
+                    id
+                    mandateType {
+                      id
+                      title
+                      definition
+                    }
+                    regulation {
+                      id
+                      shortName
+                      extendedName
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `
+        // for Composition API apollo provider
+        // const { client } = useApolloClient()
+
+        // using this.$apollo for Option API apollo provider
+        const result = await this.$apollo.query({
+          query: GET_ALL_DATA
+        })
+        console.log(result.data)
+      } catch (err) {
+        console.log(err)
+      } finally {
+        console.log('done')
+      }
+    },
     cancelNewFilter() {
       this.addingFilter = false
       this.newFilter = {
@@ -925,6 +994,7 @@ export default {
     },
     renderTable() {
       this.updateHeaders()
+      this.fetchData()
       this.showFilterInterface = false
     },
     updateSubtitle() {
