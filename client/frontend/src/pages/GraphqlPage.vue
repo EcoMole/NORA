@@ -41,102 +41,74 @@ export default {
       }
     `
 
+    // the rest of the NovelFood attributes to include:
+    // title
+    // nf_code
+    // tox_study_required
+    // genotox_final_outcome
+    // final_toxicology_remarks
+    // protein_digestibility
+    // antinutritional_factors
+    // has_nutri_disadvantage
+    // nutri_disadvantage_explanation
+    // sufficient_data
+    // food_matrices
+    // instability_concerns
+    // shelflife_value
+    // shelflife_unit
+    // endocrine_disrupt_prop
+    // outcome
+    // outcome_remarks
+    // vocab_id
+    // allergenicity
+
     const GET_ALL_DATA = gql`
       query {
-        opinions {
+        novelFoods {
           id
-          documentType {
+          opinion {
             id
-            shortName
-            extendedName
-          }
-          title
-          doi
-          url
-          publicationDate
-          adoptionDate
-          panels {
-            id
-            panel {
+            documentType {
+              id
+              shortName
+              extendedName
+            }
+            title
+            doi
+            url
+            publicationDate
+            adoptionDate
+            panels {
               id
               title
             }
-          }
-          questions {
-            id
-            question {
-              id
-              number
-            }
-          }
-          sciOfficers {
-            id
-            sciOfficer {
+            sciOfficers {
               id
               firstName
               middleName
               lastName
             }
-          }
-        }
-        questions {
-          id
-          number
-          applicants {
-            id
-            applicant {
+            questions {
               id
-              title
+              number
+              applicants {
+                id
+                title
+              }
+              mandates {
+                id
+                mandateType {
+                  id
+                  title
+                  definition
+                }
+                regulation {
+                  id
+                  shortName
+                  extendedName
+                }
+              }
             }
-          }
-          mandates {
-            id
-            mandateType {
-              id
-              title
-              definition
-            }
-            regulation {
-              id
-              shortName
-              extendedName
-            }
-          }
-        }
-        panels {
-          id
-          title
-        }
-        applicants {
-          id
-          title
-        }
-        mandateTypes {
-          id
-          title
-          definition
-        }
-        scientificOfficers {
-          id
-          firstName
-          middleName
-          lastName
-        }
-        mandates {
-          id
-          question {
-            id
-            number
-          }
-          mandateType {
-            id
-            title
-            definition
-          }
-          regulation {
-            id
-            shortName
-            extendedName
           }
         }
       }

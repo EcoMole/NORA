@@ -7,6 +7,7 @@ from .models import NovelFood
 class NovelFoodType(DjangoObjectType):
     class Meta:
         model = NovelFood
+        fields = "__all__"
 
 
 class Query(graphene.ObjectType):

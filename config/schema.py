@@ -1,9 +1,8 @@
-import administrative.schema
 import graphene
 import novel_food.schema
 
 
-class Query(novel_food.schema.Query, administrative.schema.Query, graphene.ObjectType):
+class Query(novel_food.schema.Query, graphene.ObjectType):
     pass
 
 
