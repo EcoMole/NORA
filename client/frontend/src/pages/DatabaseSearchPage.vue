@@ -433,7 +433,7 @@ export default {
   data: () => ({
     grouped: 'grouped',
     repeated: 'repeated',
-    tableStyle: 'grouped',
+    tableStyle: 'repeated',
     firstLevelHeaders: [
       { title: 'NF code', value: 'nfCode', align: 'center' },
       { title: '', value: 'firstLevelColumn1Content', align: 'center' },
@@ -445,12 +445,16 @@ export default {
       { title: '', value: 'secondLevelColumn2Content', align: 'center' }
     ],
     secondLevelHeaders2: [
-      { title: 'secondLevel Column 1', value: 'secondLevelColumn1Content', align: 'center' },
-      { title: 'secondLevel Column 2', value: 'secondLevelColumn2Content', align: 'center' }
+      { title: 'ADME test material', value: 'secondLevelColumn1Content', align: 'center' },
+      { title: 'ADME remarks', value: 'secondLevelColumn2Content', align: 'center' }
     ],
     secondLevelHeaders3: [
-      { title: 'secondLevel Column 1', value: 'secondLevelColumn1Content', align: 'center' },
-      { title: 'secondLevel Column 2', value: 'secondLevelColumn2Content', align: 'center' }
+      {
+        title: 'Final Outcome Uncertainity Factor',
+        value: 'secondLevelColumn1Content',
+        align: 'center'
+      },
+      { title: 'Final Outcome Remarks', value: 'secondLevelColumn2Content', align: 'center' }
     ],
     thirdLevelHeaders1: [
       { title: 'Applicant Name', value: 'thirdLevelColumn1Content', align: 'center' },
@@ -476,12 +480,12 @@ export default {
           }
         ],
         firstLevelColumn2Content: [
-          { secondLevelColumn1Content: 'Q 876858', secondLevelColumn2Content: 'Value 1-1' },
-          { secondLevelColumn1Content: 'Q 7658980', secondLevelColumn2Content: 'Value 1-2' }
+          { secondLevelColumn1Content: 'Value 1-5', secondLevelColumn2Content: 'Value 1-1' },
+          { secondLevelColumn1Content: 'Value 1-3', secondLevelColumn2Content: 'Value 1-2' }
         ],
         firstLevelColumn3Content: [
-          { secondLevelColumn1Content: 'Q 97968', secondLevelColumn2Content: 'Value 1-1' },
-          { secondLevelColumn1Content: 'Q058957867', secondLevelColumn2Content: 'Value 1-2' }
+          { secondLevelColumn1Content: 'Value 1-8', secondLevelColumn2Content: 'Value 1-1' },
+          { secondLevelColumn1Content: 'Value 1-9', secondLevelColumn2Content: 'Value 1-2' }
         ]
       },
       {
