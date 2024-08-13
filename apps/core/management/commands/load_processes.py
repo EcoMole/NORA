@@ -1,5 +1,5 @@
 import pandas as pd
-from administrative.models import Opinion, OpinionQuestion, Question
+from administrative.models import OpinionQuestion, Question
 from composition.models import (
     NovelFoodVariant,
     ProductionNovelFoodVariant,
@@ -12,14 +12,13 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Command to load production processes."  
+    help = "Command that loads production processes from csv." 
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
 
     def add_process_step(self, row):
         print("Adding process step for nf:", row["nf name"])
-        result_msg = "Process steps:"
 
         r_question_number = row["question"]
         question = Question.objects.get(number=r_question_number)

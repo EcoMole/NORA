@@ -1,5 +1,5 @@
 import pandas as pd
-from administrative.models import Opinion, OpinionQuestion, Question
+from administrative.models import OpinionQuestion, Question
 from core.models import Contribution
 from django.core.management.base import BaseCommand
 from novel_food.models import (
@@ -17,7 +17,7 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Script to load organism identities of Novel Foods."
+    help = "Command that loads organism identities of NFs from csv."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -62,7 +62,6 @@ class Command(BaseCommand):
 
         else:
             final_msg += "Family missing, created dummy node -> rename it.\n"
-            # family_obj = Family.objects.create(title='Dummy family', org_type=org_type_obj)
             genus_obj = Genus.objects.get_or_create(title=row["genus"])
 
         if "," in row["species"]:

@@ -1,15 +1,15 @@
 from typing import Any
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import pandas as pd
 from studies.models import StudySource, Endpoint, Endpointstudy
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier
 from novel_food.models import NovelFood
-from administrative.models import Question, OpinionQuestion, Opinion
+from administrative.models import Question, OpinionQuestion
 from core.models import Contribution
 
 
 class Command(BaseCommand):
-    help = "TODO" #TODO
+    help = "Command that loads endpoint studies from csv file"
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -139,7 +139,7 @@ class Command(BaseCommand):
             endpoint_study.guideline = guideline_node
 
         r_duration = row["duration"]
-        if r_duration == 'single' or pd.isna(r_duration) or '-' in r_duration or '<' in r_duration: #TODO Fix after asking
+        if r_duration == 'single' or pd.isna(r_duration) or '-' in r_duration or '<' in r_duration: 
             pass
         else:
             duration, unit = self.get_duration(r_duration)
@@ -179,5 +179,5 @@ class Command(BaseCommand):
 
         Endpointstudy.objects.all().delete()
 
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             self.add_study(row)

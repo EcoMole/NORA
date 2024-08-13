@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Endpointstudy(models.Model):
     duplicate_related = ["endpoints"]
 
@@ -408,7 +407,7 @@ class Genotox(models.Model):
         on_delete=models.SET_NULL,
         related_name="guideline_genotoxes",
         db_column="id_genotox_guideline",
-        limit_choices_to={"taxonomy__code": "STUDYGUIDELINE"},
+        limit_choices_to=models.Q(taxonomy__code="STUDYGUIDELINE") & ~models.Q(short_name="root"),
         help_text="(STUDYGUIDELINE vocab)",
     )
     outcome = models.ForeignKey(
@@ -416,7 +415,7 @@ class Genotox(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "POSNEG"},
+        limit_choices_to=models.Q(taxonomy__code="POSNEG") & ~models.Q(short_name="root"),
         db_column="id_is_genotoxic",
         related_name="outcome_genotoxes",
         help_text="(POSNEG vocab)",
@@ -436,7 +435,7 @@ class Genotox(models.Model):
         on_delete=models.SET_NULL,
         related_name="test_type_genotoxes",
         db_column="id_test_type",
-        limit_choices_to={"taxonomy__code": "TEST_TYPE"},
+        limit_choices_to=models.Q(taxonomy__code="TEST_TYPE") & ~models.Q(short_name="root"),
         help_text="for ex.: acute oral toxicity (OECD phrase ID 1703), or "
         "subchronic (OECD phrase ID 2399). (TEST_TYPE vocab)",
     )

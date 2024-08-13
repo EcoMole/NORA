@@ -86,7 +86,7 @@ class TaxonomyNodeAdmin(admin.ModelAdmin):
         "scientific_names",
         "chem_descriptors",
     ]
-    fields = ["code", "short_name", "extended_name", "taxonomy"]
+    fields = ["code", "short_name", "extended_name", "taxonomy", "reportable", "status", "parent", "is_botanic"]
     list_filter = ["taxonomy"]
     actions = [duplicate_model]
 
