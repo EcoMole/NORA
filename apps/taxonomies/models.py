@@ -56,6 +56,26 @@ class TaxonomyNode(MPTTModel, SyncMixin):
         help_text="Is this node marked as being in 'botanic' hierarchy?",
     )
 
+    is_yesno = models.BooleanField(
+        default=False,
+        help_text="Is this node marked as being in 'yesno' hierarchy?",
+    )
+
+    is_gender = models.BooleanField(
+        default=False,
+        help_text="Is this node marked as being in 'gender' hierarchy?",
+    )
+
+    is_part_nature = models.BooleanField(
+        default=False,
+        help_text="Is this node marked as being in 'PartNature' hierarchy?",
+    )
+
+    is_process = models.BooleanField(
+        default=False,
+        help_text="Is this node marked as being in 'process' hierarchy?",
+    )
+
     def to_html(self):
         ret = [self.code]
         if self.short_name:

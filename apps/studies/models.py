@@ -51,7 +51,7 @@ class Endpointstudy(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "MTX"},
+        limit_choices_to=models.Q(taxonomy__code="MTX") & ~models.Q(short_name="root") & models.Q(is_gender=True),
         db_column="id_sex",
         related_name="sex_endpointstudies",
         help_text="(MTX vocab)",

@@ -120,6 +120,9 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         ProposedUseInline,
     ]
 
+    class Media:
+        js = ('composition/js/admin_inline_copy.js',)
+
     def get_novel_food(self, obj):
         return str(obj.novel_food)
 
