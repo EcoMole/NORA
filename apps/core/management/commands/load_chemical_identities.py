@@ -13,7 +13,7 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Script for loading chemical identities of Novel Foods."
+    help = "Command that loads chemical identity of NF from csv."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)

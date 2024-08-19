@@ -1,14 +1,14 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import pandas as pd
 from studies.models import StudySource, InvestigationType, ADME, ADMEInvestigationType
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier
 from novel_food.models import NovelFood
-from administrative.models import Question, OpinionQuestion, Opinion
+from administrative.models import Question, OpinionQuestion
 from core.models import Contribution
 
 
 class Command(BaseCommand):
-    help = "Load ADME studies from csv"
+    help = "Command that loads ADME studies from csv."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -41,8 +41,6 @@ class Command(BaseCommand):
 
         r_study_source = row["study source"]
         if r_study_source == 'no ADME in opinion':
-            print('no ADME in this opinion')
-            #TODO az se prida ten attribute na NovelFood
             return
 
         study_source_node = StudySource.objects.get(title=r_study_source)

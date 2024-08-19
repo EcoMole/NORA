@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Endpointstudy(models.Model):
     duplicate_related = ["endpoints"]
 
@@ -15,7 +14,7 @@ class Endpointstudy(models.Model):
         on_delete=models.SET_NULL,
         related_name="test_type_endpointstudies",
         db_column="id_test_type",
-        limit_choices_to={"taxonomy__code": "TEST_TYPE"},
+        limit_choices_to=models.Q(taxonomy__code="TEST_TYPE") & ~models.Q(short_name="root"),
         help_text="for ex.: acute oral toxicity (OECD phrase ID 1703), or "
         "subchronic (OECD phrase ID 2399) (TEST_TYPE vocab)",
     )
@@ -34,7 +33,7 @@ class Endpointstudy(models.Model):
         on_delete=models.SET_NULL,
         related_name="guideline_endpointstudies",
         db_column="id_guideline",
-        limit_choices_to={"taxonomy__code": "STUDYGUIDELINE"},
+        limit_choices_to=models.Q(taxonomy__code="STUDYGUIDELINE") & ~models.Q(short_name="root"),
         help_text="(STUDYGUIDELINE vocab)",
     )
     species = models.ForeignKey(
@@ -42,7 +41,7 @@ class Endpointstudy(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "MTX"},
+        limit_choices_to=models.Q(taxonomy__code="MTX") & ~models.Q(short_name="root") & (models.Q(extended_name__icontains="(as animal)") | models.Q(extended_name__icontains="(as organism)")),
         db_column="id_species",
         related_name="species_endpointstudies",
         help_text="(MTX vocab)",
@@ -52,7 +51,7 @@ class Endpointstudy(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "MTX"},
+        limit_choices_to=models.Q(taxonomy__code="MTX") & ~models.Q(short_name="root") & models.Q(is_gender=True),
         db_column="id_sex",
         related_name="sex_endpointstudies",
         help_text="(MTX vocab)",
@@ -65,7 +64,7 @@ class Endpointstudy(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "UNIT"},
+        limit_choices_to=models.Q(taxonomy__code="UNIT") & models.Q(extended_name__in=["Hour","Day", "Week", "Month", "Year"]),
         db_column="id_duration_unit",
         related_name="duration_unit_endpointstudies",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
@@ -108,7 +107,7 @@ class Endpoint(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
+        limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV") & ~models.Q(short_name="root"),
         db_column="id_reference_point",
         related_name="endpoint_endpoints",
         help_text="(ENDPOINT_HGV vocab)",
@@ -120,7 +119,7 @@ class Endpoint(models.Model):
         on_delete=models.SET_NULL,
         related_name="qualifier_endpoints",
         db_column="id_qualifier",
-        limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        limit_choices_to=models.Q(taxonomy__code="QUALIFIER") & ~models.Q(short_name="root"),
         help_text="(QUALIFIER vocab)",
     )
     lovalue = models.DecimalField(
@@ -131,7 +130,7 @@ class Endpoint(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "UNIT"},
+        limit_choices_to=models.Q(taxonomy__code="UNIT") & ~models.Q(short_name="root"),
         db_column="id_unit",
         related_name="unit_endpoints",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
@@ -141,7 +140,7 @@ class Endpoint(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "MTX"},
+        limit_choices_to=models.Q(taxonomy__code="MTX") & ~models.Q(short_name="root") & (models.Q(is_gender=True) | models.Q(extended_name="Fetus / stillbirth / neonatus (as part-nature)")),
         db_column="id_subpopulation",
         related_name="subpopulation_endpoints",
         help_text="value such as 'male', 'female', 'mothers', 'fetuses', 'offsprings' are "
@@ -184,7 +183,7 @@ class FinalOutcome(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
+        limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV") & ~models.Q(short_name="root"),
         db_column="id_assessment_type",
         related_name="outcome_final_outcomes",
         help_text="(ENDPOINT_HGV vocab)",
@@ -196,7 +195,7 @@ class FinalOutcome(models.Model):
         on_delete=models.SET_NULL,
         db_column="id_risk_qualifier",
         related_name="qualifier_final_outcomes",
-        limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        limit_choices_to=models.Q(taxonomy__code="QUALIFIER") & ~models.Q(short_name="root"),
         help_text="(QUALIFIER vocab)",
     )
     value = models.DecimalField(
@@ -211,7 +210,7 @@ class FinalOutcome(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "UNIT"},
+        limit_choices_to=models.Q(taxonomy__code="UNIT") & ~models.Q(short_name="root"),
         db_column="id_risk_unit",
         related_name="unit_final_outcomes",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
@@ -316,7 +315,7 @@ class ADME(models.Model):
         on_delete=models.SET_NULL,
         related_name="test_type_admes",
         db_column="assay_system_endpoint",
-        limit_choices_to={"taxonomy__code": "TEST_TYPE"},
+        limit_choices_to=models.Q(taxonomy__code="TEST_TYPE") & ~models.Q(short_name="root"),
         help_text="for ex.: in silico, in vitro, in vivo, human study etc. (TEST_TYPE vocab)",
     )
     guideline_qualifier = models.ForeignKey(
@@ -332,7 +331,7 @@ class ADME(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="guideline_admes",
-        limit_choices_to={"taxonomy__code": "STUDYGUIDELINE"},
+        limit_choices_to=models.Q(taxonomy__code="STUDYGUIDELINE") & ~models.Q(short_name="root"),
         help_text="(STUDYGUIDELINE vocab)",
     )
     study_source = models.ForeignKey(
@@ -408,7 +407,7 @@ class Genotox(models.Model):
         on_delete=models.SET_NULL,
         related_name="guideline_genotoxes",
         db_column="id_genotox_guideline",
-        limit_choices_to={"taxonomy__code": "STUDYGUIDELINE"},
+        limit_choices_to=models.Q(taxonomy__code="STUDYGUIDELINE") & ~models.Q(short_name="root"),
         help_text="(STUDYGUIDELINE vocab)",
     )
     outcome = models.ForeignKey(
@@ -416,7 +415,7 @@ class Genotox(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "POSNEG"},
+        limit_choices_to=models.Q(taxonomy__code="POSNEG") & ~models.Q(short_name="root"),
         db_column="id_is_genotoxic",
         related_name="outcome_genotoxes",
         help_text="(POSNEG vocab)",
@@ -436,7 +435,7 @@ class Genotox(models.Model):
         on_delete=models.SET_NULL,
         related_name="test_type_genotoxes",
         db_column="id_test_type",
-        limit_choices_to={"taxonomy__code": "TEST_TYPE"},
+        limit_choices_to=models.Q(taxonomy__code="TEST_TYPE") & ~models.Q(short_name="root"),
         help_text="for ex.: acute oral toxicity (OECD phrase ID 1703), or "
         "subchronic (OECD phrase ID 2399). (TEST_TYPE vocab)",
     )

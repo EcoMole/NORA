@@ -8,7 +8,7 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Script to load organism identities of Novel Foods."
+    help = "Command that loads NF composition from csv."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -166,5 +166,5 @@ class Command(BaseCommand):
 
         self.initialize_characterisations()
 
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             self.add_composition(row)

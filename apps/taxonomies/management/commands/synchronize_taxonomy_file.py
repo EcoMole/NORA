@@ -117,6 +117,27 @@ class Command(BaseCommand):
                                 reportable = True
 
                             is_botanic = False
+                            is_yesno = False
+                            is_gender = False
+                            is_part_nature = False
+                            is_process = False
+
+                            for a in assignments:
+                                reportable_str = ct(a, "reportable")
+                                hc = ct(a, "hierarchyCode")
+                                if hc == "YESNO" and reportable_str == "true":
+                                    is_yesno = True
+                                    break
+                                if hc == "gender" and reportable_str == "true":
+                                    is_gender = True
+                                    break
+                                if hc == "part" and reportable_str == "true":
+                                    is_part_nature = True
+                                    break
+                                if hc == "process" and reportable_str == "true":
+                                    is_process = True
+                                    break
+
                             if len(assignments) > 1:
                                 # need to get the right assignement
                                 assignment = None
@@ -164,6 +185,10 @@ class Command(BaseCommand):
                                     attrs,
                                     reportable,
                                     is_botanic,
+                                    is_yesno,
+                                    is_gender,
+                                    is_part_nature,
+                                    is_process,
                                 )
                             except UnknownParentError:
                                 log.warning(
@@ -183,6 +208,10 @@ class Command(BaseCommand):
                                         attrs,
                                         reportable,
                                         is_botanic,
+                                        is_yesno,
+                                        is_gender,
+                                        is_part_nature,
+                                        is_process,
                                     )
                                 )
         finally:
@@ -253,6 +282,10 @@ class Command(BaseCommand):
         implicit_attributes,
         reportable,
         is_botanic,
+        is_yesno,
+        is_gender,
+        is_part_nature,
+        is_process,
     ):
         # handle status
         if status == "APPROVED":
@@ -278,6 +311,10 @@ class Command(BaseCommand):
             order=order,
             scope=term_scope,
             is_botanic=is_botanic,
+            is_yesno=is_yesno,
+            is_gender=is_gender,
+            is_part_nature=is_part_nature,
+            is_process=is_process,
         )
 
         # sync or create

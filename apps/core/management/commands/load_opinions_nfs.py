@@ -16,7 +16,7 @@ from administrative.models import (
     ScientificOfficer,
 )
 from core.models import Contribution, User
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from novel_food.models import (
     Allergenicity,
     AllergenicityNovelFood,
@@ -33,7 +33,7 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Load opinions and novel foods"
+    help = "Command that loads opinions and NFs from csv."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)

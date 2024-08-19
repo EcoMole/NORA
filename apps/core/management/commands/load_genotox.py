@@ -1,13 +1,13 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import pandas as pd
 from studies.models import Genotox, StudySource
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier
 from novel_food.models import NovelFood
-from administrative.models import Question, OpinionQuestion, Opinion
+from administrative.models import Question, OpinionQuestion
 from core.models import Contribution
 
 class Command(BaseCommand):
-    help = "Command to load genotox studies." 
+    help = "Command that loads genotox studies from csv."
 
     outcomes = ['negative', 'positive', 'inconclusive']
 
@@ -15,10 +15,10 @@ class Command(BaseCommand):
         parser.add_argument("csv_file", type=str)
 
     def get_pos_neg(self, word):
-        posneg = Taxonomy.objects.get(code='POSNEG') #FINAL delete create
-        pos = TaxonomyNode.objects.get(taxonomy=posneg, code='POS') #FINAL delete create
-        neg = TaxonomyNode.objects.get(taxonomy=posneg, code='NEG') #FINAL delete create
-        inconclusive = TaxonomyNode.objects.get(taxonomy=posneg, code='INC') #FINAL delete create
+        posneg = Taxonomy.objects.get(code='POSNEG')
+        pos = TaxonomyNode.objects.get(taxonomy=posneg, code='POS')
+        neg = TaxonomyNode.objects.get(taxonomy=posneg, code='NEG')
+        inconclusive = TaxonomyNode.objects.get(taxonomy=posneg, code='INC')
 
         if word == 'negative':
             return neg
