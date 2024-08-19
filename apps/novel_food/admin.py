@@ -335,27 +335,7 @@ class IsFromVocabFilter(admin.SimpleListFilter):
 
 
 @admin.register(Organism)
-class OrganismAdmin(admin.ModelAdmin):
-
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        extra_context = extra_context or {}
-        extra_context['show_custom_button'] = True  # Add a custom context variable
-        return super().change_view(request, object_id, form_url, extra_context)
-    
-    def response_change(self, request, obj):
-        if "_continue" in request.POST and "_popup" in request.GET:
-            # Return JavaScript that reloads the popup window
-            popup_response = (
-                f"<script type='text/javascript'>"
-                f"window.location.href = '{request.path}';"
-                f"</script>"
-            )
-            return HttpResponse(popup_response)
-        else:
-            # Handle normal form submissions
-            return super().response_change(request, obj)
-
-    
+class OrganismAdmin(admin.ModelAdmin):    
     list_display = [
         "get_organism",
         "get_custom_species_name",
