@@ -244,7 +244,10 @@ class Organism(models.Model):
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="MTX") & (models.Q(extended_name__icontains="(as animal)") | models.Q(extended_name__icontains="(as organism)") | models.Q(extended_name__icontains="(as plant)")),
+        limit_choices_to=models.Q(taxonomy__code="MTX") & (models.Q(extended_name__icontains="(as animal)") | 
+                                                           models.Q(extended_name__icontains="(as organism)") | models.Q(extended_name__icontains="(as plant)")
+                                                           | models.Q(short_name__icontains="(as animal)") | models.Q(short_name__icontains="(as organism)")
+                                                           | models.Q(short_name__icontains="(as plant)")),
         help_text="(MTX vocab)",
         related_name="vocab_id_organisms",
         verbose_name="Organism vocabulary identification",

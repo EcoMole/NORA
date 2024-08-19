@@ -41,7 +41,8 @@ class Endpointstudy(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="MTX") & ~models.Q(short_name="root") & (models.Q(extended_name__icontains="(as animal)") | models.Q(extended_name__icontains="(as organism)")),
+        limit_choices_to=models.Q(taxonomy__code="MTX") & (models.Q(extended_name__icontains="(as animal)") | models.Q(extended_name__icontains="(as organism)")
+           | models.Q(short_name__icontains="(as animal)") | models.Q(short_name__icontains="(as organism)")),
         db_column="id_species",
         related_name="species_endpointstudies",
         help_text="(MTX vocab)",
