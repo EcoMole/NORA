@@ -214,7 +214,7 @@ class Composition(models.Model):
         on_delete=models.SET_NULL,
         related_name="qualifier_compositions",
         db_column="id_qualifier",
-        limit_choices_to=models.Q(taxonomy__code="QUALIFIER") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="QUALIFIER") & models.Q(extended_name__in=["Equal to","Less than","Less than or equal","Greater than", "Greater than or equal", "Circa", "traces"]),
         help_text="(QUALIFIER vocab)",
     )
     value = models.DecimalField(

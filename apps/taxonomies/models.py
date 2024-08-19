@@ -68,12 +68,12 @@ class TaxonomyNode(MPTTModel, SyncMixin):
 
     is_part_nature = models.BooleanField(
         default=False,
-        help_text="Is this node marked as being in 'PartNature' hierarchy?",
+        help_text="Does this node belong to 'PartNature' facet from MTX?",
     )
 
     is_process = models.BooleanField(
         default=False,
-        help_text="Is this node marked as being in 'process' hierarchy?",
+        help_text="Does this node belong to 'process' facet from MTX?",
     )
 
     def to_html(self):
@@ -228,7 +228,7 @@ class Population(models.Model):
         related_name="qualifier_populations",
         db_column="id_qualifier",
         verbose_name="Age Qualifier",
-        limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        limit_choices_to=models.Q(taxonomy__code="QUALIFIER") & ~models.Q(short_name="root"),
     )
     value = models.DecimalField(
         max_digits=10,
@@ -252,7 +252,7 @@ class Population(models.Model):
         on_delete=models.SET_NULL,
         related_name="unit_populations",
         db_column="id_unit",
-        limit_choices_to={"taxonomy__code": "UNIT"},
+        limit_choices_to=models.Q(taxonomy__code="UNIT") & models.Q(extended_name__in=["Hour","Day", "Week", "Month", "Year"]),
         verbose_name="Age Unit",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
