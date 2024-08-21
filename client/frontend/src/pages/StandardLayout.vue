@@ -130,12 +130,6 @@ export default {
           routerLink: 'database-search-page'
         },
         {
-          title: 'Graphql',
-          icon: 'mdi-file-document-edit',
-          value: 'graphql',
-          routerLink: 'graphql-page'
-        },
-        {
           title: 'Novel Foods',
           icon: 'mdi-database',
           value: 'novelFoods',

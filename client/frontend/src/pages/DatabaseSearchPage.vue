@@ -250,39 +250,17 @@
   </v-row>
 
   <div v-else>
-    <v-menu :rounded="'lg'">
-      <template v-slot:activator="{ props: menuProps }">
-        <v-hover v-slot="{ isHovering, props: hoverProps }">
-          <v-btn
-            v-bind="{ ...hoverProps, ...menuProps }"
-            :elevation="isHovering ? 14 : 4"
-            size="small"
-            min-height="40px"
-            color="primary"
-            style="margin-top: 98px"
-            position="fixed"
-            location="top right"
-            class="mr-10"
-            :ripple="false"
-          >
-            <v-icon left>mdi-download</v-icon>
-            Export
-          </v-btn>
-        </v-hover>
-      </template>
-      <v-list density="compact">
-        <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i">
-          <template v-slot:prepend>
-            <v-icon :icon="option.icon"></v-icon>
-          </template>
-          <v-list-item-title>{{ option.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
+    <!-- DataTable tableStyle == grouped -->
     <v-row v-if="tableStyle == grouped" class="d-flex justify-center">
       <v-sheet elevation="2" class="mt-2 pa-4">
+        <v-skeleton-loader
+          v-if="!data"
+          class="mx-auto"
+          type="table-thead, table-tbody, table-tbody, table-tbody"
+          style="z-index: 0"
+        ></v-skeleton-loader>
         <v-data-table
+          v-else
           :headers="firstLevelHeaders"
           :items="firstLevelData"
           style="font-size: 12px"
@@ -335,11 +313,44 @@
         </v-data-table>
       </v-sheet>
     </v-row>
+
+    <!-- DataTable tableStyle == repeated -->
     <v-row v-else class="d-flex justify-center">
       <v-sheet elevation="1" class="mt-2 pa-4">
         <v-data-table :headers="headers" :items="opinions"></v-data-table>
       </v-sheet>
     </v-row>
+
+    <!-- btns -->
+    <v-menu :rounded="'lg'">
+      <template v-slot:activator="{ props: menuProps }">
+        <v-hover v-slot="{ isHovering, props: hoverProps }">
+          <v-btn
+            v-bind="{ ...hoverProps, ...menuProps }"
+            :elevation="isHovering ? 14 : 4"
+            size="small"
+            min-height="40px"
+            color="primary"
+            style="margin-top: 98px"
+            position="fixed"
+            location="top right"
+            class="mr-10"
+            :ripple="false"
+          >
+            <v-icon left>mdi-download</v-icon>
+            Export
+          </v-btn>
+        </v-hover>
+      </template>
+      <v-list density="compact">
+        <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i">
+          <template v-slot:prepend>
+            <v-icon :icon="option.icon"></v-icon>
+          </template>
+          <v-list-item-title>{{ option.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <v-hover v-slot="{ isHovering, props }">
       <v-btn
         v-bind="props"
@@ -907,7 +918,8 @@ export default {
         finalOutcomes: 'Rejected',
         finalOutcomeRemarks: 'Potential allergenicity issues'
       }
-    ]
+    ],
+    data: null
   }),
   methods: {
     async fetchData() {
@@ -970,6 +982,7 @@ export default {
         const result = await this.$apollo.query({
           query: GET_ALL_DATA
         })
+        this.data = result.data
         console.log(result.data)
       } catch (err) {
         console.log(err)
@@ -1082,6 +1095,6 @@ export default {
 
 <style>
 th {
-  color: #a6cf98;
+  color: #557c55;
 }
 </style>
