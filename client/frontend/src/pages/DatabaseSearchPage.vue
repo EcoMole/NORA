@@ -261,13 +261,16 @@
         density="compact"
         hide-default-footer
       >
-        <template v-slot:item.opinion="{ item }">
+        <template
+          v-for="(key, index) in Object.keys(fetchedData[0])"
+          v-slot:[`item.${key}`]="{ item }"
+          :key="`header-${index}`"
+        >
           <div>
-            <!-- Check if opinion is an object and render nested table -->
-            <template v-if="typeof item.opinion === 'object' && item.opinion !== null">
+            <template v-if="typeof item[key] === 'object' && item[key] !== null">
               <v-data-table
-                :headers="createHeaders(item.opinion)"
-                :items="[item.opinion]"
+                :headers="createHeaders(item[key])"
+                :items="[item[key]]"
                 style="font-size: 10px"
                 density="compact"
                 hide-default-footer
@@ -276,7 +279,7 @@
             </template>
             <template v-else>
               <!-- Render opinion as plain text -->
-              {{ item.opinion }}
+              {{ item[key] }}
             </template>
           </div>
         </template>
