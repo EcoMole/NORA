@@ -248,105 +248,103 @@
       Show data
     </v-btn>
   </v-row>
+  <v-row v-else>
+    <v-sheet elevation="2" class="mt-2 pa-4">
+      <!-- v-slot is a directive in Vue.js that allows you to define a slot in a component. Slots are placeholders that you can fill with content when using the component. When using v-slot, you are essentially injecting custom content into a specific part of a child component. -->
+      <!-- The { item } represents the entire object (row) for the current item in the table. -->
 
-      <v-sheet elevation="2" class="mt-2 pa-4">
-        <!-- recursive datatable -->
+      <v-data-table
+        v-if="fetchedData"
+        :headers="createHeaders(this.fetchedData[0])"
+        :items="fetchedData"
+        style="font-size: 12px"
+        density="compact"
+        hide-default-footer
+      >
+        <template v-slot:item.opinion="{ item }">
+          <div>
+            <!-- Check if opinion is an object and render nested table -->
+            <template v-if="typeof item.opinion === 'object' && item.opinion !== null">
+              <v-data-table
+                :headers="createHeaders(item.opinion)"
+                :items="[item.opinion]"
+                style="font-size: 10px"
+                density="compact"
+                hide-default-footer
+              >
+              </v-data-table>
+            </template>
+            <template v-else>
+              <!-- Render opinion as plain text -->
+              {{ item.opinion }}
+            </template>
+          </div>
+        </template>
+      </v-data-table>
 
-        <!-- v-slot is a directive in Vue.js that allows you to define a slot in a component. Slots are placeholders that you can fill with content when using the component. When using v-slot, you are essentially injecting custom content into a specific part of a child component. -->
-        <!-- The { item } represents the entire object (row) for the current item in the table. -->
-        <v-sheet v-if="fetchedData">
-          <v-data-table
-            :headers="createHeaders(this.fetchedData[0])"
-            :items="fetchedData"
-            style="font-size: 12px"
-            density="compact"
-            hide-default-footer
-          >
-            <template v-slot:item.opinion="{ item }">
-              <div>
-                <!-- Check if opinion is an object and render nested table -->
-                <template v-if="typeof item.opinion === 'object' && item.opinion !== null">
+      <!-- the old table variant -->
+      <v-skeleton-loader
+        v-if="!fetchedData"
+        class="mx-auto"
+        type="table-thead, table-tbody, table-tbody, table-tbody"
+        style="z-index: 0"
+      ></v-skeleton-loader>
+      <v-data-table
+        v-if="fetchedData && tableStyle != 'repeated'"
+        :headers="firstLevelHeaders"
+        :items="firstLevelData"
+        style="font-size: 12px"
+        density="compact"
+      >
+        <template v-slot:[`item.firstLevelColumn1Content`]="{ item }">
+          <v-sheet>
+            <v-data-table
+              style="font-size: 12px"
+              density="compact"
+              hide-default-footer
+              :headers="secondLevelHeaders1"
+              :items="item.firstLevelColumn1Content"
+            >
+              <template v-slot:[`item.secondLevelColumn2Content`]="{ item }">
+                <v-sheet>
                   <v-data-table
-                    :headers="createHeaders(item.opinion)"
-                    :items="[item.opinion]"
-                    style="font-size: 10px"
+                    style="font-size: 12px"
                     density="compact"
                     hide-default-footer
-                  >
-                  </v-data-table>
-                </template>
-                <template v-else>
-                  <!-- Render opinion as plain text -->
-                  {{ item.opinion }}
-                </template>
-              </div>
-            </template>
-          </v-data-table>
-        </v-sheet>
-        <!-- the old table variant -->
-        <v-skeleton-loader
-          v-if="!fetchedData"
-          class="mx-auto"
-          type="table-thead, table-tbody, table-tbody, table-tbody"
-          style="z-index: 0"
-        ></v-skeleton-loader>
-        <v-data-table
-          v-else
-          :headers="firstLevelHeaders"
-          :items="firstLevelData"
-          style="font-size: 12px"
-          density="compact"
-        >
-          <template v-slot:[`item.firstLevelColumn1Content`]="{ item }">
-            <v-sheet>
-              <v-data-table
-                style="font-size: 12px"
-                density="compact"
-                hide-default-footer
-                :headers="secondLevelHeaders1"
-                :items="item.firstLevelColumn1Content"
-              >
-                <template v-slot:[`item.secondLevelColumn2Content`]="{ item }">
-                  <v-sheet>
-                    <v-data-table
-                      style="font-size: 12px"
-                      density="compact"
-                      hide-default-footer
-                      :headers="thirdLevelHeaders1"
-                      :items="item.secondLevelColumn2Content"
-                    ></v-data-table>
-                  </v-sheet> </template
-              ></v-data-table>
-            </v-sheet>
-          </template>
-          <template v-slot:[`item.firstLevelColumn2Content`]="{ item }">
-            <v-sheet>
-              <v-data-table
-                style="font-size: 12px"
-                density="compact"
-                hide-default-footer
-                :headers="secondLevelHeaders2"
-                :items="item.firstLevelColumn2Content"
-              ></v-data-table>
-            </v-sheet>
-          </template>
-          <template v-slot:[`item.firstLevelColumn3Content`]="{ item }">
-            <v-sheet>
-              <v-data-table
-                style="font-size: 12px"
-                density="compact"
-                hide-default-footer
-                :headers="secondLevelHeaders3"
-                :items="item.firstLevelColumn3Content"
-              ></v-data-table>
-            </v-sheet>
-          </template>
-        </v-data-table>
-      </v-sheet>
-    </v-row>
+                    :headers="thirdLevelHeaders1"
+                    :items="item.secondLevelColumn2Content"
+                  ></v-data-table>
+                </v-sheet> </template
+            ></v-data-table>
+          </v-sheet>
+        </template>
+        <template v-slot:[`item.firstLevelColumn2Content`]="{ item }">
+          <v-sheet>
+            <v-data-table
+              style="font-size: 12px"
+              density="compact"
+              hide-default-footer
+              :headers="secondLevelHeaders2"
+              :items="item.firstLevelColumn2Content"
+            ></v-data-table>
+          </v-sheet>
+        </template>
+        <template v-slot:[`item.firstLevelColumn3Content`]="{ item }">
+          <v-sheet>
+            <v-data-table
+              style="font-size: 12px"
+              density="compact"
+              hide-default-footer
+              :headers="secondLevelHeaders3"
+              :items="item.firstLevelColumn3Content"
+            ></v-data-table>
+          </v-sheet>
+        </template>
+      </v-data-table>
+    </v-sheet>
 
     <!-- DataTable tableStyle == repeated -->
-    <v-row v-else class="d-flex justify-center">
+    <v-row v-if="tableStyle == 'repeated'" class="d-flex justify-center">
       <v-sheet elevation="1" class="mt-2 pa-4">
         <v-data-table :headers="headers" :items="opinions"></v-data-table>
       </v-sheet>
@@ -460,7 +458,7 @@
       <v-icon left>mdi-replay</v-icon>
       edit search
     </v-btn>
-  </div>
+  </v-row>
 </template>
 
 <script>
