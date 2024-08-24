@@ -152,7 +152,7 @@
     <v-divider :thickness="2" vertical class="ml-0"></v-divider>
     <v-col cols="4">
       <v-row class="d-flex justify-center">
-        <h1 style="color: #a9a9a9">Novel Food Data</h1>
+        <h1 style="color: #a9a9a9">Data to be fetched</h1>
       </v-row>
       <v-row class="mt-3">
         <v-container>
@@ -249,12 +249,43 @@
     </v-btn>
   </v-row>
 
-  <div v-else>
-    <!-- DataTable tableStyle == grouped -->
-    <v-row v-if="tableStyle == grouped" class="d-flex justify-center">
       <v-sheet elevation="2" class="mt-2 pa-4">
+        <!-- recursive datatable -->
+
+        <!-- v-slot is a directive in Vue.js that allows you to define a slot in a component. Slots are placeholders that you can fill with content when using the component. When using v-slot, you are essentially injecting custom content into a specific part of a child component. -->
+        <!-- The { item } represents the entire object (row) for the current item in the table. -->
+        <v-sheet v-if="fetchedData">
+          <v-data-table
+            :headers="createHeaders(this.fetchedData[0])"
+            :items="fetchedData"
+            style="font-size: 12px"
+            density="compact"
+            hide-default-footer
+          >
+            <template v-slot:item.opinion="{ item }">
+              <div>
+                <!-- Check if opinion is an object and render nested table -->
+                <template v-if="typeof item.opinion === 'object' && item.opinion !== null">
+                  <v-data-table
+                    :headers="createHeaders(item.opinion)"
+                    :items="[item.opinion]"
+                    style="font-size: 10px"
+                    density="compact"
+                    hide-default-footer
+                  >
+                  </v-data-table>
+                </template>
+                <template v-else>
+                  <!-- Render opinion as plain text -->
+                  {{ item.opinion }}
+                </template>
+              </div>
+            </template>
+          </v-data-table>
+        </v-sheet>
+        <!-- the old table variant -->
         <v-skeleton-loader
-          v-if="!data"
+          v-if="!fetchedData"
           class="mx-auto"
           type="table-thead, table-tbody, table-tbody, table-tbody"
           style="z-index: 0"
@@ -919,9 +950,26 @@ export default {
         finalOutcomeRemarks: 'Potential allergenicity issues'
       }
     ],
-    data: null
+    fetchedData: null
   }),
   methods: {
+    createNestedTable(item) {
+      return item !== null && typeof item === 'object' && !Array.isArray(item)
+    },
+
+    createHeaders(object) {
+      const headers = Object.keys(object)
+        .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
+        .map((key) => ({
+          title: key,
+          value: key,
+          align: 'center'
+        }))
+
+      console.log('headers: ', headers)
+
+      return headers
+    },
     async fetchData() {
       try {
         const GET_ALL_DATA = gql`
@@ -982,7 +1030,7 @@ export default {
         const result = await this.$apollo.query({
           query: GET_ALL_DATA
         })
-        this.data = result.data
+        this.fetchedData = result.data.novelFoods
         console.log(result.data)
       } catch (err) {
         console.log(err)
