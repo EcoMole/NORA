@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       drawer: true,
-      rail: false,
+      rail: true,
       fav: true,
       menuSettings: false,
       menuAccount: false,
