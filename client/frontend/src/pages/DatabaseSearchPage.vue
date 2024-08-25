@@ -252,48 +252,79 @@
     <v-sheet elevation="2" class="mt-2 pa-4">
       <!-- v-slot is a directive in Vue.js that allows you to define a slot in a component. Slots are placeholders that you can fill with content when using the component. When using v-slot, you are essentially injecting custom content into a specific part of a child component. -->
       <!-- The { item } represents the entire object (row) for the current item in the table. -->
-
-      <v-data-table
-        v-if="fetchedData"
-        :headers="createHeaders(this.fetchedData[0])"
-        :items="fetchedData"
-        style="font-size: 12px"
-        density="compact"
-        hide-default-footer
-      >
-        <template
-          v-for="(key, index) in Object.keys(fetchedData[0])"
-          v-slot:[`item.${key}`]="{ item }"
-          :key="`header-${index}`"
+      <div>
+        <!-- opinion, id, __typename -->
+        <v-data-table
+          v-if="fetchedNovelFoods"
+          :headers="createHeaders(fetchedNovelFoods[0])"
+          :items="fetchedNovelFoods"
+          style="font-size: 12px"
+          density="compact"
+          hide-default-footer
+          height="1400px"
         >
-          <div>
-            <template v-if="typeof item[key] === 'object' && item[key] !== null">
-              <v-data-table
-                :headers="createHeaders(item[key])"
-                :items="[item[key]]"
-                style="font-size: 10px"
-                density="compact"
-                hide-default-footer
-              >
-              </v-data-table>
-            </template>
-            <template v-else>
-              <!-- Render opinion as plain text -->
-              {{ item[key] }}
-            </template>
-          </div>
-        </template>
-      </v-data-table>
+          <!-- slot creation for opinion, id, __typename -->
+          <template
+            v-for="(key, index) in Object.keys(fetchedNovelFoods[0])"
+            v-slot:[`item.${key}`]="{ item }"
+            :key="`1-${index}`"
+          >
+            <div>
+              <template v-if="item[key] != null">
+                <!-- table inside Opinion table -->
+                <!-- documentType, title, doi, url, atd. -->
+                <!-- key here is Opinion a item[key] is content of Opinion column -->
+                <!-- content of opinion is allways object -->
+                <v-data-table
+                  :headers="createHeaders(item[key])"
+                  :items="[item[key]]"
+                  style="font-size: 10px"
+                  density="compact"
+                  hide-default-footer
+                >
+                  <!-- column creation documentType, doi, url -->
+                  <template
+                    v-for="(key, index) in Object.keys(item[key])"
+                    v-slot:[`item.${key}`]="{ item }"
+                    :key="`2-${index}`"
+                  >
+                    <div>
+                      <template v-if="item[key] != null && typeof item[key] === 'object'">
+                        <v-data-table
+                          :headers="
+                            createHeaders(Array.isArray(item[key]) ? item[key][0] : item[key])
+                          "
+                          :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
+                          style="font-size: 10px"
+                          density="compact"
+                          hide-default-footer
+                        >
+                        </v-data-table>
+                      </template>
+                      <template v-else>
+                        {{ item[key] }}
+                      </template>
+                    </div>
+                  </template>
+                </v-data-table>
+              </template>
+              <template v-else>
+                {{ item[key] }}
+              </template>
+            </div>
+          </template>
+        </v-data-table>
+      </div>
 
       <!-- the old table variant -->
       <v-skeleton-loader
-        v-if="!fetchedData"
+        v-if="!fetchedNovelFoods"
         class="mx-auto"
         type="table-thead, table-tbody, table-tbody, table-tbody"
         style="z-index: 0"
       ></v-skeleton-loader>
       <v-data-table
-        v-if="fetchedData && tableStyle != 'repeated'"
+        v-if="fetchedNovelFoods && tableStyle != 'repeated'"
         :headers="firstLevelHeaders"
         :items="firstLevelData"
         style="font-size: 12px"
@@ -951,7 +982,7 @@ export default {
         finalOutcomeRemarks: 'Potential allergenicity issues'
       }
     ],
-    fetchedData: null
+    fetchedNovelFoods: null
   }),
   methods: {
     createNestedTable(item) {
@@ -959,17 +990,19 @@ export default {
     },
 
     createHeaders(object) {
-      const headers = Object.keys(object)
-        .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
-        .map((key) => ({
-          title: key,
-          value: key,
-          align: 'center'
-        }))
+      if (!object) {
+        return null
+      } else {
+        const headers = Object.keys(object)
+          .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
+          .map((key) => ({
+            title: key,
+            value: key,
+            align: 'center'
+          }))
 
-      console.log('headers: ', headers)
-
-      return headers
+        return headers
+      }
     },
     async fetchData() {
       try {
@@ -1031,12 +1064,10 @@ export default {
         const result = await this.$apollo.query({
           query: GET_ALL_DATA
         })
-        this.fetchedData = result.data.novelFoods
-        console.log(result.data)
+        this.fetchedNovelFoods = result.data.novelFoods
+        console.log(this.fetchedNovelFoods)
       } catch (err) {
         console.log(err)
-      } finally {
-        console.log('done')
       }
     },
     cancelNewFilter() {
@@ -1142,7 +1173,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 th {
   color: #557c55;
 }
