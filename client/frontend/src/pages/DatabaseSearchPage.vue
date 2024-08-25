@@ -270,7 +270,7 @@
             :key="`1-${index}`"
           >
             <div>
-              <template v-if="item[key] != null">
+              <template v-if="createNestedTable(item[key])">
                 <!-- table inside Opinion table -->
                 <!-- documentType, title, doi, url, atd. -->
                 <!-- key here is Opinion a item[key] is content of Opinion column -->
@@ -289,7 +289,7 @@
                     :key="`2-${index}`"
                   >
                     <div>
-                      <template v-if="item[key] != null && typeof item[key] === 'object'">
+                      <template v-if="createNestedTable(item[key])">
                         <v-data-table
                           :headers="
                             createHeaders(Array.isArray(item[key]) ? item[key][0] : item[key])
@@ -985,24 +985,24 @@ export default {
     fetchedNovelFoods: null
   }),
   methods: {
-    createNestedTable(item) {
-      return item !== null && typeof item === 'object' && !Array.isArray(item)
+    createNestedTable(param) {
+      return (
+        param != null &&
+        ((param.constructor === Object && Object.keys(param).length > 0) ||
+          (Array.isArray(param) && param.length > 0))
+      )
     },
 
     createHeaders(object) {
-      if (!object) {
-        return null
-      } else {
-        const headers = Object.keys(object)
-          .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
-          .map((key) => ({
-            title: key,
-            value: key,
-            align: 'center'
-          }))
+      const headers = Object.keys(object)
+        .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
+        .map((key) => ({
+          title: key,
+          value: key,
+          align: 'center'
+        }))
 
-        return headers
-      }
+      return headers
     },
     async fetchData() {
       try {
