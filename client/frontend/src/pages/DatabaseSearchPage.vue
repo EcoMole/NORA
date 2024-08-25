@@ -249,80 +249,236 @@
     </v-btn>
   </v-row>
   <v-row v-else>
-    <v-sheet elevation="2" class="mt-2 pa-4">
+    <v-sheet elevation="2" class="mt-2 pa-4" style="overflow-x: auto; width: 100%">
       <!-- v-slot is a directive in Vue.js that allows you to define a slot in a component. Slots are placeholders that you can fill with content when using the component. When using v-slot, you are essentially injecting custom content into a specific part of a child component. -->
       <!-- The { item } represents the entire object (row) for the current item in the table. -->
-      <div>
-        <!-- opinion, id, __typename -->
-        <v-data-table
-          v-if="fetchedNovelFoods"
-          :headers="createHeaders(fetchedNovelFoods[0])"
-          :items="fetchedNovelFoods"
-          style="font-size: 12px"
-          density="compact"
-          hide-default-footer
-          height="1400px"
-        >
-          <!-- slot creation for opinion, id, __typename -->
-          <template
-            v-for="(key, index) in Object.keys(fetchedNovelFoods[0])"
-            v-slot:[`item.${key}`]="{ item }"
-            :key="`1-${index}`"
-          >
-            <div>
-              <template v-if="createNestedTable(item[key])">
-                <!-- table inside Opinion table -->
-                <!-- documentType, title, doi, url, atd. -->
-                <!-- key here is Opinion a item[key] is content of Opinion column -->
-                <!-- content of opinion is allways object -->
-                <v-data-table
-                  :headers="createHeaders(item[key])"
-                  :items="[item[key]]"
-                  style="font-size: 10px"
-                  density="compact"
-                  hide-default-footer
-                >
-                  <!-- column creation documentType, doi, url -->
-                  <template
-                    v-for="(key, index) in Object.keys(item[key])"
-                    v-slot:[`item.${key}`]="{ item }"
-                    :key="`2-${index}`"
-                  >
-                    <div>
-                      <template v-if="createNestedTable(item[key])">
-                        <v-data-table
-                          :headers="
-                            createHeaders(Array.isArray(item[key]) ? item[key][0] : item[key])
-                          "
-                          :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
-                          style="font-size: 10px"
-                          density="compact"
-                          hide-default-footer
-                        >
-                        </v-data-table>
-                      </template>
-                      <template v-else>
-                        {{ item[key] }}
-                      </template>
-                    </div>
-                  </template>
-                </v-data-table>
-              </template>
-              <template v-else>
-                {{ item[key] }}
-              </template>
-            </div>
-          </template>
-        </v-data-table>
-      </div>
 
-      <!-- the old table variant -->
       <v-skeleton-loader
         v-if="!fetchedNovelFoods"
         class="mx-auto"
         type="table-thead, table-tbody, table-tbody, table-tbody"
         style="z-index: 0"
       ></v-skeleton-loader>
+      <!-- opinion, id, __typename -->
+      <v-data-table
+        v-if="fetchedNovelFoods"
+        :headers="createHeaders(fetchedNovelFoods[0])"
+        :items="fetchedNovelFoods"
+        style="font-size: 12px"
+        density="compact"
+        hide-default-footer
+        height="1400px"
+      >
+        <!-- slot creation for opinion, id, __typename -->
+        <template
+          v-for="(key, index) in Object.keys(fetchedNovelFoods[0])"
+          v-slot:[`item.${key}`]="{ item }"
+          :key="`1-${index}`"
+        >
+          <div>
+            <template v-if="createNestedTable(item[key])">
+              <!-- table inside Opinion table -->
+              <!-- documentType, title, doi, url, atd. -->
+              <!-- key here is Opinion a item[key] is content of Opinion column -->
+              <!-- content of opinion is allways object -->
+              <v-data-table
+                :headers="createHeaders(item[key])"
+                :items="[item[key]]"
+                style="font-size: 10px"
+                density="compact"
+                hide-default-footer
+              >
+                <!-- column creation documentType, doi, url -->
+                <template
+                  v-for="(key, index) in Object.keys(item[key])"
+                  v-slot:[`item.${key}`]="{ item }"
+                  :key="`2-${index}`"
+                >
+                  <div>
+                    <template v-if="createNestedTable(item[key])">
+                      <v-data-table
+                        :headers="
+                          createHeaders(Array.isArray(item[key]) ? item[key][0] : item[key])
+                        "
+                        :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
+                        style="font-size: 10px"
+                        density="compact"
+                        hide-default-footer
+                      >
+                        <v-data-table
+                          :headers="createHeaders(item[key])"
+                          :items="[item[key]]"
+                          style="font-size: 10px"
+                          density="compact"
+                          hide-default-footer
+                        >
+                          <!-- column creation documentType, doi, url -->
+                          <template
+                            v-for="(key, index) in Object.keys(item[key])"
+                            v-slot:[`item.${key}`]="{ item }"
+                            :key="`3-${index}`"
+                          >
+                            <div>
+                              <template v-if="createNestedTable(item[key])">
+                                <v-data-table
+                                  :headers="
+                                    createHeaders(
+                                      Array.isArray(item[key]) ? item[key][0] : item[key]
+                                    )
+                                  "
+                                  :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
+                                  style="font-size: 10px"
+                                  density="compact"
+                                  hide-default-footer
+                                >
+                                  <v-data-table
+                                    :headers="createHeaders(item[key])"
+                                    :items="[item[key]]"
+                                    style="font-size: 10px"
+                                    density="compact"
+                                    hide-default-footer
+                                  >
+                                    <!-- column creation documentType, doi, url -->
+                                    <template
+                                      v-for="(key, index) in Object.keys(item[key])"
+                                      v-slot:[`item.${key}`]="{ item }"
+                                      :key="`4-${index}`"
+                                    >
+                                      <div>
+                                        <template v-if="createNestedTable(item[key])">
+                                          <v-data-table
+                                            :headers="
+                                              createHeaders(
+                                                Array.isArray(item[key]) ? item[key][0] : item[key]
+                                              )
+                                            "
+                                            :items="
+                                              Array.isArray(item[key]) ? item[key] : [item[key]]
+                                            "
+                                            style="font-size: 10px"
+                                            density="compact"
+                                            hide-default-footer
+                                          >
+                                            <v-data-table
+                                              :headers="createHeaders(item[key])"
+                                              :items="[item[key]]"
+                                              style="font-size: 10px"
+                                              density="compact"
+                                              hide-default-footer
+                                            >
+                                              <!-- column creation documentType, doi, url -->
+                                              <template
+                                                v-for="(key, index) in Object.keys(item[key])"
+                                                v-slot:[`item.${key}`]="{ item }"
+                                                :key="`5-${index}`"
+                                              >
+                                                <div>
+                                                  <template v-if="createNestedTable(item[key])">
+                                                    <v-data-table
+                                                      :headers="
+                                                        createHeaders(
+                                                          Array.isArray(item[key])
+                                                            ? item[key][0]
+                                                            : item[key]
+                                                        )
+                                                      "
+                                                      :items="
+                                                        Array.isArray(item[key])
+                                                          ? item[key]
+                                                          : [item[key]]
+                                                      "
+                                                      style="font-size: 10px"
+                                                      density="compact"
+                                                      hide-default-footer
+                                                    >
+                                                      <v-data-table
+                                                        :headers="createHeaders(item[key])"
+                                                        :items="[item[key]]"
+                                                        style="font-size: 10px"
+                                                        density="compact"
+                                                        hide-default-footer
+                                                      >
+                                                        <!-- column creation documentType, doi, url -->
+                                                        <template
+                                                          v-for="(key, index) in Object.keys(
+                                                            item[key]
+                                                          )"
+                                                          v-slot:[`item.${key}`]="{ item }"
+                                                          :key="`6-${index}`"
+                                                        >
+                                                          <div>
+                                                            <template
+                                                              v-if="createNestedTable(item[key])"
+                                                            >
+                                                              <v-data-table
+                                                                :headers="
+                                                                  createHeaders(
+                                                                    Array.isArray(item[key])
+                                                                      ? item[key][0]
+                                                                      : item[key]
+                                                                  )
+                                                                "
+                                                                :items="
+                                                                  Array.isArray(item[key])
+                                                                    ? item[key]
+                                                                    : [item[key]]
+                                                                "
+                                                                style="font-size: 10px"
+                                                                density="compact"
+                                                                hide-default-footer
+                                                              >
+                                                              </v-data-table>
+                                                            </template>
+                                                            <template v-else>
+                                                              {{ item[key] }}
+                                                            </template>
+                                                          </div>
+                                                        </template>
+                                                      </v-data-table>
+                                                    </v-data-table>
+                                                  </template>
+                                                  <template v-else>
+                                                    {{ item[key] }}
+                                                  </template>
+                                                </div>
+                                              </template>
+                                            </v-data-table>
+                                          </v-data-table>
+                                        </template>
+                                        <template v-else>
+                                          {{ item[key] }}
+                                        </template>
+                                      </div>
+                                    </template>
+                                  </v-data-table>
+                                </v-data-table>
+                              </template>
+                              <template v-else>
+                                {{ item[key] }}
+                              </template>
+                            </div>
+                          </template>
+                        </v-data-table>
+                      </v-data-table>
+                    </template>
+                    <template v-else>
+                      {{ item[key] }}
+                    </template>
+                  </div>
+                </template>
+              </v-data-table>
+            </template>
+            <template v-else>
+              {{ item[key] }}
+            </template>
+          </div>
+        </template>
+      </v-data-table>
+    </v-sheet>
+
+    <!-- the old table variant -->
+
+    <v-sheet elevation="2" class="mt-2 pa-4" style="overflow-x: auto; width: 100%">
       <v-data-table
         v-if="fetchedNovelFoods && tableStyle != 'repeated'"
         :headers="firstLevelHeaders"
@@ -1173,7 +1329,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 th {
   color: #557c55;
 }

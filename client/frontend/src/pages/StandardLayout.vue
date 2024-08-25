@@ -94,7 +94,7 @@
     </v-list>
   </v-navigation-drawer>
   <v-main>
-    <v-container style="max-width: 1200px">
+    <v-container :class="{ 'xs12 sm10 md8 lg6 xl4': true }" fluid>
       <router-view :key="$route.fullPath" />
     </v-container>
   </v-main>
