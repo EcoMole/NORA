@@ -371,70 +371,6 @@
       </v-data-table>
     </v-sheet>
 
-    <!-- the old table variant -->
-
-    <v-sheet elevation="2" class="mt-2 pa-4" style="overflow-x: auto; width: 100%">
-      <v-data-table
-        v-if="fetchedNovelFoods && tableStyle != 'repeated'"
-        :headers="firstLevelHeaders"
-        :items="firstLevelData"
-        style="font-size: 12px"
-        density="compact"
-      >
-        <template v-slot:[`item.firstLevelColumn1Content`]="{ item }">
-          <v-sheet>
-            <v-data-table
-              style="font-size: 12px"
-              density="compact"
-              hide-default-footer
-              :headers="secondLevelHeaders1"
-              :items="item.firstLevelColumn1Content"
-            >
-              <template v-slot:[`item.secondLevelColumn2Content`]="{ item }">
-                <v-sheet>
-                  <v-data-table
-                    style="font-size: 12px"
-                    density="compact"
-                    hide-default-footer
-                    :headers="thirdLevelHeaders1"
-                    :items="item.secondLevelColumn2Content"
-                  ></v-data-table>
-                </v-sheet> </template
-            ></v-data-table>
-          </v-sheet>
-        </template>
-        <template v-slot:[`item.firstLevelColumn2Content`]="{ item }">
-          <v-sheet>
-            <v-data-table
-              style="font-size: 12px"
-              density="compact"
-              hide-default-footer
-              :headers="secondLevelHeaders2"
-              :items="item.firstLevelColumn2Content"
-            ></v-data-table>
-          </v-sheet>
-        </template>
-        <template v-slot:[`item.firstLevelColumn3Content`]="{ item }">
-          <v-sheet>
-            <v-data-table
-              style="font-size: 12px"
-              density="compact"
-              hide-default-footer
-              :headers="secondLevelHeaders3"
-              :items="item.firstLevelColumn3Content"
-            ></v-data-table>
-          </v-sheet>
-        </template>
-      </v-data-table>
-    </v-sheet>
-
-    <!-- DataTable tableStyle == repeated -->
-    <v-row v-if="tableStyle == 'repeated'" class="d-flex justify-center">
-      <v-sheet elevation="1" class="mt-2 pa-4">
-        <v-data-table :headers="headers" :items="opinions"></v-data-table>
-      </v-sheet>
-    </v-row>
-
     <!-- btns -->
     <v-menu :rounded="'lg'">
       <template v-slot:activator="{ props: menuProps }">
@@ -561,115 +497,6 @@ export default {
     grouped: 'grouped',
     repeated: 'repeated',
     tableStyle: 'repeated',
-    firstLevelHeaders: [
-      { title: 'NF code', value: 'nfCode', align: 'center' },
-      { title: '', value: 'firstLevelColumn1Content', align: 'center' },
-      { title: '', value: 'firstLevelColumn2Content', align: 'center' },
-      { title: '', value: 'firstLevelColumn3Content', align: 'center' }
-    ],
-    secondLevelHeaders1: [
-      { title: 'Question Number', value: 'secondLevelColumn1Content', align: 'center' },
-      { title: '', value: 'secondLevelColumn2Content', align: 'center' }
-    ],
-    secondLevelHeaders2: [
-      { title: 'ADME test material', value: 'secondLevelColumn1Content', align: 'center' },
-      { title: 'ADME remarks', value: 'secondLevelColumn2Content', align: 'center' }
-    ],
-    secondLevelHeaders3: [
-      {
-        title: 'Final Outcome Uncertainity Factor',
-        value: 'secondLevelColumn1Content',
-        align: 'center'
-      },
-      { title: 'Final Outcome Remarks', value: 'secondLevelColumn2Content', align: 'center' }
-    ],
-    thirdLevelHeaders1: [
-      { title: 'Applicant Name', value: 'thirdLevelColumn1Content', align: 'center' },
-      { title: 'Applicant Surname', value: 'thirdLevelColumn2Content', align: 'center' }
-    ],
-    firstLevelData: [
-      {
-        nfCode: 'NF876897',
-        firstLevelColumn1Content: [
-          {
-            secondLevelColumn1Content: 'Q 87687',
-            secondLevelColumn2Content: [
-              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
-              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
-            ]
-          },
-          {
-            secondLevelColumn1Content: 'Q 867987',
-            secondLevelColumn2Content: [
-              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
-              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
-            ]
-          }
-        ],
-        firstLevelColumn2Content: [
-          { secondLevelColumn1Content: 'Value 1-5', secondLevelColumn2Content: 'Value 1-1' },
-          { secondLevelColumn1Content: 'Value 1-3', secondLevelColumn2Content: 'Value 1-2' }
-        ],
-        firstLevelColumn3Content: [
-          { secondLevelColumn1Content: 'Value 1-8', secondLevelColumn2Content: 'Value 1-1' },
-          { secondLevelColumn1Content: 'Value 1-9', secondLevelColumn2Content: 'Value 1-2' }
-        ]
-      },
-      {
-        nfCode: 'NF768',
-        firstLevelColumn1Content: [
-          {
-            secondLevelColumn1Content: 'Q 058967',
-            secondLevelColumn2Content: [
-              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
-              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
-            ]
-          },
-          {
-            secondLevelColumn1Content: 'Q 97968',
-            secondLevelColumn2Content: [
-              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
-              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
-            ]
-          }
-        ],
-        firstLevelColumn2Content: [
-          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
-          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
-        ],
-        firstLevelColumn3Content: [
-          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
-          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
-        ]
-      },
-      {
-        nfCode: 'NF987897',
-        firstLevelColumn1Content: [
-          {
-            secondLevelColumn1Content: 'Q 876858',
-            secondLevelColumn2Content: [
-              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
-              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
-            ]
-          },
-          {
-            secondLevelColumn1Content: 'Q 7658980',
-            secondLevelColumn2Content: [
-              { thirdLevelColumn1Content: 'John', thirdLevelColumn2Content: 'Doe' },
-              { thirdLevelColumn1Content: 'Bob', thirdLevelColumn2Content: 'Brown' }
-            ]
-          }
-        ],
-        firstLevelColumn2Content: [
-          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
-          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
-        ],
-        firstLevelColumn3Content: [
-          { secondLevelColumn1Content: 'Sub-Item 2-1', secondLevelColumn2Content: 'Value 2-1' },
-          { secondLevelColumn1Content: 'Sub-Item 2-2', secondLevelColumn2Content: 'Value 2-2' }
-        ]
-      }
-    ],
     open: ['Users'],
     exportOptions: [
       { title: 'the search result', icon: 'mdi-table' },
@@ -686,80 +513,40 @@ export default {
       ['Delete', 'mdi-delete']
     ],
     availableAttrs: [
-      {
-        // administrative
-        text: 'NF Code',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'Novel Food Title',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'Opinion URL',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'Opinion DOI',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'Publication Date',
-        icon: 'mdi-file-document-outline'
-      },
+      // administrative
+      { text: 'opinion - document type', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - title', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - doi', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - url', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - publication date', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - adoption date', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - panels - title', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - scientific officer - first name', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - scientific officer - middle name', icon: 'mdi-file-document-outline' },
+      { text: 'opinion - scientific officer - last name', icon: 'mdi-file-document-outline' },
+      { text: 'question - number', icon: 'mdi-file-document-outline' },
+      { text: 'question - applicant - title', icon: 'mdi-file-document-outline' },
+      { text: 'mandate - type - title', icon: 'mdi-file-document-outline' },
+      { text: 'mandate - type - definition', icon: 'mdi-file-document-outline' },
+      { text: 'mandate - regulation', icon: 'mdi-file-document-outline' }
+    ],
 
-      {
-        // nutrition
-        text: 'Has Nutri Disadvantage',
-        icon: 'mdi-nutrition'
-      },
-      {
-        // allergenicity
-        text: 'Allergenicity',
-        icon: 'mdi-peanut-off'
-      },
-      {
-        // ADME
-        text: 'ADME studies',
-        icon: 'mdi-pill'
-      },
-      {
-        // toxicology
-        text: 'Was Tox Study Required',
-        icon: 'mdi-test-tube'
-      },
-      {
-        text: 'Endpoint studies',
-        icon: 'mdi-test-tube'
-      },
-      {
-        text: 'Genotox studies',
-        icon: 'mdi-test-tube'
-      },
-      {
-        text: 'Final Outcome',
-        icon: 'mdi-test-tube'
-      },
-      {
-        text: 'Final Outcome Remarks',
-        icon: 'mdi-test-tube'
-      }
-    ],
-    showOptions: [
-      'Allergenicity',
-      'NF Code',
-      'Novel Food Title',
-      'Was Tox Study Required',
-      'Has Nutri Disadvantage',
-      'Opinion URL',
-      'Opinion DOI',
-      'Publication Date',
-      'ADME studies',
-      'Endpoint studies',
-      'Genotox studies',
-      'Final Outcome',
-      'Final Outcome Remarks'
-    ],
+    // 'opinion - document type',
+    // 'opinion - title',
+    // 'opinion - doi',
+    // 'opinion - url',
+    // 'opinion - publication date',
+    // 'opinion - adoption date',
+    // 'opinion - panels - title',
+    // 'opinion - scientific officer - first name',
+    // 'opinion - scientific officer - middle name',
+    // 'opinion - scientific officer - last name',
+    // 'question - number',
+    // 'question - applicant - title',
+    // 'mandate - type - title',
+    // 'mandate - type - definition',
+    // 'mandate - regulation'
+
     availableAttrsSearch: '',
     selectedAttrs: [],
     showFilterInterface: true,
@@ -806,233 +593,6 @@ export default {
 
     showIndescriptions: [],
     addedFilters: [],
-    opinions: [
-      {
-        allergenicity: 'Low',
-        nfCode: 'NF001',
-        novelFoodTitle: 'Cultured Meat',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf001',
-        opinionDOI: '10.1234/nf001',
-        publicationDate: '2022-01-01',
-        admeStudies: 'Study A1, Study A2',
-        endpointStudies: 'Study B1, Study B2',
-        genotoxStudies: 'Study C1',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'No significant issues'
-      },
-      {
-        allergenicity: 'High',
-        nfCode: 'NF002, NF302',
-        novelFoodTitle: 'Engineered Probiotics, Yeast Cultures',
-        wasToxStudyRequired: 'true, false',
-        hasNutriDisadvantage: 'true, true',
-        opinionURL: 'http://example.com/nf002',
-        opinionDOI: '10.1234/nf002',
-        publicationDate: '2023-02-15',
-        admeStudies: 'Study A3',
-        endpointStudies: 'Study B3, Study B4',
-        genotoxStudies: 'Study C2, Study C3',
-        finalOutcomes: 'Rejected',
-        finalOutcomeRemarks: 'High allergenicity concerns'
-      },
-      {
-        allergenicity: 'Moderate, Low',
-        nfCode: 'NF003',
-        novelFoodTitle: 'Algae-based Omega 3',
-        wasToxStudyRequired: false,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf003',
-        opinionDOI: '10.1234/nf003',
-        publicationDate: '2021-11-20',
-        admeStudies: 'Study A4',
-        endpointStudies: 'Study B5',
-        genotoxStudies: 'Study C4',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'Nutritional benefits noted'
-      },
-      {
-        allergenicity: 'Unknown',
-        nfCode: 'NF004, NF010, NF003',
-        novelFoodTitle: 'Synthetic Vanillin, Artificial Sweeteners, Algae-based Omega 3',
-        wasToxStudyRequired: 'true, true, false',
-        hasNutriDisadvantage: 'true, false, false',
-        opinionURL: 'http://example.com/nf004',
-        opinionDOI: '10.1234/nf004',
-        publicationDate: '2020-06-12',
-        admeStudies: 'Study A5',
-        endpointStudies: 'Study B6, Study B7',
-        genotoxStudies: 'Study C5, Study C6',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'Requires labeling'
-      },
-      {
-        allergenicity: 'Low, Moderate',
-        nfCode: 'NF005',
-        novelFoodTitle: 'Insect Protein',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf005',
-        opinionDOI: '10.1234/nf005',
-        publicationDate: '2022-03-22',
-        admeStudies: 'Study A6, Study A7',
-        endpointStudies: 'Study B8',
-        genotoxStudies: 'Study C7',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'Sustainable protein source'
-      },
-      {
-        allergenicity: 'Moderate',
-        nfCode: 'NF006',
-        novelFoodTitle: 'Fermented Soy',
-        wasToxStudyRequired: false,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf006',
-        opinionDOI: '10.1234/nf006',
-        publicationDate: '2021-05-11',
-        admeStudies: 'Study A8',
-        endpointStudies: 'Study B9, Study B10',
-        genotoxStudies: 'Study C8',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'Rich in probiotics'
-      },
-      {
-        allergenicity: 'High',
-        nfCode: 'NF007',
-        novelFoodTitle: 'Genetically Modified Corn',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: true,
-        opinionURL: 'http://example.com/nf007',
-        opinionDOI: '10.1234/nf007',
-        publicationDate: '2019-08-30',
-        admeStudies: 'Study A9',
-        endpointStudies: 'Study B11, Study B12',
-        genotoxStudies: 'Study C9',
-        finalOutcomes: 'Rejected',
-        finalOutcomeRemarks: 'Potential health risks'
-      },
-      {
-        allergenicity: 'Low',
-        nfCode: 'NF008',
-        novelFoodTitle: 'Microalgae Protein',
-        wasToxStudyRequired: false,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf008',
-        opinionDOI: '10.1234/nf008',
-        publicationDate: '2020-10-05',
-        admeStudies: 'Study A10, Study A11',
-        endpointStudies: 'Study B13',
-        genotoxStudies: 'Study C10',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'High protein content'
-      },
-      {
-        allergenicity: 'Moderate',
-        nfCode: 'NF009',
-        novelFoodTitle: 'Lab-grown Fish',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf009',
-        opinionDOI: '10.1234/nf009',
-        publicationDate: '2023-01-15',
-        admeStudies: 'Study A12',
-        endpointStudies: 'Study B14, Study B15',
-        genotoxStudies: 'Study C11',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'Eco-friendly alternative'
-      },
-      {
-        allergenicity: 'High',
-        nfCode: 'NF010',
-        novelFoodTitle: 'Genetically Modified Soy',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: true,
-        opinionURL: 'http://example.com/nf010',
-        opinionDOI: '10.1234/nf010',
-        publicationDate: '2022-12-01',
-        admeStudies: 'Study A13, Study A14',
-        endpointStudies: 'Study B16',
-        genotoxStudies: 'Study C12',
-        finalOutcomes: 'Rejected',
-        finalOutcomeRemarks: 'Health and environmental concerns'
-      },
-      {
-        allergenicity: 'Low',
-        nfCode: 'NF011',
-        novelFoodTitle: 'Edible Insects',
-        wasToxStudyRequired: false,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf011',
-        opinionDOI: '10.1234/nf011',
-        publicationDate: '2021-07-17',
-        admeStudies: 'Study A15',
-        endpointStudies: 'Study B17',
-        genotoxStudies: 'Study C13',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'High in protein'
-      },
-      {
-        allergenicity: 'Moderate',
-        nfCode: 'NF012',
-        novelFoodTitle: 'Cell-cultured Dairy',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf012',
-        opinionDOI: '10.1234/nf012',
-        publicationDate: '2020-04-21',
-        admeStudies: 'Study A16',
-        endpointStudies: 'Study B18',
-        genotoxStudies: 'Study C14',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'Dairy alternative'
-      },
-      {
-        allergenicity: 'Unknown',
-        nfCode: 'NF013',
-        novelFoodTitle: 'Synthetic Caffeine',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: true,
-        opinionURL: 'http://example.com/nf013',
-        opinionDOI: '10.1234/nf013',
-        publicationDate: '2019-11-05',
-        admeStudies: 'Study A17',
-        endpointStudies: 'Study B19',
-        genotoxStudies: 'Study C15',
-        finalOutcomes: 'Rejected',
-        finalOutcomeRemarks: 'Safety concerns'
-      },
-      {
-        allergenicity: 'Low',
-        nfCode: 'NF014',
-        novelFoodTitle: 'Plant-based Egg',
-        wasToxStudyRequired: false,
-        hasNutriDisadvantage: false,
-        opinionURL: 'http://example.com/nf014',
-        opinionDOI: '10.1234/nf014',
-        publicationDate: '2021-09-14',
-        admeStudies: 'Study A18',
-        endpointStudies: 'Study B20',
-        genotoxStudies: 'Study C16',
-        finalOutcomes: 'Approved',
-        finalOutcomeRemarks: 'Vegan-friendly'
-      },
-      {
-        allergenicity: 'High',
-        nfCode: 'NF015',
-        novelFoodTitle: 'Genetically Modified Wheat',
-        wasToxStudyRequired: true,
-        hasNutriDisadvantage: true,
-        opinionURL: 'http://example.com/nf015',
-        opinionDOI: '10.1234/nf015',
-        publicationDate: '2023-04-07',
-        admeStudies: 'Study A19',
-        endpointStudies: 'Study B21',
-        genotoxStudies: 'Study C17',
-        finalOutcomes: 'Rejected',
-        finalOutcomeRemarks: 'Potential allergenicity issues'
-      }
-    ],
     fetchedNovelFoods: null
   }),
   methods: {
@@ -1137,7 +697,6 @@ export default {
       this.selectedAttrs = []
     },
     renderTable() {
-      this.updateHeaders()
       this.fetchData()
       this.showFilterInterface = false
     },
@@ -1169,30 +728,7 @@ export default {
     },
     removeItem(index) {
       this.addedFilters.splice(index, 1)
-    },
-    updateHeaders() {
-      const allHeaders = [
-        { title: 'Allergenicity', key: 'allergenicity' },
-        { title: 'NF Code', key: 'nfCode' },
-        { title: 'Novel Food Title', key: 'novelFoodTitle' },
-        { title: 'Was Tox Study Required', key: 'wasToxStudyRequired' },
-        { title: 'Has Nutri Disadvantage', key: 'hasNutriDisadvantage' },
-        { title: 'Opinion URL', key: 'opinionURL' },
-        { title: 'Opinion DOI', key: 'opinionDOI' },
-        { title: 'Publication Date', key: 'publicationDate' },
-        { title: 'ADME studies', key: 'admeStudies' },
-        { title: 'Endpoint studies', key: 'endpointStudies' },
-        { title: 'Genotox studies', key: 'genotoxStudies' },
-        { title: 'Final Outcome', key: 'finalOutcomes' },
-        { title: 'Final Outcome Remarks', key: 'finalOutcomeRemarks' }
-      ]
-      this.headers = allHeaders.filter((header) =>
-        this.selectedAttrs.map((attr) => attr.text).includes(header.title)
-      )
     }
-  },
-  mounted() {
-    this.updateHeaders()
   },
   computed: {
     allSelected() {
