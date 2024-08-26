@@ -563,81 +563,81 @@ export default {
     availableAttrs: [
       {
         text: 'opinion document type',
-        model: 'Opinion',
-        field: 'document_type',
+        model: 'opinion',
+        field: 'documentType',
         icon: 'mdi-file-document-outline'
       },
       {
         text: 'opinion title',
-        model: 'Opinion',
+        model: 'opinion',
         field: 'title',
         icon: 'mdi-file-document-outline'
       },
-      { text: 'opinion doi', model: 'Opinion', field: 'doi', icon: 'mdi-file-document-outline' },
-      { text: 'opinion url', model: 'Opinion', field: 'url', icon: 'mdi-file-document-outline' },
+      { text: 'opinion doi', model: 'opinion', field: 'doi', icon: 'mdi-file-document-outline' },
+      { text: 'opinion url', model: 'opinion', field: 'url', icon: 'mdi-file-document-outline' },
       {
         text: 'opinion publication date',
-        model: 'Opinion',
-        field: 'publication_date',
+        model: 'opinion',
+        field: 'publicationDate',
         icon: 'mdi-file-document-outline'
       },
       {
         text: 'opinion adoption date',
-        model: 'Opinion',
-        field: 'adoption_date',
+        model: 'opinion',
+        field: 'adoptionDate',
         icon: 'mdi-file-document-outline'
       },
       {
         text: "opinion's panel title",
-        model: 'Panel',
+        model: 'panels',
         field: 'title',
         icon: 'mdi-file-document-outline'
       },
       {
         text: "opinion's scientific officer first name",
-        model: 'ScientificOfficer',
-        field: 'first_name',
+        model: 'sciOfficers',
+        field: 'firstName',
         icon: 'mdi-file-document-outline'
       },
       {
         text: "opinion's scientific officer middle name",
-        model: 'ScientificOfficer',
-        field: 'middle_name',
+        model: 'sciOfficers',
+        field: 'middleName',
         icon: 'mdi-file-document-outline'
       },
       {
         text: "opinion's scientific officer last name",
-        model: 'ScientificOfficer',
-        field: 'last_name',
+        model: 'sciOfficers',
+        field: 'lastName',
         icon: 'mdi-file-document-outline'
       },
       {
         text: 'question number',
-        model: 'Question',
+        model: 'questions',
         field: 'number',
         icon: 'mdi-file-document-outline'
       },
       {
         text: 'applicant title',
-        model: 'Applicant',
+        model: 'applicants',
         field: 'title',
         icon: 'mdi-file-document-outline'
       },
       {
         text: 'mandate type title',
-        model: 'MandateType',
-        field: 'title',
+        model: 'mandates',
+        field: 'mandateTypeTitle',
         icon: 'mdi-file-document-outline'
       },
       {
         text: 'mandate type definition',
-        model: 'MandateType',
-        field: 'definition',
+        model: 'mandates',
+        field: 'mandateTypeDefinition',
         icon: 'mdi-file-document-outline'
       },
       {
         text: 'mandate regulation',
-        model: 'Mandate',
+        model: 'mandates',
         field: 'regulation',
         icon: 'mdi-file-document-outline'
       }
@@ -645,141 +645,70 @@ export default {
   }),
   methods: {
     getFields(model) {
-      return this.selectedAttrs.map((attr) => {
-        if (attr.model === model) {
-          return attr.field
-        }
-      })
+      return this.selectedAttrs.filter((attr) => attr.model === model).map((attr) => attr.field)
     },
-    // buildQraphQLQuery() {
-    //   let query = ''
-    //   const mandateTypeFields = this.getFields('MandateType')
-    //   if (mandateTypeFields) {
-    //     query += `
-    //       regulation {
-    //         ${this.selectedAttrs.map((attr) => attr.text).includes('mandate regulation') ? 'regulation' : ''}
+    buildQraphQLQuery() {
+      console.log('buildQraphQLQuery started')
+      let opinionQueryPart = ''
+      let questioinsQueryPart = ''
 
-    //           ${this.selectedAttrs.map((attr) => attr.text).includes('mandate type title') ? 'title' : ''}
-    //           ${this.selectedAttrs.map((attr) => attr.text).includes('mandate type definition') ? 'definition' : ''}
+      let mandateFields = this.getFields('mandates')
+      console.log('mandateFields: ', mandateFields)
+      if (mandateFields.length > 0) {
+        questioinsQueryPart += `
+          mandates {
+            ${mandateFields.includes('mandateTypeTitle') ? 'mandateTypeTitle' : ''}
+            ${mandateFields.includes('mandateTypeDefinition') ? 'mandateTypeDefinition' : ''}
+            ${mandateFields.includes('regulation') ? 'regulation' : ''}
+          }
+          `
+        console.log('in if mandateFields questioinsQueryPart: ', questioinsQueryPart)
+      }
+      console.log('out of if mandateFields questioinsQueryPart: ', questioinsQueryPart)
 
-    //       }`
-    //   }
-    //   let mandateRagulation = ''
+      let applicantsFields = this.getFields('applicants')
+      if (applicantsFields.length > 0 && applicantsFields.includes('title')) {
+        questioinsQueryPart += `
+            applicants {
+              title
+            }
+            `
+      }
 
-    //   let opinionFields = ''
-    //   let panelsFields = ''
-    //   let sciOfficersFields = ''
-    //   let questionsFields = ''
-    //   let mandatesFields = ''
-    //   let documentTypeFields = ''
+      let questionsFields = this.getFields('questions')
+      if (questionsFields.length > 0 && questionsFields.includes('number')) {
+        questioinsQueryPart += `
+              number
+            `
+      }
+      if (questioinsQueryPart) {
+        opinionQueryPart += `
+          questions {
+            ${questioinsQueryPart}
+          }
+          `
+      }
 
-    //   selectedFields.forEach((field) => {
-    //     const parts = field.split(' - ')
+      const finalQuery = gql`
+        query {
+            novelFoods {
+                opinion {
+                    ${opinionQueryPart}
+                }
+            }
+        }`
 
-    //     switch (parts[0]) {
-    //       case 'opinion':
-    //         if (parts[1] === 'document type') {
-    //           if (documentTypeFields === '') {
-    //             documentTypeFields += `
-    //                         documentType {
-    //                             id
-    //                             ${selectedFields.includes('opinion - document type - short name') ? 'shortName' : ''}
-    //                             ${selectedFields.includes('opinion - document type - extended name') ? 'extendedName' : ''}
-    //                         }`
-    //           }
-    //         } else if (parts[1] === 'panels') {
-    //           if (parts[2] === 'title') {
-    //             panelsFields += `
-    //                         panels {
-    //                             id
-    //                             title
-    //                         }`
-    //           }
-    //         } else if (parts[1] === 'scientific officer') {
-    //           sciOfficersFields += `
-    //                     sciOfficers {
-    //                         id
-    //                         ${selectedFields.includes('opinion - scientific officer - first name') ? 'firstName' : ''}
-    //                         ${selectedFields.includes('opinion - scientific officer - middle name') ? 'middleName' : ''}
-    //                         ${selectedFields.includes('opinion - scientific officer - last name') ? 'lastName' : ''}
-    //                     }`
-    //         } else if (parts[1] === 'questions') {
-    //           questionsFields += `
-    //                     questions {
-    //                         id
-    //                         ${selectedFields.includes('question - number') ? 'number' : ''}
-    //                         ${
-    //                           selectedFields.includes('question - applicant - title')
-    //                             ? `
-    //                             applicants {
-    //                                 id
-    //                                 title
-    //                             }`
-    //                             : ''
-    //                         }
-    //                         ${
-    //                           selectedFields.includes('mandate - type - title') ||
-    //                           selectedFields.includes('mandate - type - definition') ||
-    //                           selectedFields.includes('mandate - regulation')
-    //                             ? `
-    //                             mandates {
-    //                                 id
-    //                                 mandateType {
-    //                                     id
-    //                                     ${selectedFields.includes('mandate - type - title') ? 'title' : ''}
-    //                                     ${selectedFields.includes('mandate - type - definition') ? 'definition' : ''}
-    //                                 }
-    //                                 ${
-    //                                   selectedFields.includes('mandate - regulation')
-    //                                     ? `
-    //                                     regulation {
-    //                                         id
-    //                                         ${selectedFields.includes('mandate - regulation - short name') ? 'shortName' : ''}
-    //                                         ${selectedFields.includes('mandate - regulation - extended name') ? 'extendedName' : ''}
-    //                                     }`
-    //                                     : ''
-    //                                 }
-    //                             }`
-    //                             : ''
-    //                         }
-    //                     }`
-    //         } else {
-    //           opinionFields += `
-    //                     ${parts[1].replace(/\s+/g, '')}`
-    //         }
-    //         break
-    //       default:
-    //         break
-    //     }
-    //   })
-
-    //   const finalQuery = gql`
-    //     query {
-    //         novelFoods {
-    //             id
-    //             opinion {
-    //                 id
-    //                 ${documentTypeFields}
-    //                 ${opinionFields}
-    //                 ${panelsFields}
-    //                 ${sciOfficersFields}
-    //                 ${questionsFields}
-    //             }
-    //         }
-    //     }`
-
-    //   return finalQuery
-    // },
+      return finalQuery
+    },
     async fetchData() {
-      // const GET_CHOSEN_DATA = this.buildQraphQLQuery()
-      // console.log('GET_CHOSEN_DATA: ', GET_CHOSEN_DATA)
+      console.log('fetchData')
+      const GET_CHOSEN_DATA = this.buildQraphQLQuery()
+      console.log('GET_CHOSEN_DATA: ', GET_CHOSEN_DATA)
       try {
         const GET_ALL_DATA = gql`
           query {
             novelFoods {
-              id
               opinion {
-                id
                 documentType
                 title
                 doi
@@ -787,24 +716,19 @@ export default {
                 publicationDate
                 adoptionDate
                 panels {
-                  id
                   title
                 }
                 sciOfficers {
-                  id
                   firstName
                   middleName
                   lastName
                 }
                 questions {
-                  id
                   number
                   applicants {
-                    id
                     title
                   }
                   mandates {
-                    id
                     mandateTypeTitle
                     mandateTypeDefinition
                     regulation
@@ -819,7 +743,7 @@ export default {
 
         // using this.$apollo for Option API apollo provider
         const result = await this.$apollo.query({
-          query: GET_ALL_DATA
+          query: GET_CHOSEN_DATA
         })
         this.fetchedNovelFoods = result.data.novelFoods
         console.log(this.fetchedNovelFoods)
