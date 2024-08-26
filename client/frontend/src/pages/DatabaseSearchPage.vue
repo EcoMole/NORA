@@ -513,6 +513,53 @@ export default {
       ['Delete', 'mdi-delete']
     ],
 
+    availableAttrsSearch: '',
+    selectedAttrs: [],
+    showFilterInterface: true,
+    addingFilter: false,
+    headers: [],
+    newFilter: {
+      include: '',
+      title: '',
+      group: '',
+      qualifier: '',
+      value: ''
+    },
+    availableFilters: {
+      'production process': {
+        group: 'production process',
+        type: 'text',
+        qualifiers: ['contains', 'is'],
+        description:
+          'this is more information and explanation about the production process filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+      },
+      'opinion regulation': {
+        group: 'administrative',
+        type: 'text',
+        qualifiers: ['contains', 'is'],
+        description:
+          'this is more information and explanation about the opinion regulation filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+      },
+      'date of publication': {
+        group: 'administrative',
+        type: 'date',
+        qualifiers: ['is', 'greater than', 'less than'],
+        description:
+          'this is more information and explanation about the date of publication filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+      },
+      'type mandate': {
+        group: 'administrative',
+        type: 'text',
+        qualifiers: ['contains', 'is'],
+        description:
+          'this is more information and explanation about the type mandate filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
+      }
+    },
+    expandedItems: {},
+
+    showIndescriptions: [],
+    addedFilters: [],
+    fetchedNovelFoods: null,
     availableAttrs: [
       {
         text: 'opinion document type',
@@ -594,75 +641,15 @@ export default {
         field: 'regulation',
         icon: 'mdi-file-document-outline'
       }
-    ],
-
-    availableAttrsSearch: '',
-    selectedAttrs: [],
-    showFilterInterface: true,
-    addingFilter: false,
-    headers: [],
-    newFilter: {
-      include: '',
-      title: '',
-      group: '',
-      qualifier: '',
-      value: ''
-    },
-    availableFilters: {
-      'production process': {
-        group: 'production process',
-        type: 'text',
-        qualifiers: ['contains', 'is'],
-        description:
-          'this is more information and explanation about the production process filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      },
-      'opinion regulation': {
-        group: 'administrative',
-        type: 'text',
-        qualifiers: ['contains', 'is'],
-        description:
-          'this is more information and explanation about the opinion regulation filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      },
-      'date of publication': {
-        group: 'administrative',
-        type: 'date',
-        qualifiers: ['is', 'greater than', 'less than'],
-        description:
-          'this is more information and explanation about the date of publication filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      },
-      'type mandate': {
-        group: 'administrative',
-        type: 'text',
-        qualifiers: ['contains', 'is'],
-        description:
-          'this is more information and explanation about the type mandate filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      }
-    },
-    expandedItems: {},
-
-    showIndescriptions: [],
-    addedFilters: [],
-    fetchedNovelFoods: null
+    ]
   }),
   methods: {
-    createNestedTable(param) {
-      return (
-        param != null &&
-        ((param.constructor === Object && Object.keys(param).length > 0) ||
-          (Array.isArray(param) && param.length > 0))
-      )
-    },
-
-    createHeaders(object) {
-      const headers = Object.keys(object)
-        .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
-        .map((key) => ({
-          title: key,
-          value: key,
-          align: 'center'
-        }))
-
-      return headers
+    getFields(model) {
+      return this.selectedAttrs.map((attr) => {
+        if (attr.model === model) {
+          return attr.field
+        }
+      })
     },
     async fetchData() {
       try {
@@ -729,6 +716,25 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    createNestedTable(param) {
+      return (
+        param != null &&
+        ((param.constructor === Object && Object.keys(param).length > 0) ||
+          (Array.isArray(param) && param.length > 0))
+      )
+    },
+
+    createHeaders(object) {
+      const headers = Object.keys(object)
+        .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
+        .map((key) => ({
+          title: key,
+          value: key,
+          align: 'center'
+        }))
+
+      return headers
     },
     cancelNewFilter() {
       this.addingFilter = false
