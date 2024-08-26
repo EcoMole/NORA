@@ -513,7 +513,7 @@ export default {
       ['Delete', 'mdi-delete']
     ],
 
-    fieldOptions: [
+    availableAttrs: [
       {
         text: 'opinion document type',
         model: 'Opinion',
@@ -645,14 +645,6 @@ export default {
     fetchedNovelFoods: null
   }),
   methods: {
-    getAvailableAttrs() {
-      return this.fieldOptions.map((field) => {
-        return {
-          text: field.text,
-          icon: field.icon
-        }
-      })
-    },
     createNestedTable(param) {
       return (
         param != null &&
@@ -789,8 +781,7 @@ export default {
   },
   computed: {
     allSelected() {
-      const availableAttrs = this.getAvailableAttrs()
-      return this.selectedAttrs.length === availableAttrs.length
+      return this.selectedAttrs.length === this.availableAttrs.length
     },
     addFilterValid() {
       return (
@@ -803,10 +794,9 @@ export default {
     availableAttrsSearched() {
       const availableAttrsSearch = this.availableAttrsSearch?.toLowerCase()
 
-      if (!availableAttrsSearch) return this.getAvailableAttrs()
+      if (!availableAttrsSearch) return this.availableAttrs
 
-      const availableAttrs = this.getAvailableAttrs()
-      return availableAttrs.filter((attr) => {
+      return this.availableAttrs.filter((attr) => {
         const text = attr.text.toLowerCase()
 
         return text.indexOf(availableAttrsSearch) > -1
