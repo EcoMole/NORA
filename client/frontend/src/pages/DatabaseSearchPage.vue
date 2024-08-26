@@ -651,7 +651,128 @@ export default {
         }
       })
     },
+    // buildQraphQLQuery() {
+    //   let query = ''
+    //   const mandateTypeFields = this.getFields('MandateType')
+    //   if (mandateTypeFields) {
+    //     query += `
+    //       regulation {
+    //         ${this.selectedAttrs.map((attr) => attr.text).includes('mandate regulation') ? 'regulation' : ''}
+
+    //           ${this.selectedAttrs.map((attr) => attr.text).includes('mandate type title') ? 'title' : ''}
+    //           ${this.selectedAttrs.map((attr) => attr.text).includes('mandate type definition') ? 'definition' : ''}
+
+    //       }`
+    //   }
+    //   let mandateRagulation = ''
+
+    //   let opinionFields = ''
+    //   let panelsFields = ''
+    //   let sciOfficersFields = ''
+    //   let questionsFields = ''
+    //   let mandatesFields = ''
+    //   let documentTypeFields = ''
+
+    //   selectedFields.forEach((field) => {
+    //     const parts = field.split(' - ')
+
+    //     switch (parts[0]) {
+    //       case 'opinion':
+    //         if (parts[1] === 'document type') {
+    //           if (documentTypeFields === '') {
+    //             documentTypeFields += `
+    //                         documentType {
+    //                             id
+    //                             ${selectedFields.includes('opinion - document type - short name') ? 'shortName' : ''}
+    //                             ${selectedFields.includes('opinion - document type - extended name') ? 'extendedName' : ''}
+    //                         }`
+    //           }
+    //         } else if (parts[1] === 'panels') {
+    //           if (parts[2] === 'title') {
+    //             panelsFields += `
+    //                         panels {
+    //                             id
+    //                             title
+    //                         }`
+    //           }
+    //         } else if (parts[1] === 'scientific officer') {
+    //           sciOfficersFields += `
+    //                     sciOfficers {
+    //                         id
+    //                         ${selectedFields.includes('opinion - scientific officer - first name') ? 'firstName' : ''}
+    //                         ${selectedFields.includes('opinion - scientific officer - middle name') ? 'middleName' : ''}
+    //                         ${selectedFields.includes('opinion - scientific officer - last name') ? 'lastName' : ''}
+    //                     }`
+    //         } else if (parts[1] === 'questions') {
+    //           questionsFields += `
+    //                     questions {
+    //                         id
+    //                         ${selectedFields.includes('question - number') ? 'number' : ''}
+    //                         ${
+    //                           selectedFields.includes('question - applicant - title')
+    //                             ? `
+    //                             applicants {
+    //                                 id
+    //                                 title
+    //                             }`
+    //                             : ''
+    //                         }
+    //                         ${
+    //                           selectedFields.includes('mandate - type - title') ||
+    //                           selectedFields.includes('mandate - type - definition') ||
+    //                           selectedFields.includes('mandate - regulation')
+    //                             ? `
+    //                             mandates {
+    //                                 id
+    //                                 mandateType {
+    //                                     id
+    //                                     ${selectedFields.includes('mandate - type - title') ? 'title' : ''}
+    //                                     ${selectedFields.includes('mandate - type - definition') ? 'definition' : ''}
+    //                                 }
+    //                                 ${
+    //                                   selectedFields.includes('mandate - regulation')
+    //                                     ? `
+    //                                     regulation {
+    //                                         id
+    //                                         ${selectedFields.includes('mandate - regulation - short name') ? 'shortName' : ''}
+    //                                         ${selectedFields.includes('mandate - regulation - extended name') ? 'extendedName' : ''}
+    //                                     }`
+    //                                     : ''
+    //                                 }
+    //                             }`
+    //                             : ''
+    //                         }
+    //                     }`
+    //         } else {
+    //           opinionFields += `
+    //                     ${parts[1].replace(/\s+/g, '')}`
+    //         }
+    //         break
+    //       default:
+    //         break
+    //     }
+    //   })
+
+    //   const finalQuery = gql`
+    //     query {
+    //         novelFoods {
+    //             id
+    //             opinion {
+    //                 id
+    //                 ${documentTypeFields}
+    //                 ${opinionFields}
+    //                 ${panelsFields}
+    //                 ${sciOfficersFields}
+    //                 ${questionsFields}
+    //             }
+    //         }
+    //     }`
+
+    //   return finalQuery
+    // },
     async fetchData() {
+      // const GET_CHOSEN_DATA = this.buildQraphQLQuery()
+      // console.log('GET_CHOSEN_DATA: ', GET_CHOSEN_DATA)
       try {
         const GET_ALL_DATA = gql`
           query {
@@ -659,11 +780,7 @@ export default {
               id
               opinion {
                 id
-                documentType {
-                  id
-                  shortName
-                  extendedName
-                }
+                documentType
                 title
                 doi
                 url
@@ -688,16 +805,9 @@ export default {
                   }
                   mandates {
                     id
-                    mandateType {
-                      id
-                      title
-                      definition
-                    }
-                    regulation {
-                      id
-                      shortName
-                      extendedName
-                    }
+                    mandateTypeTitle
+                    mandateTypeDefinition
+                    regulation
                   }
                 }
               }
