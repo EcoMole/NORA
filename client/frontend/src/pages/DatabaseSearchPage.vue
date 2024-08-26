@@ -512,40 +512,89 @@ export default {
       ['Update', 'mdi-update'],
       ['Delete', 'mdi-delete']
     ],
-    availableAttrs: [
-      // administrative
-      { text: 'opinion - document type', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - title', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - doi', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - url', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - publication date', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - adoption date', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - panels - title', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - scientific officer - first name', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - scientific officer - middle name', icon: 'mdi-file-document-outline' },
-      { text: 'opinion - scientific officer - last name', icon: 'mdi-file-document-outline' },
-      { text: 'question - number', icon: 'mdi-file-document-outline' },
-      { text: 'question - applicant - title', icon: 'mdi-file-document-outline' },
-      { text: 'mandate - type - title', icon: 'mdi-file-document-outline' },
-      { text: 'mandate - type - definition', icon: 'mdi-file-document-outline' },
-      { text: 'mandate - regulation', icon: 'mdi-file-document-outline' }
-    ],
 
-    // 'opinion - document type',
-    // 'opinion - title',
-    // 'opinion - doi',
-    // 'opinion - url',
-    // 'opinion - publication date',
-    // 'opinion - adoption date',
-    // 'opinion - panels - title',
-    // 'opinion - scientific officer - first name',
-    // 'opinion - scientific officer - middle name',
-    // 'opinion - scientific officer - last name',
-    // 'question - number',
-    // 'question - applicant - title',
-    // 'mandate - type - title',
-    // 'mandate - type - definition',
-    // 'mandate - regulation'
+    fieldOptions: [
+      {
+        text: 'opinion document type',
+        model: 'Opinion',
+        field: 'document_type',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'opinion title',
+        model: 'Opinion',
+        field: 'title',
+        icon: 'mdi-file-document-outline'
+      },
+      { text: 'opinion doi', model: 'Opinion', field: 'doi', icon: 'mdi-file-document-outline' },
+      { text: 'opinion url', model: 'Opinion', field: 'url', icon: 'mdi-file-document-outline' },
+      {
+        text: 'opinion publication date',
+        model: 'Opinion',
+        field: 'publication_date',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'opinion adoption date',
+        model: 'Opinion',
+        field: 'adoption_date',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: "opinion's panel title",
+        model: 'Panel',
+        field: 'title',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: "opinion's scientific officer first name",
+        model: 'ScientificOfficer',
+        field: 'first_name',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: "opinion's scientific officer middle name",
+        model: 'ScientificOfficer',
+        field: 'middle_name',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: "opinion's scientific officer last name",
+        model: 'ScientificOfficer',
+        field: 'last_name',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'question number',
+        model: 'Question',
+        field: 'number',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'applicant title',
+        model: 'Applicant',
+        field: 'title',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'mandate type title',
+        model: 'MandateType',
+        field: 'title',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'mandate type definition',
+        model: 'MandateType',
+        field: 'definition',
+        icon: 'mdi-file-document-outline'
+      },
+      {
+        text: 'mandate regulation',
+        model: 'Mandate',
+        field: 'regulation',
+        icon: 'mdi-file-document-outline'
+      }
+    ],
 
     availableAttrsSearch: '',
     selectedAttrs: [],
@@ -596,6 +645,14 @@ export default {
     fetchedNovelFoods: null
   }),
   methods: {
+    getAvailableAttrs() {
+      return this.fieldOptions.map((field) => {
+        return {
+          text: field.text,
+          icon: field.icon
+        }
+      })
+    },
     createNestedTable(param) {
       return (
         param != null &&
@@ -732,7 +789,8 @@ export default {
   },
   computed: {
     allSelected() {
-      return this.selectedAttrs.length === this.availableAttrs.length
+      const availableAttrs = this.getAvailableAttrs()
+      return this.selectedAttrs.length === availableAttrs.length
     },
     addFilterValid() {
       return (
@@ -745,9 +803,10 @@ export default {
     availableAttrsSearched() {
       const availableAttrsSearch = this.availableAttrsSearch?.toLowerCase()
 
-      if (!availableAttrsSearch) return this.availableAttrs
+      if (!availableAttrsSearch) return this.getAvailableAttrs()
 
-      return this.availableAttrs.filter((attr) => {
+      const availableAttrs = this.getAvailableAttrs()
+      return availableAttrs.filter((attr) => {
         const text = attr.text.toLowerCase()
 
         return text.indexOf(availableAttrsSearch) > -1
