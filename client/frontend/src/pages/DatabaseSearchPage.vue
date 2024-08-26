@@ -562,6 +562,18 @@ export default {
     fetchedNovelFoods: null,
     availableAttrs: [
       {
+        text: 'NF code',
+        model: 'novleFoods',
+        field: 'nfCode',
+        icon: 'mdi-rice'
+      },
+      {
+        text: 'novel food title',
+        model: 'novleFoods',
+        field: 'title',
+        icon: 'mdi-rice'
+      },
+      {
         text: 'opinion document type',
         model: 'opinion',
         field: 'documentType',
@@ -656,12 +668,12 @@ export default {
       console.log('mandateFields: ', mandateFields)
       if (mandateFields.length > 0) {
         questioinsQueryPart += `
-          mandates {
-            ${mandateFields.includes('mandateTypeTitle') ? 'mandateTypeTitle' : ''}
-            ${mandateFields.includes('mandateTypeDefinition') ? 'mandateTypeDefinition' : ''}
-            ${mandateFields.includes('regulation') ? 'regulation' : ''}
-          }
-          `
+      mandates {
+        ${mandateFields.includes('mandateTypeTitle') ? 'mandateTypeTitle' : ''}
+        ${mandateFields.includes('mandateTypeDefinition') ? 'mandateTypeDefinition' : ''}
+        ${mandateFields.includes('regulation') ? 'regulation' : ''}
+      }
+      `
         console.log('in if mandateFields questioinsQueryPart: ', questioinsQueryPart)
       }
       console.log('out of if mandateFields questioinsQueryPart: ', questioinsQueryPart)
@@ -669,34 +681,68 @@ export default {
       let applicantsFields = this.getFields('applicants')
       if (applicantsFields.length > 0 && applicantsFields.includes('title')) {
         questioinsQueryPart += `
-            applicants {
-              title
-            }
-            `
+        applicants {
+          title
+        }
+        `
       }
 
       let questionsFields = this.getFields('questions')
       if (questionsFields.length > 0 && questionsFields.includes('number')) {
         questioinsQueryPart += `
-              number
-            `
+          number
+        `
       }
       if (questioinsQueryPart) {
         opinionQueryPart += `
-          questions {
-            ${questioinsQueryPart}
-          }
-          `
+      questions {
+        ${questioinsQueryPart}
+      }
+      `
+      }
+
+      let sciOfficersFields = this.getFields('sciOfficers')
+      if (sciOfficersFields.length > 0) {
+        opinionQueryPart += `
+      sciOfficers {
+        ${sciOfficersFields.includes('firstName') ? 'firstName' : ''}
+        ${sciOfficersFields.includes('middleName') ? 'middleName' : ''}
+        ${sciOfficersFields.includes('lastName') ? 'lastName' : ''}
+      }
+      `
+      }
+
+      let panelsFields = this.getFields('panels')
+      if (panelsFields.length > 0 && panelsFields.includes('title')) {
+        opinionQueryPart += `
+      panels {
+        title
+      }
+      `
+      }
+
+      let opinionFields = this.getFields('opinion')
+      if (opinionFields.length > 0) {
+        opinionQueryPart += `
+      ${opinionFields.includes('documentType') ? 'documentType' : ''}
+      ${opinionFields.includes('title') ? 'title' : ''}
+      ${opinionFields.includes('doi') ? 'doi' : ''}
+      ${opinionFields.includes('url') ? 'url' : ''}
+      ${opinionFields.includes('publicationDate') ? 'publicationDate' : ''}
+      ${opinionFields.includes('adoptionDate') ? 'adoptionDate' : ''}
+      `
       }
 
       const finalQuery = gql`
-        query {
-            novelFoods {
-                opinion {
-                    ${opinionQueryPart}
-                }
+    query {
+        novelFoods {
+            nfCode
+            title
+            opinion {
+                ${opinionQueryPart}
             }
-        }`
+        }
+    }`
 
       return finalQuery
     },
@@ -708,6 +754,8 @@ export default {
         const GET_ALL_DATA = gql`
           query {
             novelFoods {
+              nfCode
+              title
               opinion {
                 documentType
                 title
