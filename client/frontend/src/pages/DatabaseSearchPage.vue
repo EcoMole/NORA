@@ -482,7 +482,9 @@
 
 <script>
 import { useTheme } from 'vuetify'
-import gql from 'graphql-tag'
+import { availableAttrs } from '@/libs/available-attrs'
+import { availableFilters } from '@/libs/available-filters'
+import { buildQraphQLQuery } from '@/libs/graphql-query'
 // for Composition API apollo provider:
 // import { useApolloClient } from '@vue/apollo-composable'
 // icon: 'mdi-rice'
@@ -523,240 +525,45 @@ export default {
       qualifier: '',
       value: ''
     },
-    availableFilters: {
-      'production process': {
-        group: 'production process',
-        type: 'text',
-        qualifiers: ['contains', 'is'],
-        description:
-          'this is more information and explanation about the production process filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      },
-      'opinion regulation': {
-        group: 'administrative',
-        type: 'text',
-        qualifiers: ['contains', 'is'],
-        description:
-          'this is more information and explanation about the opinion regulation filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      },
-      'date of publication': {
-        group: 'administrative',
-        type: 'date',
-        qualifiers: ['is', 'greater than', 'less than'],
-        description:
-          'this is more information and explanation about the date of publication filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      },
-      'type mandate': {
-        group: 'administrative',
-        type: 'text',
-        qualifiers: ['contains', 'is'],
-        description:
-          'this is more information and explanation about the type mandate filter user has just selected. It explains the attribute which will be queried, what values it can hold, etc.'
-      }
-    },
+    availableFilters: availableFilters,
     expandedItems: {},
 
     showIndescriptions: [],
     addedFilters: [],
     fetchedNovelFoods: null,
-    availableAttrs: [
-      {
-        text: 'NF code',
-        model: 'novelFoods',
-        field: 'nfCode',
-        icon: 'mdi-rice'
-      },
-      {
-        text: 'novel food title',
-        model: 'novelFoods',
-        field: 'title',
-        icon: 'mdi-rice'
-      },
-      {
-        text: 'opinion document type',
-        model: 'novelFoods',
-        field: 'opinionDocumentType',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'opinion title',
-        model: 'novelFoods',
-        field: 'opinionTitle',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'opinion doi',
-        model: 'novelFoods',
-        field: 'opinionDoi',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'opinion url',
-        model: 'novelFoods',
-        field: 'opinionUrl',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'opinion publication date',
-        model: 'novelFoods',
-        field: 'opinionPublicationDate',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'opinion adoption date',
-        model: 'novelFoods',
-        field: 'opinionAdoptionDate',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: "opinion's panel title",
-        model: 'panels',
-        field: 'title',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: "opinion's scientific officer first name",
-        model: 'sciOfficers',
-        field: 'firstName',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: "opinion's scientific officer middle name",
-        model: 'sciOfficers',
-        field: 'middleName',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: "opinion's scientific officer last name",
-        model: 'sciOfficers',
-        field: 'lastName',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'question number',
-        model: 'questions',
-        field: 'number',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'applicant title',
-        model: 'applicants',
-        field: 'title',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'mandate type title',
-        model: 'mandates',
-        field: 'mandateTypeTitle',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'mandate type definition',
-        model: 'mandates',
-        field: 'mandateTypeDefinition',
-        icon: 'mdi-file-document-outline'
-      },
-      {
-        text: 'mandate regulation',
-        model: 'mandates',
-        field: 'regulation',
-        icon: 'mdi-file-document-outline'
-      }
-    ]
+    availableAttrs: availableAttrs
   }),
   methods: {
     getFields(model) {
       return this.selectedAttrs.filter((attr) => attr.model === model).map((attr) => attr.field)
     },
-    buildQraphQLQuery() {
-      let novelFoodQueryPart = ''
-      let questioinsQueryPart = ''
-
-      let novelFoodFields = this.getFields('novelFoods')
-      if (novelFoodFields.length > 0) {
-        novelFoodQueryPart += `
-      ${novelFoodFields.includes('nfCode') ? 'nfCode' : ''}
-      ${novelFoodFields.includes('title') ? 'title' : ''}
-      ${novelFoodFields.includes('opinionDocumentType') ? 'opinionDocumentType' : ''}
-      ${novelFoodFields.includes('opinionTitle') ? 'opinionTitle' : ''}
-      ${novelFoodFields.includes('opinionDoi') ? 'opinionDoi' : ''}
-      ${novelFoodFields.includes('opinionUrl') ? 'opinionUrl' : ''}
-      ${novelFoodFields.includes('opinionPublicationDate') ? 'opinionPublicationDate' : ''}
-      ${novelFoodFields.includes('opinionAdoptionDate') ? 'opinionAdoptionDate' : ''}
-      `
-      }
-
-      let panelsFields = this.getFields('panels')
-      if (panelsFields.length > 0 && panelsFields.includes('title')) {
-        novelFoodQueryPart += `
-      panels {
-        title
-      }
-      `
-      }
-      let sciOfficersFields = this.getFields('sciOfficers')
-      if (sciOfficersFields.length > 0) {
-        novelFoodQueryPart += `
-      sciOfficers {
-        ${sciOfficersFields.includes('firstName') ? 'firstName' : ''}
-        ${sciOfficersFields.includes('middleName') ? 'middleName' : ''}
-        ${sciOfficersFields.includes('lastName') ? 'lastName' : ''}
-      }
-      `
-      }
-
-      let questionsFields = this.getFields('questions')
-      if (questionsFields.includes('number')) {
-        questioinsQueryPart += `
-        number
-        `
-      }
-
-      let applicantsFields = this.getFields('applicants')
-      if (applicantsFields.includes('title')) {
-        questioinsQueryPart += `
-        applicants {
-          title
-        }
-        `
-      }
-
-      let mandateFields = this.getFields('mandates')
-      if (mandateFields.length > 0) {
-        questioinsQueryPart += `
-        mandates {
-          ${mandateFields.includes('mandateTypeTitle') ? 'mandateTypeTitle' : ''}
-          ${mandateFields.includes('mandateTypeDefinition') ? 'mandateTypeDefinition' : ''}
-          ${mandateFields.includes('regulation') ? 'regulation' : ''}
-        }
-      `
-      }
-
-      if (questioinsQueryPart) {
-        novelFoodQueryPart += `
-      questions {
-        ${questioinsQueryPart}
-      }
-      `
-      }
-
-      console.log('novelFoodQueryPart', novelFoodQueryPart)
-      const finalQuery = gql`
-    query {
-        novelFoods {
-            ${novelFoodQueryPart}
-        }
-    }`
-
-      return finalQuery
-    },
+    buildQraphQLQuery,
     async fetchData() {
       const GET_CHOSEN_DATA = this.buildQraphQLQuery()
       try {
-        const GET_ALL_DATA = gql`
+        const GET_ALL_DATA = `
           query {
             novelFoods {
               nfCode
               title
+              toxStudyRequired
+              genotoxFinalOutcome
+              finalToxicologyRemarks
+              proteinDigestibility
+              antinutritionalFactors
+              hasNutriDisadvantage
+              nutriDisadvantageExplanation
+              sufficientData
+              foodMatrices
+              instabilityConcerns
+              shelflifeValue
+              shelflifeUnit
+              endocrineDisruptProp
+              outcome
+              outcomeRemarks
+              vocabId
+              allergenicity
+
               opinionDocumentType
               opinionTitle
               opinionDoi
