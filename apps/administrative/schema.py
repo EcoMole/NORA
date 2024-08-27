@@ -85,24 +85,13 @@ class QuestionType(DjangoObjectType):
 class OpinionType(DjangoObjectType):
     class Meta:
         model = Opinion
+
         fields = "__all__"
 
-    panels = graphene.List(PanelType)
-    sci_officers = graphene.List(ScientificOfficerType)
     questions = graphene.List(QuestionType)
-    document_type = graphene.String()
-
-    def resolve_panels(self, info):
-        return Panel.objects.filter(opinionpanel__opinion=self)
-
-    def resolve_sci_officers(self, info):
-        return ScientificOfficer.objects.filter(opinionsciofficer__opinion=self)
 
     def resolve_questions(self, info):
         return Question.objects.filter(opinionquestion__opinion=self)
-
-    def resolve_document_type(self, info):
-        return self.document_type.name if self.document_type else None
 
 
 class Query(graphene.ObjectType):
