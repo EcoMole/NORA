@@ -18,108 +18,108 @@ export const availableAttrs = [
     field: 'opinionDocumentType',
     icon: 'mdi-file-document-outline'
   },
-  // {
-  //   text: 'Toxicology Study Required',
-  //   model: 'novelFoods',
-  //   field: 'toxStudyRequired',
-  //   icon: 'mdi-flask-outline'
-  // },
-  // {
-  //   text: 'Genotoxicity Final Outcome',
-  //   model: 'novelFoods',
-  //   field: 'genotoxFinalOutcome',
-  //   icon: 'mdi-dna'
-  // },
-  // {
-  //   text: 'Final Toxicology Remarks',
-  //   model: 'novelFoods',
-  //   field: 'finalToxicologyRemarks',
-  //   icon: 'mdi-comment-text-outline'
-  // },
-  // {
-  //   text: 'Protein Digestibility',
-  //   model: 'novelFoods',
-  //   field: 'proteinDigestibility',
-  //   icon: 'mdi-food-drumstick-outline'
-  // },
-  // {
-  //   text: 'Antinutritional Factors',
-  //   model: 'novelFoods',
-  //   field: 'antinutritionalFactors',
-  //   icon: 'mdi-alert-circle-outline'
-  // },
-  // {
-  //   text: 'Nutritional Disadvantage',
-  //   model: 'novelFoods',
-  //   field: 'hasNutriDisadvantage',
-  //   icon: 'mdi-scale-balance'
-  // },
-  // {
-  //   text: 'Nutritional Disadvantage Explanation',
-  //   model: 'novelFoods',
-  //   field: 'nutriDisadvantageExplanation',
-  //   icon: 'mdi-text-box-outline'
-  // },
-  // {
-  //   text: 'Sufficient Data',
-  //   model: 'novelFoods',
-  //   field: 'sufficientData',
-  //   icon: 'mdi-database-check'
-  // },
-  // {
-  //   text: 'Food Matrices',
-  //   model: 'novelFoods',
-  //   field: 'foodMatrices',
-  //   icon: 'mdi-grid'
-  // },
-  // {
-  //   text: 'Instability Concerns',
-  //   model: 'novelFoods',
-  //   field: 'instabilityConcerns',
-  //   icon: 'mdi-alert-outline'
-  // },
-  // {
-  //   text: 'Shelf Life Value',
-  //   model: 'novelFoods',
-  //   field: 'shelflifeValue',
-  //   icon: 'mdi-clock-outline'
-  // },
-  // {
-  //   text: 'Shelf Life Unit',
-  //   model: 'novelFoods',
-  //   field: 'shelflifeUnit',
-  //   icon: 'mdi-timer-sand'
-  // },
-  // {
-  //   text: 'Endocrine Disruptive Properties',
-  //   model: 'novelFoods',
-  //   field: 'endocrineDisruptProp',
-  //   icon: 'mdi-alert-outline'
-  // },
-  // {
-  //   text: 'Outcome',
-  //   model: 'novelFoods',
-  //   field: 'outcome',
-  //   icon: 'mdi-check-circle-outline'
-  // },
-  // {
-  //   text: 'Outcome Remarks',
-  //   model: 'novelFoods',
-  //   field: 'outcomeRemarks',
-  //   icon: 'mdi-comment-text-outline'
-  // },
-  // {
-  //   text: 'Vocabulary ID',
-  //   model: 'novelFoods',
-  //   field: 'vocabId',
-  //   icon: 'mdi-book-open-outline'
-  // },
-  // {
-  //   text: 'Allergenicity',
-  //   model: 'novelFoods',
-  //   field: 'allergenicity',
-  //   icon: 'mdi-alert-circle-outline'
-  // },
+  {
+    text: 'Toxicology Study Required',
+    model: 'novelFoods',
+    field: 'toxStudyRequired',
+    icon: 'mdi-flask-outline'
+  },
+  {
+    text: 'Genotoxicity Final Outcome',
+    model: 'novelFoods',
+    field: 'genotoxFinalOutcome',
+    icon: 'mdi-dna'
+  },
+  {
+    text: 'Final Toxicology Remarks',
+    model: 'novelFoods',
+    field: 'finalToxicologyRemarks',
+    icon: 'mdi-comment-text-outline'
+  },
+  {
+    text: 'Protein Digestibility',
+    model: 'novelFoods',
+    field: 'proteinDigestibility',
+    icon: 'mdi-food-drumstick-outline'
+  },
+  {
+    text: 'Antinutritional Factors',
+    model: 'novelFoods',
+    field: 'antinutritionalFactors',
+    icon: 'mdi-alert-circle-outline'
+  },
+  {
+    text: 'Nutritional Disadvantage',
+    model: 'novelFoods',
+    field: 'hasNutriDisadvantage',
+    icon: 'mdi-scale-balance'
+  },
+  {
+    text: 'Nutritional Disadvantage Explanation',
+    model: 'novelFoods',
+    field: 'nutriDisadvantageExplanation',
+    icon: 'mdi-text-box-outline'
+  },
+  {
+    text: 'Sufficient Data',
+    model: 'novelFoods',
+    field: 'sufficientData',
+    icon: 'mdi-database-check'
+  },
+  {
+    text: 'Food Matrices',
+    model: 'novelFoods',
+    field: 'foodMatrices',
+    icon: 'mdi-grid'
+  },
+  {
+    text: 'Instability Concerns',
+    model: 'novelFoods',
+    field: 'instabilityConcerns',
+    icon: 'mdi-alert-outline'
+  },
+  {
+    text: 'Shelf Life Value',
+    model: 'novelFoods',
+    field: 'shelflifeValue',
+    icon: 'mdi-clock-outline'
+  },
+  {
+    text: 'Shelf Life Unit',
+    model: 'novelFoods',
+    field: 'shelflifeUnit',
+    icon: 'mdi-timer-sand'
+  },
+  {
+    text: 'Endocrine Disruptive Properties',
+    model: 'novelFoods',
+    field: 'endocrineDisruptProp',
+    icon: 'mdi-alert-outline'
+  },
+  {
+    text: 'Outcome',
+    model: 'novelFoods',
+    field: 'outcome',
+    icon: 'mdi-check-circle-outline'
+  },
+  {
+    text: 'Outcome Remarks',
+    model: 'novelFoods',
+    field: 'outcomeRemarks',
+    icon: 'mdi-comment-text-outline'
+  },
+  {
+    text: 'Vocabulary ID',
+    model: 'novelFoods',
+    field: 'vocabId',
+    icon: 'mdi-book-open-outline'
+  },
+  {
+    text: 'Allergenicity',
+    model: 'novelFoods',
+    field: 'allergenicity',
+    icon: 'mdi-alert-circle-outline'
+  },
 
   // opinion
   {
