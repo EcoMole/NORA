@@ -1,4 +1,5 @@
 export const availableFilters = {
+  // not working examples bellow
   'production process': {
     group: 'production process',
     type: 'text',
