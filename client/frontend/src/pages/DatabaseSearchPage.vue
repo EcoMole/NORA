@@ -497,7 +497,6 @@ export default {
   data: () => ({
     grouped: 'grouped',
     repeated: 'repeated',
-    parameter: 'vitamin D2 mushroom powder',
     tableStyle: 'repeated',
     open: ['Users'],
     exportOptions: [
@@ -701,12 +700,14 @@ export default {
         `
         // for Composition API apollo provider
         // const { client } = useApolloClient()
-
+        const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
+          ?.value
+        console.log('nfTitle', nfTitle)
         // using this.$apollo for Option API apollo provider
         const result = await this.$apollo.query({
           query: GET_CHOSEN_DATA,
           variables: {
-            novelFoodTitle: this.parameter
+            novelFoodTitle: nfTitle
           }
         })
         this.fetchedNovelFoods = result.data.novelFoods
@@ -778,6 +779,7 @@ export default {
           value: ''
         }
       }
+      console.log('addedFilters', this.addedFilters)
     },
     removeItem(index) {
       this.addedFilters.splice(index, 1)
