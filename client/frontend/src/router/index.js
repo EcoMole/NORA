@@ -35,11 +35,6 @@ export default new createRouter({
       component: () => import('@/pages/OrganismsPage.vue')
     },
     {
-      path: '/chemicals/',
-      name: 'chemicals-page',
-      component: () => import('@/pages/ChemicalsPage.vue')
-    },
-    {
       path: '/user/',
       name: 'user-page',
       component: () => import('@/pages/UserPage.vue')

@@ -266,6 +266,7 @@
         :items="fetchedNovelFoods"
         style="font-size: 12px"
         density="compact"
+        :loading="tableIsLoading"
       >
         <!-- slot creation for opinion, id, __typename -->
         <template
@@ -417,7 +418,8 @@
         new search
       </v-btn>
     </v-hover>
-    <v-sheet
+    <!-- grouped repeated switch -->
+    <!-- <v-sheet
       elevation="24"
       position="fixed"
       location="bottom"
@@ -426,7 +428,6 @@
       border
     >
       <v-row class="d-flex align-center">
-        <!-- Label for false value -->
         <v-col class="text-right">
           <label
             for="custom-switch"
@@ -438,7 +439,6 @@
           >
         </v-col>
 
-        <!-- v-switch component -->
         <v-col>
           <v-switch
             density="compact"
@@ -450,7 +450,6 @@
           ></v-switch>
         </v-col>
 
-        <!-- Label for true value -->
         <v-col>
           <label
             for="custom-switch"
@@ -463,7 +462,7 @@
           >
         </v-col>
       </v-row>
-    </v-sheet>
+    </v-sheet> -->
     <v-btn
       elevation="24"
       @click="showFilterInterface = true"
@@ -495,6 +494,7 @@ import gql from 'graphql-tag'
 
 export default {
   data: () => ({
+    tableIsLoading: false,
     grouped: 'grouped',
     repeated: 'repeated',
     tableStyle: 'repeated',
@@ -645,6 +645,7 @@ export default {
       return finalQuery
     },
     async fetchData() {
+      this.tableIsLoading = true
       const GET_CHOSEN_DATA = this.buildQraphQLQuery()
       try {
         const GET_ALL_DATA = `
@@ -714,6 +715,8 @@ export default {
         console.log(this.fetchedNovelFoods)
       } catch (err) {
         console.log(err)
+      } finally {
+        this.tableIsLoading = false
       }
     },
     createNestedTable(param) {

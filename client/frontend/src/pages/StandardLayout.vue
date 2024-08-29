@@ -131,21 +131,15 @@ export default {
         },
         {
           title: 'Novel Foods',
-          icon: 'mdi-database',
+          icon: 'mdi-database-off',
           value: 'novelFoods',
           routerLink: 'novel-foods-page'
         },
         {
           title: 'Organisms',
-          icon: 'mdi-database',
+          icon: 'mdi-database-off',
           value: 'organisms',
           routerLink: 'organisms-page'
-        },
-        {
-          title: 'Chemicals',
-          icon: 'mdi-database',
-          value: 'chemicals',
-          routerLink: 'chemicals-page'
         },
         {
           title: 'User',
