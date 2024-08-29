@@ -94,7 +94,7 @@
     </v-list>
   </v-navigation-drawer>
   <v-main>
-    <v-container style="max-width: 1200px">
+    <v-container :class="{ 'xs12 sm10 md8 lg6 xl4': true }" fluid>
       <router-view :key="$route.fullPath" />
     </v-container>
   </v-main>
@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       drawer: true,
-      rail: false,
+      rail: true,
       fav: true,
       menuSettings: false,
       menuAccount: false,
@@ -130,28 +130,16 @@ export default {
           routerLink: 'database-search-page'
         },
         {
-          title: 'Graphql',
-          icon: 'mdi-file-document-edit',
-          value: 'graphql',
-          routerLink: 'graphql-page'
-        },
-        {
           title: 'Novel Foods',
-          icon: 'mdi-database',
+          icon: 'mdi-database-off',
           value: 'novelFoods',
           routerLink: 'novel-foods-page'
         },
         {
           title: 'Organisms',
-          icon: 'mdi-database',
+          icon: 'mdi-database-off',
           value: 'organisms',
           routerLink: 'organisms-page'
-        },
-        {
-          title: 'Chemicals',
-          icon: 'mdi-database',
-          value: 'chemicals',
-          routerLink: 'chemicals-page'
         },
         {
           title: 'User',
