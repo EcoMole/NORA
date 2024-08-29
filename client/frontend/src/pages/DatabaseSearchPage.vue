@@ -546,6 +546,12 @@ export default {
             novelFoods {
               nfCode
               title
+              opinionDocumentType
+              opinionTitle
+              opinionDoi
+              opinionUrl
+              opinionPublicationDate
+              opinionAdoptionDate
               toxStudyRequired
               genotoxFinalOutcome
               finalToxicologyRemarks
@@ -564,12 +570,6 @@ export default {
               vocabId
               allergenicity
 
-              opinionDocumentType
-              opinionTitle
-              opinionDoi
-              opinionUrl
-              opinionPublicationDate
-              opinionAdoptionDate
               panels {
                 title
               }

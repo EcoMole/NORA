@@ -116,8 +116,8 @@ export const availableAttrs = [
   },
   {
     text: 'Allergenicity',
-    model: 'novelFoods',
-    field: 'allergenicity',
+    model: 'allergenicities',
+    field: 'title',
     icon: 'mdi-alert-circle-outline'
   },
 

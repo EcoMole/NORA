@@ -15,6 +15,22 @@ export function buildQraphQLQuery() {
   ${novelFoodFields.includes('opinionUrl') ? 'opinionUrl' : ''}
   ${novelFoodFields.includes('opinionPublicationDate') ? 'opinionPublicationDate' : ''}
   ${novelFoodFields.includes('opinionAdoptionDate') ? 'opinionAdoptionDate' : ''}
+  ${novelFoodFields.includes('toxStudyRequired') ? 'toxStudyRequired' : ''}
+  ${novelFoodFields.includes('genotoxFinalOutcome') ? 'genotoxFinalOutcome' : ''}
+  ${novelFoodFields.includes('finalToxicologyRemarks') ? 'finalToxicologyRemarks' : ''}
+  ${novelFoodFields.includes('proteinDigestibility') ? 'proteinDigestibility' : ''}
+  ${novelFoodFields.includes('antinutritionalFactors') ? 'antinutritionalFactors' : ''}
+  ${novelFoodFields.includes('hasNutriDisadvantage') ? 'hasNutriDisadvantage' : ''}
+  ${novelFoodFields.includes('nutriDisadvantageExplanation') ? 'nutriDisadvantageExplanation' : ''}
+  ${novelFoodFields.includes('sufficientData') ? 'sufficientData' : ''}
+  ${novelFoodFields.includes('foodMatrices') ? 'foodMatrices' : ''}
+  ${novelFoodFields.includes('instabilityConcerns') ? 'instabilityConcerns' : ''}
+  ${novelFoodFields.includes('shelflifeValue') ? 'shelflifeValue' : ''}
+  ${novelFoodFields.includes('shelflifeUnit') ? 'shelflifeUnit' : ''}
+  ${novelFoodFields.includes('endocrineDisruptProp') ? 'endocrineDisruptProp' : ''}
+  ${novelFoodFields.includes('outcome') ? 'outcome' : ''}
+  ${novelFoodFields.includes('outcomeRemarks') ? 'outcomeRemarks' : ''}
+  ${novelFoodFields.includes('vocabId') ? 'vocabId' : ''}
   `
   }
 
@@ -26,6 +42,7 @@ export function buildQraphQLQuery() {
   }
   `
   }
+
   let sciOfficersFields = this.getFields('sciOfficers')
   if (sciOfficersFields.length > 0) {
     novelFoodQueryPart += `
@@ -33,6 +50,15 @@ export function buildQraphQLQuery() {
     ${sciOfficersFields.includes('firstName') ? 'firstName' : ''}
     ${sciOfficersFields.includes('middleName') ? 'middleName' : ''}
     ${sciOfficersFields.includes('lastName') ? 'lastName' : ''}
+  }
+  `
+  }
+
+  let allergenicityFields = this.getFields('allergenicities')
+  if (allergenicityFields.length > 0) {
+    novelFoodQueryPart += `
+  allergenicities {
+    ${allergenicityFields.includes('title') ? 'title' : ''}
   }
   `
   }
