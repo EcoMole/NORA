@@ -130,18 +130,6 @@ export default {
           routerLink: 'database-search-page'
         },
         {
-          title: 'Novel Foods',
-          icon: 'mdi-database-off',
-          value: 'novelFoods',
-          routerLink: 'novel-foods-page'
-        },
-        {
-          title: 'Organisms',
-          icon: 'mdi-database-off',
-          value: 'organisms',
-          routerLink: 'organisms-page'
-        },
-        {
           title: 'User',
           icon: 'mdi-account',
           value: 'user',
