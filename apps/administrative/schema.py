@@ -1,16 +1,16 @@
 import graphene
 from graphene_django import DjangoObjectType
-from taxonomies.models import TaxonomyNode
 
-from .models import (
+from .models import (  # MandateType,
     Applicant,
     Mandate,
-    MandateType,
     Opinion,
     Panel,
     Question,
     ScientificOfficer,
 )
+
+# from taxonomies.models import TaxonomyNode
 
 
 class PanelType(DjangoObjectType):
@@ -29,23 +29,6 @@ class ApplicantType(DjangoObjectType):
     class Meta:
         model = Applicant
         fields = "__all__"
-
-
-class MandateTypeObjectType(DjangoObjectType):
-    class Meta:
-        model = MandateType
-        fields = "__all__"
-
-
-class TaxonomyNodeType(DjangoObjectType):
-    name = graphene.String()
-
-    class Meta:
-        model = TaxonomyNode
-        fields = "__all__"
-
-    def resolve_name(self, info):
-        return self.name
 
 
 class MandateObjectType(DjangoObjectType):

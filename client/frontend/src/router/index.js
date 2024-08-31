@@ -12,27 +12,12 @@ export default new createRouter({
     {
       path: '/',
       name: 'home-page',
-      redirect: { name: 'dashboard-page' }
-    },
-    {
-      path: '/dashboard/',
-      name: 'dashboard-page',
-      component: () => import('@/pages/DashboardPage.vue')
+      redirect: { name: 'database-search-page' }
     },
     {
       path: '/database-search/',
       name: 'database-search-page',
       component: () => import('@/pages/DatabaseSearchPage.vue')
-    },
-    {
-      path: '/novle-foods/',
-      name: 'novel-foods-page',
-      component: () => import('@/pages/NovelFoodsPage.vue')
-    },
-    {
-      path: '/organisms/',
-      name: 'organisms-page',
-      component: () => import('@/pages/OrganismsPage.vue')
     },
     {
       path: '/user/',
