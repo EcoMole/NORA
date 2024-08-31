@@ -121,7 +121,7 @@
                 color="tertiary"
                 size="x-small"
                 min-height="30"
-                @click="removeItem(i)"
+                @click="removeFilter(i)"
                 variant="tonal"
                 style="z-index: 2"
               >
@@ -200,7 +200,7 @@
 
           <v-container class="mt-4">
             <v-text-field
-              v-if="!allSelected"
+              v-if="!allAttrsSelected"
               v-model="availableAttrsSearch"
               density="comfortable"
               placeholder="Search available data"
@@ -292,7 +292,6 @@ export default {
           value: ''
         }
       }
-      console.log('addedFilters', this.addedFilters)
     },
     updateSubtitle() {
       const selectedAttribute = this.availableFilters[this.newFilter.title]
@@ -310,18 +309,16 @@ export default {
         value: ''
       }
     },
-    removeItem(index) {
+    removeFilter(index) {
       this.addedFilters.splice(index, 1)
     },
     renderTable() {
-      console.log('addedFilters', this.addedFilters)
-      console.log('selectedAttrs', this.selectedAttrs)
       this.$emit('render-table', this.addedFilters, this.selectedAttrs)
       this.$emit('close')
     }
   },
   computed: {
-    allSelected() {
+    allAttrsSelected() {
       return this.selectedAttrs.length === this.availableAttrs.length
     },
     addFilterValid() {
