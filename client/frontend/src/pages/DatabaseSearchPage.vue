@@ -2,252 +2,13 @@
   <div>
     <h1>Database Search</h1>
   </div>
-
-  <v-row v-if="showFilterInterface" class="mt-4">
-    <v-col cols="7">
-      <v-row class="d-flex justify-center">
-        <h1 style="color: #a9a9a9">Novel Food Filters</h1>
-      </v-row>
-
-      <v-row class="mt-4">
-        <v-spacer></v-spacer>
-        <v-btn
-          v-if="addedFilters.length > 1 ? true : false"
-          @click="addedFilters = []"
-          color="tertiary"
-          size="x-small"
-          min-height="30"
-          class="mr-6"
-          variant="tonal"
-        >
-          <v-icon left>mdi-close</v-icon>
-          all</v-btn
-        >
-      </v-row>
-
-      <v-row v-if="!addingFilter" class="d-flex justify-center mt-5">
-        <v-btn
-          color="secondary"
-          :variant="addedFilters.length > 0 ? 'tonal' : 'elevated'"
-          @click="addingFilter = true"
-        >
-          <v-icon left>mdi-plus</v-icon>
-          Add Filter
-        </v-btn>
-      </v-row>
-      <v-row v-else class="d-flex justify-end mb-0">
-        <v-col cols="12" class="mr-1">
-          <v-card
-            class="pa-2"
-            rounded="xl"
-            elevation="6"
-            density="compact"
-            @keyup.enter="addFilter"
-          >
-            <v-card-subtitle class="text-h6 pt-4">
-              {{ this.availableFilters[newFilter.title]?.group || '' }}
-            </v-card-subtitle>
-            <v-card-text class="pb-0">
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-row class="d-flex align-center">
-                      <span>All Novel Foods</span>
-                      <v-select
-                        v-model="newFilter.include"
-                        :items="['must have', 'must not have']"
-                        class="ml-6"
-                        variant="underlined"
-                        max-width="140px"
-                      ></v-select>
-                      <v-autocomplete
-                        v-model="newFilter.title"
-                        :items="Object.keys(availableFilters)"
-                        class="ml-6"
-                        variant="underlined"
-                        @change="updateSubtitle"
-                      ></v-autocomplete>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-row class="d-flex align-center">
-                      <span v-if="newFilter.title">which</span>
-                      <v-autocomplete
-                        :disabled="!newFilter.title"
-                        v-model="newFilter.qualifier"
-                        :items="availableFilters[newFilter.title]?.qualifiers || []"
-                        max-width="180px"
-                        variant="underlined"
-                        class="ml-6"
-                      ></v-autocomplete>
-                      <v-text-field
-                        variant="underlined"
-                        v-model="newFilter.value"
-                        :type="availableFilters[newFilter.title]?.type"
-                        class="ml-6"
-                        :disabled="!newFilter.title"
-                      ></v-text-field>
-                    </v-row>
-                  </v-col>
-
-                  <v-col v-if="availableFilters[newFilter.title]?.description" cols="12">
-                    <p>
-                      {{ availableFilters[newFilter.title]?.description }}
-                    </p>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-            <v-card-actions class="mb-1 pt-0">
-              <v-spacer></v-spacer>
-              <v-btn color="tertiary" variant="tonal" @click="cancelNewFilter">Cancel</v-btn>
-              <v-btn
-                color="secondary"
-                :disabled="!addFilterValid"
-                variant="elevated"
-                class="mr-2 ml-5"
-                @click="addFilter"
-                >Save</v-btn
-              >
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row v-for="(filter, i) in addedFilters" :key="i" class="mb-0">
-        <v-row class="d-flex justify-center mb-0" v-if="i != 0 || addingFilter == true">
-          <span class="mt-0">and</span>
-        </v-row>
-        <v-col cols="12" class="mb-0">
-          <v-card class="pa-2 mb-0 mr-1" elevation="3" style="position: relative" rounded="xl">
-            <v-btn
-              :style="{ position: 'absolute', right: '+8px' }"
-              color="tertiary"
-              size="x-small"
-              min-height="30"
-              @click="removeItem(i)"
-              variant="tonal"
-              style="z-index: 2"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-
-            <v-card-subtitle class="text-h6 pt-3 pb-2 mb-0">
-              {{ filter.group }}
-            </v-card-subtitle>
-            <v-card-text class="pt-0">
-              Novel Foods <b>{{ filter.include }}</b> {{ ' ' }}
-              <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                filter.title
-              }}</v-chip
-              >{{ ' ' }}which <b>{{ filter.qualifier }}</b
-              >{{ ' ' }}
-              <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                filter.value
-              }}</v-chip>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-col>
-    <v-divider :thickness="2" vertical class="ml-0"></v-divider>
-    <v-col cols="4">
-      <v-row class="d-flex justify-center">
-        <h1 style="color: #a9a9a9">Data to be fetched</h1>
-      </v-row>
-      <v-row class="mt-3">
-        <v-container>
-          <v-alert
-            class="mb-3"
-            v-if="selectedAttrs.length < 1"
-            icon="$warning"
-            text="Select data you would like to see"
-            color="secondary"
-            rounded="md"
-          ></v-alert>
-          <v-row v-if="selectedAttrs.length > 1" class="mb-2">
-            <v-spacer></v-spacer>
-            <v-btn
-              @click="selectedAttrs = []"
-              color="tertiary"
-              size="x-small"
-              min-height="30"
-              rounded="md"
-              variant="tonal"
-            >
-              <v-icon left>mdi-close</v-icon>
-              all
-            </v-btn>
-          </v-row>
-          <v-row class="mt-0">
-            <v-col
-              v-for="(attr, i) in selectedAttrs"
-              :key="attr.text"
-              class="py-1 pe-0"
-              cols="auto"
-            >
-              <v-chip
-                size="large"
-                closable
-                elevation="3"
-                @click:close="selectedAttrs.splice(i, 1)"
-                variant="elevated"
-                :color="this.theme.global.current.value.dark ? 'black' : 'white'"
-              >
-                <v-icon :icon="attr.icon" start></v-icon>
-
-                {{ attr.text }}
-              </v-chip>
-            </v-col>
-          </v-row>
-        </v-container>
-
-        <v-container class="mt-4">
-          <v-text-field
-            v-if="!allSelected"
-            v-model="availableAttrsSearch"
-            density="comfortable"
-            placeholder="Search available data"
-            prepend-inner-icon="mdi-magnify"
-            style="max-width: 300px"
-            variant="outlined"
-            clearable
-            hide-details
-          ></v-text-field>
-          <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
-            <template v-for="attr in availableAttrsSearched">
-              <v-list-item
-                v-if="!selectedAttrs.includes(attr)"
-                :key="attr.text"
-                @click="selectedAttrs.push(attr)"
-              >
-                <template v-slot:prepend>
-                  <v-icon :icon="attr.icon"></v-icon>
-                </template>
-
-                <v-list-item-title>{{ attr.text }}</v-list-item-title>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-container>
-      </v-row>
-    </v-col>
-    <v-btn
-      elevation="14"
-      :disabled="selectedAttrs.length < 1"
-      @click="renderTable"
-      style="z-index: 2"
-      color="secondary"
-      position="fixed"
-      location="bottom right"
-      class="mb-8 mr-10"
-      :ripple="false"
-      size="large"
-      min-height="50px"
-    >
-      <v-icon left class="mr-2">mdi-table</v-icon>
-      Show data
-    </v-btn>
-  </v-row>
+  <DatabaseSearchFilters
+    v-if="showFilterInterface"
+    :selectedAttrsFromPreviousSearch="selectedAttrs"
+    :addedFiltersFromPreviousSearch="addedFilters"
+    @render-table="renderTable"
+    @close="showFilterInterface = false"
+  />
   <v-row v-else>
     <v-sheet elevation="2" class="mt-2 pa-4" style="overflow-x: auto; width: 100%">
       <!-- v-slot is a directive in Vue.js that allows you to define a slot in a component. Slots are placeholders that you can fill with content when using the component. When using v-slot, you are essentially injecting custom content into a specific part of a child component. -->
@@ -481,9 +242,8 @@
 
 <script>
 import { useTheme } from 'vuetify'
-import { availableAttrs } from '@/libs/available-attrs'
-import { availableFilters } from '@/libs/available-filters'
 import gql from 'graphql-tag'
+import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
 // import { buildQraphQLQuery } from '@/libs/graphql-query'
 // for Composition API apollo provider:
 // import { useApolloClient } from '@vue/apollo-composable'
@@ -493,46 +253,21 @@ import gql from 'graphql-tag'
 // icon: 'mdi-shield-alert'
 
 export default {
+  components: { DatabaseSearchFilters },
   data: () => ({
     tableIsLoading: false,
     grouped: 'grouped',
     repeated: 'repeated',
     tableStyle: 'repeated',
-    open: ['Users'],
     exportOptions: [
       { title: 'the search result', icon: 'mdi-table' },
       { title: 'the whole database', icon: 'mdi-database' }
     ],
-    admins: [
-      ['Management', 'mdi-account-multiple-outline'],
-      ['Settings', 'mdi-cog-outline']
-    ],
-    cruds: [
-      ['Create', 'mdi-plus-outline'],
-      ['Read', 'mdi-file-outline'],
-      ['Update', 'mdi-update'],
-      ['Delete', 'mdi-delete']
-    ],
-
-    availableAttrsSearch: '',
-    selectedAttrs: [],
     showFilterInterface: true,
-    addingFilter: false,
     headers: [],
-    newFilter: {
-      include: '',
-      title: '',
-      group: '',
-      qualifier: '',
-      value: ''
-    },
-    availableFilters: availableFilters,
-    expandedItems: {},
-
-    showIndescriptions: [],
-    addedFilters: [],
     fetchedNovelFoods: null,
-    availableAttrs: availableAttrs
+    addedFilters: [],
+    selectedAttrs: []
   }),
   methods: {
     getFields(model) {
@@ -644,7 +379,9 @@ export default {
 
       return finalQuery
     },
-    async fetchData() {
+    async renderTable(addedFilters, selectedAttrs) {
+      this.addedFilters = addedFilters
+      this.selectedAttrs = selectedAttrs
       this.tableIsLoading = true
       const GET_CHOSEN_DATA = this.buildQraphQLQuery()
       try {
@@ -738,78 +475,11 @@ export default {
 
       return headers
     },
-    cancelNewFilter() {
-      this.addingFilter = false
-      this.newFilter = {
-        include: '',
-        title: '',
-        group: '',
-        qualifier: '',
-        value: ''
-      }
-    },
+
     newSearch() {
       this.showFilterInterface = true
       this.addedFilters = []
       this.selectedAttrs = []
-    },
-    renderTable() {
-      this.fetchData()
-      this.showFilterInterface = false
-    },
-    updateSubtitle() {
-      const selectedAttribute = this.availableFilters[this.newFilter.title]
-      if (selectedAttribute) {
-        this.newFilter.group = selectedAttribute.group
-      }
-    },
-    addFilter() {
-      if (this.addFilterValid) {
-        this.addedFilters.unshift({
-          id: this.addedFilters.length + 1,
-          include: this.newFilter.include,
-          title: this.newFilter.title,
-          group: this.availableFilters[this.newFilter.title]?.group || '',
-          qualifier: this.newFilter.qualifier,
-          value: this.newFilter.value
-        })
-        this.addingFilter = false
-        this.newFilter = {
-          include: '',
-          title: '',
-          group: '',
-          qualifier: '',
-          value: ''
-        }
-      }
-      console.log('addedFilters', this.addedFilters)
-    },
-    removeItem(index) {
-      this.addedFilters.splice(index, 1)
-    }
-  },
-  computed: {
-    allSelected() {
-      return this.selectedAttrs.length === this.availableAttrs.length
-    },
-    addFilterValid() {
-      return (
-        this.newFilter.include &&
-        this.newFilter.title &&
-        this.newFilter.qualifier &&
-        this.newFilter.value
-      )
-    },
-    availableAttrsSearched() {
-      const availableAttrsSearch = this.availableAttrsSearch?.toLowerCase()
-
-      if (!availableAttrsSearch) return this.availableAttrs
-
-      return this.availableAttrs.filter((attr) => {
-        const text = attr.text.toLowerCase()
-
-        return text.indexOf(availableAttrsSearch) > -1
-      })
     }
   },
   created() {
