@@ -95,7 +95,8 @@ class NovelFoodCategory(models.Model):
         on_delete=models.SET_NULL,
         # related_name="regulation_categories",
         db_column="id_regulation",
-        limit_choices_to=models.Q(taxonomy__code="LEGREF") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="LEGREF")
+        & ~models.Q(short_name="root"),
         help_text="(LEGREF vocab)",
     )
 
@@ -244,10 +245,15 @@ class Organism(models.Model):
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="MTX") & (models.Q(extended_name__icontains="(as animal)") | 
-                                                           models.Q(extended_name__icontains="(as organism)") | models.Q(extended_name__icontains="(as plant)")
-                                                           | models.Q(short_name__icontains="(as animal)") | models.Q(short_name__icontains="(as organism)")
-                                                           | models.Q(short_name__icontains="(as plant)")),
+        limit_choices_to=models.Q(taxonomy__code="MTX")
+        & (
+            models.Q(extended_name__icontains="(as animal)")
+            | models.Q(extended_name__icontains="(as organism)")
+            | models.Q(extended_name__icontains="(as plant)")
+            | models.Q(short_name__icontains="(as animal)")
+            | models.Q(short_name__icontains="(as organism)")
+            | models.Q(short_name__icontains="(as plant)")
+        ),
         help_text="(MTX vocab)",
         related_name="vocab_id_organisms",
         verbose_name="Organism vocabulary identification",
@@ -255,7 +261,9 @@ class Organism(models.Model):
     )
 
     def __str__(self):
-        return self.vocab_id.name
+        return (
+            self.vocab_id.name if self.vocab_id else "MISSING CONNECTION TO VOCABULARY"
+        )
 
     class Meta:
         db_table = "ORGANISM"
@@ -329,7 +337,9 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="org_part_novel_foods",
-        limit_choices_to=models.Q(taxonomy__code="MTX") & ~models.Q(short_name="root") & models.Q(is_part_nature=True),
+        limit_choices_to=models.Q(taxonomy__code="MTX")
+        & ~models.Q(short_name="root")
+        & models.Q(is_part_nature=True),
         help_text="(MTX vocab)",
         db_column="id_org_part",
         verbose_name="organism part",
@@ -347,7 +357,9 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="is_gmo_novel_foods",
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         verbose_name="is GMO",
         db_column="id_is_gmo",
         help_text="Is the organism genetically modified? (YESNO vocab)",
@@ -358,7 +370,9 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="has_qps_novel_foods",
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         verbose_name="has QPS",
         db_column="id_has_qps",
         help_text="Has qualified presumption of safety? applies only if the organism is a "
@@ -373,7 +387,9 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="cells_modified_novel_foods",
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         verbose_name="Cells Modified? (Cell Culture)",
         db_column="id_cells_modified",
         help_text="(YESNO vocab)",
@@ -438,7 +454,8 @@ class Chemical(models.Model):
         null=True,
         on_delete=models.SET_NULL,
         related_name="vocab_id_chemicals",
-        limit_choices_to=models.Q(taxonomy__code="PARAM") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         help_text="(PARAM vocab)",
         verbose_name="Chemical vocabulary identification",
     )
@@ -559,7 +576,8 @@ class SubstanceOfConcernNovelFood(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="substance_of_concern_substance_of_concern_novel_foods",
-        limit_choices_to=models.Q(taxonomy__code="PARAM") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         db_column="id_sub_of_concern",
         help_text="Fill only if there is a substance of concern, if not leave blank. (PARAM vocab)",
     )
@@ -650,8 +668,9 @@ class NovelFood(models.Model):
         db_column="id_protein_digestibility",
         verbose_name="Protein digestibility",
         on_delete=models.SET_NULL,
-        
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         related_name="protein_digestibility_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -662,7 +681,9 @@ class NovelFood(models.Model):
         db_column="id_antinutritional_factors",
         verbose_name="Antinutritional factors",
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         related_name="antinutritional_factors_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -673,7 +694,9 @@ class NovelFood(models.Model):
         db_column="id_has_nutri_disadvantage",
         verbose_name="Nutritionally Disadvantageous",
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         related_name="has_nutri_disadvantage_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -690,7 +713,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_is_sufficient_data",
         related_name="sufficient_data_novel_foods",
         help_text="Were sufficient data provided? (YESNO vocab)",
@@ -701,7 +726,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_is_food_matrices",
         help_text="Were food matrices provided? (YESNO vocab)",
         related_name="food_matrices_novel_foods",
@@ -711,7 +738,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_instability_concerns",
         related_name="instability_concerns_novel_foods",
         help_text="(YESNO vocab)",
@@ -728,7 +757,8 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="UNIT") & models.Q(extended_name__in=["Hour","Day", "Week", "Month", "Year"]),
+        limit_choices_to=models.Q(taxonomy__code="UNIT")
+        & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"]),
         db_column="id_shelflife_unit",
         related_name="shelflife_unit_novel_foods",
         verbose_name="Shelf Life Unit",
@@ -739,7 +769,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_has_endocrine_disrupt_prop",
         verbose_name="Endocrine Disrupting Properties",
         related_name="endocrine_disrupt_prop_novel_foods",
@@ -763,7 +795,8 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="PARAM") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         db_column="id_rms_efsa",
         related_name="vocab_id_novel_foods",
         verbose_name="NovelFood Vocabulary Identification",
@@ -795,7 +828,8 @@ class SpecificToxicity(models.Model):
         db_column="id_toxicity",
         verbose_name="Specific Toxicity",
         on_delete=models.CASCADE,
-        limit_choices_to=models.Q(taxonomy__code="TOXICITY") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="TOXICITY")
+        & ~models.Q(short_name="root"),
         related_name="novel_foods",
         help_text="if novel food has specific toxicity, specify which one. (TOXICITY vocab)",
     )
@@ -837,7 +871,8 @@ class BackgroundExposureAssessment(models.Model):
         on_delete=models.SET_NULL,
         related_name="comp_of_interest_bg_expo_assessments",
         db_column="id_comp_of_interest",
-        limit_choices_to=models.Q(taxonomy__code="PARAM") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         help_text="Compound of interest (PARAM vocab)",
         verbose_name="Compound Assessed",
     )
@@ -865,7 +900,8 @@ class HBGV(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="type_hbgvs",
-        limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV")
+        & ~models.Q(short_name="root"),
         db_column="id_type",
         help_text="(ENDPOINT_HGV vocab)",
     )
@@ -875,7 +911,8 @@ class HBGV(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="substance_hbgvs",
-        limit_choices_to=models.Q(taxonomy__code="PARAM") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         db_column="id_substance",
         help_text="(PARAM vocab)",
     )
@@ -885,7 +922,9 @@ class HBGV(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="exceeded_hbgvs",
-        limit_choices_to=models.Q(taxonomy__code="YESNO") & ~models.Q(short_name="root") & models.Q(is_yesno=True),
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_exceeded",
         help_text="(YESNO vocab)",
         verbose_name="Exceedance",
