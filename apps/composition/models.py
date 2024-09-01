@@ -60,7 +60,8 @@ class Parameter(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="vocab_id_parameters",
-        limit_choices_to=models.Q(taxonomy__code="PARAM") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         help_text="(PARAM vocab)",
         verbose_name="Parameter Vocabulary Identification",
         db_column="id_param",
@@ -157,7 +158,9 @@ class ProductionNovelFoodVariant(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="process_production_novel_food_variants",
-        limit_choices_to=models.Q(taxonomy__code="MTX") & ~models.Q(short_name="root") & models.Q(is_process=True),
+        limit_choices_to=models.Q(taxonomy__code="MTX")
+        & ~models.Q(short_name="root")
+        & models.Q(is_process=True),
         help_text="(MTX vocab)",
         db_column="id_process",
         verbose_name="Process Step",
@@ -214,7 +217,18 @@ class Composition(models.Model):
         on_delete=models.SET_NULL,
         related_name="qualifier_compositions",
         db_column="id_qualifier",
-        limit_choices_to=models.Q(taxonomy__code="QUALIFIER") & models.Q(extended_name__in=["Equal to","Less than","Less than or equal","Greater than", "Greater than or equal", "Circa", "traces"]),
+        limit_choices_to=models.Q(taxonomy__code="QUALIFIER")
+        & models.Q(
+            extended_name__in=[
+                "Equal to",
+                "Less than",
+                "Less than or equal",
+                "Greater than",
+                "Greater than or equal",
+                "Circa",
+                "traces",
+            ]
+        ),
         help_text="(QUALIFIER vocab)",
     )
     value = models.DecimalField(
@@ -255,7 +269,7 @@ class Composition(models.Model):
         help_text="Specification/Composition/Other",
     )
 
-    footnote = models.TextField(blank=True)
+    footnote = models.TextField(blank=True, verbose_name="Comment")
 
     def __str__(self):
         return ""

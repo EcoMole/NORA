@@ -254,7 +254,8 @@ class Organism(models.Model):
             | models.Q(short_name__icontains="(as organism)")
             | models.Q(short_name__icontains="(as plant)")
         ),
-        help_text="(MTX vocab)",
+        help_text="(MTX vocab) - only records with '(as animal)' or '(as plant)' or "
+        "'(as organism)' in the name are allowed",
         related_name="vocab_id_organisms",
         verbose_name="Organism vocabulary identification",
         db_column="id_organism",

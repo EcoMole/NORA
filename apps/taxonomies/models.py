@@ -28,7 +28,10 @@ class TaxonomyNode(MPTTModel, SyncMixin):
     )
 
     short_name = models.CharField(
-        max_length=255, null=True, blank=True, help_text="SPECIES if organism"
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text="if Organism: use SPECIES name + '(as animal)' or '(as plant)' or '(as organism)'",
     )
 
     scope = models.TextField(null=True, blank=True)
