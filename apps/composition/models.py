@@ -154,9 +154,9 @@ class ProductionNovelFoodVariant(models.Model):
 
     process = models.ForeignKey(
         "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        null=False,
+        blank=False,
+        on_delete=models.CASCADE,
         related_name="process_production_novel_food_variants",
         limit_choices_to=models.Q(taxonomy__code="MTX")
         & ~models.Q(short_name="root")
