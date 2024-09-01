@@ -262,7 +262,9 @@ class Organism(models.Model):
 
     def __str__(self):
         return (
-            self.vocab_id.name if self.vocab_id else "MISSING CONNECTION TO VOCABULARY"
+            self.vocab_id.name
+            if self.vocab_id
+            else "MISSING ORGANISM VOCABULARY IDENTIFICATION"
         )
 
     class Meta:

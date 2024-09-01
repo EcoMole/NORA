@@ -384,7 +384,7 @@ class OrganismAdmin(admin.ModelAdmin):
     get_is_from_vocab.short_description = "Is from Vocab"
 
     def get_organism(self, obj):
-        return obj.vocab_id.name if obj.vocab_id else "MISSING CONNECTION TO VOCABULARY"
+        return str(obj)
 
     get_organism.short_description = "Organism vocabulary identification"
     get_organism.admin_order_field = "vocab_id__short_name"
