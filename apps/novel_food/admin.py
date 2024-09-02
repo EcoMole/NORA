@@ -210,7 +210,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
     list_filter = ["outcome", HasContributor, HasContributorStatus]
     fieldsets = [
         (
-            "General Information",
+            "GENERAL INFORMATION",
             {"fields": ["opinion", "title", "nf_code", "vocab_id"]},
         ),
         (
@@ -249,7 +249,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "HAZARDS",
+            "HAZARD - ENDOCRINE DISRUPTING PROPERTIES",
             {
                 "fields": ["endocrine_disrupt_prop"],
             },

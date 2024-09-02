@@ -544,8 +544,8 @@ class SubstanceOfConcernNovelFood(models.Model):
 
     class Meta:
         db_table = "SUBSTANCE_OF_CONCERN_STUDY"
-        verbose_name = "Substance of concern"
-        verbose_name_plural = "Substances of concern"
+        verbose_name = "Hazard - Substance of concern"
+        verbose_name_plural = "Hazard - Substances of concern"
 
 
 class GenotoxFinalOutcome(models.Model):
@@ -806,8 +806,8 @@ class SpecificToxicity(models.Model):
 
     class Meta:
         db_table = "SPECIFIC_TOXICITY"
-        verbose_name = "Specific Toxicity"
-        verbose_name_plural = "Specific Toxicities"
+        verbose_name = "Hazard - Specific Toxicity"
+        verbose_name_plural = "Hazard - Specific Toxicities"
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "specific_toxicity"],
