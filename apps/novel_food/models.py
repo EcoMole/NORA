@@ -422,30 +422,6 @@ class NovelFoodChemical(models.Model):
         verbose_name_plural = "Chemical Identities"
 
 
-# For possible future use only
-class ChemicalType(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_com_type")
-    title = models.CharField(max_length=255, db_column="com_type")
-    definition = models.TextField(null=True, blank=True)
-
-    class Meta:
-        db_table = "COM_TYPE"
-        verbose_name = "Chemical type (future use)"
-        verbose_name_plural = "📂 Chemical types (future use)"
-
-
-# For possible future use only
-class StructureReported(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_com_structureShown")
-    title = models.CharField(max_length=255, db_column="com_structureShown")
-    definition = models.TextField(null=True, blank=True)
-
-    class Meta:
-        db_table = "COM_STRUCTURE_SHOWN"
-        verbose_name = "Structure reported (future use)"
-        verbose_name_plural = "📂 Structures reported (future use)"
-
-
 class Chemical(models.Model):
     duplicate_related = ["chem_descriptors", "synonyms"]
 
@@ -463,31 +439,12 @@ class Chemical(models.Model):
         verbose_name="Chemical vocabulary identification",
     )
 
-    chemical_type = models.ForeignKey(
-        # for possible future use
-        ChemicalType,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        db_column="id_comp_type",
-        help_text="The majority of the chemical types are extracted from the OECD picklist"
-        "(OECD 2012). More on the purpose of this field: 2013:EN-458 page:20",
-    )
-    structure_reported = models.ForeignKey(
-        # for possible future use
-        StructureReported,
-        on_delete=models.CASCADE,
-        db_column="id_com_structureShown",
-        blank=True,
-        null=True,
-        help_text="This field is used to indicate what type of structure (either SMILES or InChI) "
-        "is reported. For example: the structure of the compound itself, the structure of "
-        "the monomer if the compound is a polymer, the structure of an isomer, or "
-        "no structure at all.",
-    )
-
     def __str__(self):
-        return self.vocab_id.name
+        return (
+            self.vocab_id.name
+            if self.vocab_id
+            else "MISSING CHEMICAL VOCABULARY IDENTIFICATION"
+        )
 
     class Meta:
         db_table = "COMPONENT"
