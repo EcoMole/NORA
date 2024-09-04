@@ -258,7 +258,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "HAZARD - ENDOCRINE DISRUPTING PROPERTIES",
+            "HAZARDS",
             {
                 "fields": ["endocrine_disrupt_prop"],
             },
