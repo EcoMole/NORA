@@ -274,10 +274,6 @@ class Composition(models.Model):
     def __str__(self):
         return ""
 
-    class Meta:
-        verbose_name = "Composition"
-        verbose_name_plural = "Composition"
-
 
 class ProposedUse(models.Model):
     USE_CHOICES = [
@@ -360,7 +356,7 @@ class RiskAssessRedFlagNFVariant(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_risk_assess_red_flag",
-        verbose_name="Red Flag",
+        verbose_name="Risk Assessment Red Flag",
     )
 
     def __str__(self):
@@ -368,5 +364,3 @@ class RiskAssessRedFlagNFVariant(models.Model):
 
     class Meta:
         db_table = "RISK_ASSESS_RED_FLAG_NF_VARIANT"
-        verbose_name = "Risk assessment red flag"
-        verbose_name_plural = "Risk assessment red flags"

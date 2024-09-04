@@ -17,7 +17,8 @@ class Opinion(models.Model):
         related_name="opinions",
         verbose_name="Document type",
         on_delete=models.SET_NULL,
-        limit_choices_to=models.Q(taxonomy__code="REF_TYPE") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="REF_TYPE")
+        & ~models.Q(short_name="root"),
         help_text="(REF_TYPE vocab)",
         db_column="id_op_type",
         #   limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
@@ -68,8 +69,8 @@ class Question(models.Model):
 
     class Meta:
         db_table = "QUESTION"
-        verbose_name = "Question❔"
-        verbose_name_plural = "Questions❔"
+        verbose_name = "Question"
+        verbose_name_plural = "📂 Questions"
 
 
 class Panel(models.Model):
@@ -286,7 +287,8 @@ class Mandate(models.Model):
         on_delete=models.SET_NULL,
         related_name="regulation_mandates",
         db_column="id_regulation",
-        limit_choices_to=models.Q(taxonomy__code="LEGREF") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="LEGREF")
+        & ~models.Q(short_name="root"),
         help_text="(LEGREF vocab)",
     )
 

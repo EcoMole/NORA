@@ -22,7 +22,7 @@ class AllergenicityNovelFood(models.Model):
         Allergenicity,
         on_delete=models.CASCADE,
         db_column="id_allergenicity",
-        verbose_name="Allergenicity",
+        verbose_name="Allergenicity Risk",
     )
     novel_food = models.ForeignKey(
         "NovelFood",
@@ -55,7 +55,10 @@ class FoodCategory(models.Model):
 class FoodCategoryNovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_food_category_study")
     food_category = models.ForeignKey(
-        FoodCategory, on_delete=models.CASCADE, db_column="id_food_category"
+        FoodCategory,
+        on_delete=models.CASCADE,
+        db_column="id_food_category",
+        verbose_name="Food Category Tool",
     )
     novel_food = models.ForeignKey(
         "NovelFood",
@@ -75,7 +78,6 @@ class FoodCategoryNovelFood(models.Model):
     class Meta:
         db_table = "STUDY_FOOD_CATEGORY"
         verbose_name = "Food Category of Novel Food"
-        verbose_name_plural = "Food Categories"
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "food_category"],
@@ -119,7 +121,10 @@ class NovelFoodCategoryNovelFood(models.Model):
         related_name="novel_food_categories",
     )
     novel_food_category = models.ForeignKey(
-        NovelFoodCategory, on_delete=models.CASCADE, db_column="id_sub_type"
+        NovelFoodCategory,
+        on_delete=models.CASCADE,
+        db_column="id_sub_type",
+        verbose_name="Regulation Category",
     )
 
     def __str__(self) -> str:
@@ -134,8 +139,6 @@ class NovelFoodCategoryNovelFood(models.Model):
 
     class Meta:
         db_table = "STUDY_SUB_TYPE"
-        verbose_name = "Novel Food Category of Novel Food"
-        verbose_name_plural = "Novel Food Categories"
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "novel_food_category"],
@@ -176,14 +179,17 @@ class NovelFoodSyn(models.Model):
         db_column="id_study",
         related_name="synonyms",
     )
-    title = models.CharField(max_length=255, db_column="study_syn")
+    title = models.CharField(
+        max_length=255,
+        db_column="study_syn",
+        verbose_name="Novel/Traditional Food Synonym",
+    )
 
     def __str__(self):
         return ""
 
     class Meta:
         db_table = "STUDY_SYN"
-        verbose_name = "Novel food synonym"
 
 
 class OrgType(models.Model):
@@ -332,7 +338,10 @@ class NovelFoodOrganism(models.Model):
         related_name="organisms",
     )
     organism = models.ForeignKey(
-        Organism, on_delete=models.CASCADE, db_column="id_organism"
+        Organism,
+        on_delete=models.CASCADE,
+        db_column="id_organism",
+        verbose_name="Organism Identity",
     )
     org_part = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -400,8 +409,6 @@ class NovelFoodOrganism(models.Model):
 
     class Meta:
         db_table = "STUDY_ORG"
-        verbose_name = "Organism Identity of Novel food"
-        verbose_name_plural = "Organism Identities"
 
 
 class NovelFoodChemical(models.Model):
@@ -413,13 +420,14 @@ class NovelFoodChemical(models.Model):
         related_name="chemicals",
     )
     chemical = models.ForeignKey(
-        "Chemical", on_delete=models.CASCADE, db_column="id_com"
+        "Chemical",
+        on_delete=models.CASCADE,
+        db_column="id_com",
+        verbose_name="Chemical Identity",
     )
 
     class Meta:
         db_table = "STUDY_COM"
-        verbose_name = "Chemical Identity of Novel Food"
-        verbose_name_plural = "Chemical Identities"
 
 
 class Chemical(models.Model):
@@ -544,8 +552,6 @@ class SubstanceOfConcernNovelFood(models.Model):
 
     class Meta:
         db_table = "SUBSTANCE_OF_CONCERN_STUDY"
-        verbose_name = "Hazard - Substance of concern"
-        verbose_name_plural = "Hazard - Substances of concern"
 
 
 class GenotoxFinalOutcome(models.Model):
@@ -806,8 +812,6 @@ class SpecificToxicity(models.Model):
 
     class Meta:
         db_table = "SPECIFIC_TOXICITY"
-        verbose_name = "Hazard - Specific Toxicity"
-        verbose_name_plural = "Hazard - Specific Toxicities"
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "specific_toxicity"],
@@ -834,7 +838,7 @@ class BackgroundExposureAssessment(models.Model):
         limit_choices_to=models.Q(taxonomy__code="PARAM")
         & ~models.Q(short_name="root"),
         help_text="Compound of interest (PARAM vocab)",
-        verbose_name="Compound Assessed",
+        verbose_name="Compound Assessed For Background Exposure",
     )
 
     def __str__(self) -> str:
@@ -842,8 +846,6 @@ class BackgroundExposureAssessment(models.Model):
 
     class Meta:
         db_table = "BG_EXPO_ASSESSMENT"
-        verbose_name = "Background exposure assessment"
-        verbose_name_plural = "Background exposure assessment"
 
 
 class HBGV(models.Model):
@@ -864,6 +866,7 @@ class HBGV(models.Model):
         & ~models.Q(short_name="root"),
         db_column="id_type",
         help_text="(ENDPOINT_HGV vocab)",
+        verbose_name="Health-Based Guidance Value",
     )
     substance = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -892,7 +895,3 @@ class HBGV(models.Model):
 
     def __str__(self):
         return f"{self.novel_food.title} - {self.substance.name} - {self.type.name}"
-
-    class Meta:
-        verbose_name = "Health-Based Guidance Value"
-        verbose_name_plural = "Health-Based Guidance Values"

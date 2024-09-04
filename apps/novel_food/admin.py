@@ -36,23 +36,27 @@ from utils.admin_utils import duplicate_model
 class NovelFoodCategoryNovelFoodInline(admin.TabularInline):
     model = NovelFoodCategoryNovelFood
     extra = 1
+    verbose_name_plural = "Novel/Traditional Food Identity"
 
 
 class SpecificToxicityInline(admin.TabularInline):
     model = SpecificToxicity
     autocomplete_fields = ["specific_toxicity"]
     extra = 1
+    verbose_name_plural = "Hazards"
 
 
 class FoodCategoryNovelFoodInline(admin.TabularInline):
     model = FoodCategoryNovelFood
     extra = 1
+    verbose_name_plural = "Proposed Use"
 
 
 class NovelFoodChemicalInline(admin.TabularInline):
     model = NovelFoodChemical
     extra = 1
     autocomplete_fields = ["chemical"]
+    verbose_name_plural = "Novel/Traditional Food Identity"
 
 
 class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
@@ -92,23 +96,27 @@ class NovelFoodOrganismInline(admin.TabularInline):  # StackedInline
             },
         ),
     ]
+    verbose_name_plural = "Novel/Traditional Food Identity"
 
 
 class HBGVInline(admin.TabularInline):
     model = HBGV
     autocomplete_fields = ["type", "novel_food", "exceeded", "substance"]
     extra = 1
+    verbose_name_plural = "Hazards"
 
 
 class BackgroundExposureAssessmentInline(admin.TabularInline):
     model = BackgroundExposureAssessment
     autocomplete_fields = ["comp_of_interest"]
     extra = 1
+    verbose_name_plural = "Nutrition"
 
 
 class NovelFoodSynInline(admin.TabularInline):
     model = NovelFoodSyn
     extra = 1
+    verbose_name_plural = "Novel/Traditional Food Identity"
 
 
 class AllergenicityNovelFoodInline(admin.TabularInline):
@@ -120,6 +128,7 @@ class SubstanceOfConcernNovelFoodInline(admin.TabularInline):
     model = SubstanceOfConcernNovelFood
     autocomplete_fields = ["substance_of_concern"]
     extra = 0
+    verbose_name_plural = "Hazards"
 
 
 class OrganismSynInline(admin.TabularInline):
@@ -255,7 +264,7 @@ class NovelFoodAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "OUTCOME",
+            "CONCLUSION",
             {
                 "fields": [("outcome", "outcome_remarks")],
             },
