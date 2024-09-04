@@ -244,6 +244,8 @@
 import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
 import { buildQraphQLQuery } from '@/libs/graphql-query.js'
+import { useMainStore } from '@/stores/main'
+import { availableAttrs } from '@/libs/available-attrs'
 // import { buildQraphQLQuery } from '@/libs/graphql-query'
 // for Composition API apollo provider:
 // import { useApolloClient } from '@vue/apollo-composable'
@@ -262,6 +264,7 @@ export default {
     ],
     showFilterInterface: true,
     headers: [],
+    availableAttrs: availableAttrs,
     fetchedNovelFoods: null,
     addedFilters: [],
     selectedAttrs: []
@@ -272,24 +275,23 @@ export default {
       this.addedFilters = addedFilters
       this.selectedAttrs = selectedAttrs
       this.tableIsLoading = true
-      const GET_CHOSEN_DATA = this.buildQraphQLQuery(this.selectedAttrs)
+      const QUERY = this.buildQraphQLQuery(this.selectedAttrs)
+      const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
+        ?.value
+
       try {
-        // for Composition API apollo provider
-        // const { client } = useApolloClient()
-        const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
-          ?.value
-        console.log('nfTitle', nfTitle)
         // using this.$apollo for Option API apollo provider
-        const result = await this.$apollo.query({
-          query: GET_CHOSEN_DATA,
+        // for Composition API apollo provider use: const { client } = useApolloClient()
+        const response = await this.$apollo.query({
+          query: QUERY,
           variables: {
             novelFoodTitle: nfTitle
           }
         })
-        this.fetchedNovelFoods = result.data.novelFoods
+        this.fetchedNovelFoods = response.data.novelFoods
         console.log(this.fetchedNovelFoods)
-      } catch (err) {
-        console.log(err)
+      } catch (error) {
+        this.mainStore.handleError(error)
       } finally {
         this.tableIsLoading = false
       }
@@ -306,7 +308,7 @@ export default {
       const headers = Object.keys(object)
         .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
         .map((key) => ({
-          title: key,
+          title: this.availableAttrs.filter((item) => item.field == key)[0].text,
           value: key,
           align: 'center'
         }))
@@ -322,6 +324,7 @@ export default {
   },
   created() {
     this.theme = useTheme()
+    this.mainStore = useMainStore()
   }
 }
 </script>

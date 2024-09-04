@@ -279,7 +279,7 @@ export default {
           id: this.addedFilters.length + 1,
           include: this.newFilter.include,
           title: this.newFilter.title,
-          group: this.availableFilters[this.newFilter.title]?.group || '',
+          group: this.newFilter.group,
           qualifier: this.newFilter.qualifier,
           value: this.newFilter.value
         })
