@@ -283,6 +283,7 @@ class ProposedUse(models.Model):
         ("infant follow on formula", "Infant formula and follow-on formula"),
         ("special medical purpose", "Food for special medical purposes"),
         ("total diet replacement", "Total diet replacement for weight control"),
+        ("meal replacement for weight control", "Meal replacement for weight control"),
     ]
     id = models.AutoField(primary_key=True, db_column="id_proposed_use")
     nf_variant = models.ForeignKey(
