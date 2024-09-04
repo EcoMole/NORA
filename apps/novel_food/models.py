@@ -894,4 +894,11 @@ class HBGV(models.Model):
     )
 
     def __str__(self):
-        return f"{self.novel_food.title} - {self.substance.name} - {self.type.name}"
+        result = ""
+        if self.novel_food:
+            result += f"{self.novel_food.title}"
+        if self.substance:
+            result += f" - {self.substance.name}"
+        if self.type:
+            result += f" - {self.type.name}"
+        return result
