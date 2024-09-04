@@ -291,7 +291,7 @@ export default {
         this.fetchedNovelFoods = response.data.novelFoods
         console.log(this.fetchedNovelFoods)
       } catch (error) {
-        this.mainStore.handleError(error)
+        this.mainStore.handleError(error['message'])
       } finally {
         this.tableIsLoading = false
       }
