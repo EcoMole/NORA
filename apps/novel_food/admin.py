@@ -400,7 +400,7 @@ class OrganismAdmin(admin.ModelAdmin):
         if species_names := obj.vocab_id.implicit_attributes.filter(code="A01"):
             return "\n".join(sn.value for sn in species_names)
         else:
-            return "😢"
+            return "NO DATA"
 
     get_vocab_species_name.short_description = (
         "Vocab Species Name or Vocab Scientific Name"
@@ -421,7 +421,7 @@ class OrganismAdmin(admin.ModelAdmin):
                 res += " < " + ancestor.name
             return res.lstrip(" < ")
         else:
-            return "😢"
+            return "NO DATA"
 
     get_vocab_tax_path.short_description = "Vocab Taxonomy Path"
 
@@ -560,7 +560,7 @@ class ChemicalAdmin(admin.ModelAdmin):
         ):
             descriptors.extend([attr.value for attr in vocab_descriptors])
         if not descriptors:
-            return "😢"
+            return "NO DATA"
         return ", ".join(descriptors)
 
     def get_iupac(self, obj):
