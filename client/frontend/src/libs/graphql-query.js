@@ -1,7 +1,14 @@
 import gql from 'graphql-tag'
 
 function getFields(selectedAttrs, model) {
-  return selectedAttrs.filter((attr) => attr.model === model).map((attr) => attr.field)
+  const modelPrefix = model + '_'
+  return Object.keys(selectedAttrs).reduce((acc, key) => {
+    if (key.startsWith(modelPrefix)) {
+      const field = key.replace(modelPrefix, '')
+      acc.push(field)
+    }
+    return acc
+  }, [])
 }
 
 export function buildQraphQLQuery(selectedAttrs) {

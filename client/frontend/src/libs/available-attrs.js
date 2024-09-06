@@ -1,5 +1,5 @@
 export const newAvailableAttrs = {
-  novelFood_nfCode: {
+  novelFoods_nfCode: {
     displayName: 'NF code',
     displayGroupName: 'Novel Food',
     type: 'text',
@@ -8,7 +8,7 @@ export const newAvailableAttrs = {
     filterDescription: 'description for NF code',
     tooltipDescription: 'NF code tooltip description'
   },
-  novelFood_title: {
+  novelFoods_title: {
     displayName: 'Novel food title',
     displayGroupName: 'Novel Food',
     type: 'text',
