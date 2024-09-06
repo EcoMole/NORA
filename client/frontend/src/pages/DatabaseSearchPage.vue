@@ -245,7 +245,6 @@ import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
 import { buildQraphQLQuery } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
-import { availableAttrs } from '@/libs/available-attrs'
 // import { buildQraphQLQuery } from '@/libs/graphql-query'
 // for Composition API apollo provider:
 // import { useApolloClient } from '@vue/apollo-composable'
@@ -264,7 +263,6 @@ export default {
     ],
     showFilterInterface: true,
     headers: [],
-    availableAttrs: availableAttrs,
     fetchedNovelFoods: null,
     addedFilters: [],
     selectedAttrs: []
