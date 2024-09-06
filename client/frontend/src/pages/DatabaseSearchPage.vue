@@ -308,7 +308,7 @@ export default {
       const headers = Object.keys(object)
         .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
         .map((key) => ({
-          title: this.availableAttrs.filter((item) => item.field == key)[0].text,
+          title: key,
           value: key,
           align: 'center'
         }))
