@@ -1,3 +1,34 @@
+export const newAvailableAttrs = {
+  novelFood_nfCode: {
+    displayName: 'NF code',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-rice',
+    filterDescription: 'description for NF code',
+    tooltipDescription: 'NF code tooltip description'
+  },
+  novelFood_title: {
+    displayName: 'Novel food title',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-rice',
+    filterDescription: 'description for novel food title',
+    tooltipDescription: 'Novel food title tooltip description'
+  },
+
+  panels_title: {
+    displayName: "Panel's title",
+    displayGroupName: 'Administrative',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: "description for panel's title",
+    tooltipDescription: 'Panel title tooltip description'
+  }
+}
+
 export const availableAttrs = [
   // novel food
   {

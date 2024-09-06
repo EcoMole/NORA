@@ -155,16 +155,16 @@
           <v-container>
             <v-alert
               class="mb-3"
-              v-if="selectedAttrs.length < 1"
+              v-if="Object.keys(selectedAttrs).length < 1"
               icon="$warning"
               text="Select data you would like to see"
               color="secondary"
               rounded="md"
             ></v-alert>
-            <v-row v-if="selectedAttrs.length > 1" class="mb-2">
+            <v-row v-if="Object.keys(selectedAttrs).length > 1" class="mb-2">
               <v-spacer></v-spacer>
               <v-btn
-                @click="selectedAttrs = []"
+                @click="selectedAttrs = {}"
                 color="tertiary"
                 size="x-small"
                 min-height="30"
@@ -177,8 +177,8 @@
             </v-row>
             <v-row class="mt-0">
               <v-col
-                v-for="(attr, i) in selectedAttrs"
-                :key="attr.text"
+                v-for="(attr, attrKey) in selectedAttrs"
+                :key="attrKey"
                 class="py-1 pe-0"
                 cols="auto"
               >
@@ -186,13 +186,13 @@
                   size="large"
                   closable
                   elevation="3"
-                  @click:close="selectedAttrs.splice(i, 1)"
+                  @click:close="delete selectedAttrs[attrKey]"
                   variant="elevated"
                   :color="this.theme.global.current.value.dark ? 'black' : 'white'"
                 >
                   <v-icon :icon="attr.icon" start></v-icon>
 
-                  {{ attr.text }}
+                  {{ attr.displayName }}
                 </v-chip>
               </v-col>
             </v-row>
@@ -201,7 +201,7 @@
           <v-container class="mt-4">
             <v-text-field
               v-if="!allAttrsSelected"
-              v-model="availableAttrsSearch"
+              v-model="attrsSearch"
               density="comfortable"
               placeholder="Search available data"
               prepend-inner-icon="mdi-magnify"
@@ -211,17 +211,17 @@
               hide-details
             ></v-text-field>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
-              <template v-for="attr in availableAttrsSearched">
+              <template v-for="(attr, attrKey) in availableAttrsSearched">
                 <v-list-item
-                  v-if="!selectedAttrs.includes(attr)"
-                  :key="attr.text"
-                  @click="selectedAttrs.push(attr)"
+                  v-if="!(attrKey in selectedAttrs)"
+                  :key="attrKey"
+                  @click="selectedAttrs[attrKey] = attr"
                 >
                   <template v-slot:prepend>
                     <v-icon :icon="attr.icon"></v-icon>
                   </template>
 
-                  <v-list-item-title>{{ attr.text }}</v-list-item-title>
+                  <v-list-item-title>{{ attr.displayName }}</v-list-item-title>
                 </v-list-item>
               </template>
             </v-list>
@@ -230,7 +230,7 @@
       </v-col>
       <v-btn
         elevation="14"
-        :disabled="selectedAttrs.length < 1"
+        :disabled="Object.keys(selectedAttrs).length < 1"
         @click="renderTable"
         style="z-index: 2"
         color="secondary"
@@ -250,11 +250,11 @@
 
 <script>
 import { availableFilters } from '@/libs/available-filters'
-import { availableAttrs } from '@/libs/available-attrs'
+import { newAvailableAttrs } from '@/libs/available-attrs'
 import { useTheme } from 'vuetify'
 export default {
   props: {
-    selectedAttrsFromPreviousSearch: Array,
+    selectedAttrsFromPreviousSearch: Object,
     addedFiltersFromPreviousSearch: Array
   },
   data: () => ({
@@ -268,9 +268,9 @@ export default {
       value: ''
     },
     addedFilters: [],
-    availableAttrs: availableAttrs,
-    availableAttrsSearch: '',
-    selectedAttrs: []
+    availableAttrs: newAvailableAttrs,
+    attrsSearch: '',
+    selectedAttrs: {}
   }),
   methods: {
     addFilter() {
@@ -319,7 +319,7 @@ export default {
   },
   computed: {
     allAttrsSelected() {
-      return this.selectedAttrs.length === this.availableAttrs.length
+      return Object.keys(this.selectedAttrs).length === Object.keys(this.availableAttrs).length
     },
     addFilterValid() {
       return (
@@ -330,26 +330,30 @@ export default {
       )
     },
     availableAttrsSearched() {
-      const availableAttrsSearch = this.availableAttrsSearch?.toLowerCase()
+      const attrsSearch = this.attrsSearch?.toLowerCase()
 
-      if (!availableAttrsSearch) return this.availableAttrs
+      if (!attrsSearch) return this.availableAttrs
 
-      return this.availableAttrs.filter((attr) => {
-        const text = attr.text.toLowerCase()
+      return Object.entries(this.availableAttrs).reduce((acc, [attrKey, attrValue]) => {
+        const displayName = attrValue.displayName.toLowerCase()
 
-        return text.indexOf(availableAttrsSearch) > -1
-      })
+        if (displayName.indexOf(attrsSearch) > -1) {
+          acc[attrKey] = attrValue
+        }
+
+        return acc
+      }, {})
     }
   },
   created() {
     this.theme = useTheme()
     // Properly initialize local copies from props when the component is created
     this.selectedAttrs = this.selectedAttrsFromPreviousSearch
-      ? [...this.selectedAttrsFromPreviousSearch]
-      : []
+      ? this.selectedAttrsFromPreviousSearch
+      : {}
     this.addedFilters = this.addedFiltersFromPreviousSearch
-      ? [...this.addedFiltersFromPreviousSearch]
-      : []
+      ? this.addedFiltersFromPreviousSearch
+      : {}
   }
 }
 </script>

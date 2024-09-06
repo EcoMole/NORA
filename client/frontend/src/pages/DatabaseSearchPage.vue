@@ -265,7 +265,7 @@ export default {
     headers: [],
     fetchedNovelFoods: null,
     addedFilters: [],
-    selectedAttrs: []
+    selectedAttrs: {}
   }),
   methods: {
     buildQraphQLQuery: buildQraphQLQuery,
