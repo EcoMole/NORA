@@ -349,11 +349,11 @@ export default {
     this.theme = useTheme()
     // Properly initialize local copies from props when the component is created
     this.selectedAttrs = this.selectedAttrsFromPreviousSearch
-      ? this.selectedAttrsFromPreviousSearch
+      ? { ...this.selectedAttrsFromPreviousSearch }
       : {}
     this.addedFilters = this.addedFiltersFromPreviousSearch
-      ? this.addedFiltersFromPreviousSearch
-      : {}
+      ? [...this.addedFiltersFromPreviousSearch]
+      : []
   }
 }
 </script>
