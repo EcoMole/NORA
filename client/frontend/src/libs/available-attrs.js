@@ -1,4 +1,5 @@
-export const newAvailableAttrs = {
+export const availableAttrs = {
+  // novel food
   novelFoods_nfCode: {
     displayName: 'NF code',
     displayGroupName: 'Novel Food',
@@ -18,6 +19,207 @@ export const newAvailableAttrs = {
     tooltipDescription: 'Novel food title tooltip description'
   },
 
+  novelFoods_toxStudyRequired: {
+    displayName: 'Toxicology Study Required',
+    displayGroupName: 'Novel Food',
+    type: 'boolean',
+    qualifiers: ['is true', 'is false'],
+    icon: 'mdi-flask-outline',
+    filterDescription: 'description for Toxicology Study Required',
+    tooltipDescription: 'Toxicology Study Required tooltip description'
+  },
+  novelFoods_genotoxFinalOutcome: {
+    displayName: 'Genotoxicity Final Outcome',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-dna',
+    filterDescription: 'description for Genotoxicity Final Outcome',
+    tooltipDescription: 'Genotoxicity Final Outcome tooltip description'
+  },
+  novelFoods_finalToxicologyRemarks: {
+    displayName: 'Final Toxicology Remarks',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-comment-text-outline',
+    filterDescription: 'description for Final Toxicology Remarks',
+    tooltipDescription: 'Final Toxicology Remarks tooltip description'
+  },
+  novelFoods_proteinDigestibility: {
+    displayName: 'Protein Digestibility',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-food-drumstick-outline',
+    filterDescription: 'description for Protein Digestibility',
+    tooltipDescription: 'Protein Digestibility tooltip description'
+  },
+
+  novelFoods_hasNutriDisadvantage: {
+    displayName: 'Nutritional Disadvantage',
+    displayGroupName: 'Novel Food',
+    type: 'boolean',
+    qualifiers: ['is true', 'is false'],
+    icon: 'mdi-scale-balance',
+    filterDescription: 'description for Nutritional Disadvantage',
+    tooltipDescription: 'Nutritional Disadvantage tooltip description'
+  },
+  novelFoods_nutriDisadvantageExplanation: {
+    displayName: 'Nutritional Disadvantage Explanation',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-text-box-outline',
+    filterDescription: 'description for Nutritional Disadvantage Explanation',
+    tooltipDescription: 'Nutritional Disadvantage Explanation tooltip description'
+  },
+  novelFoods_sufficientData: {
+    displayName: 'Sufficient Data',
+    displayGroupName: 'Novel Food',
+    type: 'boolean',
+    qualifiers: ['is true', 'is false'],
+    icon: 'mdi-database-check',
+    filterDescription: 'description for Sufficient Data',
+    tooltipDescription: 'Sufficient Data tooltip description'
+  },
+  novelFoods_foodMatrices: {
+    displayName: 'Food Matrices',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-grid',
+    filterDescription: 'description for Food Matrices',
+    tooltipDescription: 'Food Matrices tooltip description'
+  },
+  novelFoods_instabilityConcerns: {
+    displayName: 'Instability Concerns',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-alert-outline',
+    filterDescription: 'description for Instability Concerns',
+    tooltipDescription: 'Instability Concerns tooltip description'
+  },
+  novelFoods_shelflifeValue: {
+    displayName: 'Shelf Life Value',
+    displayGroupName: 'Novel Food',
+    type: 'number',
+    qualifiers: ['is', 'greater than', 'less than'],
+    icon: 'mdi-clock-outline',
+    filterDescription: 'description for Shelf Life Value',
+    tooltipDescription: 'Shelf Life Value tooltip description'
+  },
+  novelFoods_shelflifeUnit: {
+    displayName: 'Shelf Life Unit',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-timer-sand',
+    filterDescription: 'description for Shelf Life Unit',
+    tooltipDescription: 'Shelf Life Unit tooltip description'
+  },
+  novelFoods_endocrineDisruptProp: {
+    displayName: 'Endocrine Disruptive Properties',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-alert-outline',
+    filterDescription: 'description for Endocrine Disruptive Properties',
+    tooltipDescription: 'Endocrine Disruptive Properties tooltip description'
+  },
+  novelFoods_outcome: {
+    displayName: 'Outcome',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-check-circle-outline',
+    filterDescription: 'description for Outcome',
+    tooltipDescription: 'Outcome tooltip description'
+  },
+  novelFoods_outcomeRemarks: {
+    displayName: 'Outcome Remarks',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-comment-text-outline',
+    filterDescription: 'description for Outcome Remarks',
+    tooltipDescription: 'Outcome Remarks tooltip description'
+  },
+  novelFoods_vocabId: {
+    displayName: 'Vocabulary ID',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-book-open-outline',
+    filterDescription: 'description for Vocabulary ID',
+    tooltipDescription: 'Vocabulary ID tooltip description'
+  },
+  allergenicities_title: {
+    displayName: 'Allergenicity',
+    displayGroupName: 'Allergenicity',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-alert-circle-outline',
+    filterDescription: 'description for Allergenicity',
+    tooltipDescription: 'Allergenicity tooltip description'
+  },
+
+  // opinion
+  novelFoods_opinionDocumentType: {
+    displayName: 'Opinion document type',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: 'description for opinion document type',
+    tooltipDescription: 'Opinion document type tooltip description'
+  },
+  novelFoods_opinionTitle: {
+    displayName: 'Opinion title',
+    displayGroupName: 'Opinion',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: 'description for Opinion title',
+    tooltipDescription: 'Opinion title tooltip description'
+  },
+  novelFoods_opinionDoi: {
+    displayName: 'Opinion DOI',
+    displayGroupName: 'Opinion',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: 'description for Opinion DOI',
+    tooltipDescription: 'Opinion DOI tooltip description'
+  },
+  novelFoods_opinionUrl: {
+    displayName: 'Opinion URL',
+    displayGroupName: 'Opinion',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: 'description for Opinion URL',
+    tooltipDescription: 'Opinion URL tooltip description'
+  },
+  novelFoods_opinionPublicationDate: {
+    displayName: 'Opinion publication date',
+    displayGroupName: 'Opinion',
+    type: 'date',
+    qualifiers: ['is before', 'is after', 'is'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: 'description for Opinion publication date',
+    tooltipDescription: 'Opinion publication date tooltip description'
+  },
+  novelFoods_opinionAdoptionDate: {
+    displayName: 'Opinion adoption date',
+    displayGroupName: 'Opinion',
+    type: 'date',
+    qualifiers: ['is before', 'is after', 'is'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: 'description for Opinion adoption date',
+    tooltipDescription: 'Opinion adoption date tooltip description'
+  },
   panels_title: {
     displayName: "Panel's title",
     displayGroupName: 'Administrative',
@@ -26,260 +228,81 @@ export const newAvailableAttrs = {
     icon: 'mdi-file-document-outline',
     filterDescription: "description for panel's title",
     tooltipDescription: 'Panel title tooltip description'
-  }
-}
-
-export const availableAttrs = [
-  // novel food
-  {
-    text: 'NF code',
-    model: 'novelFoods',
-    field: 'nfCode',
-    icon: 'mdi-rice',
-    description: 'description'
   },
-  {
-    text: 'novel food title',
-    model: 'novelFoods',
-    field: 'title',
-    icon: 'mdi-rice',
-    description: 'description'
-  },
-  {
-    text: 'opinion document type',
-    model: 'novelFoods',
-    field: 'opinionDocumentType',
+  sciOfficers_firstName: {
+    displayName: "Scientific officer's first name",
+    displayGroupName: 'Administrative',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: "description for scientific officer's first name",
+    tooltipDescription: "Scientific officer's first name tooltip description"
   },
-  {
-    text: 'Toxicology Study Required',
-    model: 'novelFoods',
-    field: 'toxStudyRequired',
-    icon: 'mdi-flask-outline',
-    description: 'description'
-  },
-  {
-    text: 'Genotoxicity Final Outcome',
-    model: 'novelFoods',
-    field: 'genotoxFinalOutcome',
-    icon: 'mdi-dna',
-    description: 'description'
-  },
-  {
-    text: 'Final Toxicology Remarks',
-    model: 'novelFoods',
-    field: 'finalToxicologyRemarks',
-    icon: 'mdi-comment-text-outline',
-    description: 'description'
-  },
-  {
-    text: 'Protein Digestibility',
-    model: 'novelFoods',
-    field: 'proteinDigestibility',
-    icon: 'mdi-food-drumstick-outline',
-    description: 'description'
-  },
-  {
-    text: 'Antinutritional Factors',
-    model: 'novelFoods',
-    field: 'antinutritionalFactors',
-    icon: 'mdi-alert-circle-outline',
-    description: 'description'
-  },
-  {
-    text: 'Nutritional Disadvantage',
-    model: 'novelFoods',
-    field: 'hasNutriDisadvantage',
-    icon: 'mdi-scale-balance',
-    description: 'description'
-  },
-  {
-    text: 'Nutritional Disadvantage Explanation',
-    model: 'novelFoods',
-    field: 'nutriDisadvantageExplanation',
-    icon: 'mdi-text-box-outline',
-    description: 'description'
-  },
-  {
-    text: 'Sufficient Data',
-    model: 'novelFoods',
-    field: 'sufficientData',
-    icon: 'mdi-database-check',
-    description: 'description'
-  },
-  {
-    text: 'Food Matrices',
-    model: 'novelFoods',
-    field: 'foodMatrices',
-    icon: 'mdi-grid',
-    description: 'description'
-  },
-  {
-    text: 'Instability Concerns',
-    model: 'novelFoods',
-    field: 'instabilityConcerns',
-    icon: 'mdi-alert-outline',
-    description: 'description'
-  },
-  {
-    text: 'Shelf Life Value',
-    model: 'novelFoods',
-    field: 'shelflifeValue',
-    icon: 'mdi-clock-outline',
-    description: 'description'
-  },
-  {
-    text: 'Shelf Life Unit',
-    model: 'novelFoods',
-    field: 'shelflifeUnit',
-    icon: 'mdi-timer-sand',
-    description: 'description'
-  },
-  {
-    text: 'Endocrine Disruptive Properties',
-    model: 'novelFoods',
-    field: 'endocrineDisruptProp',
-    icon: 'mdi-alert-outline',
-    description: 'description'
-  },
-  {
-    text: 'Outcome',
-    model: 'novelFoods',
-    field: 'outcome',
-    icon: 'mdi-check-circle-outline',
-    description: 'description'
-  },
-  {
-    text: 'Outcome Remarks',
-    model: 'novelFoods',
-    field: 'outcomeRemarks',
-    icon: 'mdi-comment-text-outline',
-    description: 'description'
-  },
-  {
-    text: 'Vocabulary ID',
-    model: 'novelFoods',
-    field: 'vocabId',
-    icon: 'mdi-book-open-outline',
-    description: 'description'
-  },
-  {
-    text: 'Allergenicity',
-    model: 'allergenicities',
-    field: 'title',
-    icon: 'mdi-alert-circle-outline',
-    description: 'description'
-  },
-
-  // opinion
-  {
-    text: 'opinion document type',
-    model: 'novelFoods',
-    field: 'opinionDocumentType',
+  sciOfficers_middleName: {
+    displayName: "Scientific officer's middle name",
+    displayGroupName: 'Administrative',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: "description for scientific officer's middle name",
+    tooltipDescription: "Scientific officer's middle name tooltip description"
   },
-  {
-    text: 'opinion title',
-    model: 'novelFoods',
-    field: 'opinionTitle',
+  sciOfficers_lastName: {
+    displayName: "Scientific officer's last name",
+    displayGroupName: 'Administrative',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: 'opinion doi',
-    model: 'novelFoods',
-    field: 'opinionDoi',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: 'opinion url',
-    model: 'novelFoods',
-    field: 'opinionUrl',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: 'opinion publication date',
-    model: 'novelFoods',
-    field: 'opinionPublicationDate',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: 'opinion adoption date',
-    model: 'novelFoods',
-    field: 'opinionAdoptionDate',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: "opinion's panel title",
-    model: 'panels',
-    field: 'title',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: "opinion's scientific officer first name",
-    model: 'sciOfficers',
-    field: 'firstName',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: "opinion's scientific officer middle name",
-    model: 'sciOfficers',
-    field: 'middleName',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
-  },
-  {
-    text: "opinion's scientific officer last name",
-    model: 'sciOfficers',
-    field: 'lastName',
-    icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: "description for scientific officer's last name",
+    tooltipDescription: "Scientific officer's last name tooltip description"
   },
 
   // question
-  {
-    text: 'question number',
-    model: 'questions',
-    field: 'number',
+  questions_number: {
+    displayName: 'Question number',
+    displayGroupName: 'Question',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: 'description for question number',
+    tooltipDescription: 'Question number tooltip description'
   },
-  {
-    text: 'applicant title',
-    model: 'applicants',
-    field: 'title',
+  applicants_title: {
+    displayName: 'Applicant title',
+    displayGroupName: 'Applicant',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: 'description for applicant title',
+    tooltipDescription: 'Applicant title tooltip description'
   },
 
   // mandate
-  {
-    text: 'mandate type title',
-    model: 'mandates',
-    field: 'mandateTypeTitle',
+  mandates_mandateTypeTitle: {
+    displayName: 'Mandate type title',
+    displayGroupName: 'Mandate',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: 'description for mandate type title',
+    tooltipDescription: 'Mandate type title tooltip description'
   },
-  {
-    text: 'mandate type definition',
-    model: 'mandates',
-    field: 'mandateTypeDefinition',
+  mandates_mandateTypeDefinition: {
+    displayName: 'Mandate type definition',
+    displayGroupName: 'Mandate',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: 'description for mandate type definition',
+    tooltipDescription: 'Mandate type definition tooltip description'
   },
-  {
-    text: 'mandate regulation',
-    model: 'mandates',
-    field: 'regulation',
+  mandates_regulation: {
+    displayName: 'Mandate regulation',
+    displayGroupName: 'Mandate',
+    type: 'text',
+    qualifiers: ['contains', 'is'],
     icon: 'mdi-file-document-outline',
-    description: 'description'
+    filterDescription: 'description for mandate regulation',
+    tooltipDescription: 'Mandate regulation tooltip description'
   }
-]
+}

@@ -250,7 +250,7 @@
 
 <script>
 import { availableFilters } from '@/libs/available-filters'
-import { newAvailableAttrs } from '@/libs/available-attrs'
+import { availableAttrs } from '@/libs/available-attrs'
 import { useTheme } from 'vuetify'
 export default {
   props: {
@@ -268,7 +268,7 @@ export default {
       value: ''
     },
     addedFilters: [],
-    availableAttrs: newAvailableAttrs,
+    availableAttrs: availableAttrs,
     attrsSearch: '',
     selectedAttrs: {}
   }),
