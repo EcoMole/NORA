@@ -1,14 +1,13 @@
 import graphene
+from graphene_django.filter import DjangoFilterConnectionField
 from novel_food.models import NovelFood
 from novel_food.schema import NovelFoodType
 
 
 class Query(graphene.ObjectType):
-    novel_foods = graphene.List(NovelFoodType, novel_food_title=graphene.String())
+    novel_foods = DjangoFilterConnectionField(NovelFoodType)
 
-    def resolve_novel_foods(self, info, novel_food_title=None, **kwargs):
-        if novel_food_title:
-            return NovelFood.objects.filter(title=novel_food_title)
+    def resolve_novel_foods(self, info, **kwargs):
         return NovelFood.objects.all()
 
 

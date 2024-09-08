@@ -23,15 +23,15 @@
       <!-- opinion, id, __typename -->
       <v-data-table
         v-if="fetchedNovelFoods"
-        :headers="createHeaders(fetchedNovelFoods[0])"
-        :items="fetchedNovelFoods"
+        :headers="createHeaders(fetchedNovelFoods[0].node)"
+        :items="fetchedNovelFoods.map((edge) => edge.node)"
         style="font-size: 12px"
         density="compact"
         :loading="tableIsLoading"
       >
         <!-- slot creation for opinion, id, __typename -->
         <template
-          v-for="(key, index) in Object.keys(fetchedNovelFoods[0])"
+          v-for="(key, index) in Object.keys(fetchedNovelFoods[0].node)"
           v-slot:[`item.${key}`]="{ item }"
           :key="`1-${index}`"
         >
@@ -274,6 +274,7 @@ export default {
       this.selectedAttrs = selectedAttrs
       this.tableIsLoading = true
       const QUERY = this.buildQraphQLQuery(this.selectedAttrs)
+      console.log('QUERY', QUERY)
       const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
         ?.value
 
@@ -286,7 +287,7 @@ export default {
             novelFoodTitle: nfTitle
           }
         })
-        this.fetchedNovelFoods = response.data.novelFoods
+        this.fetchedNovelFoods = response.data.novelFoods.edges
         console.log(this.fetchedNovelFoods)
       } catch (error) {
         this.mainStore.handleError(error['message'])

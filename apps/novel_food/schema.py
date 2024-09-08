@@ -48,6 +48,7 @@ class NovelFoodType(DjangoObjectType):
             ],  # , 'icontains', 'istartswith'
             # Add other fields to filter by
         }
+        interfaces = (graphene.relay.Node,)
 
     def resolve_opinion_document_type(self, info):
         return self.opinion.document_type.name if self.opinion.document_type else None
