@@ -41,13 +41,7 @@ class NovelFoodType(DjangoObjectType):
 
     class Meta:
         model = NovelFood
-        # fields = "__all__"
-        filter_fields = {
-            "title": [
-                "exact",
-            ],  # , 'icontains', 'istartswith'
-            # Add other fields to filter by
-        }
+        fields = "__all__"
         interfaces = (graphene.relay.Node,)
 
     def resolve_opinion_document_type(self, info):

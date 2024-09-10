@@ -2,7 +2,7 @@ export const availableFilters = {
   'novel food title': {
     group: 'novel food',
     type: 'text',
-    qualifiers: ['is'],
+    qualifiers: ['is exactly', 'contains', 'starts with'],
     description:
       'Novel Food title is the name of the product. It is a text field and can be queried using the "is" qualifier.'
   },

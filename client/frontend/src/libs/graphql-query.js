@@ -110,7 +110,7 @@ export function buildQraphQLQuery(selectedAttrs) {
   }
   const finalQuery = gql`
   query GetNovelFoods($novelFoodTitle: String) {
-      novelFoods(title: $novelFoodTitle) {
+      novelFoods(titleIcontains: $novelFoodTitle) {
           edges {
       node {
         ${novelFoodQueryPart}
