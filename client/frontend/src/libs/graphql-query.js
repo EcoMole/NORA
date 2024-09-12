@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import { query as gqlQuery } from 'gql-query-builder'
-import { newavailableAttrs } from './available-attrs'
+import { availableFields } from './available-fields'
 
 export function buildGraphQLQuery(fields) {
   const { query } = gqlQuery({
@@ -64,7 +64,6 @@ flattenedFields = {
     let currentObject = result
 
     pathArray.forEach((part, i) => {
-
       // If it's the last part, add the record without "fields" object
       if (i === pathArray.length - 1) {
         if (!currentObject[part]) {
@@ -129,7 +128,7 @@ field8: {}
 }
 
 export function buildQueryFromAllAvailableFields() {
-  return buildGraphQLQuery(parseFields(newavailableAttrs.novelFoods.fields))
+  return buildGraphQLQuery(parseFields(availableFields.novelFoods.fields))
 }
 
 export function buildQueryFromSelectedFields(selectedFields) {

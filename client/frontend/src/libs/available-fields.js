@@ -1,5 +1,5 @@
 //! rename to availableFields
-export const newavailableAttrs = {
+export const availableFields = {
   // novel food
   novelFoods: {
     displayName: 'Novel Food',

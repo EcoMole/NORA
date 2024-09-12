@@ -155,16 +155,16 @@
           <v-container>
             <v-alert
               class="mb-3"
-              v-if="Object.keys(selectedAttrs).length < 1"
+              v-if="Object.keys(selectedFields).length < 1"
               icon="$warning"
               text="Select data you would like to see"
               color="secondary"
               rounded="md"
             ></v-alert>
-            <v-row v-if="Object.keys(selectedAttrs).length > 1" class="mb-2">
+            <v-row v-if="Object.keys(selectedFields).length > 1" class="mb-2">
               <v-spacer></v-spacer>
               <v-btn
-                @click="selectedAttrs = {}"
+                @click="selectedFields = {}"
                 color="tertiary"
                 size="x-small"
                 min-height="30"
@@ -177,7 +177,7 @@
             </v-row>
             <v-row class="mt-0">
               <v-col
-                v-for="(field, fieldPath) in selectedAttrs"
+                v-for="(field, fieldPath) in selectedFields"
                 :key="fieldPath"
                 class="py-1 pe-0"
                 cols="auto"
@@ -186,7 +186,7 @@
                   size="large"
                   closable
                   elevation="3"
-                  @click:close="delete selectedAttrs[fieldPath]"
+                  @click:close="delete selectedFields[fieldPath]"
                   variant="elevated"
                   :color="this.theme.global.current.value.dark ? 'black' : 'white'"
                 >
@@ -213,9 +213,9 @@
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
               <template v-for="(field, fieldPath) in availableAttrsSearched">
                 <v-list-item
-                  v-if="!(fieldPath in selectedAttrs)"
+                  v-if="!(fieldPath in selectedFields)"
                   :key="fieldPath"
-                  @click="selectedAttrs[fieldPath] = field"
+                  @click="selectedFields[fieldPath] = field"
                 >
                   <template v-slot:prepend>
                     <v-icon :icon="field.icon"></v-icon>
@@ -230,7 +230,7 @@
       </v-col>
       <v-btn
         elevation="14"
-        :disabled="Object.keys(selectedAttrs).length < 1"
+        :disabled="Object.keys(selectedFields).length < 1"
         @click="renderTable"
         style="z-index: 2"
         color="secondary"
@@ -250,11 +250,11 @@
 
 <script>
 import { availableFilters } from '@/libs/available-filters'
-import { newavailableAttrs } from '@/libs/available-attrs'
+import { availableFields } from '@/libs/available-fields'
 import { useTheme } from 'vuetify'
 export default {
   props: {
-    selectedAttrsFromPreviousSearch: Object,
+    selectedFieldsFromPreviousSearch: Object,
     addedFiltersFromPreviousSearch: Array
   },
   data: () => ({
@@ -268,10 +268,10 @@ export default {
       value: ''
     },
     addedFilters: [],
-    newavailableAttrs: newavailableAttrs,
+    availableFields: availableFields,
     attrsSearch: '',
-    selectedAttrs: {},
-    flattenedFields: {},
+    selectedFields: {},
+    flattenedFields: {}
   }),
   methods: {
     addFilter() {
@@ -314,7 +314,7 @@ export default {
       this.addedFilters.splice(index, 1)
     },
     renderTable() {
-      this.$emit('render-table', this.addedFilters, this.selectedAttrs)
+      this.$emit('render-table', this.addedFilters, this.selectedFields)
       this.$emit('close')
     },
     flattenFields(fields, parentPath = '') {
@@ -332,11 +332,11 @@ export default {
         }
       }
       return flatFields
-    },
+    }
   },
   computed: {
     allAttrsSelected() {
-      return Object.keys(this.selectedAttrs).length === Object.keys(this.flattenedFields).length
+      return Object.keys(this.selectedFields).length === Object.keys(this.flattenedFields).length
     },
     addFilterValid() {
       return (
@@ -365,13 +365,13 @@ export default {
   created() {
     this.theme = useTheme()
     // Properly initialize local copies from props when the component is created
-    this.selectedAttrs = this.selectedAttrsFromPreviousSearch
-      ? { ...this.selectedAttrsFromPreviousSearch }
+    this.selectedFields = this.selectedFieldsFromPreviousSearch
+      ? { ...this.selectedFieldsFromPreviousSearch }
       : {}
     this.addedFilters = this.addedFiltersFromPreviousSearch
       ? [...this.addedFiltersFromPreviousSearch]
       : []
-    this.flattenedFields = this.flattenFields(this.newavailableAttrs.novelFoods.fields)
+    this.flattenedFields = this.flattenFields(this.availableFields.novelFoods.fields)
   }
 }
 </script>

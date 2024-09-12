@@ -4,7 +4,7 @@
   </div>
   <DatabaseSearchFilters
     v-if="showFilterInterface"
-    :selectedAttrsFromPreviousSearch="selectedAttrs"
+    :selectedFieldsFromPreviousSearch="selectedFields"
     :addedFiltersFromPreviousSearch="addedFilters"
     @render-table="renderTable"
     @close="showFilterInterface = false"
@@ -245,7 +245,7 @@ import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
 import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
-import { newavailableAttrs } from '@/libs/available-attrs'
+import { availableFields } from '@/libs/available-fields'
 // for Composition API apollo provider:
 // import { useApolloClient } from '@vue/apollo-composable'
 // icon: 'mdi-rice'
@@ -265,16 +265,16 @@ export default {
     headers: [],
     fetchedNovelFoods: null,
     addedFilters: [],
-    selectedAttrs: {},
-    newavailableAttrs: newavailableAttrs
+    selectedFields: {},
+    availableFields: availableFields
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
-    async renderTable(addedFilters, selectedAttrs) {
+    async renderTable(addedFilters, selectedFields) {
       this.addedFilters = addedFilters
-      this.selectedAttrs = selectedAttrs
+      this.selectedFields = selectedFields
       this.tableIsLoading = true
-      const QUERY = this.buildQueryFromSelectedFields(this.selectedAttrs)
+      const QUERY = this.buildQueryFromSelectedFields(this.selectedFields)
       const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
         ?.value
 
@@ -317,7 +317,7 @@ export default {
     newSearch() {
       this.showFilterInterface = true
       this.addedFilters = []
-      this.selectedAttrs = []
+      this.selectedFields = []
     }
   },
   created() {
