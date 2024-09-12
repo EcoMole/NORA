@@ -1,4 +1,3 @@
-//! rename to availableFields
 export const availableFields = {
   // novel food
   novelFoods: {
@@ -334,6 +333,329 @@ export const availableFields = {
                 icon: 'mdi-file-document-outline',
                 filterDescription: 'description for mandate regulation',
                 tooltipDescription: 'Mandate regulation tooltip description'
+              }
+            }
+          }
+        }
+      },
+      foodCategories: {
+        displayName: 'Food Category',
+        fields: {
+          title: {
+            displayName: 'Food Category Name',
+            displayGroupName: 'Novel Food',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-alert-circle-outline',
+            filterDescription: 'description for Food Category Name',
+            tooltipDescription: 'Food Category Name tooltip description'
+          },
+          definition: {
+            displayName: 'Food Category Definition',
+            displayGroupName: 'Novel Food',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-alert-circle-outline',
+            filterDescription: 'description for Food Category Definition',
+            tooltipDescription: 'Food Category Definition tooltip description'
+          }
+        }
+      },
+      novelFoodCategories: {
+        displayName: 'Novel Food Category',
+        fields: {
+          title: {
+            displayName: 'Novel Food Category Name',
+            displayGroupName: 'Novel Food',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-alert-circle-outline',
+            filterDescription: 'description for Novel Food Category Name',
+            tooltipDescription: 'Novel Food Category Name tooltip description'
+          },
+          definition: {
+            displayName: 'Novel Food Category Definition',
+            displayGroupName: 'Novel Food',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-alert-circle-outline',
+            filterDescription: 'description for Novel Food Category Definition',
+            tooltipDescription: 'Novel Food Category Definition tooltip description'
+          },
+          regulation: {
+            displayName: 'Novel Food Category regulation',
+            displayGroupName: 'Novel Food',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-file-document-outline',
+            filterDescription: 'description for Novel Food Category regulation',
+            tooltipDescription: 'Novel Food Category regulation tooltip description'
+          }
+        }
+      },
+      // adme
+      admes: {
+        displayName: 'ADME',
+        fields: {
+          testType: {
+            displayName: 'Test Type',
+            displayGroupName: 'ADME',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-flask-outline',
+            filterDescription: 'description for Test Type',
+            tooltipDescription: 'Test Type tooltip description'
+          },
+          guideline: {
+            displayName: 'Guideline',
+            displayGroupName: 'ADME',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-book-open-outline',
+            filterDescription: 'description for Guideline',
+            tooltipDescription: 'Guideline tooltip description'
+          },
+          guidelineQualifier: {
+            displayName: 'Guideline Qualifier',
+            displayGroupName: 'ADME',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-book-open-outline',
+            filterDescription: 'description for Guideline Qualifier',
+            tooltipDescription: 'Guideline Qualifier tooltip description'
+          },
+          studySource: {
+            displayName: 'Study Source',
+            displayGroupName: 'ADME',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-book-outline',
+            filterDescription: 'description for Study Source',
+            tooltipDescription: 'Study Source tooltip description'
+          },
+          investigationTypes: {
+            displayName: 'Investigation Type',
+            fields: {
+              title: {
+                displayName: 'Investigation Type Name',
+                displayGroupName: 'ADME',
+                type: 'text',
+                qualifiers: ['contains', 'is'],
+                icon: 'mdi-flask',
+                filterDescription: 'description for Investigation Type Name',
+                tooltipDescription: 'Investigation Type Name tooltip description'
+              }
+            }
+          }
+        }
+      },
+
+      // genotox
+      genotoxes: {
+        displayName: 'Genotoxicity',
+        fields: {
+          testType: {
+            displayName: 'Test Type',
+            displayGroupName: 'Genotoxicity',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-dna',
+            filterDescription: 'description for Test Type',
+            tooltipDescription: 'Test Type tooltip description'
+          },
+          guideline: {
+            displayName: 'Guideline',
+            displayGroupName: 'Genotoxicity',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-book-open-outline',
+            filterDescription: 'description for Guideline',
+            tooltipDescription: 'Guideline tooltip description'
+          },
+          guidelineQualifier: {
+            displayName: 'Guideline Qualifier',
+            displayGroupName: 'Genotoxicity',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-book-open-outline',
+            filterDescription: 'description for Guideline Qualifier',
+            tooltipDescription: 'Guideline Qualifier tooltip description'
+          },
+          studySource: {
+            displayName: 'Study Source',
+            displayGroupName: 'Genotoxicity',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-book-outline',
+            filterDescription: 'description for Study Source',
+            tooltipDescription: 'Study Source tooltip description'
+          },
+          outcome: {
+            displayName: 'Outcome',
+            displayGroupName: 'Genotoxicity',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-check-circle-outline',
+            filterDescription: 'description for Outcome',
+            tooltipDescription: 'Outcome tooltip description'
+          }
+        }
+      },
+
+      // endpoint studies
+      endpointstudies: {
+        displayName: 'Endpoint Study',
+        fields: {
+          testType: {
+            displayName: 'Test Type',
+            displayGroupName: 'Endpoint Study',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-flask-outline',
+            filterDescription: 'description for Test Type',
+            tooltipDescription: 'Test Type tooltip description'
+          },
+          guideline: {
+            displayName: 'Guideline',
+            displayGroupName: 'Endpoint Study',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-book-open-outline',
+            filterDescription: 'description for Guideline',
+            tooltipDescription: 'Guideline tooltip description'
+          },
+          species: {
+            displayName: 'Species',
+            displayGroupName: 'Endpoint Study',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-paw',
+            filterDescription: 'description for Species',
+            tooltipDescription: 'Species tooltip description'
+          },
+          sex: {
+            displayName: 'Sex',
+            displayGroupName: 'Endpoint Study',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-gender-male-female',
+            filterDescription: 'description for Sex',
+            tooltipDescription: 'Sex tooltip description'
+          },
+          studyDuration: {
+            displayName: 'Study Duration',
+            displayGroupName: 'Endpoint Study',
+            type: 'text',
+            qualifiers: ['contains', 'is'],
+            icon: 'mdi-clock-outline',
+            filterDescription: 'description for Study Duration',
+            tooltipDescription: 'Study Duration tooltip description'
+          },
+          // endpoint
+          endpoints: {
+            displayName: 'Endpoint',
+            fields: {
+              referencePoint: {
+                displayName: 'Reference Point',
+                displayGroupName: 'Endpoint',
+                type: 'text',
+                qualifiers: ['contains', 'is'],
+                icon: 'mdi-target',
+                filterDescription: 'description for Reference Point',
+                tooltipDescription: 'Reference Point tooltip description'
+              },
+              qualifier: {
+                displayName: 'Qualifier',
+                displayGroupName: 'Endpoint',
+                type: 'text',
+                qualifiers: ['contains', 'is'],
+                icon: 'mdi-scale',
+                filterDescription: 'description for Qualifier',
+                tooltipDescription: 'Qualifier tooltip description'
+              },
+              subpopulation: {
+                displayName: 'Subpopulation',
+                displayGroupName: 'Endpoint',
+                type: 'text',
+                qualifiers: ['contains', 'is'],
+                icon: 'mdi-account-group',
+                filterDescription: 'description for Subpopulation',
+                tooltipDescription: 'Subpopulation tooltip description'
+              },
+              lovalue: {
+                displayName: 'Lowest Observed Value',
+                displayGroupName: 'Endpoint',
+                type: 'number',
+                qualifiers: ['is', 'greater than', 'less than'],
+                icon: 'mdi-arrow-down',
+                filterDescription: 'description for Lowest Observed Value',
+                tooltipDescription: 'Lowest Observed Value tooltip description'
+              },
+              // final outcome
+              finalOutcomes: {
+                displayName: 'Final Outcome',
+                fields: {
+                  outcome: {
+                    displayName: 'Outcome',
+                    displayGroupName: 'Final Outcome',
+                    type: 'text',
+                    qualifiers: ['contains', 'is'],
+                    icon: 'mdi-check-circle-outline',
+                    filterDescription: 'description for Outcome',
+                    tooltipDescription: 'Outcome tooltip description'
+                  },
+                  qualifier: {
+                    displayName: 'Qualifier',
+                    displayGroupName: 'Final Outcome',
+                    type: 'text',
+                    qualifiers: ['contains', 'is'],
+                    icon: 'mdi-scale',
+                    filterDescription: 'description for Qualifier',
+                    tooltipDescription: 'Qualifier tooltip description'
+                  },
+                  value: {
+                    displayName: 'Value',
+                    displayGroupName: 'Final Outcome',
+                    type: 'number',
+                    qualifiers: ['is', 'greater than', 'less than'],
+                    icon: 'mdi-numeric',
+                    filterDescription: 'description for Value',
+                    tooltipDescription: 'Value tooltip description'
+                  },
+                  // population
+                  populations: {
+                    displayName: 'Population',
+                    fields: {
+                      subgroup: {
+                        displayName: 'Subgroup',
+                        displayGroupName: 'Population',
+                        type: 'text',
+                        qualifiers: ['contains', 'is'],
+                        icon: 'mdi-account-multiple-outline',
+                        filterDescription: 'description for Subgroup',
+                        tooltipDescription: 'Subgroup tooltip description'
+                      },
+                      qualifier: {
+                        displayName: 'Qualifier',
+                        displayGroupName: 'Population',
+                        type: 'text',
+                        qualifiers: ['contains', 'is'],
+                        icon: 'mdi-scale',
+                        filterDescription: 'description for Qualifier',
+                        tooltipDescription: 'Qualifier tooltip description'
+                      },
+                      value: {
+                        displayName: 'Value',
+                        displayGroupName: 'Population',
+                        type: 'number',
+                        qualifiers: ['is', 'greater than', 'less than'],
+                        icon: 'mdi-numeric',
+                        filterDescription: 'description for Value',
+                        tooltipDescription: 'Value tooltip description'
+                      }
+                    }
+                  }
+                }
               }
             }
           }
