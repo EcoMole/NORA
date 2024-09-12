@@ -1,123 +1,137 @@
 import gql from 'graphql-tag'
+import { query as gqlQuery } from 'gql-query-builder'
+import { newavailableAttrs } from './available-attrs'
 
-function getFields(selectedAttrs, model) {
-  const modelPrefix = model + '_'
-  return Object.keys(selectedAttrs).reduce((acc, key) => {
-    if (key.startsWith(modelPrefix)) {
-      const field = key.replace(modelPrefix, '')
-      acc.push(field)
+export function buildGraphQLQuery(fields) {
+  const { query } = gqlQuery({
+    operation: 'novelFoods',
+    fields: [
+      {
+        edges: [
+          {
+            node: fields
+          }
+        ]
+      }
+    ]
+  })
+  return gql`
+    ${query}
+  `
+}
+
+function buildNestedFieldsStructure(flattenedFields) {
+  /*
+
+builds the availbleFields format
+
+field1: {
+  fields: {
+ 		field2: {
+ 		}
+  },
+field3: {},
+field4: {
+  fields: {
+    field5: {
+      fields: {
+        field6: {},
+        field7: {}
+      }
     }
+  }
+},
+field8: {}
+
+
+from flattenedFields format
+
+flattenedFields = {
+  "field1.field2" : {},
+  "field3" : {},
+  "field4.field5.field6" : {},
+  "field4.field5.field7" : {},
+  "field8" : {}
+}
+
+*/
+  const result = {}
+
+  for (const fieldPath in flattenedFields) {
+    const pathArray = fieldPath.split('.')
+    // reference to the `result` object
+    // any changes made to currentObject will directly affect the `result` object
+    let currentObject = result
+
+    pathArray.forEach((part, i) => {
+
+      // If it's the last part, add the record without "fields" object
+      if (i === pathArray.length - 1) {
+        if (!currentObject[part]) {
+          currentObject[part] = {}
+        }
+      } else {
+        // If the part doesn't exist yet, create a "fields" object
+        if (!currentObject[part]) {
+          currentObject[part] = { fields: {} }
+        }
+
+        // Move deeper into the structure
+        currentObject = currentObject[part].fields
+      }
+    })
+  }
+  return result
+}
+
+function parseFields(fields) {
+  /*
+Builds the desired format:
+newArray = [
+  {field1: ["field2"]},
+  "field3",
+  {field4:
+    {field5: ["field6", "field7"]}},
+  "field8"
+]
+
+from the availbleFields format
+
+field1: {
+  fields: {
+ 		field2: {
+ 		}
+  },
+field3: {},
+field4: {
+  fields: {
+    field5: {
+      fields: {
+        field6: {},
+        field7: {}
+      }
+    }
+  }
+},
+field8: {}
+ */
+  return Object.entries(fields).reduce((acc, [fieldName, fieldData]) => {
+    if (fieldData.fields) {
+      acc.push({
+        [fieldName]: parseFields(fieldData.fields)
+      })
+    } else {
+      acc.push(fieldName)
+    }
+    console.log('acc', acc)
     return acc
   }, [])
 }
 
-export function buildQraphQLQuery(selectedAttrs) {
-  let novelFoodQueryPart = ''
-  let questioinsQueryPart = ''
+export function buildQueryFromAllAvailableFields() {
+  return buildGraphQLQuery(parseFields(newavailableAttrs.novelFoods.fields))
+}
 
-  let novelFoodFields = getFields(selectedAttrs, 'novelFoods')
-  if (novelFoodFields.length > 0) {
-    novelFoodQueryPart += `
-    ${novelFoodFields.includes('nfCode') ? 'nfCode' : ''}
-    ${novelFoodFields.includes('title') ? 'title' : ''}
-    ${novelFoodFields.includes('opinionDocumentType') ? 'opinionDocumentType' : ''}
-    ${novelFoodFields.includes('opinionTitle') ? 'opinionTitle' : ''}
-    ${novelFoodFields.includes('opinionDoi') ? 'opinionDoi' : ''}
-    ${novelFoodFields.includes('opinionUrl') ? 'opinionUrl' : ''}
-    ${novelFoodFields.includes('opinionPublicationDate') ? 'opinionPublicationDate' : ''}
-    ${novelFoodFields.includes('opinionAdoptionDate') ? 'opinionAdoptionDate' : ''}
-    ${novelFoodFields.includes('toxStudyRequired') ? 'toxStudyRequired' : ''}
-    ${novelFoodFields.includes('genotoxFinalOutcome') ? 'genotoxFinalOutcome' : ''}
-    ${novelFoodFields.includes('finalToxicologyRemarks') ? 'finalToxicologyRemarks' : ''}
-    ${novelFoodFields.includes('proteinDigestibility') ? 'proteinDigestibility' : ''}
-    ${novelFoodFields.includes('antinutritionalFactors') ? 'antinutritionalFactors' : ''}
-    ${novelFoodFields.includes('hasNutriDisadvantage') ? 'hasNutriDisadvantage' : ''}
-    ${novelFoodFields.includes('nutriDisadvantageExplanation') ? 'nutriDisadvantageExplanation' : ''}
-    ${novelFoodFields.includes('sufficientData') ? 'sufficientData' : ''}
-    ${novelFoodFields.includes('foodMatrices') ? 'foodMatrices' : ''}
-    ${novelFoodFields.includes('instabilityConcerns') ? 'instabilityConcerns' : ''}
-    ${novelFoodFields.includes('shelflifeValue') ? 'shelflifeValue' : ''}
-    ${novelFoodFields.includes('shelflifeUnit') ? 'shelflifeUnit' : ''}
-    ${novelFoodFields.includes('endocrineDisruptProp') ? 'endocrineDisruptProp' : ''}
-    ${novelFoodFields.includes('outcome') ? 'outcome' : ''}
-    ${novelFoodFields.includes('outcomeRemarks') ? 'outcomeRemarks' : ''}
-    ${novelFoodFields.includes('vocabId') ? 'vocabId' : ''}
-    `
-  }
-
-  let panelsFields = getFields(selectedAttrs, 'panels')
-  if (panelsFields.length > 0 && panelsFields.includes('title')) {
-    novelFoodQueryPart += `
-    panels {
-      title
-    }
-    `
-  }
-
-  let sciOfficersFields = getFields(selectedAttrs, 'sciOfficers')
-  if (sciOfficersFields.length > 0) {
-    novelFoodQueryPart += `
-    sciOfficers {
-      ${sciOfficersFields.includes('firstName') ? 'firstName' : ''}
-      ${sciOfficersFields.includes('middleName') ? 'middleName' : ''}
-      ${sciOfficersFields.includes('lastName') ? 'lastName' : ''}
-    }
-    `
-  }
-
-  let allergenicityFields = getFields(selectedAttrs, 'allergenicities')
-  if (allergenicityFields.length > 0) {
-    novelFoodQueryPart += `
-    allergenicities {
-      ${allergenicityFields.includes('title') ? 'title' : ''}
-    }
-    `
-  }
-
-  let questionsFields = getFields(selectedAttrs, 'questions')
-  if (questionsFields.includes('number')) {
-    questioinsQueryPart += `
-      number
-      `
-  }
-
-  let applicantsFields = getFields(selectedAttrs, 'applicants')
-  if (applicantsFields.includes('title')) {
-    questioinsQueryPart += `
-      applicants {
-        title
-      }
-      `
-  }
-
-  let mandateFields = getFields(selectedAttrs, 'mandates')
-  if (mandateFields.length > 0) {
-    questioinsQueryPart += `
-      mandates {
-        ${mandateFields.includes('mandateTypeTitle') ? 'mandateTypeTitle' : ''}
-        ${mandateFields.includes('mandateTypeDefinition') ? 'mandateTypeDefinition' : ''}
-        ${mandateFields.includes('regulation') ? 'regulation' : ''}
-      }
-    `
-  }
-
-  if (questioinsQueryPart) {
-    novelFoodQueryPart += `
-    questions {
-      ${questioinsQueryPart}
-    }
-    `
-  }
-  const finalQuery = gql`
-  query GetNovelFoods($novelFoodTitle: String) {
-      novelFoods(titleIcontains: $novelFoodTitle) {
-          edges {
-      node {
-        ${novelFoodQueryPart}
-        }
-        }
-        }
-        }`
-
-  return finalQuery
+export function buildQueryFromSelectedFields(selectedFields) {
+  return buildGraphQLQuery(parseFields(buildNestedFieldsStructure(selectedFields)))
 }

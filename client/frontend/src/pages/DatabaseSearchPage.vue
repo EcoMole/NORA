@@ -243,9 +243,9 @@
 <script>
 import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
-import { buildQraphQLQuery } from '@/libs/graphql-query.js'
+import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
-// import { buildQraphQLQuery } from '@/libs/graphql-query'
+import { newavailableAttrs } from '@/libs/available-attrs'
 // for Composition API apollo provider:
 // import { useApolloClient } from '@vue/apollo-composable'
 // icon: 'mdi-rice'
@@ -265,16 +265,16 @@ export default {
     headers: [],
     fetchedNovelFoods: null,
     addedFilters: [],
-    selectedAttrs: {}
+    selectedAttrs: {},
+    newavailableAttrs: newavailableAttrs
   }),
   methods: {
-    buildQraphQLQuery: buildQraphQLQuery,
+    buildQueryFromSelectedFields: buildQueryFromSelectedFields,
     async renderTable(addedFilters, selectedAttrs) {
       this.addedFilters = addedFilters
       this.selectedAttrs = selectedAttrs
       this.tableIsLoading = true
-      const QUERY = this.buildQraphQLQuery(this.selectedAttrs)
-      console.log('QUERY', QUERY)
+      const QUERY = this.buildQueryFromSelectedFields(this.selectedAttrs)
       const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
         ?.value
 
@@ -284,11 +284,10 @@ export default {
         const response = await this.$apollo.query({
           query: QUERY,
           variables: {
-            novelFoodTitle: nfTitle
+            // Todo: make sure that keys will have names straight like novelFoods_titleStartswith, novelFoods_titleIcontains, novelFoods_titleExact.
           }
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges
-        console.log(this.fetchedNovelFoods)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {

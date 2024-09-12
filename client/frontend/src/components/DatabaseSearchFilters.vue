@@ -177,8 +177,8 @@
             </v-row>
             <v-row class="mt-0">
               <v-col
-                v-for="(attr, attrKey) in selectedAttrs"
-                :key="attrKey"
+                v-for="(field, fieldPath) in selectedAttrs"
+                :key="fieldPath"
                 class="py-1 pe-0"
                 cols="auto"
               >
@@ -186,13 +186,13 @@
                   size="large"
                   closable
                   elevation="3"
-                  @click:close="delete selectedAttrs[attrKey]"
+                  @click:close="delete selectedAttrs[fieldPath]"
                   variant="elevated"
                   :color="this.theme.global.current.value.dark ? 'black' : 'white'"
                 >
-                  <v-icon :icon="attr.icon" start></v-icon>
+                  <v-icon :icon="field.icon" start></v-icon>
 
-                  {{ attr.displayName }}
+                  {{ field.displayName }}
                 </v-chip>
               </v-col>
             </v-row>
@@ -211,17 +211,17 @@
               hide-details
             ></v-text-field>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
-              <template v-for="(attr, attrKey) in availableAttrsSearched">
+              <template v-for="(field, fieldPath) in availableAttrsSearched">
                 <v-list-item
-                  v-if="!(attrKey in selectedAttrs)"
-                  :key="attrKey"
-                  @click="selectedAttrs[attrKey] = attr"
+                  v-if="!(fieldPath in selectedAttrs)"
+                  :key="fieldPath"
+                  @click="selectedAttrs[fieldPath] = field"
                 >
                   <template v-slot:prepend>
-                    <v-icon :icon="attr.icon"></v-icon>
+                    <v-icon :icon="field.icon"></v-icon>
                   </template>
 
-                  <v-list-item-title>{{ attr.displayName }}</v-list-item-title>
+                  <v-list-item-title>{{ field.displayName }}</v-list-item-title>
                 </v-list-item>
               </template>
             </v-list>
@@ -250,7 +250,7 @@
 
 <script>
 import { availableFilters } from '@/libs/available-filters'
-import { availableAttrs } from '@/libs/available-attrs'
+import { newavailableAttrs } from '@/libs/available-attrs'
 import { useTheme } from 'vuetify'
 export default {
   props: {
@@ -268,9 +268,10 @@ export default {
       value: ''
     },
     addedFilters: [],
-    availableAttrs: availableAttrs,
+    newavailableAttrs: newavailableAttrs,
     attrsSearch: '',
-    selectedAttrs: {}
+    selectedAttrs: {},
+    flattenedFields: {},
   }),
   methods: {
     addFilter() {
@@ -315,11 +316,27 @@ export default {
     renderTable() {
       this.$emit('render-table', this.addedFilters, this.selectedAttrs)
       this.$emit('close')
-    }
+    },
+    flattenFields(fields, parentPath = '') {
+      let flatFields = {}
+      for (let fieldName in fields) {
+        let field = fields[fieldName]
+        let currentPath = parentPath ? `${parentPath}.${fieldName}` : fieldName
+
+        if (field.fields) {
+          // Recursive call for nested fields
+          flatFields = { ...flatFields, ...this.flattenFields(field.fields, currentPath) }
+        } else {
+          // Add field to flattened fields with its path
+          flatFields[currentPath] = field
+        }
+      }
+      return flatFields
+    },
   },
   computed: {
     allAttrsSelected() {
-      return Object.keys(this.selectedAttrs).length === Object.keys(this.availableAttrs).length
+      return Object.keys(this.selectedAttrs).length === Object.keys(this.flattenedFields).length
     },
     addFilterValid() {
       return (
@@ -332,13 +349,13 @@ export default {
     availableAttrsSearched() {
       const attrsSearch = this.attrsSearch?.toLowerCase()
 
-      if (!attrsSearch) return this.availableAttrs
+      if (!attrsSearch) return this.flattenedFields
 
-      return Object.entries(this.availableAttrs).reduce((acc, [attrKey, attrValue]) => {
-        const displayName = attrValue.displayName.toLowerCase()
+      return Object.entries(this.flattenedFields).reduce((acc, [fieldPath, field]) => {
+        const displayName = field.displayName.toLowerCase()
 
         if (displayName.indexOf(attrsSearch) > -1) {
-          acc[attrKey] = attrValue
+          acc[fieldPath] = field
         }
 
         return acc
@@ -354,6 +371,7 @@ export default {
     this.addedFilters = this.addedFiltersFromPreviousSearch
       ? [...this.addedFiltersFromPreviousSearch]
       : []
+    this.flattenedFields = this.flattenFields(this.newavailableAttrs.novelFoods.fields)
   }
 }
 </script>
