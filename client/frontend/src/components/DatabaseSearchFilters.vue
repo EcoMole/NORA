@@ -192,7 +192,7 @@
                 >
                   <v-icon :icon="field.icon" start></v-icon>
 
-                  {{ field.displayName }}
+                  {{ field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName }}
                 </v-chip>
               </v-col>
             </v-row>
@@ -221,7 +221,9 @@
                     <v-icon :icon="field.icon"></v-icon>
                   </template>
 
-                  <v-list-item-title>{{ field.displayName }}</v-list-item-title>
+                  <v-list-item-title>{{
+                    field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName
+                  }}</v-list-item-title>
                 </v-list-item>
               </template>
             </v-list>

@@ -4,22 +4,24 @@ export const availableFields = {
     displayName: 'Novel Food',
     fields: {
       nfCode: {
-        displayName: 'NF code',
+        displayName: 'Code',
+        flattenedDisplayName: 'Novel Food Code',
         displayGroupName: 'Novel Food',
         type: 'text',
         qualifiers: ['contains', 'is'],
         icon: 'mdi-rice',
-        filterDescription: 'description for NF code',
-        tooltipDescription: 'NF code tooltip description'
+        filterDescription: 'description for Code',
+        tooltipDescription: 'Code tooltip description'
       },
       title: {
-        displayName: 'Novel food title',
+        displayName: 'Title',
+        flattenedDisplayName: 'Novel Food Title',
         displayGroupName: 'Novel Food',
         type: 'text',
         qualifiers: ['contains', 'is'],
         icon: 'mdi-rice',
-        filterDescription: 'description for novel food title',
-        tooltipDescription: 'Novel food title tooltip description'
+        filterDescription: 'description for Title',
+        tooltipDescription: 'Title tooltip description'
       },
 
       toxStudyRequired: {
@@ -133,6 +135,7 @@ export const availableFields = {
       },
       outcome: {
         displayName: 'Outcome',
+        flattenedDisplayName: 'Novel Food Outcome',
         displayGroupName: 'Novel Food',
         type: 'text',
         qualifiers: ['contains', 'is'],
@@ -142,6 +145,7 @@ export const availableFields = {
       },
       outcomeRemarks: {
         displayName: 'Outcome Remarks',
+        flattenedDisplayName: 'Novel Food Outcome Remarks',
         displayGroupName: 'Novel Food',
         type: 'text',
         qualifiers: ['contains', 'is'],
@@ -150,19 +154,21 @@ export const availableFields = {
         tooltipDescription: 'Outcome Remarks tooltip description'
       },
       vocabId: {
-        displayName: 'Vocabulary ID',
+        displayName: 'Vocabulary Name',
+        flattenedDisplayName: 'Novel Food Vocabulary Name',
         displayGroupName: 'Novel Food',
         type: 'text',
         qualifiers: ['contains', 'is'],
         icon: 'mdi-book-open-outline',
-        filterDescription: 'description for Vocabulary ID',
-        tooltipDescription: 'Vocabulary ID tooltip description'
+        filterDescription: 'description for Vocabulary Name',
+        tooltipDescription: 'Vocabulary Name tooltip description'
       },
       allergenicities: {
         displayName: 'Allergenicity',
         fields: {
           title: {
-            displayName: 'Allergenicity',
+            displayName: '',
+            flattenedDisplayName: 'Allergenicity',
             displayGroupName: 'Allergenicity',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -175,22 +181,22 @@ export const availableFields = {
 
       // opinion
       opinionDocumentType: {
-        displayName: 'Opinion document type',
-        displayGroupName: 'Novel Food',
-        type: 'text',
-        qualifiers: ['contains', 'is'],
-        icon: 'mdi-file-document-outline',
-        filterDescription: 'description for opinion document type',
-        tooltipDescription: 'Opinion document type tooltip description'
-      },
-      opinionTitle: {
-        displayName: 'Opinion title',
+        displayName: 'Opinion Document Type',
         displayGroupName: 'Opinion',
         type: 'text',
         qualifiers: ['contains', 'is'],
         icon: 'mdi-file-document-outline',
-        filterDescription: 'description for Opinion title',
-        tooltipDescription: 'Opinion title tooltip description'
+        filterDescription: 'description for Opinion Document Type',
+        tooltipDescription: 'Opinion Document Type tooltip description'
+      },
+      opinionTitle: {
+        displayName: 'Opinion Title',
+        displayGroupName: 'Opinion',
+        type: 'text',
+        qualifiers: ['contains', 'is'],
+        icon: 'mdi-file-document-outline',
+        filterDescription: 'description for Opinion Title',
+        tooltipDescription: 'Opinion Title tooltip description'
       },
       opinionDoi: {
         displayName: 'Opinion DOI',
@@ -211,34 +217,35 @@ export const availableFields = {
         tooltipDescription: 'Opinion URL tooltip description'
       },
       opinionPublicationDate: {
-        displayName: 'Opinion publication date',
+        displayName: 'Opinion Publication Date',
         displayGroupName: 'Opinion',
         type: 'date',
         qualifiers: ['is before', 'is after', 'is'],
         icon: 'mdi-file-document-outline',
-        filterDescription: 'description for Opinion publication date',
-        tooltipDescription: 'Opinion publication date tooltip description'
+        filterDescription: 'description for Opinion Publication Date',
+        tooltipDescription: 'Opinion Publication Date tooltip description'
       },
       opinionAdoptionDate: {
-        displayName: 'Opinion adoption date',
+        displayName: 'Opinion Adoption Date',
         displayGroupName: 'Opinion',
         type: 'date',
         qualifiers: ['is before', 'is after', 'is'],
         icon: 'mdi-file-document-outline',
-        filterDescription: 'description for Opinion adoption date',
-        tooltipDescription: 'Opinion adoption date tooltip description'
+        filterDescription: 'description for Opinion Adoption Date',
+        tooltipDescription: 'Opinion Adoption Date tooltip description'
       },
       panels: {
         displayName: 'Panel',
         fields: {
           title: {
-            displayName: "Panel's title",
+            displayName: "Name",
+            flattenedDisplayName: 'Panel',
             displayGroupName: 'Administrative',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-file-document-outline',
-            filterDescription: "description for panel's title",
-            tooltipDescription: 'Panel title tooltip description'
+            filterDescription: "description for Panel's Name",
+            tooltipDescription: "Panel's Name tooltip description"
           }
         }
       },
@@ -246,31 +253,34 @@ export const availableFields = {
         displayName: 'Scientific Officer',
         fields: {
           firstName: {
-            displayName: "Scientific officer's first name",
+            displayName: "First Name",
+            flattenedDisplayName: "Scientific Officer's First Name",
             displayGroupName: 'Administrative',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-file-document-outline',
-            filterDescription: "description for scientific officer's first name",
-            tooltipDescription: "Scientific officer's first name tooltip description"
+            filterDescription: "description for Scientific Officer's First Name",
+            tooltipDescription: "Scientific Officer's First Name tooltip description"
           },
           middleName: {
-            displayName: "Scientific officer's middle name",
+            displayName: "Middle Name",
+            flattenedDisplayName: "Scientific officer's Middle Name",
             displayGroupName: 'Administrative',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-file-document-outline',
-            filterDescription: "description for scientific officer's middle name",
-            tooltipDescription: "Scientific officer's middle name tooltip description"
+            filterDescription: "description for scientific officer's Middle Name",
+            tooltipDescription: "Scientific officer's Middle Name tooltip description"
           },
           lastName: {
-            displayName: "Scientific officer's last name",
+            displayName: "Last Name",
+            flattenedDisplayName: "Scientific officer's Last Name",
             displayGroupName: 'Administrative',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-file-document-outline',
-            filterDescription: "description for scientific officer's last name",
-            tooltipDescription: "Scientific officer's last name tooltip description"
+            filterDescription: "description for scientific officer's Last Name",
+            tooltipDescription: "Scientific officer's Last Name tooltip description"
           }
         }
       },
@@ -281,19 +291,21 @@ export const availableFields = {
         displayName: 'Question',
         fields: {
           number: {
-            displayName: 'Question number',
+            displayName: 'Number',
+            flattenedDisplayName: 'Question Number',
             displayGroupName: 'Question',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-file-document-outline',
-            filterDescription: 'description for question number',
-            tooltipDescription: 'Question number tooltip description'
+            filterDescription: 'description for Number',
+            tooltipDescription: 'Number tooltip description'
           },
           applicants: {
             displayName: 'Applicant',
             fields: {
               title: {
-                displayName: 'Applicant title',
+                displayName: 'Name',
+                flattenedDisplayName: 'Applicant',
                 displayGroupName: 'Applicant',
                 type: 'text',
                 qualifiers: ['contains', 'is'],
@@ -308,31 +320,34 @@ export const availableFields = {
             displayName: 'Mandate',
             fields: {
               mandateTypeTitle: {
-                displayName: 'Mandate type title',
+                displayName: 'Type',
+                flattenedDisplayName: 'Mandate Type',
                 displayGroupName: 'Mandate',
                 type: 'text',
                 qualifiers: ['contains', 'is'],
                 icon: 'mdi-file-document-outline',
-                filterDescription: 'description for mandate type title',
-                tooltipDescription: 'Mandate type title tooltip description'
+                filterDescription: 'description for Mandate Type',
+                tooltipDescription: 'Mandate Type tooltip description'
               },
               mandateTypeDefinition: {
-                displayName: 'Mandate type definition',
+                displayName: 'Type Definition',
+                flattenedDisplayName: 'Mandate Type Definition',
                 displayGroupName: 'Mandate',
                 type: 'text',
                 qualifiers: ['contains', 'is'],
                 icon: 'mdi-file-document-outline',
-                filterDescription: 'description for mandate type definition',
-                tooltipDescription: 'Mandate type definition tooltip description'
+                filterDescription: 'description for Mandate Type Definition',
+                tooltipDescription: 'Mandate Type Definition tooltip description'
               },
               regulation: {
-                displayName: 'Mandate regulation',
+                displayName: 'Regulation',
+                flattenedDisplayName: 'Mandate Regulation',
                 displayGroupName: 'Mandate',
                 type: 'text',
                 qualifiers: ['contains', 'is'],
                 icon: 'mdi-file-document-outline',
-                filterDescription: 'description for mandate regulation',
-                tooltipDescription: 'Mandate regulation tooltip description'
+                filterDescription: 'description for Mandate Regulation',
+                tooltipDescription: 'Mandate Regulation tooltip description'
               }
             }
           }
@@ -342,7 +357,8 @@ export const availableFields = {
         displayName: 'Food Category',
         fields: {
           title: {
-            displayName: 'Food Category Name',
+            displayName: 'Name',
+            flattenedDisplayName: 'Food Category Name',
             displayGroupName: 'Novel Food',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -351,7 +367,8 @@ export const availableFields = {
             tooltipDescription: 'Food Category Name tooltip description'
           },
           definition: {
-            displayName: 'Food Category Definition',
+            displayName: 'Definition',
+            flattenedDisplayName: 'Food Category Definition',
             displayGroupName: 'Novel Food',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -365,16 +382,18 @@ export const availableFields = {
         displayName: 'Novel Food Category',
         fields: {
           title: {
-            displayName: 'Novel Food Category Name',
+            displayName: 'Name',
+            flattenedDisplayName: 'Novel Food Category',
             displayGroupName: 'Novel Food',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-alert-circle-outline',
-            filterDescription: 'description for Novel Food Category Name',
-            tooltipDescription: 'Novel Food Category Name tooltip description'
+            filterDescription: 'description for Novel Food Category',
+            tooltipDescription: 'Novel Food Category tooltip description'
           },
           definition: {
-            displayName: 'Novel Food Category Definition',
+            displayName: 'Definition',
+            flattenedDisplayName: 'Novel Food Category Definition',
             displayGroupName: 'Novel Food',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -383,7 +402,8 @@ export const availableFields = {
             tooltipDescription: 'Novel Food Category Definition tooltip description'
           },
           regulation: {
-            displayName: 'Novel Food Category regulation',
+            displayName: 'Regulation',
+            flattenedDisplayName: 'Novel Food Category Regulation',
             displayGroupName: 'Novel Food',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -399,6 +419,7 @@ export const availableFields = {
         fields: {
           testType: {
             displayName: 'Test Type',
+            flattenedDisplayName: 'ADME Test Type',
             displayGroupName: 'ADME',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -408,6 +429,7 @@ export const availableFields = {
           },
           guideline: {
             displayName: 'Guideline',
+            flattenedDisplayName: 'ADME Guideline',
             displayGroupName: 'ADME',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -417,6 +439,7 @@ export const availableFields = {
           },
           guidelineQualifier: {
             displayName: 'Guideline Qualifier',
+            flattenedDisplayName: 'ADME Guideline Qualifier',
             displayGroupName: 'ADME',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -426,6 +449,7 @@ export const availableFields = {
           },
           studySource: {
             displayName: 'Study Source',
+            flattenedDisplayName: 'ADME Study Source',
             displayGroupName: 'ADME',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -437,7 +461,8 @@ export const availableFields = {
             displayName: 'Investigation Type',
             fields: {
               title: {
-                displayName: 'Investigation Type Name',
+                displayName: 'Name',
+                flattenedDisplayName: 'ADME Investigation Type',
                 displayGroupName: 'ADME',
                 type: 'text',
                 qualifiers: ['contains', 'is'],
@@ -452,11 +477,12 @@ export const availableFields = {
 
       // genotox
       genotoxes: {
-        displayName: 'Genotoxicity',
+        displayName: 'Genotox',
         fields: {
           testType: {
             displayName: 'Test Type',
-            displayGroupName: 'Genotoxicity',
+            flattenedDisplayName: 'Genotox Test Type',
+            displayGroupName: 'Genotox',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-dna',
@@ -465,7 +491,8 @@ export const availableFields = {
           },
           guideline: {
             displayName: 'Guideline',
-            displayGroupName: 'Genotoxicity',
+            flattenedDisplayName: 'Genotox Guideline',
+            displayGroupName: 'Genotox',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-book-open-outline',
@@ -474,7 +501,8 @@ export const availableFields = {
           },
           guidelineQualifier: {
             displayName: 'Guideline Qualifier',
-            displayGroupName: 'Genotoxicity',
+            flattenedDisplayName: 'Genotox Guideline Qualifier',
+            displayGroupName: 'Genotox',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-book-open-outline',
@@ -483,7 +511,8 @@ export const availableFields = {
           },
           studySource: {
             displayName: 'Study Source',
-            displayGroupName: 'Genotoxicity',
+            flattenedDisplayName: 'Genotox Study Source',
+            displayGroupName: 'Genotox',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-book-outline',
@@ -492,12 +521,13 @@ export const availableFields = {
           },
           outcome: {
             displayName: 'Outcome',
-            displayGroupName: 'Genotoxicity',
+            flattenedDisplayName: 'Genotox Outcome',
+            displayGroupName: 'Genotox',
             type: 'text',
             qualifiers: ['contains', 'is'],
             icon: 'mdi-check-circle-outline',
-            filterDescription: 'description for Outcome',
-            tooltipDescription: 'Outcome tooltip description'
+            filterDescription: 'description for Genotox Outcome',
+            tooltipDescription: 'Genotox Outcome tooltip description'
           }
         }
       },
@@ -508,6 +538,7 @@ export const availableFields = {
         fields: {
           testType: {
             displayName: 'Test Type',
+            flattenedDisplayName: 'Endpoint Study Test Type',
             displayGroupName: 'Endpoint Study',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -517,6 +548,7 @@ export const availableFields = {
           },
           guideline: {
             displayName: 'Guideline',
+            flattenedDisplayName: 'Endpoint Study Guideline',
             displayGroupName: 'Endpoint Study',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -526,6 +558,7 @@ export const availableFields = {
           },
           species: {
             displayName: 'Species',
+            flattenedDisplayName: 'Endpoint Study Species',
             displayGroupName: 'Endpoint Study',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -535,6 +568,7 @@ export const availableFields = {
           },
           sex: {
             displayName: 'Sex',
+            flattenedDisplayName: 'Endpoint Study Sex',
             displayGroupName: 'Endpoint Study',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -544,6 +578,7 @@ export const availableFields = {
           },
           studyDuration: {
             displayName: 'Study Duration',
+            flattenedDisplayName: 'Endpoint Study Duration',
             displayGroupName: 'Endpoint Study',
             type: 'text',
             qualifiers: ['contains', 'is'],
@@ -566,6 +601,7 @@ export const availableFields = {
               },
               qualifier: {
                 displayName: 'Qualifier',
+                flattenedDisplayName: 'Endpoint Qualifier',
                 displayGroupName: 'Endpoint',
                 type: 'text',
                 qualifiers: ['contains', 'is'],
@@ -575,6 +611,7 @@ export const availableFields = {
               },
               subpopulation: {
                 displayName: 'Subpopulation',
+                flattenedDisplayName: 'Endpoint Subpopulation',
                 displayGroupName: 'Endpoint',
                 type: 'text',
                 qualifiers: ['contains', 'is'],
@@ -583,20 +620,22 @@ export const availableFields = {
                 tooltipDescription: 'Subpopulation tooltip description'
               },
               lovalue: {
-                displayName: 'Lowest Observed Value',
+                displayName: 'Value',
+                flattenedDisplayName: 'Endpoint Value',
                 displayGroupName: 'Endpoint',
                 type: 'number',
                 qualifiers: ['is', 'greater than', 'less than'],
                 icon: 'mdi-arrow-down',
-                filterDescription: 'description for Lowest Observed Value',
-                tooltipDescription: 'Lowest Observed Value tooltip description'
+                filterDescription: 'description for Value',
+                tooltipDescription: 'Value tooltip description'
               },
               // final outcome
               finalOutcomes: {
                 displayName: 'Final Outcome',
                 fields: {
                   outcome: {
-                    displayName: 'Outcome',
+                    displayName: '',
+                    flattenedDisplayName: 'Final Outcome',
                     displayGroupName: 'Final Outcome',
                     type: 'text',
                     qualifiers: ['contains', 'is'],
@@ -606,6 +645,7 @@ export const availableFields = {
                   },
                   qualifier: {
                     displayName: 'Qualifier',
+                    flattenedDisplayName: 'Final Outcome Qualifier',
                     displayGroupName: 'Final Outcome',
                     type: 'text',
                     qualifiers: ['contains', 'is'],
@@ -615,6 +655,7 @@ export const availableFields = {
                   },
                   value: {
                     displayName: 'Value',
+                    flattenedDisplayName: 'Final Outcome Value',
                     displayGroupName: 'Final Outcome',
                     type: 'number',
                     qualifiers: ['is', 'greater than', 'less than'],
@@ -628,6 +669,7 @@ export const availableFields = {
                     fields: {
                       subgroup: {
                         displayName: 'Subgroup',
+                        flattenedDisplayName: 'Final Outcome Population Subgroup',
                         displayGroupName: 'Population',
                         type: 'text',
                         qualifiers: ['contains', 'is'],
@@ -637,6 +679,7 @@ export const availableFields = {
                       },
                       qualifier: {
                         displayName: 'Qualifier',
+                        flattenedDisplayName: 'Final Outcome Population Qualifier',
                         displayGroupName: 'Population',
                         type: 'text',
                         qualifiers: ['contains', 'is'],
@@ -646,6 +689,7 @@ export const availableFields = {
                       },
                       value: {
                         displayName: 'Value',
+                        flattenedDisplayName: 'Final Outcome Population Value',
                         displayGroupName: 'Population',
                         type: 'number',
                         qualifiers: ['is', 'greater than', 'less than'],
