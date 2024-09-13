@@ -496,7 +496,7 @@ class ChemDescriptor(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_com_descriptor")
     type = models.CharField(max_length=255, choices=TYPE_CHOICES)
     value = models.CharField(
-        max_length=255,
+        max_length=500,
         verbose_name="Descriptor",
         help_text="contains e.g. the molecular formula itself if type is 'Molecular Formula', etc.",
     )
