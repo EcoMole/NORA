@@ -1,186 +1,79 @@
 <template>
   <div>
     <h1>Database Search</h1>
-  </div>
-  <DatabaseSearchFilters
-    v-if="showFilterInterface"
-    :selectedFieldsFromPreviousSearch="selectedFields"
-    :addedFiltersFromPreviousSearch="addedFilters"
-    @render-table="renderTable"
-    @close="showFilterInterface = false"
-  />
-  <v-row v-else>
-    <v-sheet elevation="2" class="mt-2 pa-4" style="overflow-x: auto; width: 100%">
-      <!-- v-slot is a directive in Vue.js that allows you to define a slot in a component. Slots are placeholders that you can fill with content when using the component. When using v-slot, you are essentially injecting custom content into a specific part of a child component. -->
-      <!-- The { item } represents the entire object (row) for the current item in the table. -->
+    <DatabaseSearchFilters
+      v-if="showFilterInterface"
+      :selectedFieldsFromPreviousSearch="selectedFields"
+      :addedFiltersFromPreviousSearch="addedFilters"
+      @render-table="renderTable"
+      @close="showFilterInterface = false"
+    />
+    <v-row v-else>
+      <v-sheet elevation="2" class="mt-2 pa-4" style="overflow-x: auto; width: 100%">
+        <v-skeleton-loader
+          v-if="!fetchedNovelFoods"
+          class="mx-auto"
+          type="table-thead, table-tbody, table-tbody, table-tbody"
+          style="z-index: 0"
+        ></v-skeleton-loader>
+        <div v-else>
+          <RecursiveDataTable
+            :data="fetchedNovelFoods.map((edge) => edge.node)"
+            :loading="tableIsLoading"
+          />
+        </div>
+      </v-sheet>
 
-      <v-skeleton-loader
-        v-if="!fetchedNovelFoods"
-        class="mx-auto"
-        type="table-thead, table-tbody, table-tbody, table-tbody"
-        style="z-index: 0"
-      ></v-skeleton-loader>
-      <!-- opinion, id, __typename -->
-      <v-data-table
-        v-if="fetchedNovelFoods"
-        :headers="createHeaders(fetchedNovelFoods[0].node)"
-        :items="fetchedNovelFoods.map((edge) => edge.node)"
-        style="font-size: 12px"
-        density="compact"
-        :loading="tableIsLoading"
-      >
-        <!-- slot creation for opinion, id, __typename -->
-        <template
-          v-for="(key, index) in Object.keys(fetchedNovelFoods[0].node)"
-          v-slot:[`item.${key}`]="{ item }"
-          :key="`1-${index}`"
-        >
-          <div>
-            <template v-if="createNestedTable(item[key])">
-              <!-- table inside Opinion table -->
-              <!-- documentType, title, doi, url, atd. -->
-              <!-- key here is Opinion a item[key] is content of Opinion column -->
-              <!-- content of opinion is allways object -->
-              <v-data-table
-                :headers="createHeaders(Array.isArray(item[key]) ? item[key][0] : item[key])"
-                :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
-                style="font-size: 10px"
-                density="compact"
-                hide-default-footer
-              >
-                <!-- column creation documentType, doi, url -->
-                <!-- next level -->
-                <template
-                  v-for="(key, index) in Object.keys(
-                    Array.isArray(item[key]) ? item[key][0] : item[key]
-                  )"
-                  v-slot:[`item.${key}`]="{ item }"
-                  :key="`2-${index}`"
-                >
-                  <div>
-                    <template v-if="createNestedTable(item[key])">
-                      <v-data-table
-                        :headers="
-                          createHeaders(Array.isArray(item[key]) ? item[key][0] : item[key])
-                        "
-                        :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
-                        style="font-size: 10px"
-                        density="compact"
-                        hide-default-footer
-                      >
-                        <!-- next level -->
-                        <template
-                          v-for="(key, index) in Object.keys(
-                            Array.isArray(item[key]) ? item[key][0] : item[key]
-                          )"
-                          v-slot:[`item.${key}`]="{ item }"
-                          :key="`3-${index}`"
-                        >
-                          <div>
-                            <template v-if="createNestedTable(item[key])">
-                              <v-data-table
-                                :headers="
-                                  createHeaders(Array.isArray(item[key]) ? item[key][0] : item[key])
-                                "
-                                :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
-                                style="font-size: 10px"
-                                density="compact"
-                                hide-default-footer
-                              >
-                                <!-- next level -->
-                                <template
-                                  v-for="(key, index) in Object.keys(
-                                    Array.isArray(item[key]) ? item[key][0] : item[key]
-                                  )"
-                                  v-slot:[`item.${key}`]="{ item }"
-                                  :key="`4-${index}`"
-                                >
-                                  <div>
-                                    <template v-if="createNestedTable(item[key])">
-                                      <v-data-table
-                                        :headers="
-                                          createHeaders(
-                                            Array.isArray(item[key]) ? item[key][0] : item[key]
-                                          )
-                                        "
-                                        :items="Array.isArray(item[key]) ? item[key] : [item[key]]"
-                                        style="font-size: 10px"
-                                        density="compact"
-                                        hide-default-footer
-                                      >
-                                      </v-data-table>
-                                    </template>
-                                    <template v-else> {{ item[key] }} </template>
-                                  </div>
-                                </template>
-                              </v-data-table>
-                            </template>
-                            <template v-else> {{ item[key] }} </template>
-                          </div>
-                        </template>
-                      </v-data-table>
-                    </template>
-                    <template v-else> {{ item[key] }} </template>
-                  </div>
-                </template>
-              </v-data-table>
-            </template>
-            <template v-else> {{ item[key] }}</template>
-          </div>
+      <!-- btns -->
+      <v-menu :rounded="'lg'">
+        <template v-slot:activator="{ props: menuProps }">
+          <v-hover v-slot="{ isHovering, props: hoverProps }">
+            <v-btn
+              v-bind="{ ...hoverProps, ...menuProps }"
+              :elevation="isHovering ? 14 : 4"
+              size="small"
+              min-height="40px"
+              color="primary"
+              style="margin-top: 98px"
+              position="fixed"
+              location="top right"
+              class="mr-10"
+              :ripple="false"
+            >
+              <v-icon left>mdi-download</v-icon>
+              Export
+            </v-btn>
+          </v-hover>
         </template>
-      </v-data-table>
-    </v-sheet>
-
-    <!-- btns -->
-    <v-menu :rounded="'lg'">
-      <template v-slot:activator="{ props: menuProps }">
-        <v-hover v-slot="{ isHovering, props: hoverProps }">
-          <v-btn
-            v-bind="{ ...hoverProps, ...menuProps }"
-            :elevation="isHovering ? 14 : 4"
-            size="small"
-            min-height="40px"
-            color="primary"
-            style="margin-top: 98px"
-            position="fixed"
-            location="top right"
-            class="mr-10"
-            :ripple="false"
-          >
-            <v-icon left>mdi-download</v-icon>
-            Export
-          </v-btn>
-        </v-hover>
-      </template>
-      <v-list density="compact">
-        <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i">
-          <template v-slot:prepend>
-            <v-icon :icon="option.icon"></v-icon>
-          </template>
-          <v-list-item-title>{{ option.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-    <v-hover v-slot="{ isHovering, props }">
-      <v-btn
-        v-bind="props"
-        :elevation="isHovering ? 14 : 4"
-        @click="newSearch"
-        size="small"
-        min-height="50px"
-        color="tertiary"
-        style="margin-bottom: 98px"
-        position="fixed"
-        location="bottom right"
-        class="mr-10"
-        :ripple="false"
-      >
-        <v-icon left>mdi-replay</v-icon>
-        new search
-      </v-btn>
-    </v-hover>
-    <!-- grouped repeated switch -->
-    <!-- <v-sheet
+        <v-list density="compact">
+          <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i">
+            <template v-slot:prepend>
+              <v-icon :icon="option.icon"></v-icon>
+            </template>
+            <v-list-item-title>{{ option.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-hover v-slot="{ isHovering, props }">
+        <v-btn
+          v-bind="props"
+          :elevation="isHovering ? 14 : 4"
+          @click="newSearch"
+          size="small"
+          min-height="50px"
+          color="tertiary"
+          style="margin-bottom: 98px"
+          position="fixed"
+          location="bottom right"
+          class="mr-10"
+          :ripple="false"
+        >
+          <v-icon left>mdi-replay</v-icon>
+          new search
+        </v-btn>
+      </v-hover>
+      <!-- grouped repeated switch -->
+      <!-- <v-sheet
       elevation="24"
       position="fixed"
       location="bottom"
@@ -224,20 +117,21 @@
         </v-col>
       </v-row>
     </v-sheet> -->
-    <v-btn
-      elevation="24"
-      @click="showFilterInterface = true"
-      min-height="50px"
-      color="secondary"
-      position="fixed"
-      location="bottom right"
-      class="mb-8 mr-10"
-      :ripple="false"
-    >
-      <v-icon left>mdi-replay</v-icon>
-      edit search
-    </v-btn>
-  </v-row>
+      <v-btn
+        elevation="24"
+        @click="showFilterInterface = true"
+        min-height="50px"
+        color="secondary"
+        position="fixed"
+        location="bottom right"
+        class="mb-8 mr-10"
+        :ripple="false"
+      >
+        <v-icon left>mdi-replay</v-icon>
+        edit search
+      </v-btn>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -246,15 +140,10 @@ import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
 import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import { availableFields } from '@/libs/available-fields'
-// for Composition API apollo provider:
-// import { useApolloClient } from '@vue/apollo-composable'
-// icon: 'mdi-rice'
-// icon: 'mdi-alert-outline'
-// icon: 'mdi-hazard-lights'
-// icon: 'mdi-shield-alert'
+import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 
 export default {
-  components: { DatabaseSearchFilters },
+  components: { DatabaseSearchFilters, RecursiveDataTable },
   data: () => ({
     tableIsLoading: false,
     exportOptions: [
@@ -262,7 +151,6 @@ export default {
       { title: 'the whole database', icon: 'mdi-database' }
     ],
     showFilterInterface: true,
-    headers: [],
     fetchedNovelFoods: null,
     addedFilters: [],
     selectedFields: {},
@@ -294,26 +182,6 @@ export default {
         this.tableIsLoading = false
       }
     },
-    createNestedTable(param) {
-      return (
-        param != null &&
-        ((param.constructor === Object && Object.keys(param).length > 0) ||
-          (Array.isArray(param) && param.length > 0))
-      )
-    },
-
-    createHeaders(object) {
-      const headers = Object.keys(object)
-        .filter((key) => key !== '__typename' && key !== 'id') // Exclude specific keys
-        .map((key) => ({
-          title: key,
-          value: key,
-          align: 'center'
-        }))
-
-      return headers
-    },
-
     newSearch() {
       this.showFilterInterface = true
       this.addedFilters = []
@@ -328,7 +196,4 @@ export default {
 </script>
 
 <style>
-th {
-  color: #557c55;
-}
 </style>
