@@ -20,6 +20,7 @@
           <RecursiveDataTable
             :data="fetchedNovelFoods.map((edge) => edge.node)"
             :loading="tableIsLoading"
+            :nameMappingObj="nameMappingObj"
           />
         </div>
       </v-sheet>
@@ -141,6 +142,7 @@ import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import { availableFields } from '@/libs/available-fields'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
+import { objectTypes, fields } from '@/libs/definitions.js'
 
 export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },
@@ -154,7 +156,8 @@ export default {
     fetchedNovelFoods: null,
     addedFilters: [],
     selectedFields: {},
-    availableFields: availableFields
+    availableFields: availableFields,
+    nameMappingObj: {...objectTypes, ...fields},
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,

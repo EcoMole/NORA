@@ -134,3 +134,25 @@ export function buildQueryFromAllAvailableFields() {
 export function buildQueryFromSelectedFields(selectedFields) {
   return buildGraphQLQuery(parseFields(buildNestedFieldsStructure(selectedFields)))
 }
+
+// const mappingFile = {
+//   "field1.field2": {displayName: "Field 1.2"},
+//   "field3": {displayName: "Field 3"},
+//   "field4.field5.field6": {displayName: "Field 4.5.6"},
+//   "field4.field5.field7": {displayName: "Field 4.5.7"},
+//   "field8": {disoplayName: "Field 8"}
+// }
+
+// const data = {
+//   field1: {
+//     field2: "value"
+//   },
+//   field3: "value",
+//   field4: {
+//     field5: {
+//       field6: "value",
+//       field7: "value"
+//     }
+//   },
+//   field8: "value"
+//   }

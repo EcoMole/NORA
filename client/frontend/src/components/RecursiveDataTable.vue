@@ -12,7 +12,12 @@
       <tr>
         <td v-for="header in headers" :key="header.value" class="table-cell">
           <div v-if="isNested(item[header.value])">
-            <RecursiveDataTable :data="item[header.value]" :level="level + 1" />
+            <RecursiveDataTable
+              :data="item[header.value]"
+              :level="level + 1"
+              :path="[...path, header.value]"
+              :nameMappingObj="nameMappingObj"
+            />
           </div>
           <div v-else>
             {{ item[header.value] }}
@@ -38,6 +43,14 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    path: {
+      type: Array,
+      default: () => []
+    },
+    nameMappingObj: {
+      type: Object,
+      required: true
     }
   },
   computed: {
@@ -57,11 +70,15 @@ export default {
       }
       return Object.keys(dataItem)
         .filter((key) => key !== '__typename' && key !== 'id')
-        .map((key) => ({
-          title: key,
-          value: key,
-          align: 'center'
-        }))
+        .map((key) => {
+          const fullPath = [...this.path, key].join('.')
+          const mappingEntry = this.nameMappingObj[fullPath]
+          return {
+            title: mappingEntry ? mappingEntry.displayName : key,
+            value: key,
+            align: 'center'
+          }
+        })
     },
     fontSize() {
       const baseSize = 12
@@ -108,8 +125,4 @@ td {
 td:first-child {
   border-left: none;
 }
-
-
-
-
 </style>
