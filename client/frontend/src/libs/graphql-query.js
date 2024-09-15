@@ -20,68 +20,50 @@ export function buildGraphQLQuery(fields) {
   `
 }
 
-function buildNestedFieldsStructure(flattenedFields) {
+function toNestedStructure(flattenedFields) {
   /*
 
 builds nested format:
-
+{
 field1: {
-  fields: {
- 		field2: {
- 		}
+ 		field2: {}
   },
 field3: {},
 field4: {
-  fields: {
     field5: {
-      fields: {
         field6: {},
         field7: {}
       }
-    }
-  }
-},
+    },
 field8: {}
+}
 
-
-from flattenedFields format:
-
+from the flattenedFields format:
+{
 "field1.field2" : {},
 "field3" : {},
 "field4.field5.field6" : {},
 "field4.field5.field7" : {},
 "field8" : {}
-
+}
 */
   const result = {}
 
   for (const fieldPath in flattenedFields) {
     const pathArray = fieldPath.split('.')
-    // reference to the `result` object
-    // any changes made to currentObject will directly affect the `result` object
     let currentObject = result
 
-    pathArray.forEach((part, i) => {
-      // If it's the last part, add the record without "fields" object
-      if (i === pathArray.length - 1) {
-        if (!currentObject[part]) {
-          currentObject[part] = {}
-        }
-      } else {
-        // If the part doesn't exist yet, create a "fields" object
-        if (!currentObject[part]) {
-          currentObject[part] = { fields: {} }
-        }
-
-        // Move deeper into the structure
-        currentObject = currentObject[part].fields
+    pathArray.forEach((part) => {
+      if (!currentObject[part]) {
+        currentObject[part] = {}
       }
+      currentObject = currentObject[part]
     })
   }
   return result
 }
 
-function parseFields(fields) {
+function toGqlQueryDesiredStructure(fields) {
   /*
 
 Builds the gql-query-builder desired format:
@@ -94,29 +76,24 @@ newArray = [
 ]
 
 from the nested format
-
+{
 field1: {
-  fields: {
- 		field2: {
- 		}
+ 		field2: {}
   },
 field3: {},
 field4: {
-  fields: {
     field5: {
-      fields: {
         field6: {},
         field7: {}
       }
-    }
-  }
-},
-field8: {}
- */
+    },
+field8: {},
+}
+*/
   return Object.entries(fields).reduce((acc, [fieldName, fieldData]) => {
-    if (fieldData.fields) {
+    if (fieldData && typeof fieldData === 'object' && Object.keys(fieldData).length > 0) {
       acc.push({
-        [fieldName]: parseFields(fieldData.fields)
+        [fieldName]: toGqlQueryDesiredStructure(fieldData)
       })
     } else {
       acc.push(fieldName)
@@ -125,30 +102,6 @@ field8: {}
   }, [])
 }
 
-
-
-export function buildQueryFromSelectedFields(selectedFields=fields) {
-  return buildGraphQLQuery(parseFields(buildNestedFieldsStructure(selectedFields)))
+export function buildQueryFromSelectedFields(selectedFields = fields) {
+  return buildGraphQLQuery(toGqlQueryDesiredStructure(toNestedStructure(selectedFields)))
 }
-
-// const mappingFile = {
-//   "field1.field2": {displayName: "Field 1.2"},
-//   "field3": {displayName: "Field 3"},
-//   "field4.field5.field6": {displayName: "Field 4.5.6"},
-//   "field4.field5.field7": {displayName: "Field 4.5.7"},
-//   "field8": {disoplayName: "Field 8"}
-// }
-
-// const data = {
-//   field1: {
-//     field2: "value"
-//   },
-//   field3: "value",
-//   field4: {
-//     field5: {
-//       field6: "value",
-//       field7: "value"
-//     }
-//   },
-//   field8: "value"
-//   }
