@@ -2,7 +2,15 @@ import gql from 'graphql-tag'
 import { query as gqlQuery } from 'gql-query-builder'
 import { fields } from './definitions'
 
-export function buildGraphQLQuery(fields) {
+function toDesiredVariablesStructure(variables) {
+  return Object.entries(variables).reduce((acc, [key, value]) => {
+    acc[key] = {value: value, required: false}
+    return acc
+  }, {})
+}
+
+export function buildGraphQLQuery(variables, fields) {
+
   const { query } = gqlQuery({
     operation: 'novelFoods',
     fields: [
@@ -13,7 +21,8 @@ export function buildGraphQLQuery(fields) {
           }
         ]
       }
-    ]
+    ],
+    variables: toDesiredVariablesStructure(variables)
   })
   return gql`
     ${query}
@@ -102,6 +111,6 @@ field8: {},
   }, [])
 }
 
-export function buildQueryFromSelectedFields(selectedFields = fields) {
-  return buildGraphQLQuery(toGqlQueryDesiredStructure(toNestedStructure(selectedFields)))
+export function buildQueryFromSelectedFields(variables, selectedFields = fields) {
+  return buildGraphQLQuery(variables, toGqlQueryDesiredStructure(toNestedStructure(selectedFields)))
 }

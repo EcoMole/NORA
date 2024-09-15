@@ -163,18 +163,17 @@ export default {
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
-      const QUERY = this.buildQueryFromSelectedFields(this.selectedFields)
       const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
         ?.value
+      const variables = { titleIcontains: nfTitle }
+      const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
 
       try {
         // using this.$apollo for Option API apollo provider
         // for Composition API apollo provider use: const { client } = useApolloClient()
         const response = await this.$apollo.query({
           query: QUERY,
-          variables: {
-            // Todo: make sure that keys will have names straight like novelFoods_titleStartswith, novelFoods_titleIcontains, novelFoods_titleExact.
-          }
+          variables: variables
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges
       } catch (error) {
