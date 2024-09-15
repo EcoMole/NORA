@@ -260,6 +260,7 @@ export default {
     selectedFieldsFromPreviousSearch: Object,
     addedFiltersFromPreviousSearch: Array
   },
+  emits: ['render-table', 'close'],
   data: () => ({
     addingFilter: false,
     selectedField: '',
@@ -282,6 +283,7 @@ export default {
       if (this.addFilterValid) {
         this.addedFilters.unshift({
           id: this.addedFilters.length + 1,
+          key: this.newFilter.key,
           include: this.newFilter.include,
           title: this.newFilter.title,
           group: this.newFilter.group,

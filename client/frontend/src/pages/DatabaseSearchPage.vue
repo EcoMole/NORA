@@ -142,6 +142,7 @@ import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
+import { buildVariables } from '@/libs/utils.js'
 
 export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },
@@ -159,13 +160,12 @@ export default {
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
+    buildVariables: buildVariables,
     async renderTable(addedFilters, selectedFields) {
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
-      const nfTitle = this.addedFilters.filter((filter) => filter.title === 'novel food title')[0]
-        ?.value
-      const variables = { titleIcontains: nfTitle }
+      const variables = buildVariables(this.addedFilters)
       const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
 
       try {
