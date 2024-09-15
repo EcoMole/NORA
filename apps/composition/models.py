@@ -266,7 +266,7 @@ class Composition(models.Model):
         choices=TYPE_CHOICES,
         blank=False,
         null=False,
-        help_text="Specification/Composition/Other",
+        help_text="Specification/Characterization/Other",
     )
 
     footnote = models.TextField(blank=True, verbose_name="Comment")
