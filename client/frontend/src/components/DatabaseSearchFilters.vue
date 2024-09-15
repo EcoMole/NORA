@@ -42,7 +42,7 @@
               @keyup.enter="addFilter"
             >
               <v-card-subtitle class="text-h6 pt-4">
-                {{ this.availableFilters[newFilter.title]?.group || '' }}
+                {{ this.newFilter.group }}
               </v-card-subtitle>
               <v-card-text class="pb-0">
                 <v-container>
@@ -58,21 +58,23 @@
                           max-width="140px"
                         ></v-select>
                         <v-autocomplete
-                          v-model="newFilter.title"
-                          :items="Object.keys(availableFilters)"
+                          v-model="newFilter.key"
+                          :items="filtersItems"
+                          item-title="displayName"
+                          item-value="key"
                           class="ml-6"
                           variant="underlined"
-                          @change="updateSubtitle"
+                          @update:modelValue="updateFilter"
                         ></v-autocomplete>
                       </v-row>
                     </v-col>
                     <v-col cols="12">
                       <v-row class="d-flex align-center">
-                        <span v-if="newFilter.title">which</span>
+                        <span v-if="newFilter.key">which</span>
                         <v-autocomplete
-                          :disabled="!newFilter.title"
+                          :disabled="!newFilter.key"
                           v-model="newFilter.qualifier"
-                          :items="availableFilters[newFilter.title]?.qualifiers || []"
+                          :items="fields[newFilter.key]?.qualifiers || []"
                           max-width="180px"
                           variant="underlined"
                           class="ml-6"
@@ -80,16 +82,16 @@
                         <v-text-field
                           variant="underlined"
                           v-model="newFilter.value"
-                          :type="availableFilters[newFilter.title]?.type"
+                          :type="fields[newFilter.key]?.type"
                           class="ml-6"
-                          :disabled="!newFilter.title"
+                          :disabled="!newFilter.key"
                         ></v-text-field>
                       </v-row>
                     </v-col>
 
-                    <v-col v-if="availableFilters[newFilter.title]?.description" cols="12">
+                    <v-col v-if="fields[newFilter.key]?.filterDescription" cols="12">
                       <p>
-                        {{ availableFilters[newFilter.title]?.description }}
+                        {{ fields[newFilter.key].filterDescription }}
                       </p>
                     </v-col>
                   </v-row>
@@ -251,7 +253,6 @@
 </template>
 
 <script>
-import { availableFilters } from '@/libs/available-filters'
 import { fields } from '@/libs/definitions'
 import { useTheme } from 'vuetify'
 export default {
@@ -260,9 +261,11 @@ export default {
     addedFiltersFromPreviousSearch: Array
   },
   data: () => ({
-    availableFilters: availableFilters,
     addingFilter: false,
+    selectedField: '',
+    filter: '',
     newFilter: {
+      key: '',
       include: '',
       title: '',
       group: '',
@@ -287,6 +290,7 @@ export default {
         })
         this.addingFilter = false
         this.newFilter = {
+          key: '',
           include: '',
           title: '',
           group: '',
@@ -295,10 +299,12 @@ export default {
         }
       }
     },
-    updateSubtitle() {
-      const selectedFilter = this.availableFilters[this.newFilter.title]
-      if (selectedFilter) {
-        this.newFilter.group = selectedFilter.group
+    updateFilter() {
+      const selectedField = this.fields[this.newFilter.key]
+
+      if (selectedField) {
+        this.newFilter.title = selectedField.flattenedDisplayName || selectedField.displayName
+        this.newFilter.group = selectedField.displayGroupName
       }
     },
     cancelNewFilter() {
@@ -320,6 +326,12 @@ export default {
     }
   },
   computed: {
+    filtersItems() {
+      return Object.entries(this.fields).map(([key, field]) => ({
+        key: key,
+        displayName: field.flattenedDisplayName || field.displayName
+      }))
+    },
     allFieldsSelected() {
       return Object.keys(this.selectedFields).length === Object.keys(this.fields).length
     },
@@ -337,7 +349,9 @@ export default {
       if (!fieldsSearch) return this.fields
 
       return Object.entries(this.fields).reduce((acc, [key, field]) => {
-        const nameUsed = field.flattenedDisplayName ? field.flattenedDisplayName.toLowerCase() : field.displayName.toLowerCase()
+        const nameUsed = field.flattenedDisplayName
+          ? field.flattenedDisplayName.toLowerCase()
+          : field.displayName.toLowerCase()
 
         if (nameUsed.indexOf(fieldsSearch) > -1) {
           acc[key] = field
