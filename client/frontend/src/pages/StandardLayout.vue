@@ -118,12 +118,6 @@ export default {
       hints: true,
       drawerItems: [
         {
-          title: 'Dashboard',
-          icon: 'mdi-view-dashboard',
-          value: 'dashboard',
-          routerLink: 'dashboard-page'
-        },
-        {
           title: 'Database Search',
           icon: 'mdi-database',
           value: 'databaseSearch',

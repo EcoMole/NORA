@@ -12,12 +12,7 @@ export default new createRouter({
     {
       path: '/',
       name: 'home-page',
-      redirect: { name: 'dashboard-page' }
-    },
-    {
-      path: '/dashboard/',
-      name: 'dashboard-page',
-      component: () => import('@/pages/DashboardPage.vue')
+      redirect: { name: 'database-search-page' }
     },
     {
       path: '/database-search/',
