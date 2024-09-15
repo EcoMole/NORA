@@ -140,7 +140,6 @@ import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
 import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
-import { availableFields } from '@/libs/available-fields'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
 
@@ -156,8 +155,7 @@ export default {
     fetchedNovelFoods: null,
     addedFilters: [],
     selectedFields: {},
-    availableFields: availableFields,
-    nameMappingObj: {...objectTypes, ...fields},
+    nameMappingObj: { ...objectTypes, ...fields }
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
@@ -198,5 +196,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

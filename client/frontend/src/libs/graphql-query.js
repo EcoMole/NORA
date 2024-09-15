@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import { query as gqlQuery } from 'gql-query-builder'
-import { availableFields } from './available-fields'
+import { fields } from './definitions'
 
 export function buildGraphQLQuery(fields) {
   const { query } = gqlQuery({
@@ -23,7 +23,7 @@ export function buildGraphQLQuery(fields) {
 function buildNestedFieldsStructure(flattenedFields) {
   /*
 
-builds the availbleFields format
+builds nested format:
 
 field1: {
   fields: {
@@ -44,15 +44,13 @@ field4: {
 field8: {}
 
 
-from flattenedFields format
+from flattenedFields format:
 
-flattenedFields = {
-  "field1.field2" : {},
-  "field3" : {},
-  "field4.field5.field6" : {},
-  "field4.field5.field7" : {},
-  "field8" : {}
-}
+"field1.field2" : {},
+"field3" : {},
+"field4.field5.field6" : {},
+"field4.field5.field7" : {},
+"field8" : {}
 
 */
   const result = {}
@@ -85,7 +83,8 @@ flattenedFields = {
 
 function parseFields(fields) {
   /*
-Builds the desired format:
+
+Builds the gql-query-builder desired format:
 newArray = [
   {field1: ["field2"]},
   "field3",
@@ -94,7 +93,7 @@ newArray = [
   "field8"
 ]
 
-from the availbleFields format
+from the nested format
 
 field1: {
   fields: {
@@ -122,16 +121,13 @@ field8: {}
     } else {
       acc.push(fieldName)
     }
-    console.log('acc', acc)
     return acc
   }, [])
 }
 
-export function buildQueryFromAllAvailableFields() {
-  return buildGraphQLQuery(parseFields(availableFields.novelFoods.fields))
-}
 
-export function buildQueryFromSelectedFields(selectedFields) {
+
+export function buildQueryFromSelectedFields(selectedFields=fields) {
   return buildGraphQLQuery(parseFields(buildNestedFieldsStructure(selectedFields)))
 }
 

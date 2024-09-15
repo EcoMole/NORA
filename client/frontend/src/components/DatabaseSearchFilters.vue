@@ -177,8 +177,8 @@
             </v-row>
             <v-row class="mt-0">
               <v-col
-                v-for="(field, fieldPath) in selectedFields"
-                :key="fieldPath"
+                v-for="(field, key) in selectedFields"
+                :key="key"
                 class="py-1 pe-0"
                 cols="auto"
               >
@@ -186,7 +186,7 @@
                   size="large"
                   closable
                   elevation="3"
-                  @click:close="delete selectedFields[fieldPath]"
+                  @click:close="delete selectedFields[key]"
                   variant="elevated"
                   :color="this.theme.global.current.value.dark ? 'black' : 'white'"
                 >
@@ -200,8 +200,8 @@
 
           <v-container class="mt-4">
             <v-text-field
-              v-if="!allAttrsSelected"
-              v-model="attrsSearch"
+              v-if="!allFieldsSelected"
+              v-model="fieldsSearch"
               density="comfortable"
               placeholder="Search available data"
               prepend-inner-icon="mdi-magnify"
@@ -211,11 +211,11 @@
               hide-details
             ></v-text-field>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
-              <template v-for="(field, fieldPath) in availableAttrsSearched">
+              <template v-for="(field, key) in fieldsSearched">
                 <v-list-item
-                  v-if="!(fieldPath in selectedFields)"
-                  :key="fieldPath"
-                  @click="selectedFields[fieldPath] = field"
+                  v-if="!(key in selectedFields)"
+                  :key="key"
+                  @click="selectedFields[key] = field"
                 >
                   <template v-slot:prepend>
                     <v-icon :icon="field.icon"></v-icon>
@@ -252,7 +252,7 @@
 
 <script>
 import { availableFilters } from '@/libs/available-filters'
-import { availableFields } from '@/libs/available-fields'
+import { fields } from '@/libs/definitions'
 import { useTheme } from 'vuetify'
 export default {
   props: {
@@ -270,10 +270,9 @@ export default {
       value: ''
     },
     addedFilters: [],
-    availableFields: availableFields,
-    attrsSearch: '',
-    selectedFields: {},
-    flattenedFields: {}
+    fields: fields,
+    fieldsSearch: '',
+    selectedFields: {}
   }),
   methods: {
     addFilter() {
@@ -297,9 +296,9 @@ export default {
       }
     },
     updateSubtitle() {
-      const selectedAttribute = this.availableFilters[this.newFilter.title]
-      if (selectedAttribute) {
-        this.newFilter.group = selectedAttribute.group
+      const selectedFilter = this.availableFilters[this.newFilter.title]
+      if (selectedFilter) {
+        this.newFilter.group = selectedFilter.group
       }
     },
     cancelNewFilter() {
@@ -318,27 +317,11 @@ export default {
     renderTable() {
       this.$emit('render-table', this.addedFilters, this.selectedFields)
       this.$emit('close')
-    },
-    flattenFields(fields, parentPath = '') {
-      let flatFields = {}
-      for (let fieldName in fields) {
-        let field = fields[fieldName]
-        let currentPath = parentPath ? `${parentPath}.${fieldName}` : fieldName
-
-        if (field.fields) {
-          // Recursive call for nested fields
-          flatFields = { ...flatFields, ...this.flattenFields(field.fields, currentPath) }
-        } else {
-          // Add field to flattened fields with its path
-          flatFields[currentPath] = field
-        }
-      }
-      return flatFields
     }
   },
   computed: {
-    allAttrsSelected() {
-      return Object.keys(this.selectedFields).length === Object.keys(this.flattenedFields).length
+    allFieldsSelected() {
+      return Object.keys(this.selectedFields).length === Object.keys(this.fields).length
     },
     addFilterValid() {
       return (
@@ -348,16 +331,16 @@ export default {
         this.newFilter.value
       )
     },
-    availableAttrsSearched() {
-      const attrsSearch = this.attrsSearch?.toLowerCase()
+    fieldsSearched() {
+      const fieldsSearch = this.fieldsSearch?.toLowerCase()
 
-      if (!attrsSearch) return this.flattenedFields
+      if (!fieldsSearch) return this.fields
 
-      return Object.entries(this.flattenedFields).reduce((acc, [fieldPath, field]) => {
-        const displayName = field.displayName.toLowerCase()
+      return Object.entries(this.fields).reduce((acc, [key, field]) => {
+        const nameUsed = field.flattenedDisplayName ? field.flattenedDisplayName.toLowerCase() : field.displayName.toLowerCase()
 
-        if (displayName.indexOf(attrsSearch) > -1) {
-          acc[fieldPath] = field
+        if (nameUsed.indexOf(fieldsSearch) > -1) {
+          acc[key] = field
         }
 
         return acc
@@ -373,7 +356,6 @@ export default {
     this.addedFilters = this.addedFiltersFromPreviousSearch
       ? [...this.addedFiltersFromPreviousSearch]
       : []
-    this.flattenedFields = this.flattenFields(this.availableFields.novelFoods.fields)
   }
 }
 </script>
