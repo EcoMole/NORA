@@ -11,7 +11,7 @@ function getUserType(user) {
 const mappingObj = {
   contains: 'Icontains',
   is: 'Exact',
-  'must have': 'Filter',
+  'must have': 'Include',
   'must not have': 'Exclude'
 }
 
