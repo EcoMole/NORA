@@ -79,7 +79,16 @@
                           variant="underlined"
                           class="ml-6"
                         ></v-autocomplete>
+                        <v-autocomplete
+                          v-if="newFilter.options"
+                          v-model="newFilter.value"
+                          :items="newFilter.options"
+                          max-width="180px"
+                          variant="underlined"
+                          class="ml-6"
+                        ></v-autocomplete>
                         <v-text-field
+                          v-else
                           variant="underlined"
                           v-model="newFilter.value"
                           :type="fields[newFilter.key]?.type"
@@ -255,6 +264,7 @@
 <script>
 import { fields } from '@/libs/definitions'
 import { useTheme } from 'vuetify'
+import axios from '@/libs/axios'
 export default {
   props: {
     selectedFieldsFromPreviousSearch: Object,
@@ -279,6 +289,16 @@ export default {
     selectedFields: {}
   }),
   methods: {
+    async getOptions(apiEndpoint) {
+      const url = `/api/v1/${apiEndpoint}`
+      try {
+        const response = await axios.get(url)
+        console.log('response.data', response.data)
+        return response.data
+      } catch (error) {
+        console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)
+      }
+    },
     addFilter() {
       if (this.addFilterValid) {
         this.addedFilters.unshift({
@@ -297,14 +317,18 @@ export default {
           title: '',
           group: '',
           qualifier: '',
-          value: ''
+          value: '',
+          options: []
         }
       }
     },
-    updateFilter() {
+    async updateFilter() {
       const selectedField = this.fields[this.newFilter.key]
 
       if (selectedField) {
+        if (selectedField.apiEndpoint) {
+          this.newFilter.options = await this.getOptions(selectedField.apiEndpoint)
+        }
         this.newFilter.title = selectedField.flattenedDisplayName || selectedField.displayName
         this.newFilter.group = selectedField.displayGroupName
       }
@@ -316,7 +340,8 @@ export default {
         title: '',
         group: '',
         qualifier: '',
-        value: ''
+        value: '',
+        options: []
       }
     },
     removeFilter(index) {

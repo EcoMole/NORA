@@ -1,54 +1,52 @@
 export const objectTypes = {
-
   allergenicities: {
-    displayName: 'Allergenicity',
+    displayName: 'Allergenicity'
   },
   panels: {
-    displayName: 'Panel',
+    displayName: 'Panel'
   },
   sciOfficers: {
-    displayName: 'Scientific Officer',
+    displayName: 'Scientific Officer'
   },
   questions: {
-    displayName: 'Question',
+    displayName: 'Question'
   },
-  "questions.applicants": {
-    displayName: 'Applicant',
+  'questions.applicants': {
+    displayName: 'Applicant'
   },
-  "questions.mandates": {
-    displayName: 'Mandate',
+  'questions.mandates': {
+    displayName: 'Mandate'
   },
   foodCategories: {
-    displayName: 'Food Category',
+    displayName: 'Food Category'
   },
   novelFoodCategories: {
-    displayName: 'Novel Food Category',
+    displayName: 'Novel Food Category'
   },
   admes: {
-    displayName: 'ADME',
+    displayName: 'ADME'
   },
-  "admes.investigationTypes": {
-    displayName: 'Investigation Type',
+  'admes.investigationTypes': {
+    displayName: 'Investigation Type'
   },
   genotoxes: {
-    displayName: 'Genotox',
+    displayName: 'Genotox'
   },
   endpointstudies: {
-    displayName: 'Endpoint Study',
+    displayName: 'Endpoint Study'
   },
-  "endpointstudies.endpoints": {
-    displayName: 'Endpoint',
+  'endpointstudies.endpoints': {
+    displayName: 'Endpoint'
   },
-  "endpointstudies.endpoints.finalOutcomes": {
-    displayName: 'Final Outcome',
+  'endpointstudies.endpoints.finalOutcomes': {
+    displayName: 'Final Outcome'
   },
-  "endpointstudies.endpoints.finalOutcomes.populations": {
-    displayName: 'Population',
-  },
+  'endpointstudies.endpoints.finalOutcomes.populations': {
+    displayName: 'Population'
+  }
 }
 
 export const fields = {
-
   // novel food
 
   nfCode: {
@@ -73,9 +71,9 @@ export const fields = {
   },
   toxStudyRequired: {
     displayName: 'Toxicology Study Required',
-    displayGroupName: 'Novel Food',
-    type: 'boolean',
-    qualifiers: ['is true', 'is false'],
+    displayGroupName: 'Toxicology',
+    apiEndpoint: 'tox-study-required/',
+    qualifiers: ['is'],
     icon: 'mdi-flask-outline',
     filterDescription: 'description for Toxicology Study Required',
     tooltipDescription: 'Toxicology Study Required tooltip description'
@@ -84,7 +82,8 @@ export const fields = {
     displayName: 'Genotoxicity Final Outcome',
     displayGroupName: 'Novel Food',
     type: 'text',
-    qualifiers: ['contains', 'is'],
+    apiEndpoint: 'genotox-final-outcome/',
+    qualifiers: ['is'],
     icon: 'mdi-dna',
     filterDescription: 'description for Genotoxicity Final Outcome',
     tooltipDescription: 'Genotoxicity Final Outcome tooltip description'
@@ -127,6 +126,7 @@ export const fields = {
   },
   sufficientData: {
     displayName: 'Sufficient Data',
+    flattenedDisplayName: 'Stability - Sufficient Data',
     displayGroupName: 'Novel Food',
     type: 'boolean',
     qualifiers: ['is true', 'is false'],
@@ -136,7 +136,8 @@ export const fields = {
   },
   foodMatrices: {
     displayName: 'Food Matrices',
-    displayGroupName: 'Novel Food',
+    displayGroupName: 'Stability',
+    flattenedDisplayName: 'Stability - Food Matrices',
     type: 'text',
     qualifiers: ['contains', 'is'],
     icon: 'mdi-grid',
@@ -210,8 +211,7 @@ export const fields = {
     tooltipDescription: 'Vocabulary Name tooltip description'
   },
 
-
-  "allergenicities.title": {
+  'allergenicities.title': {
     displayName: '',
     flattenedDisplayName: 'Allergenicity',
     displayGroupName: 'Allergenicity',
@@ -279,8 +279,7 @@ export const fields = {
     tooltipDescription: 'Opinion Adoption Date tooltip description'
   },
 
-
-  "panels.title": {
+  'panels.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Panel',
     displayGroupName: 'Administrative',
@@ -291,8 +290,7 @@ export const fields = {
     tooltipDescription: "Panel's Name tooltip description"
   },
 
-
-  "sciOfficers.firstName": {
+  'sciOfficers.firstName': {
     displayName: 'First Name',
     flattenedDisplayName: "Scientific Officer's First Name",
     displayGroupName: 'Administrative',
@@ -302,7 +300,7 @@ export const fields = {
     filterDescription: "description for Scientific Officer's First Name",
     tooltipDescription: "Scientific Officer's First Name tooltip description"
   },
-  "sciOfficers.middleName": {
+  'sciOfficers.middleName': {
     displayName: 'Middle Name',
     flattenedDisplayName: "Scientific officer's Middle Name",
     displayGroupName: 'Administrative',
@@ -312,7 +310,7 @@ export const fields = {
     filterDescription: "description for scientific officer's Middle Name",
     tooltipDescription: "Scientific officer's Middle Name tooltip description"
   },
-  "sciOfficers.lastName": {
+  'sciOfficers.lastName': {
     displayName: 'Last Name',
     flattenedDisplayName: "Scientific officer's Last Name",
     displayGroupName: 'Administrative',
@@ -325,8 +323,7 @@ export const fields = {
 
   // question
 
-
-  "questions.number": {
+  'questions.number': {
     displayName: 'Number',
     flattenedDisplayName: 'Question Number',
     displayGroupName: 'Question',
@@ -337,7 +334,7 @@ export const fields = {
     tooltipDescription: 'Number tooltip description'
   },
 
-  "questions.applicants.title": {
+  'questions.applicants.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Applicant',
     displayGroupName: 'Applicant',
@@ -348,7 +345,7 @@ export const fields = {
     tooltipDescription: 'Applicant title tooltip description'
   },
 
-  "questions.mandates.mandateTypeTitle": {
+  'questions.mandates.mandateTypeTitle': {
     displayName: 'Type',
     flattenedDisplayName: 'Mandate Type',
     displayGroupName: 'Mandate',
@@ -358,7 +355,7 @@ export const fields = {
     filterDescription: 'description for Mandate Type',
     tooltipDescription: 'Mandate Type tooltip description'
   },
-  "questions.mandates.mandateTypeDefinition": {
+  'questions.mandates.mandateTypeDefinition': {
     displayName: 'Type Definition',
     flattenedDisplayName: 'Mandate Type Definition',
     displayGroupName: 'Mandate',
@@ -368,7 +365,7 @@ export const fields = {
     filterDescription: 'description for Mandate Type Definition',
     tooltipDescription: 'Mandate Type Definition tooltip description'
   },
-  "questions.mandates.regulation": {
+  'questions.mandates.regulation': {
     displayName: 'Regulation',
     flattenedDisplayName: 'Mandate Regulation',
     displayGroupName: 'Mandate',
@@ -379,8 +376,7 @@ export const fields = {
     tooltipDescription: 'Mandate Regulation tooltip description'
   },
 
-
-  "foodCategories.title": {
+  'foodCategories.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Food Category Name',
     displayGroupName: 'Novel Food',
@@ -390,7 +386,7 @@ export const fields = {
     filterDescription: 'description for Food Category Name',
     tooltipDescription: 'Food Category Name tooltip description'
   },
-  "foodCategories.definition": {
+  'foodCategories.definition': {
     displayName: 'Definition',
     flattenedDisplayName: 'Food Category Definition',
     displayGroupName: 'Novel Food',
@@ -401,8 +397,7 @@ export const fields = {
     tooltipDescription: 'Food Category Definition tooltip description'
   },
 
-
-  "novelFoodCategories.title": {
+  'novelFoodCategories.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Novel Food Category',
     displayGroupName: 'Novel Food',
@@ -412,7 +407,7 @@ export const fields = {
     filterDescription: 'description for Novel Food Category',
     tooltipDescription: 'Novel Food Category tooltip description'
   },
-  "novelFoodCategories.definition": {
+  'novelFoodCategories.definition': {
     displayName: 'Definition',
     flattenedDisplayName: 'Novel Food Category Definition',
     displayGroupName: 'Novel Food',
@@ -422,7 +417,7 @@ export const fields = {
     filterDescription: 'description for Novel Food Category Definition',
     tooltipDescription: 'Novel Food Category Definition tooltip description'
   },
-  "novelFoodCategories.regulation": {
+  'novelFoodCategories.regulation': {
     displayName: 'Regulation',
     flattenedDisplayName: 'Novel Food Category Regulation',
     displayGroupName: 'Novel Food',
@@ -435,8 +430,7 @@ export const fields = {
 
   // adme
 
-
-  "admes.testType": {
+  'admes.testType': {
     displayName: 'Test Type',
     flattenedDisplayName: 'ADME Test Type',
     displayGroupName: 'ADME',
@@ -446,7 +440,7 @@ export const fields = {
     filterDescription: 'description for Test Type',
     tooltipDescription: 'Test Type tooltip description'
   },
-  "admes.guideline": {
+  'admes.guideline': {
     displayName: 'Guideline',
     flattenedDisplayName: 'ADME Guideline',
     displayGroupName: 'ADME',
@@ -456,7 +450,7 @@ export const fields = {
     filterDescription: 'description for Guideline',
     tooltipDescription: 'Guideline tooltip description'
   },
-  "admes.guidelineQualifier": {
+  'admes.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
     flattenedDisplayName: 'ADME Guideline Qualifier',
     displayGroupName: 'ADME',
@@ -466,7 +460,7 @@ export const fields = {
     filterDescription: 'description for Guideline Qualifier',
     tooltipDescription: 'Guideline Qualifier tooltip description'
   },
-  "admes.studySource": {
+  'admes.studySource': {
     displayName: 'Study Source',
     flattenedDisplayName: 'ADME Study Source',
     displayGroupName: 'ADME',
@@ -477,7 +471,7 @@ export const fields = {
     tooltipDescription: 'Study Source tooltip description'
   },
 
-  "admes.investigationTypes.title": {
+  'admes.investigationTypes.title': {
     displayName: 'Name',
     flattenedDisplayName: 'ADME Investigation Type',
     displayGroupName: 'ADME',
@@ -490,8 +484,7 @@ export const fields = {
 
   // genotox
 
-
-  "genotoxes.testType": {
+  'genotoxes.testType': {
     displayName: 'Test Type',
     flattenedDisplayName: 'Genotox Test Type',
     displayGroupName: 'Genotox',
@@ -501,7 +494,7 @@ export const fields = {
     filterDescription: 'description for Test Type',
     tooltipDescription: 'Test Type tooltip description'
   },
-  "genotoxes.guideline": {
+  'genotoxes.guideline': {
     displayName: 'Guideline',
     flattenedDisplayName: 'Genotox Guideline',
     displayGroupName: 'Genotox',
@@ -511,7 +504,7 @@ export const fields = {
     filterDescription: 'description for Guideline',
     tooltipDescription: 'Guideline tooltip description'
   },
-  "genotoxes.guidelineQualifier": {
+  'genotoxes.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
     flattenedDisplayName: 'Genotox Guideline Qualifier',
     displayGroupName: 'Genotox',
@@ -521,7 +514,7 @@ export const fields = {
     filterDescription: 'description for Guideline Qualifier',
     tooltipDescription: 'Guideline Qualifier tooltip description'
   },
-  "genotoxes.studySource": {
+  'genotoxes.studySource': {
     displayName: 'Study Source',
     flattenedDisplayName: 'Genotox Study Source',
     displayGroupName: 'Genotox',
@@ -531,7 +524,7 @@ export const fields = {
     filterDescription: 'description for Study Source',
     tooltipDescription: 'Study Source tooltip description'
   },
-  "genotoxes.outcome": {
+  'genotoxes.outcome': {
     displayName: 'Outcome',
     flattenedDisplayName: 'Genotox Outcome',
     displayGroupName: 'Genotox',
@@ -544,8 +537,7 @@ export const fields = {
 
   // endpoint studies
 
-
-  "endpointstudies.testType": {
+  'endpointstudies.testType': {
     displayName: 'Test Type',
     flattenedDisplayName: 'Endpoint Study Test Type',
     displayGroupName: 'Endpoint Study',
@@ -555,7 +547,7 @@ export const fields = {
     filterDescription: 'description for Test Type',
     tooltipDescription: 'Test Type tooltip description'
   },
-  "endpointstudies.guideline": {
+  'endpointstudies.guideline': {
     displayName: 'Guideline',
     flattenedDisplayName: 'Endpoint Study Guideline',
     displayGroupName: 'Endpoint Study',
@@ -565,7 +557,7 @@ export const fields = {
     filterDescription: 'description for Guideline',
     tooltipDescription: 'Guideline tooltip description'
   },
-  "endpointstudies.species": {
+  'endpointstudies.species': {
     displayName: 'Species',
     flattenedDisplayName: 'Endpoint Study Species',
     displayGroupName: 'Endpoint Study',
@@ -575,7 +567,7 @@ export const fields = {
     filterDescription: 'description for Species',
     tooltipDescription: 'Species tooltip description'
   },
-  "endpointstudies.sex": {
+  'endpointstudies.sex': {
     displayName: 'Sex',
     flattenedDisplayName: 'Endpoint Study Sex',
     displayGroupName: 'Endpoint Study',
@@ -585,7 +577,7 @@ export const fields = {
     filterDescription: 'description for Sex',
     tooltipDescription: 'Sex tooltip description'
   },
-  "endpointstudies.studyDuration": {
+  'endpointstudies.studyDuration': {
     displayName: 'Study Duration',
     flattenedDisplayName: 'Endpoint Study Duration',
     displayGroupName: 'Endpoint Study',
@@ -596,7 +588,7 @@ export const fields = {
     tooltipDescription: 'Study Duration tooltip description'
   },
 
-  "endpointstudies.endpoints.referencePoint": {
+  'endpointstudies.endpoints.referencePoint': {
     displayName: 'Reference Point',
     displayGroupName: 'Endpoint',
     type: 'text',
@@ -605,7 +597,7 @@ export const fields = {
     filterDescription: 'description for Reference Point',
     tooltipDescription: 'Reference Point tooltip description'
   },
-  "endpointstudies.endpoints.qualifier": {
+  'endpointstudies.endpoints.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Endpoint Qualifier',
     displayGroupName: 'Endpoint',
@@ -615,7 +607,7 @@ export const fields = {
     filterDescription: 'description for Qualifier',
     tooltipDescription: 'Qualifier tooltip description'
   },
-  "endpointstudies.endpoints.subpopulation": {
+  'endpointstudies.endpoints.subpopulation': {
     displayName: 'Subpopulation',
     flattenedDisplayName: 'Endpoint Subpopulation',
     displayGroupName: 'Endpoint',
@@ -625,7 +617,7 @@ export const fields = {
     filterDescription: 'description for Subpopulation',
     tooltipDescription: 'Subpopulation tooltip description'
   },
-  "endpointstudies.endpoints.lovalue": {
+  'endpointstudies.endpoints.lovalue': {
     displayName: 'Value',
     flattenedDisplayName: 'Endpoint Value',
     displayGroupName: 'Endpoint',
@@ -636,7 +628,7 @@ export const fields = {
     tooltipDescription: 'Value tooltip description'
   },
 
-  "endpointstudies.endpoints.finalOutcomes.outcome": {
+  'endpointstudies.endpoints.finalOutcomes.outcome': {
     displayName: '',
     flattenedDisplayName: 'Final Outcome',
     displayGroupName: 'Final Outcome',
@@ -646,7 +638,7 @@ export const fields = {
     filterDescription: 'description for Outcome',
     tooltipDescription: 'Outcome tooltip description'
   },
-  "endpointstudies.endpoints.finalOutcomes.qualifier": {
+  'endpointstudies.endpoints.finalOutcomes.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Final Outcome Qualifier',
     displayGroupName: 'Final Outcome',
@@ -656,7 +648,7 @@ export const fields = {
     filterDescription: 'description for Qualifier',
     tooltipDescription: 'Qualifier tooltip description'
   },
-  "endpointstudies.endpoints.finalOutcomes.value": {
+  'endpointstudies.endpoints.finalOutcomes.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Final Outcome Value',
     displayGroupName: 'Final Outcome',
@@ -667,7 +659,7 @@ export const fields = {
     tooltipDescription: 'Value tooltip description'
   },
 
-  "endpointstudies.endpoints.finalOutcomes.populations.subgroup": {
+  'endpointstudies.endpoints.finalOutcomes.populations.subgroup': {
     displayName: 'Subgroup',
     flattenedDisplayName: 'Final Outcome Population Subgroup',
     displayGroupName: 'Population',
@@ -677,7 +669,7 @@ export const fields = {
     filterDescription: 'description for Subgroup',
     tooltipDescription: 'Subgroup tooltip description'
   },
-  "endpointstudies.endpoints.finalOutcomes.populations.qualifier": {
+  'endpointstudies.endpoints.finalOutcomes.populations.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Final Outcome Population Qualifier',
     displayGroupName: 'Population',
@@ -687,7 +679,7 @@ export const fields = {
     filterDescription: 'description for Qualifier',
     tooltipDescription: 'Qualifier tooltip description'
   },
-  "endpointstudies.endpoints.finalOutcomes.populations.value": {
+  'endpointstudies.endpoints.finalOutcomes.populations.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Final Outcome Population Value',
     displayGroupName: 'Population',

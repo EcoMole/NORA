@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- {{this.fetchedNovelFoods || ""}} -->
+  </div>
+  <div>
     <h1>Database Search</h1>
     <DatabaseSearchFilters
       v-if="showFilterInterface"
@@ -176,6 +179,7 @@ export default {
           variables: variables
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges
+        console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
