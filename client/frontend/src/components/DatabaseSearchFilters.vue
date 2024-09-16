@@ -293,7 +293,6 @@ export default {
       const url = `/api/v1/${apiEndpoint}`
       try {
         const response = await axios.get(url)
-        console.log('response.data', response.data)
         return response.data
       } catch (error) {
         console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)

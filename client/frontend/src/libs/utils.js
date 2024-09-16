@@ -16,7 +16,6 @@ const mappingObj = {
 }
 
 function buildVariables(addedFilters) {
-  console.log('addedFilters', addedFilters)
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
     const mappedKey = `${key}${mappingObj[qualifier]}${mappingObj[include]}`
     acc[mappedKey] = value

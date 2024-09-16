@@ -108,7 +108,8 @@ field8: {},
       acc.push(fieldName)
     }
     return acc
-  }, [])
+    // we need to fetch IDs for the exporting feature
+  }, ["id"])
 }
 
 export function buildQueryFromSelectedFields(variables, selectedFields = fields) {
