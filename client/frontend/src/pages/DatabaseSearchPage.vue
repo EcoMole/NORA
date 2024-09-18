@@ -51,9 +51,10 @@
           </v-hover>
         </template>
         <v-list density="compact">
-          <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i">
+          <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i" @click="handleExport(i)">
             <template v-slot:prepend>
               <v-icon :icon="option.icon"></v-icon>
+
             </template>
             <v-list-item-title>{{ option.title }}</v-list-item-title>
           </v-list-item>
@@ -147,6 +148,7 @@ import { useMainStore } from '@/stores/main'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
 import { buildVariables } from '@/libs/utils.js'
+import axios from '@/libs/axios'
 
 export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },
@@ -154,7 +156,7 @@ export default {
     tableIsLoading: false,
     exportOptions: [
       { title: 'the search result', icon: 'mdi-table' },
-      { title: 'the whole database', icon: 'mdi-database' }
+      //{ title: 'the whole database', icon: 'mdi-database' }
     ],
     showFilterInterface: true,
     fetchedNovelFoods: null,
@@ -181,7 +183,7 @@ export default {
           variables: variables
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges
-        console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
+        /* console.log('this.fetchedNovelFoods', this.fetchedNovelFoods) */
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
@@ -192,7 +194,38 @@ export default {
       this.showFilterInterface = true
       this.addedFilters = []
       this.selectedFields = []
-    }
+    },
+    exportSearchResult() {
+      console.log('exporting search result')
+      axios.post('/api/v1/export/', this.fetchedNovelFoods, {responseType: 'blob'})
+      .then(response => {
+      // Handle success (e.g., trigger download if needed)
+      console.log('Export successful', response);
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    
+      // Create a download link for the Excel file
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', 'exported_data.xlsx');  // Specify the filename
+      document.body.appendChild(link);  // Append link to the body
+      link.click();  // Programmatically click the link to trigger the download
+      document.body.removeChild(link);
+      })
+      .catch(error => {
+        console.error('Error exporting:', error);
+      });
+    },
+    exportWholeDatabase() {
+      console.log('exporting whole database')
+    },
+    handleExport(i) {
+      console.log('exporting', i)
+      if (i === 0) {
+        this.exportSearchResult();
+      } else if (i === 1) {
+        this.exportWholeDatabase();
+      }
+    },
   },
   created() {
     this.theme = useTheme()
