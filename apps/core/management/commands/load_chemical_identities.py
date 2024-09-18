@@ -19,11 +19,17 @@ class Command(BaseCommand):
         parser.add_argument("csv_file", type=str)
 
     def add_chemical_identity(self, row):
-        r_question_number = row["question"]
-        question = Question.objects.get(number=r_question_number)
+        try:
+            question = Question.objects.get(number=row["question"])
+        except Question.DoesNotExist:
+            print("Question not found - returning")
+            return
         opinion_question = OpinionQuestion.objects.get(question=question)
-        opinion = opinion_question.opinion
-        novel_food = NovelFood.objects.get(opinion=opinion)
+        try:
+            novel_food = NovelFood.objects.get(opinion=opinion_question.opinion)
+        except NovelFood.DoesNotExist:
+            print("Novel food not found - returning")
+            return
 
         custom = False
         try:  # Try to get the chemical
@@ -42,9 +48,10 @@ class Command(BaseCommand):
         # Create the chemical
         chemical = Chemical.objects.create(vocab_id=chemical_vocab)
 
+        # Assign it to the novel food
         NovelFoodChemical.objects.create(novel_food=novel_food, chemical=chemical)
 
-        if custom:
+        if custom: # Add the descriptors if the chemical is custom
             if not pd.isnull(row["IUPAC"]):
                 ChemDescriptor.objects.create(
                     chemical=chemical, type="IUPAC", value=row["IUPAC"]
@@ -83,10 +90,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[""])
-        Chemical.objects.all().delete()
-        ChemDescriptor.objects.all().delete()
-        NovelFoodChemical.objects.all().delete()
-        TaxonomyNode.objects.filter(taxonomy__code="PARAM", code="NORA").delete()
 
         for _, row in df.iterrows():
             self.add_chemical_identity(row)
