@@ -51,6 +51,10 @@ export default {
     nameMappingObj: {
       type: Object,
       required: true
+    },
+    headdersToHide: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
@@ -69,7 +73,7 @@ export default {
         return []
       }
       return Object.keys(dataItem)
-        .filter((key) => key !== '__typename' && key !== 'id')
+        .filter((key) => !this.headdersToHide.includes(key))
         .map((key) => {
           const fullPath = [...this.path, key].join('.')
           const mappingEntry = this.nameMappingObj[fullPath]

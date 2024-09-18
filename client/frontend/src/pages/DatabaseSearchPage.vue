@@ -24,6 +24,7 @@
             :data="fetchedNovelFoods.map((edge) => edge.node)"
             :loading="tableIsLoading"
             :nameMappingObj="nameMappingObj"
+            :headdersToHide="headdersToHide"
           />
         </div>
       </v-sheet>
@@ -159,18 +160,19 @@ export default {
     fetchedNovelFoods: null,
     addedFilters: [],
     selectedFields: {},
+    headdersToHide: [],
     nameMappingObj: { ...objectTypes, ...fields }
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
     buildVariables: buildVariables,
-    async renderTable(addedFilters, selectedFields) {
+    async renderTable(addedFilters, selectedFields, headdersToHide) {
+      this.headdersToHide = headdersToHide
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
       const variables = buildVariables(this.addedFilters)
       const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
-
       try {
         // using this.$apollo for Option API apollo provider
         // for Composition API apollo provider use: const { client } = useApolloClient()

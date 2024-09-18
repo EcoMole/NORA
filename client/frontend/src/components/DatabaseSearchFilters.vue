@@ -298,6 +298,17 @@ export default {
         console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)
       }
     },
+    getHeadersToHide() {
+      // Hide the __typename and id fields by default, also hide the novelFoodId field if user didnt select it
+      const fieldsToHide = ['__typename', 'id']
+
+      const isNovelFoodIdSelected = 'novelFoodId' in this.selectedFields
+
+      if (!isNovelFoodIdSelected) {
+        fieldsToHide.push('novelFoodId')
+      }
+      return fieldsToHide
+    },
     addFilter() {
       if (this.addFilterValid) {
         this.addedFilters.unshift({
@@ -347,7 +358,7 @@ export default {
       this.addedFilters.splice(index, 1)
     },
     renderTable() {
-      this.$emit('render-table', this.addedFilters, this.selectedFields)
+      this.$emit('render-table', this.addedFilters, this.selectedFields, this.getHeadersToHide())
       this.$emit('close')
     }
   },

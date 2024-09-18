@@ -62,11 +62,15 @@ class NovelFoodType(DjangoObjectType):
     admes = graphene.List(ADMEType)
     genotoxes = graphene.List(GenotoxType)
     endpointstudies = graphene.List(EndpointStudyType)
+    novel_food_id = graphene.Int()
 
     class Meta:
         model = NovelFood
         fields = "__all__"
         interfaces = (graphene.relay.Node,)
+
+    def resolve_novel_food_id(self, info):
+        return self.id
 
     def resolve_opinion_document_type(self, info):
         return self.opinion.document_type.name if self.opinion.document_type else None
