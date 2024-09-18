@@ -156,7 +156,7 @@ export default {
     tableIsLoading: false,
     exportOptions: [
       { title: 'the search result', icon: 'mdi-table' },
-      { title: 'the whole database', icon: 'mdi-database' }
+      //{ title: 'the whole database', icon: 'mdi-database' }
     ],
     showFilterInterface: true,
     fetchedNovelFoods: null,

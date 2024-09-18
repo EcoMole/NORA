@@ -142,8 +142,7 @@ def create_export(novel_food_data):
         genotox_df.to_excel(writer, sheet_name="genotox", index=False)
         endpoint_df.to_excel(writer, sheet_name="endpointstudies", index=False)
 
-        # Get workbook and worksheet objects
-        workbook = writer.book
+        # Get the worksheets
         novel_food_ws = writer.sheets["novel_food"]
         genotox_ws = writer.sheets["genotox"]
         endpoint_ws = writer.sheets["endpointstudies"]
