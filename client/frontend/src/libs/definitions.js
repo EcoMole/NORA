@@ -49,6 +49,17 @@ export const objectTypes = {
 export const fields = {
   // novel food
 
+  novelFoodId: {
+    displayName: 'ID',
+    flattenedDisplayName: 'Novel Food ID',
+    displayGroupName: 'Novel Food',
+    type: 'number',
+    qualifiers: ['is', 'greater than', 'less than'],
+    icon: 'mdi-numeric',
+    filterDescription: 'description for ID',
+    tooltipDescription: 'ID tooltip description'
+  },
+
   nfCode: {
     displayName: 'Code',
     flattenedDisplayName: 'Novel Food Code',

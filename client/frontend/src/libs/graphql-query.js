@@ -4,13 +4,12 @@ import { fields } from './definitions'
 
 function toDesiredVariablesStructure(variables) {
   return Object.entries(variables).reduce((acc, [key, value]) => {
-    acc[key] = {value: value, required: false}
+    acc[key] = { value: value, required: false }
     return acc
   }, {})
 }
 
 export function buildGraphQLQuery(variables, fields) {
-
   const { query } = gqlQuery({
     operation: 'novelFoods',
     fields: [
@@ -99,19 +98,25 @@ field4: {
 field8: {},
 }
 */
-  return Object.entries(fields).reduce((acc, [fieldName, fieldData]) => {
-    if (fieldData && typeof fieldData === 'object' && Object.keys(fieldData).length > 0) {
-      acc.push({
-        [fieldName]: toGqlQueryDesiredStructure(fieldData)
-      })
-    } else {
-      acc.push(fieldName)
-    }
-    return acc
-    // we need to fetch IDs for the exporting feature
-  }, ["id"])
+  return Object.entries(fields).reduce(
+    (acc, [fieldName, fieldData]) => {
+      if (fieldData && typeof fieldData === 'object' && Object.keys(fieldData).length > 0) {
+        acc.push({
+          [fieldName]: toGqlQueryDesiredStructure(fieldData)
+        })
+      } else {
+        acc.push(fieldName)
+      }
+      return acc
+      // we need to fetch IDs for the exporting feature
+    },
+    ['id']
+  )
 }
 
 export function buildQueryFromSelectedFields(variables, selectedFields = fields) {
-  return buildGraphQLQuery(variables, toGqlQueryDesiredStructure(toNestedStructure(selectedFields)))
+  const formattedFields = toGqlQueryDesiredStructure(toNestedStructure(selectedFields))
+  // we need the novelFoodId for the exporting feature
+  formattedFields.push('novelFoodId')
+  return buildGraphQLQuery(variables, formattedFields)
 }
