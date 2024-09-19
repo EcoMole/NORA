@@ -11,13 +11,20 @@ function getUserType(user) {
 const mappingObj = {
   contains: 'Icontains',
   is: 'Exact',
+  'is None': 'Isnull',
   'must have': 'Include',
-  'must not have': 'Exclude'
+  'must not have': 'Exclude',
+  'is before': 'Lt',
+  'is after': 'Gt'
 }
 
 function buildVariables(addedFilters) {
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
-    const mappedKey = `${key}${mappingObj[qualifier]}${mappingObj[include]}`
+    if (qualifier === 'is None') {
+      value = include === 'must have' ? true : false
+      include = null
+    }
+    const mappedKey = `${key}${mappingObj[qualifier]}${include ? mappingObj[include] : ''}`
     acc[mappedKey] = value
     return acc
   }, {})

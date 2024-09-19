@@ -80,7 +80,7 @@
                           class="ml-6"
                         ></v-autocomplete>
                         <v-autocomplete
-                          v-if="newFilter.options"
+                          v-if="showOptionsListField"
                           v-model="newFilter.value"
                           :items="newFilter.options"
                           max-width="180px"
@@ -88,7 +88,7 @@
                           class="ml-6"
                         ></v-autocomplete>
                         <v-text-field
-                          v-else
+                          v-if="showValueField"
                           variant="underlined"
                           v-model="newFilter.value"
                           :type="fields[newFilter.key]?.type"
@@ -149,7 +149,7 @@
                 }}</v-chip
                 >{{ ' ' }}which <b>{{ filter.qualifier }}</b
                 >{{ ' ' }}
-                <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
+                <v-chip v-if="filter.value" rounded="pill" density="compact" class="pb-1" color="secondary">{{
                   filter.value
                 }}</v-chip>
               </v-card-text>
@@ -281,7 +281,8 @@ export default {
       title: '',
       group: '',
       qualifier: '',
-      value: ''
+      value: null,
+      options: []
     },
     addedFilters: [],
     fields: fields,
@@ -289,11 +290,17 @@ export default {
     selectedFields: {}
   }),
   methods: {
-    async getOptions(apiEndpoint) {
+    async getOptions(apiEndpoint, djangoModel, djangoField) {
       const url = `/api/v1/${apiEndpoint}`
       try {
-        const response = await axios.get(url)
-        return response.data
+        const response = await axios.get(url, {
+          params: {
+            djangoModel,
+            djangoField
+          }
+        })
+        console.log(`options for ${djangoModel}.${djangoField} are:`, response.data)
+        return response.data.filter((option) => option)
       } catch (error) {
         console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)
       }
@@ -327,7 +334,7 @@ export default {
           title: '',
           group: '',
           qualifier: '',
-          value: '',
+          value: null,
           options: []
         }
       }
@@ -337,7 +344,13 @@ export default {
 
       if (selectedField) {
         if (selectedField.apiEndpoint) {
-          this.newFilter.options = await this.getOptions(selectedField.apiEndpoint)
+          this.newFilter.qualifier =
+            selectedField.qualifiers.length === 1 ? selectedField.qualifiers[0] : ''
+          this.newFilter.options = await this.getOptions(
+            selectedField.apiEndpoint,
+            selectedField.djangoModel,
+            selectedField.djangoField
+          )
         }
         this.newFilter.title = selectedField.flattenedDisplayName || selectedField.displayName
         this.newFilter.group = selectedField.displayGroupName
@@ -350,7 +363,7 @@ export default {
         title: '',
         group: '',
         qualifier: '',
-        value: '',
+        value: null,
         options: []
       }
     },
@@ -363,22 +376,28 @@ export default {
     }
   },
   computed: {
+    showOptionsListField() {
+      return this.newFilter.options.length > 0 && this.newFilter.qualifier !== 'is None'
+    },
+    showValueField() {
+      return this.newFilter.options.length < 1 && this.newFilter.qualifier !== 'is None'
+    },
     filtersItems() {
-      return Object.entries(this.fields).map(([key, field]) => ({
-        key: key,
-        displayName: field.flattenedDisplayName || field.displayName
-      }))
+      return (
+        Object.entries(this.fields)
+          // filterout fields which are not showInFilters
+          .filter((entry) => entry[1].showInFilters)
+          .map(([key, field]) => ({
+            key: key,
+            displayName: field.flattenedDisplayName || field.displayName
+          }))
+      )
     },
     allFieldsSelected() {
       return Object.keys(this.selectedFields).length === Object.keys(this.fields).length
     },
     addFilterValid() {
-      return (
-        this.newFilter.include &&
-        this.newFilter.title &&
-        this.newFilter.qualifier &&
-        this.newFilter.value
-      )
+      return this.newFilter.include && this.newFilter.title && this.newFilter.qualifier
     },
     fieldsSearched() {
       const fieldsSearch = this.fieldsSearch?.toLowerCase()
