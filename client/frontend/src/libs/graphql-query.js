@@ -4,12 +4,18 @@ import { fields } from './definitions'
 
 function toDesiredVariablesStructure(variables) {
   return Object.entries(variables).reduce((acc, [key, value]) => {
-    acc[key] = { value: value, required: false }
+    acc[key] = {
+      value: value === undefined || value === null ? null : value,
+      required: false, // It's not required if the value is null
+      type: value === undefined || value === null ? 'Boolean' : 'String'
+    }
     return acc
   }, {})
 }
 
 export function buildGraphQLQuery(variables, fields) {
+  console.log('desired structure variables', toDesiredVariablesStructure(variables))
+
   const { query } = gqlQuery({
     operation: 'novelFoods',
     fields: [

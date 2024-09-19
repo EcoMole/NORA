@@ -281,7 +281,7 @@ export default {
       title: '',
       group: '',
       qualifier: '',
-      value: ''
+      value: null
     },
     addedFilters: [],
     fields: fields,
@@ -289,10 +289,16 @@ export default {
     selectedFields: {}
   }),
   methods: {
-    async getOptions(apiEndpoint) {
+    async getOptions(apiEndpoint, djangoModel, djangoField) {
       const url = `/api/v1/${apiEndpoint}`
       try {
-        const response = await axios.get(url)
+        const response = await axios.get(url, {
+          params: {
+            djangoModel,
+            djangoField
+          }
+        })
+        console.log(`options for ${djangoModel}.${djangoField} are:`, response.data)
         return response.data
       } catch (error) {
         console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)
@@ -327,7 +333,7 @@ export default {
           title: '',
           group: '',
           qualifier: '',
-          value: '',
+          value: null,
           options: []
         }
       }
@@ -337,7 +343,11 @@ export default {
 
       if (selectedField) {
         if (selectedField.apiEndpoint) {
-          this.newFilter.options = await this.getOptions(selectedField.apiEndpoint)
+          this.newFilter.options = await this.getOptions(
+            selectedField.apiEndpoint,
+            selectedField.djangoModel,
+            selectedField.djangoField
+          )
         }
         this.newFilter.title = selectedField.flattenedDisplayName || selectedField.displayName
         this.newFilter.group = selectedField.displayGroupName
@@ -350,7 +360,7 @@ export default {
         title: '',
         group: '',
         qualifier: '',
-        value: '',
+        value: null,
         options: []
       }
     },
@@ -373,12 +383,7 @@ export default {
       return Object.keys(this.selectedFields).length === Object.keys(this.fields).length
     },
     addFilterValid() {
-      return (
-        this.newFilter.include &&
-        this.newFilter.title &&
-        this.newFilter.qualifier &&
-        this.newFilter.value
-      )
+      return this.newFilter.include && this.newFilter.title && this.newFilter.qualifier
     },
     fieldsSearched() {
       const fieldsSearch = this.fieldsSearch?.toLowerCase()
