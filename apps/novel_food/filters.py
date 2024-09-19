@@ -49,10 +49,11 @@ class NovelFoodFilter(django_filters.FilterSet):
     )
 
     # title
-    title_exact_include = django_filters.CharFilter(
-        field_name="title", lookup_expr="exact"
-    )
-    title_exact_exclude = django_filters.CharFilter(method="filter_title_exact_exclude")
+    title_isnull = NullableBooleanFilter(field_name="title", lookup_expr="isnull")
+    title_exact_include = django_filters.CharFilter(method="default_filter_method")
+    title_exact_exclude = django_filters.CharFilter(method="default_filter_method")
+    title_icontains_include = django_filters.CharFilter(method="default_filter_method")
+    title_icontains_exclude = django_filters.CharFilter(method="default_filter_method")
 
     # tox_study_required
     tox_study_required_exact_include = django_filters.CharFilter(
