@@ -1,9 +1,9 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import pandas as pd
 from studies.models import StudySource, InvestigationType, ADME, ADMEInvestigationType
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier
 from novel_food.models import NovelFood
-from administrative.models import Question, OpinionQuestion, Opinion
+from administrative.models import Question, OpinionQuestion
 from core.models import Contribution
 
 

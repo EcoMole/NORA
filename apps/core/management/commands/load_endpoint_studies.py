@@ -1,10 +1,10 @@
 from typing import Any
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import pandas as pd
 from studies.models import StudySource, Endpoint, Endpointstudy
 from taxonomies.models import Taxonomy, TaxonomyNode, GuidelineQualifier
 from novel_food.models import NovelFood
-from administrative.models import Question, OpinionQuestion, Opinion
+from administrative.models import Question, OpinionQuestion
 from core.models import Contribution
 
 
@@ -149,6 +149,5 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[''])
-
         for _, row in df.iterrows():
             self.add_study(row)

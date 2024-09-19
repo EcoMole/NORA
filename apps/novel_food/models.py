@@ -22,7 +22,7 @@ class AllergenicityNovelFood(models.Model):
         Allergenicity,
         on_delete=models.CASCADE,
         db_column="id_allergenicity",
-        verbose_name="Allergenicity",
+        verbose_name="Allergenicity Risk",
     )
     novel_food = models.ForeignKey(
         "NovelFood",
@@ -55,7 +55,10 @@ class FoodCategory(models.Model):
 class FoodCategoryNovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_food_category_study")
     food_category = models.ForeignKey(
-        FoodCategory, on_delete=models.CASCADE, db_column="id_food_category"
+        FoodCategory,
+        on_delete=models.CASCADE,
+        db_column="id_food_category",
+        verbose_name="Food Category Tool",
     )
     novel_food = models.ForeignKey(
         "NovelFood",
@@ -75,7 +78,6 @@ class FoodCategoryNovelFood(models.Model):
     class Meta:
         db_table = "STUDY_FOOD_CATEGORY"
         verbose_name = "Food Category of Novel Food"
-        verbose_name_plural = "Food Categories"
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "food_category"],
@@ -95,7 +97,8 @@ class NovelFoodCategory(models.Model):
         on_delete=models.SET_NULL,
         # related_name="regulation_categories",
         db_column="id_regulation",
-        limit_choices_to={"taxonomy__code": "LEGREF"},
+        limit_choices_to=models.Q(taxonomy__code="LEGREF")
+        & ~models.Q(short_name="root"),
         help_text="(LEGREF vocab)",
     )
 
@@ -118,7 +121,10 @@ class NovelFoodCategoryNovelFood(models.Model):
         related_name="novel_food_categories",
     )
     novel_food_category = models.ForeignKey(
-        NovelFoodCategory, on_delete=models.CASCADE, db_column="id_sub_type"
+        NovelFoodCategory,
+        on_delete=models.CASCADE,
+        db_column="id_sub_type",
+        verbose_name="Regulation Category",
     )
 
     def __str__(self) -> str:
@@ -133,8 +139,6 @@ class NovelFoodCategoryNovelFood(models.Model):
 
     class Meta:
         db_table = "STUDY_SUB_TYPE"
-        verbose_name = "Novel Food Category of Novel Food"
-        verbose_name_plural = "Novel Food Categories"
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "novel_food_category"],
@@ -175,14 +179,17 @@ class NovelFoodSyn(models.Model):
         db_column="id_study",
         related_name="synonyms",
     )
-    title = models.CharField(max_length=255, db_column="study_syn")
+    title = models.CharField(
+        max_length=255,
+        db_column="study_syn",
+        verbose_name="Novel/Traditional Food Synonym",
+    )
 
     def __str__(self):
         return ""
 
     class Meta:
         db_table = "STUDY_SYN"
-        verbose_name = "Novel food synonym"
 
 
 class OrgType(models.Model):
@@ -244,15 +251,28 @@ class Organism(models.Model):
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "MTX"},
-        help_text="(MTX vocab)",
+        limit_choices_to=models.Q(taxonomy__code="MTX")
+        & (
+            models.Q(extended_name__icontains="(as animal)")
+            | models.Q(extended_name__icontains="(as organism)")
+            | models.Q(extended_name__icontains="(as plant)")
+            | models.Q(short_name__icontains="(as animal)")
+            | models.Q(short_name__icontains="(as organism)")
+            | models.Q(short_name__icontains="(as plant)")
+        ),
+        help_text="(MTX vocab) - only records with '(as animal)' or '(as plant)' or "
+        "'(as organism)' in the name are allowed",
         related_name="vocab_id_organisms",
         verbose_name="Organism vocabulary identification",
         db_column="id_organism",
     )
 
     def __str__(self):
-        return self.vocab_id.name
+        return (
+            self.vocab_id.name
+            if self.vocab_id
+            else "MISSING ORGANISM VOCABULARY IDENTIFICATION"
+        )
 
     class Meta:
         db_table = "ORGANISM"
@@ -318,7 +338,10 @@ class NovelFoodOrganism(models.Model):
         related_name="organisms",
     )
     organism = models.ForeignKey(
-        Organism, on_delete=models.CASCADE, db_column="id_organism"
+        Organism,
+        on_delete=models.CASCADE,
+        db_column="id_organism",
+        verbose_name="Organism Identity",
     )
     org_part = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -326,9 +349,12 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="org_part_novel_foods",
-        limit_choices_to={"taxonomy__code": "MTX"},
+        limit_choices_to=models.Q(taxonomy__code="MTX")
+        & ~models.Q(short_name="root")
+        & models.Q(is_part_nature=True),
         help_text="(MTX vocab)",
         db_column="id_org_part",
+        verbose_name="organism part",
     )
     variant = models.CharField(
         max_length=255,
@@ -343,7 +369,9 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="is_gmo_novel_foods",
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         verbose_name="is GMO",
         db_column="id_is_gmo",
         help_text="Is the organism genetically modified? (YESNO vocab)",
@@ -354,7 +382,9 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="has_qps_novel_foods",
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         verbose_name="has QPS",
         db_column="id_has_qps",
         help_text="Has qualified presumption of safety? applies only if the organism is a "
@@ -369,7 +399,9 @@ class NovelFoodOrganism(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="cells_modified_novel_foods",
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         verbose_name="Cells Modified? (Cell Culture)",
         db_column="id_cells_modified",
         help_text="(YESNO vocab)",
@@ -377,8 +409,6 @@ class NovelFoodOrganism(models.Model):
 
     class Meta:
         db_table = "STUDY_ORG"
-        verbose_name = "Organism Identity of Novel food"
-        verbose_name_plural = "Organism Identities"
 
 
 class NovelFoodChemical(models.Model):
@@ -390,37 +420,14 @@ class NovelFoodChemical(models.Model):
         related_name="chemicals",
     )
     chemical = models.ForeignKey(
-        "Chemical", on_delete=models.CASCADE, db_column="id_com"
+        "Chemical",
+        on_delete=models.CASCADE,
+        db_column="id_com",
+        verbose_name="Chemical Identity",
     )
 
     class Meta:
         db_table = "STUDY_COM"
-        verbose_name = "Chemical Identity of Novel Food"
-        verbose_name_plural = "Chemical Identities"
-
-
-# For possible future use only
-class ChemicalType(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_com_type")
-    title = models.CharField(max_length=255, db_column="com_type")
-    definition = models.TextField(null=True, blank=True)
-
-    class Meta:
-        db_table = "COM_TYPE"
-        verbose_name = "Chemical type (future use)"
-        verbose_name_plural = "📂 Chemical types (future use)"
-
-
-# For possible future use only
-class StructureReported(models.Model):
-    id = models.AutoField(primary_key=True, db_column="id_com_structureShown")
-    title = models.CharField(max_length=255, db_column="com_structureShown")
-    definition = models.TextField(null=True, blank=True)
-
-    class Meta:
-        db_table = "COM_STRUCTURE_SHOWN"
-        verbose_name = "Structure reported (future use)"
-        verbose_name_plural = "📂 Structures reported (future use)"
 
 
 class Chemical(models.Model):
@@ -434,36 +441,18 @@ class Chemical(models.Model):
         null=True,
         on_delete=models.SET_NULL,
         related_name="vocab_id_chemicals",
-        limit_choices_to={"taxonomy__code": "PARAM"},
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         help_text="(PARAM vocab)",
         verbose_name="Chemical vocabulary identification",
     )
 
-    chemical_type = models.ForeignKey(
-        # for possible future use
-        ChemicalType,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        db_column="id_comp_type",
-        help_text="The majority of the chemical types are extracted from the OECD picklist"
-        "(OECD 2012). More on the purpose of this field: 2013:EN-458 page:20",
-    )
-    structure_reported = models.ForeignKey(
-        # for possible future use
-        StructureReported,
-        on_delete=models.CASCADE,
-        db_column="id_com_structureShown",
-        blank=True,
-        null=True,
-        help_text="This field is used to indicate what type of structure (either SMILES or InChI) "
-        "is reported. For example: the structure of the compound itself, the structure of "
-        "the monomer if the compound is a polymer, the structure of an isomer, or "
-        "no structure at all.",
-    )
-
     def __str__(self):
-        return self.vocab_id.name
+        return (
+            self.vocab_id.name
+            if self.vocab_id
+            else "MISSING CHEMICAL VOCABULARY IDENTIFICATION"
+        )
 
     class Meta:
         db_table = "COMPONENT"
@@ -507,7 +496,7 @@ class ChemDescriptor(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_com_descriptor")
     type = models.CharField(max_length=255, choices=TYPE_CHOICES)
     value = models.CharField(
-        max_length=255,
+        max_length=500,
         verbose_name="Descriptor",
         help_text="contains e.g. the molecular formula itself if type is 'Molecular Formula', etc.",
     )
@@ -555,15 +544,14 @@ class SubstanceOfConcernNovelFood(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="substance_of_concern_substance_of_concern_novel_foods",
-        limit_choices_to={"taxonomy__code": "PARAM"},
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         db_column="id_sub_of_concern",
         help_text="Fill only if there is a substance of concern, if not leave blank. (PARAM vocab)",
     )
 
     class Meta:
         db_table = "SUBSTANCE_OF_CONCERN_STUDY"
-        verbose_name = "Substance of concern"
-        verbose_name_plural = "Substances of concern"
 
 
 class GenotoxFinalOutcome(models.Model):
@@ -646,7 +634,9 @@ class NovelFood(models.Model):
         db_column="id_protein_digestibility",
         verbose_name="Protein digestibility",
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         related_name="protein_digestibility_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -657,7 +647,9 @@ class NovelFood(models.Model):
         db_column="id_antinutritional_factors",
         verbose_name="Antinutritional factors",
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         related_name="antinutritional_factors_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -668,7 +660,9 @@ class NovelFood(models.Model):
         db_column="id_has_nutri_disadvantage",
         verbose_name="Nutritionally Disadvantageous",
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         related_name="has_nutri_disadvantage_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -685,7 +679,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_is_sufficient_data",
         related_name="sufficient_data_novel_foods",
         help_text="Were sufficient data provided? (YESNO vocab)",
@@ -696,7 +692,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_is_food_matrices",
         help_text="Were food matrices provided? (YESNO vocab)",
         related_name="food_matrices_novel_foods",
@@ -706,7 +704,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_instability_concerns",
         related_name="instability_concerns_novel_foods",
         help_text="(YESNO vocab)",
@@ -723,7 +723,8 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "UNIT"},
+        limit_choices_to=models.Q(taxonomy__code="UNIT")
+        & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"]),
         db_column="id_shelflife_unit",
         related_name="shelflife_unit_novel_foods",
         verbose_name="Shelf Life Unit",
@@ -734,7 +735,9 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_has_endocrine_disrupt_prop",
         verbose_name="Endocrine Disrupting Properties",
         related_name="endocrine_disrupt_prop_novel_foods",
@@ -758,7 +761,8 @@ class NovelFood(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={"taxonomy__code": "PARAM"},
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         db_column="id_rms_efsa",
         related_name="vocab_id_novel_foods",
         verbose_name="NovelFood Vocabulary Identification",
@@ -790,7 +794,8 @@ class SpecificToxicity(models.Model):
         db_column="id_toxicity",
         verbose_name="Specific Toxicity",
         on_delete=models.CASCADE,
-        limit_choices_to={"taxonomy__code": "TOXICITY"},
+        limit_choices_to=models.Q(taxonomy__code="TOXICITY")
+        & ~models.Q(short_name="root"),
         related_name="novel_foods",
         help_text="if novel food has specific toxicity, specify which one. (TOXICITY vocab)",
     )
@@ -807,8 +812,6 @@ class SpecificToxicity(models.Model):
 
     class Meta:
         db_table = "SPECIFIC_TOXICITY"
-        verbose_name = "Specific Toxicity"
-        verbose_name_plural = "Specific Toxicities"
         constraints = [
             models.UniqueConstraint(
                 fields=["novel_food", "specific_toxicity"],
@@ -832,9 +835,10 @@ class BackgroundExposureAssessment(models.Model):
         on_delete=models.SET_NULL,
         related_name="comp_of_interest_bg_expo_assessments",
         db_column="id_comp_of_interest",
-        limit_choices_to={"taxonomy__code": "PARAM"},
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         help_text="Compound of interest (PARAM vocab)",
-        verbose_name="Compound Assessed",
+        verbose_name="Compound Assessed For Background Exposure",
     )
 
     def __str__(self) -> str:
@@ -842,8 +846,6 @@ class BackgroundExposureAssessment(models.Model):
 
     class Meta:
         db_table = "BG_EXPO_ASSESSMENT"
-        verbose_name = "Background exposure assessment"
-        verbose_name_plural = "Background exposure assessment"
 
 
 class HBGV(models.Model):
@@ -860,9 +862,11 @@ class HBGV(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="type_hbgvs",
-        limit_choices_to={"taxonomy__code": "ENDPOINT_HGV"},
+        limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV")
+        & ~models.Q(short_name="root"),
         db_column="id_type",
         help_text="(ENDPOINT_HGV vocab)",
+        verbose_name="Health-Based Guidance Value",
     )
     substance = models.ForeignKey(
         "taxonomies.TaxonomyNode",
@@ -870,7 +874,8 @@ class HBGV(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="substance_hbgvs",
-        limit_choices_to={"taxonomy__code": "PARAM"},
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         db_column="id_substance",
         help_text="(PARAM vocab)",
     )
@@ -880,15 +885,20 @@ class HBGV(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="exceeded_hbgvs",
-        limit_choices_to={"taxonomy__code": "YESNO"},
+        limit_choices_to=models.Q(taxonomy__code="YESNO")
+        & ~models.Q(short_name="root")
+        & models.Q(is_yesno=True),
         db_column="id_exceeded",
         help_text="(YESNO vocab)",
         verbose_name="Exceedance",
     )
 
     def __str__(self):
-        return f"{self.novel_food.title} - {self.substance.name} - {self.type.name}"
-
-    class Meta:
-        verbose_name = "Health-Based Guidance Value"
-        verbose_name_plural = "Health-Based Guidance Values"
+        result = ""
+        if self.novel_food:
+            result += f"{self.novel_food.title}"
+        if self.substance:
+            result += f" - {self.substance.name}"
+        if self.type:
+            result += f" - {self.type.name}"
+        return result

@@ -16,7 +16,7 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Script to load organism identities of Novel Foods."
+    help = "Command that loads organism identities of NFs from csv."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)

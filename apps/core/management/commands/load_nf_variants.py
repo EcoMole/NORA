@@ -3,11 +3,10 @@ import pandas as pd
 from taxonomies.models import Taxonomy, TaxonomyNode, Subgroup, Population
 from novel_food.models import NovelFood
 from administrative.models import Question, OpinionQuestion
-from core.models import Contribution
 from composition.models import NovelFoodVariant, FoodForm, ProposedUse
 
 class Command(BaseCommand):
-    help = "Command to load NF variants."
+    help = "Command that loads NF variants from csv."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)

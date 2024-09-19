@@ -60,7 +60,8 @@ class Parameter(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="vocab_id_parameters",
-        limit_choices_to={"taxonomy__code": "PARAM"},
+        limit_choices_to=models.Q(taxonomy__code="PARAM")
+        & ~models.Q(short_name="root"),
         help_text="(PARAM vocab)",
         verbose_name="Parameter Vocabulary Identification",
         db_column="id_param",
@@ -153,11 +154,13 @@ class ProductionNovelFoodVariant(models.Model):
 
     process = models.ForeignKey(
         "taxonomies.TaxonomyNode",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        null=False,
+        blank=False,
+        on_delete=models.CASCADE,
         related_name="process_production_novel_food_variants",
-        limit_choices_to={"taxonomy__code": "MTX"},
+        limit_choices_to=models.Q(taxonomy__code="MTX")
+        & ~models.Q(short_name="root")
+        & models.Q(is_process=True),
         help_text="(MTX vocab)",
         db_column="id_process",
         verbose_name="Process Step",
@@ -214,7 +217,18 @@ class Composition(models.Model):
         on_delete=models.SET_NULL,
         related_name="qualifier_compositions",
         db_column="id_qualifier",
-        limit_choices_to={"taxonomy__code": "QUALIFIER"},
+        limit_choices_to=models.Q(taxonomy__code="QUALIFIER")
+        & models.Q(
+            extended_name__in=[
+                "Equal to",
+                "Less than",
+                "Less than or equal",
+                "Greater than",
+                "Greater than or equal",
+                "Circa",
+                "traces",
+            ]
+        ),
         help_text="(QUALIFIER vocab)",
     )
     value = models.DecimalField(
@@ -238,7 +252,7 @@ class Composition(models.Model):
         on_delete=models.SET_NULL,
         related_name="unit_compositions",
         db_column="id_unit",
-        limit_choices_to={"taxonomy__code": "UNIT"},
+        limit_choices_to=models.Q(taxonomy__code="UNIT") & ~models.Q(short_name="root"),
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     TYPE_CHOICES = (
@@ -252,17 +266,13 @@ class Composition(models.Model):
         choices=TYPE_CHOICES,
         blank=False,
         null=False,
-        help_text="Specification/Composition/Other",
+        help_text="Specification/Characterization/Other",
     )
 
-    footnote = models.TextField(blank=True)
+    footnote = models.TextField(blank=True, verbose_name="Comment")
 
     def __str__(self):
         return ""
-
-    class Meta:
-        verbose_name = "Composition"
-        verbose_name_plural = "Composition"
 
 
 class ProposedUse(models.Model):
@@ -273,6 +283,7 @@ class ProposedUse(models.Model):
         ("infant follow on formula", "Infant formula and follow-on formula"),
         ("special medical purpose", "Food for special medical purposes"),
         ("total diet replacement", "Total diet replacement for weight control"),
+        ("meal replacement for weight control", "Meal replacement for weight control"),
     ]
     id = models.AutoField(primary_key=True, db_column="id_proposed_use")
     nf_variant = models.ForeignKey(
@@ -346,7 +357,7 @@ class RiskAssessRedFlagNFVariant(models.Model):
         null=False,
         on_delete=models.CASCADE,
         db_column="id_risk_assess_red_flag",
-        verbose_name="Red Flag",
+        verbose_name="Risk Assessment Red Flag",
     )
 
     def __str__(self):
@@ -354,5 +365,3 @@ class RiskAssessRedFlagNFVariant(models.Model):
 
     class Meta:
         db_table = "RISK_ASSESS_RED_FLAG_NF_VARIANT"
-        verbose_name = "Risk assessment red flag"
-        verbose_name_plural = "Risk assessment red flags"

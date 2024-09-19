@@ -21,6 +21,7 @@ class CompositionInline(admin.TabularInline):
     model = Composition
     extra = 1
     autocomplete_fields = ["parameter", "unit", "qualifier"]
+    verbose_name_plural = "Composition and Specifications"
 
 
 class ProposedUseInline(admin.TabularInline):
@@ -61,6 +62,7 @@ class RiskAssessRedFlagNFVariantInline(admin.TabularInline):
     model = RiskAssessRedFlagNFVariant
     extra = 1
     autocomplete_fields = ["risk_assess_red_flag"]
+    verbose_name_plural = "Production Process"
 
 
 class HasContributor(admin.SimpleListFilter):
@@ -120,6 +122,9 @@ class NovelFoodVariantAdmin(admin.ModelAdmin):
         CompositionInline,
         ProposedUseInline,
     ]
+
+    class Media:
+        js = ("composition/js/admin_inline_copy.js",)
 
     def get_novel_food(self, obj):
         return str(obj.novel_food)
