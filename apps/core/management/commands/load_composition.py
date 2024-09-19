@@ -13,11 +13,6 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
 
-    def annotate(self, opinion, text):
-        contribution = Contribution.objects.get(opinion=opinion)
-        contribution.remarks = contribution.remarks + text
-        contribution.save()
-
     def initialize_characterisations(self):
         # Take all novel food variants:
         novel_food_variants = NovelFoodVariant.objects.all()
@@ -36,7 +31,8 @@ class Command(BaseCommand):
             extended_name="Percent", taxonomy__code="UNIT"
         )
 
-        # For each novel food variant and for each parameter, create a composition
+        # For each novel food variant and for each parameter, create a composition for
+        # extractor to fill it in.
         for nf_variant in novel_food_variants:
             for parameter in parameters_objs:
                 Composition.objects.create(
@@ -93,16 +89,14 @@ class Command(BaseCommand):
     def add_composition(self, row):
         print(f"Adding composition.")
 
-        r_question_number = row["question"]
         try:
-            question = Question.objects.get(number=r_question_number)
+            question = Question.objects.get(number=row["question"])
         except Question.DoesNotExist:
             print("Question not found - returning")
             return
         opinion_question = OpinionQuestion.objects.get(question=question)
-        opinion = opinion_question.opinion
         try:
-            novel_food_obj = NovelFood.objects.get(opinion=opinion)
+            novel_food_obj = NovelFood.objects.get(opinion=opinion_question.opinion)
         except NovelFood.DoesNotExist:
             print("Novel food not found - returning")
             return
@@ -115,7 +109,7 @@ class Command(BaseCommand):
                 novel_food=novel_food_obj, food_form__title=r_food_form
             )
 
-        else: # Food form not defined - use for all
+        else: # Food form not defined - use for all available food forms
             novel_food_variants = NovelFoodVariant.objects.filter(
                 novel_food=novel_food_obj
             )
@@ -125,7 +119,7 @@ class Command(BaseCommand):
                 parameter, type = row["parameter"].split('(')
                 parameter = parameter.strip()
                 type = type.replace(')', '').strip()
-                parameter_type_obj = ParameterType.objects.get(title=type)
+                parameter_type_obj, _ = ParameterType.objects.get_or_create(title=type)
                 parameter_obj, _ = Parameter.objects.get_or_create(
                     title=parameter, type=parameter_type_obj
                 )
@@ -136,7 +130,7 @@ class Command(BaseCommand):
             composition_obj, _ = Composition.objects.get_or_create(
                 nf_variant=variant_obj, parameter=parameter_obj
             )
-            if not composition_obj.value and pd.notna(row["value"]):
+            if not composition_obj.value and pd.notna(row["value"]): # Add value if available
                 value, upper_value, qualifier = self.interpret_value(row["value"])
                 composition_obj.value = value
                 if upper_value:
@@ -145,7 +139,7 @@ class Command(BaseCommand):
                 if row["footnote"]:
                     composition_obj.footnote = row["footnote"]
                 composition_obj.save()
-            if pd.notna(row['unit']):
+            if pd.notna(row['unit']): # Add units if we have them
                 unit_obj = TaxonomyNode.objects.get(extended_name=row['unit'], taxonomy__code='UNIT')
                 composition_obj.unit = unit_obj
                 composition_obj.save()
@@ -161,10 +155,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[""])
-        Composition.objects.all().delete()
-        Parameter.objects.all().delete()
 
         self.initialize_characterisations()
 
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             self.add_composition(row)

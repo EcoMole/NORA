@@ -15,8 +15,7 @@ from administrative.models import (
     QuestionApplicant,
     ScientificOfficer,
 )
-from core.models import Contribution, User
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from novel_food.models import (
     Allergenicity,
     AllergenicityNovelFood,
@@ -33,16 +32,12 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Load opinions and novel foods"
+    help = "Load opinions and novel foods from csv file."
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
 
     def import_opinion(self, row):
-        final_msg = '\nOpinion:\n'
-        KN = User.objects.get(username="klara@ecomole.com")
-        MF = User.objects.get(username="marketa@mit.edu")
-        LC = User.objects.get(username="lucie@ecomole.com")
 
         if 'statement' in row['title'].lower():
             doc_type = TaxonomyNode.objects.get(extended_name='EFSA statement', taxonomy__code='REF_TYPE')
@@ -51,54 +46,35 @@ class Command(BaseCommand):
         else:
             doc_type = TaxonomyNode.objects.get(extended_name='EFSA opinion', taxonomy__code='REF_TYPE')
 
-        print(f'importing opinion {row["title"]}')
+        print(f'Importing opinion {row["title"]}.')
 
-        r_title = row["title"]
-        r_doi = row["doi"]
-        if not pd.isnull(row["url"]):
-            r_url = row["url"]
-        else:
-            r_url = None
+        # Create the opinion with necessary fields
+        r_url = row["url"] if not pd.isnull(row["url"]) else None
+        opinion_obj = Opinion.objects.create(title=row["title"], doi=row["doi"], url=r_url, document_type=doc_type)
 
-        opinion_obj = Opinion.objects.create(title=r_title, doi=r_doi, url=r_url, document_type=doc_type)
-
+        # Add publication date and adoption date
         r_publication_date = row["publication date"]
         if not pd.isnull(r_publication_date):
             day, month, year = r_publication_date.split("-")
             pub_date = date(int(year), int(month), int(day))
             opinion_obj.publication_date = pub_date
-            opinion_obj.save()
 
         r_adoption_date = row["adoption date"]
         if not pd.isnull(r_adoption_date):
             day, month, year = r_adoption_date.split(" ")
             month = datetime.datetime.strptime(month, "%B").month
             adopt_date = date(int(year), month, int(day))
-
             opinion_obj.adoption_date = adopt_date
-            opinion_obj.save()
+            
+        opinion_obj.save()
 
-        person = row["person"]
-
-        if pd.isna(row['status']):
-            state = ''
-        else:
-            state = f"""Excel : {row['status']}\n"""
-        contribution = None
-        if person == "KN":
-            contribution = Contribution.objects.create(opinion=opinion_obj, user=KN, remarks=state, status='working_on')
-        elif person == "MF":
-            contribution = Contribution.objects.create(opinion=opinion_obj, user=MF, remarks=state, status='working_on')
-        elif person == "LČ":
-            contribution = Contribution.objects.create(opinion=opinion_obj, user=LC, remarks=state, status='working_on')
-
-        # import panels
+        # Add panels
         panels = row["panel"].split(",")
         for panel in panels:
-            panel_obj = Panel.objects.get(title=panel.strip())
+            panel_obj, _ = Panel.objects.get_or_create(title=panel.strip())
             OpinionPanel.objects.create(opinion=opinion_obj, panel=panel_obj)
 
-        # import questions
+        # Add questions with their mandates and applicants
         r_questions = row["question"]
         r_mandates = row["mandate"]
         r_applicant = row["applicant"]
@@ -115,22 +91,15 @@ class Command(BaseCommand):
             if not pd.isna(r_mandates):
                 for mandate in r_mandates.split(","):
                     if '?' in mandate:
-                        final_msg += 'Check mandate type.\n'
                         mandate = mandate.replace('?', '')
-                    mandate_type_obj = MandateType.objects.get(title=mandate.strip())
+                    mandate_type_obj, _ = MandateType.objects.get_or_create(title=mandate.strip())
                     mandate_obj = Mandate.objects.create(question=question_obj, mandate_type=mandate_type_obj)
                     if not pd.isna(row['regulation']):
                         if '2015/2283' in row['regulation']:
-                            mandate_obj.regulation = TaxonomyNode.objects.get(short_name='Regulation (EC) No 2015/2283 Article 3', taxonomy__code='LEGREF')
+                            mandate_obj.regulation = TaxonomyNode.objects.get_or_create(short_name='Regulation (EC) No 2015/2283 Article 3', taxonomy__code='LEGREF')[0]
                         if '258/93' in row['regulation']:
                             mandate_obj.regulation = TaxonomyNode.objects.get(code="N124A", taxonomy__code='LEGREF')
-                        if '.' in row['regulation']:
-                            final_msg += 'Check for missing regulations.\n'
                     mandate_obj.save()  
-
-        if contribution:
-            contribution.remarks += final_msg
-            contribution.save()
 
         # Import scientific officers
         r_so = row["so"]
@@ -187,7 +156,6 @@ class Command(BaseCommand):
             return day
 
     def import_novel_food(self, row, opinion):
-        result_msg = "Novel food: \n"
         r_nf_name = row["nf name"]
         if pd.isna(row["nf code"]):
             r_nf_code = None
@@ -202,7 +170,7 @@ class Command(BaseCommand):
         if not pd.isna(r_allergenicities):
             allergenicities = r_allergenicities.split(",")
             for allergenicity in allergenicities:
-                all_obj = Allergenicity.objects.get(title=allergenicity.strip())
+                all_obj, _ = Allergenicity.objects.get_or_create(title=allergenicity.strip())
                 AllergenicityNovelFood.objects.create(
                     novel_food=novel_food_obj, allergenicity=all_obj
                 )
@@ -231,9 +199,6 @@ class Command(BaseCommand):
 
         novel_food_obj.save()
 
-        if row["nutritional – background exposure assessment"] == "Yes":
-            result_msg += "Background exposure assessment (components of interest) not imported.\n"
-
         r_nutr_disadvantages = row["nutritional – disadvantageous"]
         novel_food_obj.has_nutri_disadvantage = self.get_yes_no(r_nutr_disadvantages)
 
@@ -254,14 +219,14 @@ class Command(BaseCommand):
             categories = r_category.split(',')
             for category in categories:
                 regulation, category = category.split(":") #find category which includes these two as substring:
-                category_obj = NovelFoodCategory.objects.get(title__contains=category.strip(), regulation__extended_name__contains=regulation.strip())
+                category_obj,_ = NovelFoodCategory.objects.get_or_create(title__contains=category.strip(), regulation__extended_name__contains=regulation.strip())
                 # assign category to novel food
                 NovelFoodCategoryNovelFood.objects.create(novel_food=novel_food_obj, novel_food_category=category_obj)
 
 
         r_common_names = row["nf - common name"]
         if not pd.isna(r_common_names):
-            syn_common_name = SynonymType.objects.get(title="common name")
+            syn_common_name, _ = SynonymType.objects.get_or_create(title="common name")
             for common_name in r_common_names.split(","):
                 NovelFoodSyn.objects.create(
                     syn_type=syn_common_name,
@@ -271,7 +236,7 @@ class Command(BaseCommand):
 
         r_trade_names = row["nf - trade name"]
         if not pd.isna(r_trade_names):
-            syn_trade_name = SynonymType.objects.get(title="trade name")
+            syn_trade_name, _ = SynonymType.objects.get_or_create(title="trade name")
             for trade_name in r_trade_names.split(","):
                 NovelFoodSyn.objects.create(
                     syn_type=syn_trade_name,
@@ -290,12 +255,6 @@ class Command(BaseCommand):
         r_endocrine = row["endocrine disrupting properties"]
         if not pd.isna(r_endocrine):
             novel_food_obj.endocrine_disrupt_prop = self.get_yes_no(r_endocrine)
-
-        if row["HBGV"] in ["yes", "Yes"]:
-            result_msg += "HBGV not imported.\n"
-
-        if row["substances of concern"] in ["yes", "Yes"]:
-            result_msg += "Substances of concern not imported.\n"
 
         r_specific_toxicity = row["specific toxicity – type"]
         toxicity_vocab = Taxonomy.objects.get(code="TOXICITY")
@@ -326,7 +285,7 @@ class Command(BaseCommand):
         if not pd.isna(r_food_category):
             categories = r_food_category.split(",")
             for category in categories:
-                food_category_obj = FoodCategory.objects.get(title=category.strip())
+                food_category_obj, _ = FoodCategory.objects.get_or_create(title=category.strip())
                 FoodCategoryNovelFood.objects.create(
                     novel_food=novel_food_obj, food_category=food_category_obj
                 )
@@ -341,21 +300,10 @@ class Command(BaseCommand):
             novel_food_obj.genotox_final_outcome = genotox_outcome_obj
             novel_food_obj.save()
 
-        if pd.isna(r_toxicity_required):
-            result_msg += "Toxicology required (Y/N) missing.\n"
-        else:
+        if not pd.isna(r_toxicity_required):
             novel_food_obj.tox_study_required = r_toxicity_required
             novel_food_obj.save()
 
-        # Find contribution for this opinioon:
-        try:
-            contribution = Contribution.objects.get(opinion=opinion)
-            contribution.remarks = contribution.remarks + result_msg
-            contribution.save()
-        except:
-            pass
-
-        return result_msg
 
     def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[""])
