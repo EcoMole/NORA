@@ -149,7 +149,7 @@
                 }}</v-chip
                 >{{ ' ' }}which <b>{{ filter.qualifier }}</b
                 >{{ ' ' }}
-                <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
+                <v-chip v-if="filter.value" rounded="pill" density="compact" class="pb-1" color="secondary">{{
                   filter.value
                 }}</v-chip>
               </v-card-text>
@@ -300,7 +300,7 @@ export default {
           }
         })
         console.log(`options for ${djangoModel}.${djangoField} are:`, response.data)
-        return response.data
+        return response.data.filter((option) => option)
       } catch (error) {
         console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)
       }
@@ -344,7 +344,8 @@ export default {
 
       if (selectedField) {
         if (selectedField.apiEndpoint) {
-          this.newFilter.qualifier = selectedField.qualifiers[0]
+          this.newFilter.qualifier =
+            selectedField.qualifiers.length === 1 ? selectedField.qualifiers[0] : ''
           this.newFilter.options = await this.getOptions(
             selectedField.apiEndpoint,
             selectedField.djangoModel,
@@ -382,13 +383,15 @@ export default {
       return this.newFilter.options.length < 1 && this.newFilter.qualifier !== 'is None'
     },
     filtersItems() {
-      return Object.entries(this.fields)
-        // filterout fields which are not showInFilters
-        .filter((entry) => entry[1].showInFilters)
-        .map(([key, field]) => ({
-          key: key,
-          displayName: field.flattenedDisplayName || field.displayName
-        }))
+      return (
+        Object.entries(this.fields)
+          // filterout fields which are not showInFilters
+          .filter((entry) => entry[1].showInFilters)
+          .map(([key, field]) => ({
+            key: key,
+            displayName: field.flattenedDisplayName || field.displayName
+          }))
+      )
     },
     allFieldsSelected() {
       return Object.keys(this.selectedFields).length === Object.keys(this.fields).length

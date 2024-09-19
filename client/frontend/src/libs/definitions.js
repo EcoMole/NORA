@@ -89,7 +89,7 @@ export const fields = {
     apiEndpoint: 'novel-food-values-list/',
     djangoModel: 'NovelFood',
     djangoField: 'tox_study_required',
-    qualifiers: ['is'],
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-flask-outline',
     filterDescription: 'description for Toxicology Study Required',
     tooltipDescription: 'Toxicology Study Required tooltip description',

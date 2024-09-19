@@ -17,7 +17,6 @@ class NovelFoodFilter(django_filters.FilterSet):
 
     def __init__(self, *args, **kwargs):
         # not necessary, but useful for debugging
-        print("NovelFoodFilter kwargs: ", kwargs)
         super().__init__(*args, **kwargs)
 
     def default_filter_method(self, queryset, name, value):
@@ -56,34 +55,15 @@ class NovelFoodFilter(django_filters.FilterSet):
     title_icontains_exclude = django_filters.CharFilter(method="default_filter_method")
 
     # tox_study_required
+    tox_study_required_isnull = NullableBooleanFilter(
+        field_name="tox_study_required", lookup_expr="isnull"
+    )
     tox_study_required_exact_include = django_filters.CharFilter(
-        field_name="tox_study_required", lookup_expr="exact"
+        method="default_filter_method"
     )
     tox_study_required_exact_exclude = django_filters.CharFilter(
-        method="filter_tox_study_required_exact_exclude"
+        method="default_filter_method"
     )
-
-    # title_icontains_include = django_filters.CharFilter(
-    #     field_name="title", lookup_expr="icontains"
-    # )
-
-    # title_icontains_exclude = django_filters.CharFilter(
-    #     method="filter_title_icontains_exclude"
-    # )
-
-    # def filter_title_icontains_exclude(self, queryset, name, value):
-    #     return queryset.exclude(title__icontains=value)
-
-    # # tox_study_required
-    # tox_study_required_exact_include = django_filters.CharFilter(
-    #     field_name="tox_study_required", lookup_expr="exact"
-    # )
-    # tox_study_required_exact_exclude = django_filters.CharFilter(
-    #     method="filter_tox_study_required_exact_exclude"
-    # )
-
-    # def filter_tox_study_required_exact_exclude(self, queryset, name, value):
-    #     return queryset.exclude(tox_study_required__exact=value)
 
     # # genotox_final_outcome
     # genotox_final_outcome_exact_include = django_filters.CharFilter(
