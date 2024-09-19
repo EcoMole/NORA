@@ -17,6 +17,7 @@
               :level="level + 1"
               :path="[...path, header.value]"
               :nameMappingObj="nameMappingObj"
+              :headdersToHide="headdersToHide"
             />
           </div>
           <div v-else>

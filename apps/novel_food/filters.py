@@ -5,9 +5,9 @@ from .models import NovelFood
 
 class NullableBooleanFilter(django_filters.BooleanFilter):
     def filter(self, qs, value):
-        if value is not None:
-            return super().filter(qs, value)
-        return qs.filter(**{f"{self.field_name}__isnull": value})
+        if value is True or value is False:
+            return qs.filter(**{f"{self.field_name}__isnull": value})
+        return super().filter(qs, value)
 
 
 class NovelFoodFilter(django_filters.FilterSet):
@@ -48,14 +48,19 @@ class NovelFoodFilter(django_filters.FilterSet):
         method="default_filter_method"
     )
 
-    # # title
-    # title_exact_include = django_filters.CharFilter(
-    #     field_name="title", lookup_expr="exact"
-    # )
-    # title_exact_exclude = django_filters.CharFilter(method="filter_title_exact_exclude")
+    # title
+    title_exact_include = django_filters.CharFilter(
+        field_name="title", lookup_expr="exact"
+    )
+    title_exact_exclude = django_filters.CharFilter(method="filter_title_exact_exclude")
 
-    # def filter_title_exact_exclude(self, queryset, name, value):
-    #     return queryset.exclude(title__exact=value)
+    # tox_study_required
+    tox_study_required_exact_include = django_filters.CharFilter(
+        field_name="tox_study_required", lookup_expr="exact"
+    )
+    tox_study_required_exact_exclude = django_filters.CharFilter(
+        method="filter_tox_study_required_exact_exclude"
+    )
 
     # title_icontains_include = django_filters.CharFilter(
     #     field_name="title", lookup_expr="icontains"
