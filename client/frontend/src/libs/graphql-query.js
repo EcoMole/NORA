@@ -7,7 +7,7 @@ function toDesiredVariablesStructure(variables) {
     acc[key] = {
       value: value === undefined || value === null ? null : value,
       required: false, // It's not required if the value is null
-      type: value === undefined || value === null ? 'Boolean' : 'String'
+      type: key.endsWith('Isnull') ? 'Boolean' : 'String'
     }
     return acc
   }, {})

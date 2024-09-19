@@ -80,7 +80,7 @@
                           class="ml-6"
                         ></v-autocomplete>
                         <v-autocomplete
-                          v-if="newFilter.options"
+                          v-if="showOptionsListField"
                           v-model="newFilter.value"
                           :items="newFilter.options"
                           max-width="180px"
@@ -88,7 +88,7 @@
                           class="ml-6"
                         ></v-autocomplete>
                         <v-text-field
-                          v-else
+                          v-if="showValueField"
                           variant="underlined"
                           v-model="newFilter.value"
                           :type="fields[newFilter.key]?.type"
@@ -281,7 +281,8 @@ export default {
       title: '',
       group: '',
       qualifier: '',
-      value: null
+      value: null,
+      options: []
     },
     addedFilters: [],
     fields: fields,
@@ -343,6 +344,7 @@ export default {
 
       if (selectedField) {
         if (selectedField.apiEndpoint) {
+          this.newFilter.qualifier = selectedField.qualifiers[0]
           this.newFilter.options = await this.getOptions(
             selectedField.apiEndpoint,
             selectedField.djangoModel,
@@ -373,6 +375,12 @@ export default {
     }
   },
   computed: {
+    showOptionsListField() {
+      return this.newFilter.options.length > 0 && this.newFilter.qualifier !== 'is None'
+    },
+    showValueField() {
+      return this.newFilter.options.length < 1 && this.newFilter.qualifier !== 'is None'
+    },
     filtersItems() {
       return Object.entries(this.fields).map(([key, field]) => ({
         key: key,

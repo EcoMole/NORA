@@ -18,7 +18,11 @@ const mappingObj = {
 
 function buildVariables(addedFilters) {
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
-    const mappedKey = `${key}${mappingObj[qualifier]}${mappingObj[include]}`
+    if (qualifier === 'is None') {
+      value = include === 'must have' ? true : false
+      include = null
+    }
+    const mappedKey = `${key}${mappingObj[qualifier]}${include ? mappingObj[include] : ''}`
     acc[mappedKey] = value
     return acc
   }, {})

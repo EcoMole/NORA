@@ -171,10 +171,11 @@ export default {
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
+      console.log('this.addedFilters', this.addedFilters)
       const variables = buildVariables(this.addedFilters)
-      console.log("variables", variables)
+      console.log('variables', variables)
       const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
-      console.log("QUERY", QUERY)
+      console.log('QUERY', QUERY)
       try {
         // using this.$apollo for Option API apollo provider
         // for Composition API apollo provider use: const { client } = useApolloClient()
