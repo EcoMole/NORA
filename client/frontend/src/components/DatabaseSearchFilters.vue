@@ -382,10 +382,13 @@ export default {
       return this.newFilter.options.length < 1 && this.newFilter.qualifier !== 'is None'
     },
     filtersItems() {
-      return Object.entries(this.fields).map(([key, field]) => ({
-        key: key,
-        displayName: field.flattenedDisplayName || field.displayName
-      }))
+      return Object.entries(this.fields)
+        // filterout fields which are not showInFilters
+        .filter((entry) => entry[1].showInFilters)
+        .map(([key, field]) => ({
+          key: key,
+          displayName: field.flattenedDisplayName || field.displayName
+        }))
     },
     allFieldsSelected() {
       return Object.keys(this.selectedFields).length === Object.keys(this.fields).length
