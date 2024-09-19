@@ -302,21 +302,21 @@ export const fields = {
     displayName: 'Opinion Publication Date',
     displayGroupName: 'Opinion',
     type: 'date',
-    qualifiers: ['is before', 'is after', 'is'],
+    qualifiers: ['is before', 'is after', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Publication Date',
     tooltipDescription: 'Opinion Publication Date tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   opinionAdoptionDate: {
     displayName: 'Opinion Adoption Date',
     displayGroupName: 'Opinion',
     type: 'date',
-    qualifiers: ['is before', 'is after', 'is'],
+    qualifiers: ['is before', 'is after', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Adoption Date',
     tooltipDescription: 'Opinion Adoption Date tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   'panels.title': {

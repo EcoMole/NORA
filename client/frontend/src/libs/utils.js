@@ -13,7 +13,9 @@ const mappingObj = {
   is: 'Exact',
   'is None': 'Isnull',
   'must have': 'Include',
-  'must not have': 'Exclude'
+  'must not have': 'Exclude',
+  'is before': 'Lt',
+  'is after': 'Gt'
 }
 
 function buildVariables(addedFilters) {

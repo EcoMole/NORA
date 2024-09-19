@@ -3,10 +3,25 @@ import django_filters
 from .models import NovelFood
 
 
+def get_fileld_name(field_name):
+    field_name = (
+        "opinion__adoption_date"
+        if field_name == "opinion_adoption_date"
+        else field_name
+    )
+    field_name = (
+        "opinion__publication_date"
+        if field_name == "opinion_publication_date"
+        else field_name
+    )
+    return field_name
+
+
 class NullableBooleanFilter(django_filters.BooleanFilter):
     def filter(self, qs, value):
+        field_name = get_fileld_name(self.field_name)
         if value is True or value is False:
-            return qs.filter(**{f"{self.field_name}__isnull": value})
+            return qs.filter(**{f"{field_name}__isnull": value})
         return super().filter(qs, value)
 
 
@@ -29,7 +44,8 @@ class NovelFoodFilter(django_filters.FilterSet):
             name_parts[:-2]
         )  # Extract the actual field name (e.g., 'nf_code')
         lookup_type = name_parts[-2]  # Get the lookup type (e.g., 'exact')
-
+        # todo get_fileld_name() should be more dynamic
+        field_name = get_fileld_name(field_name)
         # Include or exclude based on filter type
         if name_parts[-1] == "include":
             return queryset.filter(**{f"{field_name}__{lookup_type}": value})
@@ -62,6 +78,52 @@ class NovelFoodFilter(django_filters.FilterSet):
         method="default_filter_method"
     )
     tox_study_required_exact_exclude = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+
+    # opinion_adoption_date
+    opinion_adoption_date_isnull = NullableBooleanFilter(
+        field_name="opinion_adoption_date", lookup_expr="isnull"
+    )
+    opinion_adoption_date_exact_include = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_adoption_date_exact_exclude = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_adoption_date_gt_include = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_adoption_date_gt_exclude = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_adoption_date_lt_include = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_adoption_date_lt_exclude = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+
+    # opinion_publication_date
+    opinion_publication_date_isnull = NullableBooleanFilter(
+        field_name="opinion_publication_date", lookup_expr="isnull"
+    )
+    opinion_publication_date_exact_include = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_publication_date_exact_exclude = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_publication_date_gt_include = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_publication_date_gt_exclude = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_publication_date_lt_include = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    opinion_publication_date_lt_exclude = django_filters.CharFilter(
         method="default_filter_method"
     )
 
