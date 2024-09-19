@@ -12,7 +12,7 @@ from taxonomies.models import Taxonomy, TaxonomyNode
 
 
 class Command(BaseCommand):
-    help = "Command that loads production processes from csv." 
+    help = "Command to load production processes from csv."  
 
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
@@ -20,18 +20,23 @@ class Command(BaseCommand):
     def add_process_step(self, row):
         print("Adding process step for nf:", row["nf name"])
 
-        r_question_number = row["question"]
-        question = Question.objects.get(number=r_question_number)
+        try:
+            question = Question.objects.get(number=row["question"])
+        except Question.DoesNotExist:
+            print("Question not found - returning")
+            return
         opinion_question = OpinionQuestion.objects.get(question=question)
-        opinion = opinion_question.opinion
-        novel_food = NovelFood.objects.get(opinion=opinion)
+        try:
+            novel_food = NovelFood.objects.get(opinion=opinion_question.opinion)
+        except NovelFood.DoesNotExist:
+            print("Novel food not found - returning")
+            return
 
-        r_food_form = row["food form"]
-        if pd.isna(r_food_form) == True:  # Should only have one variant then
+        if pd.isna(row["food form"]):  # Should only have one variant then
             nf_variant = NovelFoodVariant.objects.get(novel_food=novel_food)
         else:
             nf_variant = NovelFoodVariant.objects.get(
-                novel_food=novel_food, food_form__title=r_food_form
+                novel_food=novel_food, food_form__title=row["food form"]
             )
 
         if not pd.isna(row["process step"]):
@@ -52,7 +57,7 @@ class Command(BaseCommand):
                 nf_variant=nf_variant, process=process_obj
             )
 
-        if not pd.isna(row["red flag"]):
+        if not pd.isna(row["red flag"]): # Add risk assessment red flags
             red_flag = RiskAssessRedFlag.objects.get_or_create(
                 title=row["red flag"]
             )
@@ -66,5 +71,5 @@ class Command(BaseCommand):
         ProductionNovelFoodVariant.objects.all().delete()
         RiskAssessRedFlagNFVariant.objects.all().delete()
 
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             self.add_process_step(row)

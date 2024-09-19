@@ -7,8 +7,27 @@ from administrative.schema import (  # noqa
     ScientificOfficerType,
 )
 from graphene_django.types import DjangoObjectType
+from studies.models import ADME, Endpointstudy, Genotox
+from studies.schema import ADMEType, EndpointStudyType, GenotoxType
 
-from .models import Allergenicity, NovelFood
+from .models import Allergenicity, FoodCategory, NovelFood, NovelFoodCategory
+
+
+class NovelFoodCategoryType(DjangoObjectType):
+    regulation = graphene.String()
+
+    class Meta:
+        model = NovelFoodCategory
+        fields = "__all__"
+
+    def resolve_regulation(self, info):
+        return self.regulation.name if self.regulation else None
+
+
+class FoodCategoryType(DjangoObjectType):
+    class Meta:
+        model = FoodCategory
+        fields = "__all__"
 
 
 class AllergenicityType(DjangoObjectType):
@@ -38,16 +57,20 @@ class NovelFoodType(DjangoObjectType):
     endocrine_disrupt_prop = graphene.String()
     vocab_id = graphene.String()
     allergenicities = graphene.List(AllergenicityType)
+    food_categories = graphene.List(FoodCategoryType)
+    novel_food_categories = graphene.List(NovelFoodCategoryType)
+    admes = graphene.List(ADMEType)
+    genotoxes = graphene.List(GenotoxType)
+    endpointstudies = graphene.List(EndpointStudyType)
+    novel_food_id = graphene.Int()
 
     class Meta:
         model = NovelFood
-        # fields = "__all__"
-        filter_fields = {
-            "title": [
-                "exact",
-            ],  # , 'icontains', 'istartswith'
-            # Add other fields to filter by
-        }
+        fields = "__all__"
+        interfaces = (graphene.relay.Node,)
+
+    def resolve_novel_food_id(self, info):
+        return self.id
 
     def resolve_opinion_document_type(self, info):
         return self.opinion.document_type.name if self.opinion.document_type else None
@@ -110,6 +133,23 @@ class NovelFoodType(DjangoObjectType):
 
     def resolve_allergenicities(self, info):
         return Allergenicity.objects.filter(allergenicitynovelfood__novel_food=self)
+
+    def resolve_food_categories(self, info):
+        return FoodCategory.objects.filter(foodcategorynovelfood__novel_food=self)
+
+    def resolve_novel_food_categories(self, info):
+        return NovelFoodCategory.objects.filter(
+            novelfoodcategorynovelfood__novel_food=self
+        )
+
+    def resolve_admes(self, info):
+        return ADME.objects.filter(novel_food=self)
+
+    def resolve_genotoxes(self, info):
+        return Genotox.objects.filter(novel_food=self)
+
+    def resolve_endpointstudies(self, info):
+        return Endpointstudy.objects.filter(novel_food=self)
 
 
 class Query(graphene.ObjectType):

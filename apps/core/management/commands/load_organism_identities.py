@@ -1,6 +1,5 @@
 import pandas as pd
 from administrative.models import OpinionQuestion, Question
-from core.models import Contribution
 from django.core.management.base import BaseCommand
 from novel_food.models import (
     Family,
@@ -22,36 +21,34 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("csv_file", type=str)
 
-    def annotate(self, opinion, text):
-        contribution = Contribution.objects.get(opinion=opinion)
-        contribution.remarks = contribution.remarks + text
-        contribution.save()
-
     def add_organism_identity(self, row):
-        final_msg = "\n"
         print("Adding organism identity for nf:", row["nf name"])
 
-        r_question_number = row["question"]
-        question = Question.objects.get(number=r_question_number)
+        try:
+            question = Question.objects.get(number=row["question"])
+        except Question.DoesNotExist:
+            print("Question not found - returning")
+            return
         opinion_question = OpinionQuestion.objects.get(question=question)
-        opinion = opinion_question.opinion
-        novel_food_obj = NovelFood.objects.get(opinion=opinion)
+        try:
+            novel_food_obj = NovelFood.objects.get(opinion=opinion_question.opinion)
+        except NovelFood.DoesNotExist:
+            print("Novel food not found - returning")
+            return
 
         if not pd.isna(row["vocab"]):  # We know its in vocabulary
             organism_vocab = TaxonomyNode.objects.get(
                 extended_name=row["vocab"].strip(), taxonomy__code="MTX"
             )
-        else:
-            final_msg += (
-                "Organism not found in vocabulary, created dummy node -> add it.\n"
-            )
+        else: # We need to create a dummy node, that user can manage later
             organism_vocab = TaxonomyNode.objects.get(
                 extended_name="Dummy node", taxonomy__code="MTX", code="NORA"
             )
 
+        # Create the organism
         organism_obj = Organism.objects.create(vocab_id=organism_vocab)
 
-        org_type_obj = OrgType.objects.get(title=row["type"])
+        org_type_obj, _ = OrgType.objects.get_or_create(title=row["type"])
         if not pd.isna(row["family"]):
             family_obj = Family.objects.get_or_create(
                 title=row["family"], org_type=org_type_obj
@@ -61,12 +58,12 @@ class Command(BaseCommand):
             )
 
         else:
-            final_msg += "Family missing, created dummy node -> rename it.\n"
+            print("Family missing, created dummy node -> rename it.")
             genus_obj = Genus.objects.get_or_create(title=row["genus"])
 
         if "," in row["species"]:
-            final_msg += "Multiple species for one organism, fill in manually.\n"
-            self.annotate(opinion, final_msg)
+            #Multiple species for one organism, fill in manually
+            print("Multiple species for one organism, fill in manually")
             return
         else:
             Species.objects.get_or_create(
@@ -83,14 +80,10 @@ class Command(BaseCommand):
             nf_organism.variant = row["variant"]
 
         if not pd.isna(row["gmo"]):
-            yes_no = TaxonomyNode.objects.get(code=row["gmo"], taxonomy__code="YESNO")
-            nf_organism.is_gmo = yes_no
-        else:
-            final_msg += "GMO status for organism missing."
+            nf_organism.is_gmo = TaxonomyNode.objects.get(code=row["gmo"], taxonomy__code="YESNO")
 
         if not pd.isna(row["qps"]):
-            yes_no = TaxonomyNode.objects.get(code=row["qps"], taxonomy__code="YESNO")
-            nf_organism.has_qps = yes_no
+            nf_organism.has_qps = TaxonomyNode.objects.get(code=row["qps"], taxonomy__code="YESNO")
 
         if not pd.isna(row["part"]):
             # Try to find the part in MTX
@@ -100,7 +93,7 @@ class Command(BaseCommand):
                 )
                 nf_organism.org_part = part_obj
             except TaxonomyNode.DoesNotExist:
-                final_msg += "Part used not found in vocabulary -> add it."
+                print("Part used not found in vocabulary -> add it.")
 
         if not pd.isna(row["cell culture"]):
             nf_organism.cell_culture = row["cell culture"]
@@ -124,8 +117,6 @@ class Command(BaseCommand):
                     syn_type=common_name_synonym_type,
                 )
 
-        self.annotate(opinion, final_msg)
-
     def handle(self, *args, **options):
         df = pd.read_csv(options["csv_file"], keep_default_na=False, na_values=[""])
 
@@ -136,8 +127,5 @@ class Command(BaseCommand):
             code="NORA",
         )
 
-        NovelFoodOrganism.objects.all().delete()
-        Organism.objects.all().delete()
-
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             self.add_organism_identity(row)
