@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{this.fetchedNovelFoods || ""}}
+    <!-- {{this.fetchedNovelFoods || ""}} -->
   </div>
   <div>
     <h1>Database Search</h1>
@@ -183,7 +183,7 @@ export default {
           variables: variables
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges
-        console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
+        /* console.log('this.fetchedNovelFoods', this.fetchedNovelFoods) */
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
