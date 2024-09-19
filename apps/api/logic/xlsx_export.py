@@ -47,8 +47,21 @@ def process_endpoint_studies(endpointstudies, nf_id):
         endpoint_rows.append(endpoint_study)
     return endpoint_rows
 
+def process_adme_studies(admes, nf_id):
+    adme_rows = []
+    for adme_study in admes:
+        investig_types = [investigation_type['title'] for investigation_type in adme_study['investigationTypes']]
+        adme_study['investigationTypes'] = "; ".join(investig_types)
+        adme_study = {
+            key: value
+            for key, value in adme_study.items()
+            if not key.startswith("__") and key != "id"
+        }
+        adme_study["novelFoodId"] = nf_id
+        adme_rows.append(adme_study)
+    return adme_rows
 
-def flatten_json(data, genotox_rows, endpoint_rows, parent_key="", sep="."):
+def flatten_json(data, genotox_rows, endpoint_rows, adme_rows, parent_key="", sep="."):
     items = []
     list_sep = ", "
 
@@ -64,14 +77,17 @@ def flatten_json(data, genotox_rows, endpoint_rows, parent_key="", sep="."):
             if key == "endpointstudies":
                 endpoint_rows += process_endpoint_studies(value, nf_id)
                 continue
+            if key == "admes":
+                adme_rows += process_adme_studies(value, nf_id)
+                continue
             if (
                 key.startswith("__") or key == "id"
             ):  # Skip all the inner keys from graphql
                 continue
             new_key = f"{parent_key}{sep}{key}" if parent_key else key
             if isinstance(value, dict):  # Dict was found -> recurse
-                item, genotox_rows, endpoint_rows = flatten_json(
-                    value, genotox_rows, endpoint_rows, new_key, sep=sep
+                item, genotox_rows, endpoint_rows, adme_rows = flatten_json(
+                    value, genotox_rows, endpoint_rows, adme_rows, new_key, sep=sep
                 )
                 items.extend(item.items())
                 # items.extend(flatten_json(value, genotox_df, endpointstudies_df, new_key, sep=sep).items())
@@ -80,8 +96,8 @@ def flatten_json(data, genotox_rows, endpoint_rows, parent_key="", sep="."):
                 flattened_list = []
                 for item in value:
                     if isinstance(item, dict):  # Dict was found -> recurse
-                        item, genotox_rows, endpoint_rows = flatten_json(
-                            item, genotox_rows, endpoint_rows, "", sep=sep
+                        item, genotox_rows, endpoint_rows, adme_rows = flatten_json(
+                            item, genotox_rows, endpoint_rows, adme_rows, "", sep=sep
                         )
                         flattened_list.append(item)
                     else:
@@ -103,7 +119,7 @@ def flatten_json(data, genotox_rows, endpoint_rows, parent_key="", sep="."):
     else:
         items.append((parent_key, data))
 
-    return dict(items), genotox_rows, endpoint_rows
+    return dict(items), genotox_rows, endpoint_rows, adme_rows
 
 
 def create_export(novel_food_data):
@@ -111,15 +127,17 @@ def create_export(novel_food_data):
     novel_food_df_data = []
     genotox_rows = []
     endpoint_rows = []
+    adme_rows = []
     for item in novel_food_data:
-        nf, genotox_rows, endpoint_rows = flatten_json(
-            item["node"], genotox_rows, endpoint_rows
+        nf, genotox_rows, endpoint_rows, adme_rows = flatten_json(
+            item["node"], genotox_rows, endpoint_rows, adme_rows
         )
         novel_food_df_data.append(nf)
 
     novel_food_df = pd.DataFrame(novel_food_df_data)
     genotox_df = pd.DataFrame(genotox_rows)
     endpoint_df = pd.DataFrame(endpoint_rows)
+    adme_df = pd.DataFrame(adme_rows)
 
     # Reorder the columns so that novelFoodId is first
     if "novelFoodId" in genotox_df.columns:
@@ -134,6 +152,12 @@ def create_export(novel_food_data):
             + [col for col in endpoint_df.columns if col != "novelFoodId"]
         ]
 
+    if "novelFoodId" in adme_df.columns:
+        adme_df = adme_df[
+            ["novelFoodId"]
+            + [col for col in adme_df.columns if col != "novelFoodId"]
+        ]
+
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine="xlsxwriter")
 
@@ -141,16 +165,19 @@ def create_export(novel_food_data):
         novel_food_df.to_excel(writer, sheet_name="novel_food", index=False)
         genotox_df.to_excel(writer, sheet_name="genotox", index=False)
         endpoint_df.to_excel(writer, sheet_name="endpointstudies", index=False)
+        adme_df.to_excel(writer, sheet_name="adme", index=False)
 
         # Get the worksheets
         novel_food_ws = writer.sheets["novel_food"]
         genotox_ws = writer.sheets["genotox"]
         endpoint_ws = writer.sheets["endpointstudies"]
+        adme_ws = writer.sheets["adme"]
 
         # Autofit columns for each worksheet
         novel_food_ws.autofit()
         genotox_ws.autofit()
         endpoint_ws.autofit()
+        adme_ws.autofit()
 
     output.seek(0)
 
