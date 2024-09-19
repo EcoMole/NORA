@@ -1,7 +1,53 @@
 import django_filters
 
+from .models import NovelFood
+
+
+class NullableBooleanFilter(django_filters.BooleanFilter):
+    def filter(self, qs, value):
+        if value is True or value is False:
+            return qs.filter(**{f"{self.field_name}__isnull": value})
+        return super().filter(qs, value)
+
 
 class NovelFoodFilter(django_filters.FilterSet):
+    class Meta:
+        model = NovelFood
+        fields = ["title", "nf_code", "tox_study_required", "genotox_final_outcome"]
+
+    def __init__(self, *args, **kwargs):
+        # not necessary, but useful for debugging
+        print("NovelFoodFilter kwargs: ", kwargs)
+        super().__init__(*args, **kwargs)
+
+    def default_filter_method(self, queryset, name, value):
+        print("default_filter_method name: ", name)
+        print("default_filter_method value: ", value)
+
+        # Splitting the filter name to handle cases like 'nf_code_exact_include'
+        name_parts = name.split("_")
+        field_name = "_".join(
+            name_parts[:-2]
+        )  # Extract the actual field name (e.g., 'nf_code')
+        lookup_type = name_parts[-2]  # Get the lookup type (e.g., 'exact')
+
+        # Include or exclude based on filter type
+        if name_parts[-1] == "include":
+            return queryset.filter(**{f"{field_name}__{lookup_type}": value})
+        elif name_parts[-1] == "exclude":
+            return queryset.exclude(**{f"{field_name}__{lookup_type}": value})
+
+    # nf_code
+    nf_code_isnull = NullableBooleanFilter(field_name="nf_code", lookup_expr="isnull")
+    nf_code_exact_include = django_filters.CharFilter(method="default_filter_method")
+    nf_code_exact_exclude = django_filters.CharFilter(method="default_filter_method")
+    nf_code_icontains_include = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+    nf_code_icontains_exclude = django_filters.CharFilter(
+        method="default_filter_method"
+    )
+
     # title
     title_exact_include = django_filters.CharFilter(
         field_name="title", lookup_expr="exact"
@@ -21,28 +67,6 @@ class NovelFoodFilter(django_filters.FilterSet):
 
     def filter_title_icontains_exclude(self, queryset, name, value):
         return queryset.exclude(title__icontains=value)
-
-    # nf_code
-    nf_code_exact_include = django_filters.CharFilter(
-        field_name="nf_code", lookup_expr="exact"
-    )
-    nf_code_exact_exclude = django_filters.CharFilter(
-        method="filter_nf_code_exact_exclude"
-    )
-
-    def filter_nf_code_exact_exclude(self, queryset, name, value):
-        return queryset.exclude(nf_code__exact=value)
-
-    nf_code_icontains_include = django_filters.CharFilter(
-        field_name="nf_code", lookup_expr="icontains"
-    )
-
-    nf_code_icontains_exclude = django_filters.CharFilter(
-        method="filter_nf_code_icontains_exclude"
-    )
-
-    def filter_nf_code_icontains_exclude(self, queryset, name, value):
-        return queryset.exclude(nf_code__icontains=value)
 
     # tox_study_required
     tox_study_required_exact_include = django_filters.CharFilter(
