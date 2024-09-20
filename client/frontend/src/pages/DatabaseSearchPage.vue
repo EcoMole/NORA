@@ -147,7 +147,7 @@
 <script>
 import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
-import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
+import { buildQueryFromSelectedFields, formatGraphQLQuery } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
@@ -172,12 +172,15 @@ export default {
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
+    formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
     async renderTable(addedFilters, selectedFields, headdersToHide) {
       this.headdersToHide = headdersToHide
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
+      const query = this.formatGraphQLQuery(selectedFields)
+      console.log('query', query)
       console.log('this.addedFilters', this.addedFilters)
       const variables = buildVariables(this.addedFilters)
       console.log('variables', variables)
@@ -187,16 +190,17 @@ export default {
         // using this.$apollo for Option API apollo provider
         // for Composition API apollo provider use: const { client } = useApolloClient()
         const response = await this.$apollo.query({
-          query: gql`
-            query {
-              novelFoods {
-                id
-                title
-                nfCode
-                novelFoodId
-              }
-            }
-          `
+          query: query,
+          // query: gql`
+          //   query {
+          //     novelFoods {
+          //       id
+          //       title
+          //       nfCode
+          //       novelFoodId
+          //     }
+          //   }
+          // `
           // variables: variables
         })
         this.fetchedNovelFoods = response.data.novelFoods
