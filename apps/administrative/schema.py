@@ -75,10 +75,3 @@ class OpinionType(DjangoObjectType):
 
     def resolve_questions(self, info):
         return Question.objects.filter(opinionquestion__opinion=self)
-
-
-class Query(graphene.ObjectType):
-    opinions = graphene.List(OpinionType)
-
-    def resolve_opinions(self, info):
-        return Opinion.objects.all()

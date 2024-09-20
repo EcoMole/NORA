@@ -150,10 +150,3 @@ class NovelFoodType(DjangoObjectType):
 
     def resolve_endpointstudies(self, info):
         return Endpointstudy.objects.filter(novel_food=self)
-
-
-class Query(graphene.ObjectType):
-    novel_foods = graphene.List(NovelFoodType)
-
-    def resolve_novel_foods(self, info):
-        return NovelFood.objects.all()
