@@ -1,17 +1,18 @@
 import graphene
-from graphene_django.filter import DjangoFilterConnectionField
-from novel_food.filters import NovelFoodFilter
 from novel_food.models import NovelFood
 from novel_food.schema import NovelFoodType
 
 
 class Query(graphene.ObjectType):
-    novel_foods = DjangoFilterConnectionField(
-        NovelFoodType, filterset_class=NovelFoodFilter
+    novel_foods = graphene.List(
+        NovelFoodType,
     )
 
-    def resolve_novel_foods(self, info, **kwargs):
-        return NovelFood.objects.all()
+    def resolve_novel_foods(self, info, filters=None, **kwargs):
+        queryset = NovelFood.objects.all()
+        # filtering logic
+        # ...
+        return queryset
 
 
 schema = graphene.Schema(query=Query)

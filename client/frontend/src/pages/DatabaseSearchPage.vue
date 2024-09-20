@@ -21,7 +21,7 @@
         ></v-skeleton-loader>
         <div v-else>
           <RecursiveDataTable
-            :data="fetchedNovelFoods.map((edge) => edge.node)"
+            :data="fetchedNovelFoods"
             :loading="tableIsLoading"
             :nameMappingObj="nameMappingObj"
             :headdersToHide="headdersToHide"
@@ -51,10 +51,14 @@
           </v-hover>
         </template>
         <v-list density="compact">
-          <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i" @click="handleExport(i)">
+          <v-list-item
+            v-for="(option, i) in exportOptions"
+            :key="i"
+            :value="i"
+            @click="handleExport(i)"
+          >
             <template v-slot:prepend>
               <v-icon :icon="option.icon"></v-icon>
-
             </template>
             <v-list-item-title>{{ option.title }}</v-list-item-title>
           </v-list-item>
@@ -149,13 +153,14 @@ import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
 import { buildVariables } from '@/libs/utils.js'
 import axios from '@/libs/axios'
+import gql from 'graphql-tag'
 
 export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },
   data: () => ({
     tableIsLoading: false,
     exportOptions: [
-      { title: 'the search result', icon: 'mdi-table' },
+      { title: 'the search result', icon: 'mdi-table' }
       //{ title: 'the whole database', icon: 'mdi-database' }
     ],
     showFilterInterface: true,
@@ -176,17 +181,26 @@ export default {
       console.log('this.addedFilters', this.addedFilters)
       const variables = buildVariables(this.addedFilters)
       console.log('variables', variables)
-      const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
-      console.log('QUERY', QUERY)
+      // const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
+      // console.log('QUERY', QUERY)
       try {
         // using this.$apollo for Option API apollo provider
         // for Composition API apollo provider use: const { client } = useApolloClient()
         const response = await this.$apollo.query({
-          query: QUERY,
-          variables: variables
+          query: gql`
+            query {
+              novelFoods {
+                id
+                title
+                nfCode
+                novelFoodId
+              }
+            }
+          `
+          // variables: variables
         })
-        this.fetchedNovelFoods = response.data.novelFoods.edges
-        /* console.log('this.fetchedNovelFoods', this.fetchedNovelFoods) */
+        this.fetchedNovelFoods = response.data.novelFoods
+        console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
@@ -200,23 +214,26 @@ export default {
     },
     exportSearchResult() {
       console.log('exporting search result')
-      axios.post('/api/v1/export/', this.fetchedNovelFoods, {responseType: 'blob'})
-      .then(response => {
-      // Handle success (e.g., trigger download if needed)
-      console.log('Export successful', response);
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    
-      // Create a download link for the Excel file
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.setAttribute('download', 'exported_data.xlsx');  // Specify the filename
-      document.body.appendChild(link);  // Append link to the body
-      link.click();  // Programmatically click the link to trigger the download
-      document.body.removeChild(link);
-      })
-      .catch(error => {
-        console.error('Error exporting:', error);
-      });
+      axios
+        .post('/api/v1/export/', this.fetchedNovelFoods, { responseType: 'blob' })
+        .then((response) => {
+          // Handle success (e.g., trigger download if needed)
+          console.log('Export successful', response)
+          const blob = new Blob([response.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          })
+
+          // Create a download link for the Excel file
+          const link = document.createElement('a')
+          link.href = URL.createObjectURL(blob)
+          link.setAttribute('download', 'exported_data.xlsx') // Specify the filename
+          document.body.appendChild(link) // Append link to the body
+          link.click() // Programmatically click the link to trigger the download
+          document.body.removeChild(link)
+        })
+        .catch((error) => {
+          console.error('Error exporting:', error)
+        })
     },
     exportWholeDatabase() {
       console.log('exporting whole database')
@@ -224,11 +241,11 @@ export default {
     handleExport(i) {
       console.log('exporting', i)
       if (i === 0) {
-        this.exportSearchResult();
+        this.exportSearchResult()
       } else if (i === 1) {
-        this.exportWholeDatabase();
+        this.exportWholeDatabase()
       }
-    },
+    }
   },
   created() {
     this.theme = useTheme()
