@@ -229,11 +229,15 @@
             ></v-text-field>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
               <template v-for="(field, key) in fieldsSearched" :key="key">
-                <v-tooltip :text="field.tooltipDescription" v-model="tooltipVisibility[key]" location="left">
+                <v-tooltip
+                  :text="field.tooltipDescription"
+                  v-model="tooltipVisibility[key]"
+                  location="left"
+                >
                   <template v-slot:activator="{ props }">
                     <v-list-item
                       v-bind="props"
-                      v-if="!(key in selectedFields)"
+                      v-show="!(key in selectedFields)"
                       :key="key"
                       @click="handleClick(field, key)"
                     >
@@ -303,8 +307,8 @@ export default {
   }),
   methods: {
     handleClick(field, key) {
-      this.selectedFields[key] = field
       this.tooltipVisibility[key] = false
+      this.selectedFields[key] = field
     },
     async getOptions(apiEndpoint, djangoModel, djangoField) {
       const url = `/api/v1/${apiEndpoint}`
