@@ -192,32 +192,26 @@
               </v-btn>
             </v-row>
             <v-row class="mt-0">
-              <v-col
-                v-for="(field, key) in selectedFields"
-                :key="key"
-                class="py-1 pe-0"
-                cols="auto"
-              >
-                <v-tooltip :text="field.tooltipDescription">
+              <template v-for="(field, key) in selectedFields" :key="key">
+                <v-tooltip :text="field.tooltipDescription" location="left">
                   <template v-slot:activator="{ props }">
-                    <v-chip
-                      size="large"
-                      closable
-                      v-bind="props"
-                      elevation="3"
-                      @click:close="delete selectedFields[key]"
-                      variant="elevated"
-                      :color="this.theme.global.current.value.dark ? 'black' : 'white'"
-                    >
-                      <v-icon :icon="field.icon" start></v-icon>
-
-                      {{
-                        field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName
-                      }}
-                    </v-chip>
+                    <v-col class="py-1 pe-0" cols="auto">
+                      <v-chip
+                        v-bind="props"
+                        size="large"
+                        closable
+                        elevation="3"
+                        @click:close="delete selectedFields[key]"
+                        variant="elevated"
+                        :color="theme.global.current.value.dark ? 'black' : 'white'"
+                      >
+                        <v-icon :icon="field.icon" start></v-icon>
+                        {{ field.flattenedDisplayName || field.displayName }}
+                      </v-chip>
+                    </v-col>
                   </template>
                 </v-tooltip>
-              </v-col>
+              </template>
             </v-row>
           </v-container>
 
@@ -234,14 +228,14 @@
               hide-details
             ></v-text-field>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
-              <template v-for="(field, key) in fieldsSearched">
-                <v-tooltip :text="field.tooltipDescription">
+              <template v-for="(field, key) in fieldsSearched" :key="key">
+                <v-tooltip :text="field.tooltipDescription" v-model="tooltipVisibility[key]" location="left">
                   <template v-slot:activator="{ props }">
                     <v-list-item
                       v-bind="props"
                       v-if="!(key in selectedFields)"
                       :key="key"
-                      @click="selectedFields[key] = field"
+                      @click="handleClick(field, key)"
                     >
                       <template v-slot:prepend>
                         <v-icon :icon="field.icon"></v-icon>
@@ -304,9 +298,14 @@ export default {
     addedFilters: [],
     fields: fields,
     fieldsSearch: '',
-    selectedFields: {}
+    selectedFields: {},
+    tooltipVisibility: {}
   }),
   methods: {
+    handleClick(field, key) {
+      this.selectedFields[key] = field
+      this.tooltipVisibility[key] = false
+    },
     async getOptions(apiEndpoint, djangoModel, djangoField) {
       const url = `/api/v1/${apiEndpoint}`
       try {
@@ -443,6 +442,9 @@ export default {
     this.addedFilters = this.addedFiltersFromPreviousSearch
       ? [...this.addedFiltersFromPreviousSearch]
       : []
+    for (const key in this.fields) {
+      this.tooltipVisibility[key] = false
+    }
   }
 }
 </script>
