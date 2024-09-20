@@ -149,9 +149,14 @@
                 }}</v-chip
                 >{{ ' ' }}which <b>{{ filter.qualifier }}</b
                 >{{ ' ' }}
-                <v-chip v-if="filter.value" rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                  filter.value
-                }}</v-chip>
+                <v-chip
+                  v-if="filter.value"
+                  rounded="pill"
+                  density="compact"
+                  class="pb-1"
+                  color="secondary"
+                  >{{ filter.value }}</v-chip
+                >
               </v-card-text>
             </v-card>
           </v-col>
@@ -193,18 +198,25 @@
                 class="py-1 pe-0"
                 cols="auto"
               >
-                <v-chip
-                  size="large"
-                  closable
-                  elevation="3"
-                  @click:close="delete selectedFields[key]"
-                  variant="elevated"
-                  :color="this.theme.global.current.value.dark ? 'black' : 'white'"
-                >
-                  <v-icon :icon="field.icon" start></v-icon>
+                <v-tooltip :text="field.tooltipDescription">
+                  <template v-slot:activator="{ props }">
+                    <v-chip
+                      size="large"
+                      closable
+                      v-bind="props"
+                      elevation="3"
+                      @click:close="delete selectedFields[key]"
+                      variant="elevated"
+                      :color="this.theme.global.current.value.dark ? 'black' : 'white'"
+                    >
+                      <v-icon :icon="field.icon" start></v-icon>
 
-                  {{ field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName }}
-                </v-chip>
+                      {{
+                        field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName
+                      }}
+                    </v-chip>
+                  </template>
+                </v-tooltip>
               </v-col>
             </v-row>
           </v-container>
@@ -223,19 +235,24 @@
             ></v-text-field>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
               <template v-for="(field, key) in fieldsSearched">
-                <v-list-item
-                  v-if="!(key in selectedFields)"
-                  :key="key"
-                  @click="selectedFields[key] = field"
-                >
-                  <template v-slot:prepend>
-                    <v-icon :icon="field.icon"></v-icon>
-                  </template>
+                <v-tooltip :text="field.tooltipDescription">
+                  <template v-slot:activator="{ props }">
+                    <v-list-item
+                      v-bind="props"
+                      v-if="!(key in selectedFields)"
+                      :key="key"
+                      @click="selectedFields[key] = field"
+                    >
+                      <template v-slot:prepend>
+                        <v-icon :icon="field.icon"></v-icon>
+                      </template>
 
-                  <v-list-item-title>{{
-                    field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName
-                  }}</v-list-item-title>
-                </v-list-item>
+                      <v-list-item-title>{{
+                        field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName
+                      }}</v-list-item-title>
+                    </v-list-item>
+                  </template>
+                </v-tooltip>
               </template>
             </v-list>
           </v-container>
