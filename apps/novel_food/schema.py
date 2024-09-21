@@ -67,6 +67,7 @@ class NovelFoodType(DjangoObjectType):
     class Meta:
         model = NovelFood
         fields = "__all__"
+        interfaces = (graphene.relay.Node,)
 
     def resolve_novel_food_id(self, info):
         return self.id

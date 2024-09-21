@@ -179,35 +179,24 @@ export default {
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
+
+      const startTime = performance.now()
       const query = this.formatGraphQLQuery(selectedFields)
-      console.log('query', query)
-      console.log('this.addedFilters', this.addedFilters)
-      const variables = buildVariables(this.addedFilters)
-      console.log('variables', variables)
+      // const variables = buildVariables(this.addedFilters)
       // const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
       // console.log('QUERY', QUERY)
       try {
-        // using this.$apollo for Option API apollo provider
-        // for Composition API apollo provider use: const { client } = useApolloClient()
         const response = await this.$apollo.query({
-          query: query,
-          // query: gql`
-          //   query {
-          //     novelFoods {
-          //       id
-          //       title
-          //       nfCode
-          //       novelFoodId
-          //     }
-          //   }
-          // `
+          query: query
           // variables: variables
         })
-        this.fetchedNovelFoods = response.data.novelFoods
-        console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
+        this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
+        const endTime = performance.now()
+        const timeTaken = endTime - startTime
+        console.log(`Query and processing took ${timeTaken.toFixed(2)} milliseconds.`)
         this.tableIsLoading = false
       }
     },

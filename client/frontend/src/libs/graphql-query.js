@@ -127,38 +127,37 @@ export function buildQueryFromSelectedFields(variables, selectedFields = fields)
   return buildGraphQLQuery(variables, formattedFields)
 }
 
-
 export function formatGraphQLQuery(data) {
-  const tree = {};
+  const tree = {}
 
   // Function to insert each key into the tree structure
   function insertIntoTree(parts) {
-      let current = tree;
-      parts.forEach(part => {
-          if (!current[part]) {
-              current[part] = {};
-          }
-          current = current[part];
-      });
+    let current = tree
+    parts.forEach((part) => {
+      if (!current[part]) {
+        current[part] = {}
+      }
+      current = current[part]
+    })
   }
 
   // Build the tree from the dot notation
-  Object.keys(data).forEach(key => {
-      const parts = key.split('.');
-      insertIntoTree(parts);
-  });
+  Object.keys(data).forEach((key) => {
+    const parts = key.split('.')
+    insertIntoTree(parts)
+  })
 
   // Function to format the tree into the GraphQL query string
   function formatTree(node, depth = 0) {
-      return Object.entries(node)
-          .map(([key, value]) => {
-              const indent = '  '.repeat(depth);
-              const children = formatTree(value, depth + 1);
-              return `${indent}${key}${children ? ' {\n' + children + indent + '}' : ''}`;
-          })
-          .join('\n');
+    return Object.entries(node)
+      .map(([key, value]) => {
+        const indent = '  '.repeat(depth)
+        const children = formatTree(value, depth + 1)
+        return `${indent}${key}${children ? ' {\n' + children + indent + '}' : ''}`
+      })
+      .join('\n')
   }
 
   // Wrap the output with the `query` block
-  return gql`query {\n novelFoods {\n${formatTree(tree, 1)}\n}\n}`;
+  return gql`query {\n novelFoods{ edges { node {\n${formatTree(tree, 1)}\n}\n}\n}\n}`
 }
