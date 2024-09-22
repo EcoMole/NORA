@@ -138,7 +138,17 @@
               >
                 <v-icon>mdi-close</v-icon>
               </v-btn>
-
+              <v-btn
+                :style="{ position: 'absolute', right: '+50px' }"
+                color="secondary"
+                size="x-small"
+                min-height="30"
+                @click="editFilter(i)"
+                variant="tonal"
+                style="z-index: 2"
+              >
+                edit
+              </v-btn>
               <v-card-subtitle class="text-h6 pt-3 pb-2 mb-0">
                 {{ filter.group }}
               </v-card-subtitle>
@@ -368,7 +378,7 @@ export default {
           title: this.newFilter.title,
           group: this.newFilter.group,
           qualifier: this.newFilter.qualifier,
-          value: this.newFilter.value
+          value: this.newFilter.qualifier === 'is None' ? null : this.newFilter.value,
         })
         this.addingFilter = false
         this.newFilter = {
@@ -386,29 +396,44 @@ export default {
       const selectedField = this.fields[this.newFilter.key]
 
       if (selectedField) {
+        this.newFilter.title = selectedField.flattenedDisplayName || selectedField.displayName
+        this.newFilter.qualifier =
+          selectedField.qualifiers.length === 1 ? selectedField.qualifiers[0] : ''
+        this.newFilter.group = selectedField.displayGroupName
+        this.newFilter.value = null
         if (selectedField.apiEndpoint) {
-          this.newFilter.qualifier =
-            selectedField.qualifiers.length === 1 ? selectedField.qualifiers[0] : ''
           this.newFilter.options = await this.getOptions(
             selectedField.apiEndpoint,
             selectedField.djangoModel,
             selectedField.djangoField
           )
         }
-        this.newFilter.title = selectedField.flattenedDisplayName || selectedField.displayName
-        this.newFilter.group = selectedField.displayGroupName
       }
     },
     cancelNewFilter() {
       this.addingFilter = false
       this.newFilter = {
         include: '',
+        key: '',
         title: '',
         group: '',
         qualifier: '',
         value: null,
         options: []
       }
+    },
+    editFilter(index) {
+      this.addingFilter = true
+      this.newFilter = {
+        include: this.addedFilters[index].include,
+        key: this.addedFilters[index].key,
+        title: this.addedFilters[index].title,
+        group: this.addedFilters[index].group,
+        qualifier: this.addedFilters[index].qualifier,
+        value: this.addedFilters[index].value,
+        options: this.addedFilters[index].options ? this.addedFilters[index].options : []
+      }
+      this.removeFilter(index)
     },
     removeFilter(index) {
       this.addedFilters.splice(index, 1)
