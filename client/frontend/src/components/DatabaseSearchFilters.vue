@@ -216,17 +216,40 @@
           </v-container>
 
           <v-container class="mt-4">
-            <v-text-field
-              v-if="!allFieldsSelected"
-              v-model="fieldsSearch"
-              density="comfortable"
-              placeholder="Search available data"
-              prepend-inner-icon="mdi-magnify"
-              style="max-width: 300px"
-              variant="outlined"
-              clearable
-              hide-details
-            ></v-text-field>
+            <v-row>
+              <v-text-field
+                v-if="!allFieldsSelected"
+                v-model="fieldsSearch"
+                density="comfortable"
+                placeholder="Search available data"
+                prepend-inner-icon="mdi-magnify"
+                style="max-width: 300px"
+                variant="outlined"
+                clearable
+                hide-details
+              ></v-text-field>
+              <v-tooltip
+                text="Selecting all filelds will result in long time to fetch the data"
+                location="top"
+              >
+                <template v-slot:activator="{ props }">
+                  <v-btn
+                    v-bind="props"
+                    v-if="!allFieldsSelected"
+                    @click="selectedFields = fields"
+                    color="secondary"
+                    size="x-small"
+                    min-height="30"
+                    rounded="md"
+                    variant="tonal"
+                    class="ml-2 mt-2"
+                  >
+                    select <br />
+                    all
+                  </v-btn>
+                </template>
+              </v-tooltip>
+            </v-row>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
               <template v-for="(field, key) in fieldsSearched" :key="key">
                 <v-tooltip
