@@ -20,6 +20,9 @@
               :headdersToHide="headdersToHide"
             />
           </div>
+          <a v-else-if="header.value === 'opinionUrl'" :href="item[header.value]" target="_blank">{{
+            item[header.value]
+          }}</a>
           <div v-else>
             {{ item[header.value] }}
           </div>
