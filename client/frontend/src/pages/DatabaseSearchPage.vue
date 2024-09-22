@@ -30,36 +30,25 @@
       </v-sheet>
 
       <!-- btns -->
-      <v-menu :rounded="'lg'">
-        <template v-slot:activator="{ props: menuProps }">
-          <v-hover v-slot="{ isHovering, props: hoverProps }">
-            <v-btn
-              v-bind="{ ...hoverProps, ...menuProps }"
-              :elevation="isHovering ? 14 : 4"
-              size="small"
-              min-height="40px"
-              color="primary"
-              style="margin-top: 98px"
-              position="fixed"
-              location="top right"
-              class="mr-10"
-              :ripple="false"
-            >
-              <v-icon left>mdi-download</v-icon>
-              Export
-            </v-btn>
-          </v-hover>
-        </template>
-        <v-list density="compact">
-          <v-list-item v-for="(option, i) in exportOptions" :key="i" :value="i" @click="handleExport(i)">
-            <template v-slot:prepend>
-              <v-icon :icon="option.icon"></v-icon>
-
-            </template>
-            <v-list-item-title>{{ option.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-hover v-slot="{ isHovering, props: hoverProps }">
+        <v-btn
+          v-bind="{ ...hoverProps }"
+          :elevation="isHovering ? 14 : 4"
+          size="small"
+          min-height="40px"
+          color="primary"
+          style="margin-top: 98px"
+          position="fixed"
+          location="top right"
+          class="mr-10"
+          :ripple="false"
+          @click="exportSearchResult"
+          :loading="exporting"
+        >
+          <v-icon left>mdi-download</v-icon>
+          Export
+        </v-btn>
+      </v-hover>
       <v-hover v-slot="{ isHovering, props }">
         <v-btn
           v-bind="props"
@@ -154,16 +143,13 @@ export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },
   data: () => ({
     tableIsLoading: false,
-    exportOptions: [
-      { title: 'the search result', icon: 'mdi-table' },
-      //{ title: 'the whole database', icon: 'mdi-database' }
-    ],
     showFilterInterface: true,
     fetchedNovelFoods: null,
     addedFilters: [],
     selectedFields: {},
     headdersToHide: [],
-    nameMappingObj: { ...objectTypes, ...fields }
+    nameMappingObj: { ...objectTypes, ...fields },
+    exporting: false
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
@@ -199,36 +185,32 @@ export default {
       this.selectedFields = []
     },
     exportSearchResult() {
+      this.exporting = true
       console.log('exporting search result')
-      axios.post('/api/v1/export/', this.fetchedNovelFoods, {responseType: 'blob'})
-      .then(response => {
-      // Handle success (e.g., trigger download if needed)
-      console.log('Export successful', response);
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    
-      // Create a download link for the Excel file
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.setAttribute('download', 'exported_data.xlsx');  // Specify the filename
-      document.body.appendChild(link);  // Append link to the body
-      link.click();  // Programmatically click the link to trigger the download
-      document.body.removeChild(link);
-      })
-      .catch(error => {
-        console.error('Error exporting:', error);
-      });
-    },
-    exportWholeDatabase() {
-      console.log('exporting whole database')
-    },
-    handleExport(i) {
-      console.log('exporting', i)
-      if (i === 0) {
-        this.exportSearchResult();
-      } else if (i === 1) {
-        this.exportWholeDatabase();
-      }
-    },
+      axios
+        .post('/api/v1/export/', this.fetchedNovelFoods, { responseType: 'blob' })
+        .then((response) => {
+          // Handle success (e.g., trigger download if needed)
+          console.log('Export successful', response)
+          const blob = new Blob([response.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          })
+
+          // Create a download link for the Excel file
+          const link = document.createElement('a')
+          link.href = URL.createObjectURL(blob)
+          link.setAttribute('download', 'exported_data.xlsx') // Specify the filename
+          document.body.appendChild(link) // Append link to the body
+          link.click() // Programmatically click the link to trigger the download
+          document.body.removeChild(link)
+        })
+        .catch((error) => {
+          console.error('Error exporting:', error)
+        })
+        .finally(() => {
+          this.exporting = false
+        })
+    }
   },
   created() {
     this.theme = useTheme()
