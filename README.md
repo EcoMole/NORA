@@ -58,12 +58,13 @@ The project comprises several phases:
 
 ### Tools and Technologies
 
-- **Django & Django REST Framework**: For backend API development.
+- **Django & Django REST Framework**: For backend API development and database management.
+- **Django Admin Interface**: This project includes a Django-admin interface to add, edit, and manage data within the database. The interface provides extensive searching, filtering, and ordering capabilities, making data management and exploration efficient.
 - **Vue.js 3 & Vite**: Employed for efficient frontend development.
 - **Vuetify**: Utilized for UI components in Vue.js applications.
 - **Axios**: For making HTTP requests from the frontend.
 - **JWT (JSON Web Tokens)**: For secure authentication mechanisms.
-- **HTTPS**: Ensured for secure communication between client and server.
+- **GraphQL**: Used for querying the database. The custom frontend interface built with Vue.js 3 enables flexible data querying using GraphQL, allowing users to apply filters based on any field in the database. Users can also fetch and structure the data from all fields in a format of their choosing, adding flexibility and customization to the data retrieval process.
 
 ## Results and Impact
 
@@ -74,10 +75,7 @@ Preliminary results demonstrate the effective translation of the OFT 2.0 design 
 Further documentation, including the Entity Relationship Diagram (ERD) and detailed project methodologies, is provided in the appendices.
 
 - **Appendix A**: Initial ERD Draft
-- **Appendix B**: Comparative Analysis of OFT 2.0 and NORA Data Models
 
 ## License
 
 This project is developed under the guidance of EFSA and adheres to its regulatory framework.
-
-© European Food Safety Authority, 2024
