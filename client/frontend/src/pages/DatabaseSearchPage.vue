@@ -21,7 +21,7 @@
         ></v-skeleton-loader>
         <div v-else>
           <RecursiveDataTable
-            :data="fetchedNovelFoods.map((edge) => edge.node)"
+            :data="fetchedNovelFoods"
             :loading="tableIsLoading"
             :nameMappingObj="nameMappingObj"
             :headdersToHide="headdersToHide"
@@ -132,12 +132,13 @@
 <script>
 import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
-import { buildQueryFromSelectedFields } from '@/libs/graphql-query.js'
+import { buildQueryFromSelectedFields, formatGraphQLQuery } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
 import { buildVariables } from '@/libs/utils.js'
 import axios from '@/libs/axios'
+import gql from 'graphql-tag'
 
 export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },
@@ -153,29 +154,32 @@ export default {
   }),
   methods: {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
+    formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
     async renderTable(addedFilters, selectedFields, headdersToHide) {
       this.headdersToHide = headdersToHide
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
-      console.log('this.addedFilters', this.addedFilters)
-      const variables = buildVariables(this.addedFilters)
-      console.log('variables', variables)
-      const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
-      console.log('QUERY', QUERY)
+
+      const startTime = performance.now()
+      const query = this.formatGraphQLQuery(selectedFields)
+      // const variables = buildVariables(this.addedFilters)
+      // const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
+      // console.log('QUERY', QUERY)
+      // todo: first create viariables using buildVariables and then use this to include it in query and add value types using some method.
       try {
-        // using this.$apollo for Option API apollo provider
-        // for Composition API apollo provider use: const { client } = useApolloClient()
         const response = await this.$apollo.query({
-          query: QUERY,
-          variables: variables
+          query: query
+          // variables: variables
         })
-        this.fetchedNovelFoods = response.data.novelFoods.edges
-        /* console.log('this.fetchedNovelFoods', this.fetchedNovelFoods) */
+        this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
+        const endTime = performance.now()
+        const timeTaken = endTime - startTime
+        console.log(`Query and processing took ${timeTaken.toFixed(2)} milliseconds.`)
         this.tableIsLoading = false
       }
     },

@@ -1,5 +1,6 @@
-import pandas as pd
 from io import BytesIO
+
+import pandas as pd
 from django.http import HttpResponse
 
 
@@ -117,7 +118,6 @@ def flatten_json(
     items.append(("novelFoodId", nf_id))
 
     if isinstance(data, dict):
-
         for key, value in data.items():
             if key == "genotoxes":  # Delegate into genotox studies sheet
                 genotox_rows += process_genotox_studies(value, nf_id)
@@ -138,15 +138,19 @@ def flatten_json(
                 continue
             new_key = f"{parent_key}.{key}" if parent_key else key
             if isinstance(value, dict):  # Dict was found -> recurse
-                item, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows = (
-                    flatten_json(
-                        value,
-                        genotox_rows,
-                        endpoint_rows,
-                        adme_rows,
-                        final_outcome_rows,
-                        new_key,
-                    )
+                (
+                    item,
+                    genotox_rows,
+                    endpoint_rows,
+                    adme_rows,
+                    final_outcome_rows,
+                ) = flatten_json(
+                    value,
+                    genotox_rows,
+                    endpoint_rows,
+                    adme_rows,
+                    final_outcome_rows,
+                    new_key,
                 )
                 items.extend(item.items())
             elif isinstance(value, list):
@@ -201,7 +205,7 @@ def create_export(novel_food_data):
     final_outcome_rows = []
     for item in novel_food_data:
         nf, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows = flatten_json(
-            item["node"], genotox_rows, endpoint_rows, adme_rows, final_outcome_rows
+            item, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows
         )
         novel_food_df_data.append(nf)
 
