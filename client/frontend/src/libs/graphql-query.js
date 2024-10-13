@@ -128,6 +128,7 @@ export function buildQueryFromSelectedFields(variables, selectedFields = fields)
 }
 
 export function formatGraphQLQuery(data) {
+  // Create a tree structure to manage nested fields
   const tree = {}
 
   // Function to insert each key into the tree structure
@@ -153,11 +154,21 @@ export function formatGraphQLQuery(data) {
       .map(([key, value]) => {
         const indent = '  '.repeat(depth)
         const children = formatTree(value, depth + 1)
-        return `${indent}${key}${children ? ' {\n' + children + indent + '}' : ''}`
+        return `${indent}${key}${children ? ' {\n' + children + '\n' + indent + '}' : ''}`
       })
       .join('\n')
   }
 
   // Wrap the output with the `query` block
-  return gql`query {\n novelFoods{ edges { node {\n${formatTree(tree, 1)}\n}\n}\n}\n}`
+  return gql`
+  query GetNovelFoods($filters: [NovelFoodFilterInput]) {
+    novelFoods(filters: $filters) {
+      edges {
+        node {
+          ${formatTree(tree, 1)}
+        }
+      }
+    }
+  }
+  `
 }

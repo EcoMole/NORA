@@ -157,21 +157,25 @@ export default {
     formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
     async renderTable(addedFilters, selectedFields, headdersToHide) {
+      // const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
+      // console.log('QUERY', QUERY)
+      // todo: first create viariables using buildVariables and then use this to include it in query and add value types using some method.
       this.headdersToHide = headdersToHide
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
-
+      console.log('this.addedFilters', this.addedFilters)
       const startTime = performance.now()
       const query = this.formatGraphQLQuery(selectedFields)
-      // const variables = buildVariables(this.addedFilters)
-      // const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
-      // console.log('QUERY', QUERY)
-      // todo: first create viariables using buildVariables and then use this to include it in query and add value types using some method.
+      const filters = buildVariables(this.addedFilters)
+      console.log('filters', filters)
+      console.log('query', query)
       try {
         const response = await this.$apollo.query({
-          query: query
-          // variables: variables
+          query: query,
+          variables: {
+            filters: filters
+          }
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
       } catch (error) {
