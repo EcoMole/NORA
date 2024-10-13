@@ -378,7 +378,7 @@ export default {
           title: this.newFilter.title,
           group: this.newFilter.group,
           qualifier: this.newFilter.qualifier,
-          value: this.newFilter.qualifier === 'is None' ? null : this.newFilter.value,
+          value: this.newFilter.qualifier === 'is None' ? null : this.newFilter.value
         })
         this.addingFilter = false
         this.newFilter = {

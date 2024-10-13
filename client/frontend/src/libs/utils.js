@@ -18,6 +18,18 @@ function getUserType(user) {
 //   'is before': 'Lt',
 //   'is after': 'Gt'
 // }
+// might be unnecessary
+// const mappingObj = {
+//   contains: 'Icontains',
+//   is: 'Exact',
+//   'is None': 'Isnull',
+//   'must have': 'filter',
+//   'must not have': 'exclude',
+//   'is before': 'Lt',
+//   'is after': 'Gt'
+// }
+
+import { fields } from './definitions'
 
 function buildVariables(addedFilters) {
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
@@ -25,7 +37,8 @@ function buildVariables(addedFilters) {
       value = include === 'must have' ? true : false
       include = null
     }
-    acc.push({ key, qualifier, include, value })
+    const djangoLookupField = fields[key].djangoLookupField
+    acc.push({ qualifier, include, value, djangoLookupField })
     return acc
   }, [])
 }

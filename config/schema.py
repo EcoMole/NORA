@@ -1,4 +1,5 @@
 import graphene
+from django.db.models import Q
 from novel_food.models import NovelFood
 from novel_food.schema import NovelFoodType
 
@@ -9,6 +10,7 @@ class NovelFoodFilterInput(graphene.InputObjectType):
     key = graphene.String()
     qualifier = graphene.String()
     value = graphene.String()
+    django_lookup_field = graphene.String()
 
 
 class NovelFoodConnection(graphene.relay.Connection):
@@ -25,9 +27,31 @@ class Query(graphene.ObjectType):
 
     def resolve_novel_foods(self, info, filters=None, **kwargs):
         qs = NovelFood.objects.all()
+
         print("filters")
         print(filters)
 
+        map = {
+            "is": "exact",
+            "contains": "icontains",
+        }
+
+        for f in filters:
+            lookup_field = f.get("django_lookup_field")
+            lookup_type = map[f.get("qualifier")]
+            include = f.get("include")
+            value = f.get("value")
+
+            # Construct the lookup expression, e.g., 'title__icontains'
+            lookup = f"{lookup_field}__{lookup_type}"
+            print(lookup)
+
+            q_object = Q(**{lookup: value})
+
+            if include == "must have":
+                qs = qs.filter(q_object)
+            elif include == "must not have":
+                qs = qs.exclude(q_object)
         return qs
 
 
