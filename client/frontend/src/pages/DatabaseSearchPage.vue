@@ -185,6 +185,7 @@ export default {
       // const variables = buildVariables(this.addedFilters)
       // const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
       // console.log('QUERY', QUERY)
+      // todo: first create viariables using buildVariables and then use this to include it in query and add value types using some method.
       try {
         const response = await this.$apollo.query({
           query: query
