@@ -33,10 +33,6 @@ import { fields } from './definitions'
 
 function buildVariables(addedFilters) {
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
-    if (qualifier === 'is None') {
-      value = include === 'must have' ? true : false
-      include = null
-    }
     const djangoLookupField = fields[key].djangoLookupField
     acc.push({ qualifier, include, value, djangoLookupField })
     return acc

@@ -329,7 +329,7 @@ export default {
       title: '',
       group: '',
       qualifier: '',
-      value: null,
+      value: '',
       options: []
     },
     addedFilters: [],
@@ -378,7 +378,7 @@ export default {
           title: this.newFilter.title,
           group: this.newFilter.group,
           qualifier: this.newFilter.qualifier,
-          value: this.newFilter.qualifier === 'is None' ? null : this.newFilter.value
+          value: this.newFilter.value
         })
         this.addingFilter = false
         this.newFilter = {
@@ -387,7 +387,7 @@ export default {
           title: '',
           group: '',
           qualifier: '',
-          value: null,
+          value: '',
           options: []
         }
       }
@@ -400,7 +400,7 @@ export default {
         this.newFilter.qualifier =
           selectedField.qualifiers.length === 1 ? selectedField.qualifiers[0] : ''
         this.newFilter.group = selectedField.displayGroupName
-        this.newFilter.value = null
+        this.newFilter.value = ''
         if (selectedField.apiEndpoint) {
           this.newFilter.options = await this.getOptions(
             selectedField.apiEndpoint,
@@ -418,7 +418,7 @@ export default {
         title: '',
         group: '',
         qualifier: '',
-        value: null,
+        value: '',
         options: []
       }
     },
@@ -465,7 +465,13 @@ export default {
       return Object.keys(this.selectedFields).length === Object.keys(this.fields).length
     },
     addFilterValid() {
-      return this.newFilter.include && this.newFilter.title && this.newFilter.qualifier
+      const hasNecessaryFields = this.newFilter.include && this.newFilter.title && this.newFilter.qualifier
+      const hasValue = this.newFilter.value
+      if (this.newFilter.qualifier != "is None") {
+        return  hasNecessaryFields && hasValue
+      } else {
+        return hasNecessaryFields
+      }
     },
     fieldsSearched() {
       const fieldsSearch = this.fieldsSearch?.toLowerCase()

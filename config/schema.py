@@ -34,6 +34,7 @@ class Query(graphene.ObjectType):
         map = {
             "is": "exact",
             "contains": "icontains",
+            "is None": "isnull",
         }
 
         for f in filters:
@@ -45,7 +46,8 @@ class Query(graphene.ObjectType):
             # Construct the lookup expression, e.g., 'title__icontains'
             lookup = f"{lookup_field}__{lookup_type}"
             print(lookup)
-
+            # if lookup_type is 'isnull', the value should be True
+            value = True if lookup_type == "isnull" else value
             q_object = Q(**{lookup: value})
 
             if include == "must have":
