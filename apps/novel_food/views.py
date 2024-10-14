@@ -18,6 +18,19 @@ from rest_framework.response import Response
 #     return Response(distinct_values)
 
 
+def get_choices_from_field(app_name, model_name, field_name):
+    if not app_name or not model_name or not field_name:
+        return None
+    Model = apps.get_model(app_label=app_name, model_name=model_name)
+    if not Model:
+        raise ValueError(f"Model '{model_name}' in app '{app_name}' does not exist.")
+    field = Model._meta.get_field(field_name)
+    if hasattr(field, "choices"):
+        print("field.choices: ", field.choices)
+        return field.choices
+    return None
+
+
 def get_limit_choices_to(app_name, model_name, field_name):
     if not app_name or not model_name or not field_name:
         return None
@@ -46,9 +59,13 @@ def get_novel_food_values_list(request):
     django_app = request.query_params.get("djangoApp")
     django_model = request.query_params.get("djangoModel")
     django_field = request.query_params.get("djangoField")
-    django_limitchoices_app = request.query_params.get("djangoLimitchoicesApp")
-    django_limitchoices_model = request.query_params.get("djangoLimitchoicesModel")
-    django_limitchoices_field = request.query_params.get("djangoLimitchoicesField")
+    django_limitchoices_app = request.query_params.get("djangoLimitchoicesApp", None)
+    django_limitchoices_model = request.query_params.get(
+        "djangoLimitchoicesModel", None
+    )
+    django_limitchoices_field = request.query_params.get(
+        "djangoLimitchoicesField", None
+    )
 
     try:
         model = apps.get_model(django_app, django_model)
@@ -83,4 +100,10 @@ def get_novel_food_values_list(request):
         )
         distinct_values = distinct_values.union(distinct_values_extended)
 
+    if get_choices_from_field(django_app, django_model, django_field):
+        res = [
+            pair[0]
+            for pair in get_choices_from_field(django_app, django_model, django_field)
+        ]
+        return Response(res)
     return Response(distinct_values)
