@@ -378,7 +378,7 @@ export default {
           title: this.newFilter.title,
           group: this.newFilter.group,
           qualifier: this.newFilter.qualifier,
-          value: this.newFilter.value
+          value: this.newFilter.qualifier === 'is None' ? '' : this.newFilter.value
         })
         this.addingFilter = false
         this.newFilter = {
@@ -465,10 +465,11 @@ export default {
       return Object.keys(this.selectedFields).length === Object.keys(this.fields).length
     },
     addFilterValid() {
-      const hasNecessaryFields = this.newFilter.include && this.newFilter.title && this.newFilter.qualifier
+      const hasNecessaryFields =
+        this.newFilter.include && this.newFilter.title && this.newFilter.qualifier
       const hasValue = this.newFilter.value
-      if (this.newFilter.qualifier != "is None") {
-        return  hasNecessaryFields && hasValue
+      if (this.newFilter.qualifier != 'is None') {
+        return hasNecessaryFields && hasValue
       } else {
         return hasNecessaryFields
       }

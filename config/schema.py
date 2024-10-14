@@ -26,6 +26,18 @@ class Query(graphene.ObjectType):
     )
 
     def resolve_novel_foods(self, info, filters=None, **kwargs):
+        def create_null_filter(field_chain):
+            """
+            creates q_objects which checks whether each foreign key in the field_chain is null
+            """
+            fields = field_chain.split("__")
+            q_objects = Q()
+            for i in range(len(fields), 0, -1):
+                lookup = "__".join(fields[:i]) + "__isnull"
+                # if lookup_type is 'isnull', the value should be True
+                q_objects |= Q(**{lookup: True})
+            return q_objects
+
         qs = NovelFood.objects.all()
 
         print("filters")
@@ -38,17 +50,45 @@ class Query(graphene.ObjectType):
         }
 
         for f in filters:
+            include = f.get("include")
             lookup_field = f.get("django_lookup_field")
             lookup_type = map[f.get("qualifier")]
-            include = f.get("include")
             value = f.get("value")
 
-            # Construct the lookup expression, e.g., 'title__icontains'
-            lookup = f"{lookup_field}__{lookup_type}"
-            print(lookup)
-            # if lookup_type is 'isnull', the value should be True
-            value = True if lookup_type == "isnull" else value
-            q_object = Q(**{lookup: value})
+            if lookup_type == "isnull":
+                # if any attribute in the lookup_field chain is null,
+                # we need to check whether any foreign key in the chain is null
+                q_object = create_null_filter(lookup_field)
+            else:
+                # Construct the lookup expression, e.g., 'title__icontains'
+                lookup = f"{lookup_field}__{lookup_type}"
+                q_object = Q(**{lookup: value})
+                print("lookup: value", f"{lookup}: {value}")
+
+            # the value searched on TaxonomyNode instances might be
+            # either in short_name or in extended_name attributes
+            if lookup_field.endswith("__tax_node"):
+                prefix = lookup_field[: -len("__tax_node")]
+
+                if lookup_type == "isnull":
+                    q_object = create_null_filter(prefix)
+                    q_object |= Q(**{f"{prefix}__short_name__isnull": True}) & Q(
+                        **{f"{prefix}__extended_name__isnull": True}
+                    )
+                else:
+                    q_object = (
+                        Q(**{f"{prefix}__short_name__isnull": False})
+                        & ~Q(**{f"{prefix}__short_name": ""})
+                        & Q(**{f"{prefix}__short_name__{lookup_type}": value})
+                    ) | (
+                        (
+                            Q(**{f"{prefix}__short_name__isnull": True})
+                            | Q(**{f"{prefix}__short_name": ""})
+                        )
+                        & Q(**{f"{prefix}__extended_name__{lookup_type}": value})
+                    )
+
+            print("q_object", q_object)
 
             if include == "must have":
                 qs = qs.filter(q_object)

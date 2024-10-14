@@ -263,22 +263,24 @@ export const fields = {
   opinionDocumentType: {
     displayName: 'Opinion Document Type',
     displayGroupName: 'Opinion',
+    djangoLookupField: 'opinion__document_type__tax_node',
     type: 'text',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Document Type',
     tooltipDescription: 'Opinion Document Type tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   opinionTitle: {
     displayName: 'Opinion Title',
     displayGroupName: 'Opinion',
+    djangoLookupField: 'opinion__title',
     type: 'text',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Title',
     tooltipDescription: 'Opinion Title tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   opinionDoi: {
     displayName: 'Opinion DOI',
