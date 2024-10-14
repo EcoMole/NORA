@@ -343,16 +343,28 @@ export default {
       this.tooltipVisibility[key] = false
       this.selectedFields[key] = field
     },
-    async getOptions(apiEndpoint, djangoModel, djangoField) {
+    async getOptions(
+      apiEndpoint,
+      djangoApp,
+      djangoModel,
+      djangoField,
+      djangoLimitchoicesApp,
+      djangoLimitchoicesModel,
+      djangoLimitchoicesField
+    ) {
       const url = `/api/v1/${apiEndpoint}`
       try {
         const response = await axios.get(url, {
           params: {
+            djangoApp,
             djangoModel,
-            djangoField
+            djangoField,
+            djangoLimitchoicesApp,
+            djangoLimitchoicesModel,
+            djangoLimitchoicesField
           }
         })
-        console.log(`options for ${djangoModel}.${djangoField} are:`, response.data)
+        console.log(`options for ${djangoApp} - ${djangoModel}.${djangoField} are:`, response.data)
         return response.data.filter((option) => option)
       } catch (error) {
         console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)
@@ -402,10 +414,23 @@ export default {
         this.newFilter.group = selectedField.displayGroupName
         this.newFilter.value = ''
         if (selectedField.apiEndpoint) {
+          const djangoLimitchoicesApp = selectedField.djangoLimitchoicesApp
+            ? selectedField.djangoLimitchoicesApp
+            : null
+          const djangoLimitchoicesModel = selectedField.djangoLimitchoicesModel
+            ? selectedField.djangoLimitchoicesModel
+            : null
+          const djangoLimitchoicesField = selectedField.djangoLimitchoicesField
+            ? selectedField.djangoLimitchoicesField
+            : null
           this.newFilter.options = await this.getOptions(
             selectedField.apiEndpoint,
+            selectedField.djangoApp,
             selectedField.djangoModel,
-            selectedField.djangoField
+            selectedField.djangoField,
+            djangoLimitchoicesApp,
+            djangoLimitchoicesModel,
+            djangoLimitchoicesField
           )
         }
       }

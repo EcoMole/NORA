@@ -18,28 +18,69 @@ from rest_framework.response import Response
 #     return Response(distinct_values)
 
 
+def get_limit_choices_to(app_name, model_name, field_name):
+    if not app_name or not model_name or not field_name:
+        return None
+    Model = apps.get_model(app_label=app_name, model_name=model_name)
+    if not Model:
+        raise ValueError(f"Model '{model_name}' in app '{app_name}' does not exist.")
+    field = Model._meta.get_field(field_name)
+
+    limit_choices_to = None
+    if (
+        hasattr(field, "remote_field")
+        and field.remote_field
+        and hasattr(field.remote_field, "limit_choices_to")
+    ):
+        limit_choices_to = field.remote_field.limit_choices_to
+        print("field.remote_field.limit_choices_to: ", limit_choices_to)
+    elif hasattr(field, "limit_choices_to"):
+        limit_choices_to = field.limit_choices_to
+        print("field.limit_choices_to: ", limit_choices_to)
+    return limit_choices_to
+
+
 @api_view(["GET"])
 def get_novel_food_values_list(request):
-    # Get parameters from request
+    # Extract parameters
+    django_app = request.query_params.get("djangoApp")
     django_model = request.query_params.get("djangoModel")
     django_field = request.query_params.get("djangoField")
+    django_limitchoices_app = request.query_params.get("djangoLimitchoicesApp")
+    django_limitchoices_model = request.query_params.get("djangoLimitchoicesModel")
+    django_limitchoices_field = request.query_params.get("djangoLimitchoicesField")
 
-    # Dynamically get the model
     try:
-        model = apps.get_model("novel_food", django_model)
+        model = apps.get_model(django_app, django_model)
     except LookupError:
-        return Response({"error": "Model not found."}, status=400)
+        return Response({"error": f"Model {django_model} not found."}, status=400)
 
-    # Ensure the field exists on the model
     if not hasattr(model, django_field):
         return Response(
             {"error": f"Field {django_field} not found on model {django_model}."},
             status=400,
         )
 
-    # Query the distinct values of the field dynamically
-    distinct_values = model.objects.values_list(django_field, flat=True).distinct()
-    print("distinct_values")
-    print(distinct_values)
+    limit_choices = get_limit_choices_to(
+        django_limitchoices_app, django_limitchoices_model, django_limitchoices_field
+    )
+    print("limit_choices: ", limit_choices)
+
+    if limit_choices:
+        qs = model.objects.filter(limit_choices)
+    else:
+        qs = model.objects.all()
+
+    distinct_values = qs.order_by().values_list(django_field, flat=True).distinct()
+
+    if django_field == "short_name" and hasattr(model, "extended_name"):
+        if limit_choices:
+            qs_extended = model.objects.filter(limit_choices)
+        else:
+            qs_extended = model.objects.all()
+        distinct_values_extended = (
+            qs_extended.order_by().values_list("extended_name", flat=True).distinct()
+        )
+        distinct_values = distinct_values.union(distinct_values_extended)
 
     return Response(distinct_values)
