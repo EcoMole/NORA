@@ -64,7 +64,7 @@
                           item-value="key"
                           class="ml-6"
                           variant="underlined"
-                          @update:modelValue="updateFilter"
+                          @update:modelValue="updateFilterKey"
                         ></v-autocomplete>
                       </v-row>
                     </v-col>
@@ -78,6 +78,7 @@
                           max-width="180px"
                           variant="underlined"
                           class="ml-6"
+                          @update:modelValue="updateFilterQualifier"
                         ></v-autocomplete>
                         <v-autocomplete
                           v-if="showOptionsListField"
@@ -343,31 +344,42 @@ export default {
       this.tooltipVisibility[key] = false
       this.selectedFields[key] = field
     },
-    async getOptions(
-      apiEndpoint,
-      djangoApp,
-      djangoModel,
-      djangoField,
-      djangoLimitchoicesApp,
-      djangoLimitchoicesModel,
-      djangoLimitchoicesField
-    ) {
-      const url = `/api/v1/${apiEndpoint}`
-      try {
-        const response = await axios.get(url, {
-          params: {
-            djangoApp,
-            djangoModel,
-            djangoField,
-            djangoLimitchoicesApp,
-            djangoLimitchoicesModel,
-            djangoLimitchoicesField
-          }
-        })
-        console.log(`options for ${djangoApp} - ${djangoModel}.${djangoField} are:`, response.data)
-        return response.data.filter((option) => option)
-      } catch (error) {
-        console.error(`Error fetching options from ${apiEndpoint} endpoint`, error)
+    async getOptions(selectedField) {
+      if (selectedField.apiEndpoint) {
+        const url = `/api/v1/${selectedField.apiEndpoint}`
+        const djangoApp = selectedField.djangoApp
+        const djangoModel = selectedField.djangoModel
+        const djangoField = selectedField.djangoField
+        const djangoLimitchoicesApp = selectedField.djangoLimitchoicesApp
+          ? selectedField.djangoLimitchoicesApp
+          : null
+        const djangoLimitchoicesModel = selectedField.djangoLimitchoicesModel
+          ? selectedField.djangoLimitchoicesModel
+          : null
+        const djangoLimitchoicesField = selectedField.djangoLimitchoicesField
+          ? selectedField.djangoLimitchoicesField
+          : null
+        try {
+          const response = await axios.get(url, {
+            params: {
+              djangoApp,
+              djangoModel,
+              djangoField,
+              djangoLimitchoicesApp,
+              djangoLimitchoicesModel,
+              djangoLimitchoicesField
+            }
+          })
+          console.log(
+            `options for ${djangoApp} - ${djangoModel}.${djangoField} are:`,
+            response.data
+          )
+          this.newFilter.options = response.data.filter((option) => option)
+        } catch (error) {
+          console.error(`Error fetching options from ${url} endpoint`, error)
+        }
+      } else {
+        this.newFilter.options = []
       }
     },
     getHeadersToHide() {
@@ -404,7 +416,14 @@ export default {
         }
       }
     },
-    async updateFilter() {
+    async updateFilterQualifier() {
+      const selectedField = this.fields[this.newFilter.key]
+
+      if (selectedField) {
+        await this.getOptions(selectedField)
+      }
+    },
+    async updateFilterKey() {
       const selectedField = this.fields[this.newFilter.key]
 
       if (selectedField) {
@@ -413,26 +432,7 @@ export default {
           selectedField.qualifiers.length === 1 ? selectedField.qualifiers[0] : ''
         this.newFilter.group = selectedField.displayGroupName
         this.newFilter.value = ''
-        if (selectedField.apiEndpoint) {
-          const djangoLimitchoicesApp = selectedField.djangoLimitchoicesApp
-            ? selectedField.djangoLimitchoicesApp
-            : null
-          const djangoLimitchoicesModel = selectedField.djangoLimitchoicesModel
-            ? selectedField.djangoLimitchoicesModel
-            : null
-          const djangoLimitchoicesField = selectedField.djangoLimitchoicesField
-            ? selectedField.djangoLimitchoicesField
-            : null
-          this.newFilter.options = await this.getOptions(
-            selectedField.apiEndpoint,
-            selectedField.djangoApp,
-            selectedField.djangoModel,
-            selectedField.djangoField,
-            djangoLimitchoicesApp,
-            djangoLimitchoicesModel,
-            djangoLimitchoicesField
-          )
-        }
+        await this.getOptions(selectedField)
       }
     },
     cancelNewFilter() {
