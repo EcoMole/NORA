@@ -88,12 +88,12 @@ export const fields = {
   toxStudyRequired: {
     displayName: 'Toxicology Study Required',
     displayGroupName: 'Toxicology',
+    type: 'text',
     apiEndpoint: 'novel-food-values-list/',
     djangoApp: 'novel_food',
     djangoModel: 'NovelFood',
     djangoField: 'tox_study_required',
     djangoLookupField: 'tox_study_required',
-    type: 'text',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-flask-outline',
     filterDescription: 'description for Toxicology Study Required',
@@ -105,85 +105,147 @@ export const fields = {
     displayGroupName: 'Novel Food',
     type: 'text',
     apiEndpoint: 'novel-food-values-list/',
-    djangoModel: 'NovelFood',
-    djangoField: 'genotox_final_outcome',
-    qualifiers: ['is'],
+    djangoApp: 'novel_food',
+    djangoModel: 'GenotoxFinalOutcome',
+    djangoField: 'title',
+    djangoLookupField: 'genotox_final_outcome__title',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-dna',
     filterDescription: 'description for Genotoxicity Final Outcome',
     tooltipDescription: 'Genotoxicity Final Outcome tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   finalToxicologyRemarks: {
     displayName: 'Final Toxicology Remarks',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'final_toxicology_remarks',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-comment-text-outline',
     filterDescription: 'description for Final Toxicology Remarks',
     tooltipDescription: 'Final Toxicology Remarks tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   proteinDigestibility: {
     displayName: 'Protein Digestibility',
     displayGroupName: 'Novel Food',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'protein_digestibility__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFood',
+    djangoLimitchoicesField: 'protein_digestibility',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-food-drumstick-outline',
     filterDescription: 'description for Protein Digestibility',
     tooltipDescription: 'Protein Digestibility tooltip description',
-    showInFilters: false
+    showInFilters: true
+  },
+  antinutritionalFactors: {
+    displayName: 'Antinutritional Factors',
+    displayGroupName: 'Novel Food',
+    type: 'text',
+    djangoLookupField: 'antinutritional_factors__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFood',
+    djangoLimitchoicesField: 'antinutritional_factors',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-scale-balance',
+    filterDescription: 'description for Antinutritional Factors',
+    tooltipDescription: 'Antinutritional Factors tooltip description',
+    showInFilters: true
   },
   hasNutriDisadvantage: {
     displayName: 'Nutritional Disadvantage',
     displayGroupName: 'Novel Food',
-    type: 'boolean',
-    qualifiers: ['is true', 'is false'],
+    type: 'text',
+    djangoLookupField: 'has_nutri_disadvantage__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFood',
+    djangoLimitchoicesField: 'has_nutri_disadvantage',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-scale-balance',
     filterDescription: 'description for Nutritional Disadvantage',
     tooltipDescription: 'Nutritional Disadvantage tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   nutriDisadvantageExplanation: {
     displayName: 'Nutritional Disadvantage Explanation',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'nutri_disadvantage_explanation',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-text-box-outline',
     filterDescription: 'description for Nutritional Disadvantage Explanation',
     tooltipDescription: 'Nutritional Disadvantage Explanation tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   sufficientData: {
     displayName: 'Sufficient Data',
-    flattenedDisplayName: 'Stability - Sufficient Data',
     displayGroupName: 'Novel Food',
-    type: 'boolean',
-    qualifiers: ['is true', 'is false'],
+    flattenedDisplayName: 'Stability - Sufficient Data',
+    type: 'text',
+    djangoLookupField: 'sufficient_data__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFood',
+    djangoLimitchoicesField: 'sufficient_data',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-database-check',
     filterDescription: 'description for Sufficient Data',
     tooltipDescription: 'Sufficient Data tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   foodMatrices: {
     displayName: 'Food Matrices',
     displayGroupName: 'Stability',
     flattenedDisplayName: 'Stability - Food Matrices',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'food_matrices__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFood',
+    djangoLimitchoicesField: 'food_matrices',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-grid',
     filterDescription: 'description for Food Matrices',
     tooltipDescription: 'Food Matrices tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   instabilityConcerns: {
     displayName: 'Instability Concerns',
     displayGroupName: 'Novel Food',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'instability_concerns__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFood',
+    djangoLimitchoicesField: 'instability_concerns',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription: 'description for Instability Concerns',
     tooltipDescription: 'Instability Concerns tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   shelflifeValue: {
     displayName: 'Shelf Life Value',
@@ -199,54 +261,70 @@ export const fields = {
     displayName: 'Shelf Life Unit',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'shelflife_unit__tax_node',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-timer-sand',
     filterDescription: 'description for Shelf Life Unit',
     tooltipDescription: 'Shelf Life Unit tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   endocrineDisruptProp: {
     displayName: 'Endocrine Disruptive Properties',
     displayGroupName: 'Novel Food',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'endocrine_disrupt_prop__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFood',
+    djangoLimitchoicesField: 'endocrine_disrupt_prop',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription: 'description for Endocrine Disruptive Properties',
     tooltipDescription: 'Endocrine Disruptive Properties tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   outcome: {
     displayName: 'Outcome',
     flattenedDisplayName: 'Novel Food Outcome',
     displayGroupName: 'Novel Food',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFood',
+    djangoField: 'outcome',
+    djangoLookupField: 'outcome',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-check-circle-outline',
     filterDescription: 'description for Outcome',
     tooltipDescription: 'Outcome tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   outcomeRemarks: {
     displayName: 'Outcome Remarks',
     flattenedDisplayName: 'Novel Food Outcome Remarks',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'outcome_remarks',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-comment-text-outline',
     filterDescription: 'description for Outcome Remarks',
     tooltipDescription: 'Outcome Remarks tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   vocabId: {
     displayName: 'Vocabulary Name',
     flattenedDisplayName: 'Novel Food Vocabulary Name',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'vocab_id__tax_node',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription: 'description for Vocabulary Name',
     tooltipDescription: 'Vocabulary Name tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   'allergenicities.title': {
@@ -266,6 +344,7 @@ export const fields = {
   opinionDocumentType: {
     displayName: 'Opinion Document Type',
     displayGroupName: 'Opinion',
+    type: 'text',
     djangoLookupField: 'opinion__document_type__tax_node',
     apiEndpoint: 'novel-food-values-list/',
     djangoApp: 'taxonomies',
@@ -274,7 +353,6 @@ export const fields = {
     djangoLimitchoicesApp: 'administrative',
     djangoLimitchoicesModel: 'Opinion',
     djangoLimitchoicesField: 'document_type',
-    type: 'text',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Document Type',
@@ -284,8 +362,8 @@ export const fields = {
   opinionTitle: {
     displayName: 'Opinion Title',
     displayGroupName: 'Opinion',
-    djangoLookupField: 'opinion__title',
     type: 'text',
+    djangoLookupField: 'opinion__title',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Title',
@@ -296,21 +374,23 @@ export const fields = {
     displayName: 'Opinion DOI',
     displayGroupName: 'Opinion',
     type: 'text',
+    djangoLookupField: 'opinion__doi',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion DOI',
     tooltipDescription: 'Opinion DOI tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   opinionUrl: {
     displayName: 'Opinion URL',
     displayGroupName: 'Opinion',
     type: 'text',
+    djangoLookupField: 'opinion__url',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion URL',
     tooltipDescription: 'Opinion URL tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   opinionPublicationDate: {
     displayName: 'Opinion Publication Date',
@@ -320,7 +400,7 @@ export const fields = {
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Publication Date',
     tooltipDescription: 'Opinion Publication Date tooltip description',
-    showInFilters: true
+    showInFilters: false
   },
   opinionAdoptionDate: {
     displayName: 'Opinion Adoption Date',
@@ -330,7 +410,7 @@ export const fields = {
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Adoption Date',
     tooltipDescription: 'Opinion Adoption Date tooltip description',
-    showInFilters: true
+    showInFilters: false
   },
 
   'panels.title': {
