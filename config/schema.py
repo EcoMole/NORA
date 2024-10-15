@@ -26,16 +26,23 @@ class Query(graphene.ObjectType):
     )
 
     def resolve_novel_foods(self, info, filters=None, **kwargs):
-        def create_null_filter(field_chain):
+        def create_null_or_empty_filter(field_chain):
             """
-            creates q_objects which checks whether each foreign key in the field_chain is null
+            Creates Q objects which check whether
+            each foreign key or field in the field_chain is null or,
+            for the longest chain, if it is either null or an empty string.
             """
             fields = field_chain.split("__")
             q_objects = Q()
             for i in range(len(fields), 0, -1):
-                lookup = "__".join(fields[:i]) + "__isnull"
-                # if lookup_type is 'isnull', the value should be True
-                q_objects |= Q(**{lookup: True})
+                f_chain = "__".join(fields[:i])
+                if i == len(fields):
+                    # checks if it is the first iteration in the reversed loop
+                    q_objects |= Q(**{f_chain + "__isnull": True}) | Q(
+                        **{f_chain + "__exact": ""}
+                    )
+                else:
+                    q_objects |= Q(**{f_chain + "__isnull": True})
             return q_objects
 
         qs = NovelFood.objects.all()
@@ -58,7 +65,7 @@ class Query(graphene.ObjectType):
             if lookup_type == "isnull":
                 # if any attribute in the lookup_field chain is null,
                 # we need to check whether any foreign key in the chain is null
-                q_object = create_null_filter(lookup_field)
+                q_object = create_null_or_empty_filter(lookup_field)
             else:
                 # Construct the lookup expression, e.g., 'title__icontains'
                 lookup = f"{lookup_field}__{lookup_type}"
@@ -71,7 +78,7 @@ class Query(graphene.ObjectType):
                 prefix = lookup_field[: -len("__tax_node")]
 
                 if lookup_type == "isnull":
-                    q_object = create_null_filter(prefix)
+                    q_object = create_null_or_empty_filter(prefix)
                     q_object |= Q(**{f"{prefix}__short_name__isnull": True}) & Q(
                         **{f"{prefix}__extended_name__isnull": True}
                     )
