@@ -332,11 +332,16 @@ export const fields = {
     flattenedDisplayName: 'Allergenicity',
     displayGroupName: 'Allergenicity',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'allergenicities__allergenicity__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'Allergenicity',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'description for Allergenicity',
     tooltipDescription: 'Allergenicity tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   // opinion
@@ -418,11 +423,12 @@ export const fields = {
     flattenedDisplayName: 'Panel',
     displayGroupName: 'Administrative',
     type: 'text',
+    djangoLookupField: 'opinion__panels__panel__title',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: "description for Panel's Name",
     tooltipDescription: "Panel's Name tooltip description",
-    showInFilters: false
+    showInFilters: true
   },
 
   'sciOfficers.firstName': {
@@ -430,33 +436,36 @@ export const fields = {
     flattenedDisplayName: "Scientific Officer's First Name",
     displayGroupName: 'Administrative',
     type: 'text',
+    djangoLookupField: 'opinion__sci_officers__sci_officer__first_name',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: "description for Scientific Officer's First Name",
     tooltipDescription: "Scientific Officer's First Name tooltip description",
-    showInFilters: false
+    showInFilters: true
   },
   'sciOfficers.middleName': {
     displayName: 'Middle Name',
     flattenedDisplayName: "Scientific officer's Middle Name",
     displayGroupName: 'Administrative',
     type: 'text',
+    djangoLookupField: 'opinion__sci_officers__sci_officer__middle_name',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: "description for scientific officer's Middle Name",
     tooltipDescription: "Scientific officer's Middle Name tooltip description",
-    showInFilters: false
+    showInFilters: true
   },
   'sciOfficers.lastName': {
     displayName: 'Last Name',
     flattenedDisplayName: "Scientific officer's Last Name",
     displayGroupName: 'Administrative',
     type: 'text',
+    djangoLookupField: 'opinion__sci_officers__sci_officer__last_name',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: "description for scientific officer's Last Name",
     tooltipDescription: "Scientific officer's Last Name tooltip description",
-    showInFilters: false
+    showInFilters: true
   },
 
   // question
@@ -466,23 +475,25 @@ export const fields = {
     flattenedDisplayName: 'Question Number',
     displayGroupName: 'Question',
     type: 'text',
+    djangoLookupField: 'opinion__questions__question__number',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Number',
     tooltipDescription: 'Number tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   'questions.applicants.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Applicant',
     displayGroupName: 'Applicant',
+    djangoLookupField: 'opinion__questions__question__applicants__applicant__title',
     type: 'text',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for applicant title',
     tooltipDescription: 'Applicant title tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   'questions.mandates.mandateTypeTitle': {
@@ -490,33 +501,40 @@ export const fields = {
     flattenedDisplayName: 'Mandate Type',
     displayGroupName: 'Mandate',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'opinion__questions__question__mandates__mandate_type__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'administrative',
+    djangoModel: 'MandateType',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Mandate Type',
     tooltipDescription: 'Mandate Type tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'questions.mandates.mandateTypeDefinition': {
     displayName: 'Type Definition',
     flattenedDisplayName: 'Mandate Type Definition',
     displayGroupName: 'Mandate',
     type: 'text',
+    djangoLookupField: 'opinion__questions__question__mandates__mandate_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Mandate Type Definition',
     tooltipDescription: 'Mandate Type Definition tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'questions.mandates.regulation': {
     displayName: 'Regulation',
     flattenedDisplayName: 'Mandate Regulation',
     displayGroupName: 'Mandate',
     type: 'text',
+    djangoLookupField: 'opinion__questions__question__mandates__regulation__tax_node',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Mandate Regulation',
     tooltipDescription: 'Mandate Regulation tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   'foodCategories.title': {
@@ -524,22 +542,28 @@ export const fields = {
     flattenedDisplayName: 'Food Category Name',
     displayGroupName: 'Novel Food',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'food_categories__food_category__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'FoodCategory',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'description for Food Category Name',
     tooltipDescription: 'Food Category Name tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'foodCategories.definition': {
     displayName: 'Definition',
     flattenedDisplayName: 'Food Category Definition',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'food_categories__food_category__definition',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'description for Food Category Definition',
     tooltipDescription: 'Food Category Definition tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   'novelFoodCategories.title': {
@@ -547,33 +571,40 @@ export const fields = {
     flattenedDisplayName: 'Novel Food Category',
     displayGroupName: 'Novel Food',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'novel_food_categories__novel_food_category__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodCategory',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'description for Novel Food Category',
     tooltipDescription: 'Novel Food Category tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'novelFoodCategories.definition': {
     displayName: 'Definition',
     flattenedDisplayName: 'Novel Food Category Definition',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'novel_food_categories__novel_food_category__definition',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'description for Novel Food Category Definition',
     tooltipDescription: 'Novel Food Category Definition tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'novelFoodCategories.regulation': {
     displayName: 'Regulation',
     flattenedDisplayName: 'Novel Food Category Regulation',
     displayGroupName: 'Novel Food',
     type: 'text',
+    djangoLookupField: 'novel_food_categories__novel_food_category__regulation__tax_node',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Novel Food Category regulation',
     tooltipDescription: 'Novel Food Category regulation tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   // adme
