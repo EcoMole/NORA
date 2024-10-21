@@ -54,7 +54,7 @@ export const fields = {
     flattenedDisplayName: 'Novel Food ID',
     displayGroupName: 'Novel Food',
     type: 'number',
-    qualifiers: ['is', 'greater than', 'less than'],
+    qualifiers: ['is', 'is greater than', 'is less than'],
     icon: 'mdi-numeric',
     filterDescription: 'description for ID',
     tooltipDescription: 'ID tooltip description',
@@ -251,11 +251,12 @@ export const fields = {
     displayName: 'Shelf Life Value',
     displayGroupName: 'Novel Food',
     type: 'number',
-    qualifiers: ['is', 'greater than', 'less than'],
+    djangoLookupField: 'shelflife_value',
+    qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-clock-outline',
     filterDescription: 'description for Shelf Life Value',
     tooltipDescription: 'Shelf Life Value tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   shelflifeUnit: {
     displayName: 'Shelf Life Unit',
@@ -415,21 +416,23 @@ export const fields = {
     displayName: 'Opinion Publication Date',
     displayGroupName: 'Opinion',
     type: 'date',
+    djangoLookupField: 'opinion__publication_date',
     qualifiers: ['is before', 'is after', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Publication Date',
     tooltipDescription: 'Opinion Publication Date tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   opinionAdoptionDate: {
     displayName: 'Opinion Adoption Date',
     displayGroupName: 'Opinion',
     type: 'date',
+    djangoLookupField: 'opinion__adoption_date',
     qualifiers: ['is before', 'is after', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Opinion Adoption Date',
     tooltipDescription: 'Opinion Adoption Date tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
 
   'panels.title': {
@@ -535,7 +538,8 @@ export const fields = {
     flattenedDisplayName: 'Mandate Type Definition',
     displayGroupName: 'Mandate',
     type: 'text',
-    djangoLookupField: 'opinion__questions__question__mandates__mandate_type__definition__text_field',
+    djangoLookupField:
+      'opinion__questions__question__mandates__mandate_type__definition__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Mandate Type Definition',
@@ -916,7 +920,7 @@ export const fields = {
     flattenedDisplayName: 'Endpoint Value',
     displayGroupName: 'Endpoint',
     type: 'number',
-    qualifiers: ['is', 'greater than', 'less than'],
+    qualifiers: ['is', 'is greater than', 'is less than'],
     icon: 'mdi-arrow-down',
     filterDescription: 'description for Value',
     tooltipDescription: 'Value tooltip description',
@@ -950,7 +954,7 @@ export const fields = {
     flattenedDisplayName: 'Final Outcome Value',
     displayGroupName: 'Final Outcome',
     type: 'number',
-    qualifiers: ['is', 'greater than', 'less than'],
+    qualifiers: ['is', 'is greater than', 'is less than'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Value',
     tooltipDescription: 'Value tooltip description',
@@ -984,7 +988,7 @@ export const fields = {
     flattenedDisplayName: 'Final Outcome Population Value',
     displayGroupName: 'Population',
     type: 'number',
-    qualifiers: ['is', 'greater than', 'less than'],
+    qualifiers: ['is', 'is greater than', 'is less than'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Value',
     tooltipDescription: 'Value tooltip description',

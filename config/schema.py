@@ -50,9 +50,13 @@ class Query(graphene.ObjectType):
         print(filters)
 
         map = {
+            "is before": "lt",
+            "is after": "gt",
             "is": "exact",
             "contains": "icontains",
             "is None": "isnull",
+            "is greater than": "gt",
+            "is less than": "lt",
         }
 
         for f in filters:
