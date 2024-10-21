@@ -26,7 +26,12 @@ class Query(graphene.ObjectType):
     )
 
     def resolve_novel_foods(self, info, filters=None, **kwargs):
-        def create_null_or_empty_filter(field_chain):
+        def create_q_object(lookup_field, lookup_type, value):
+            lookup = f"{lookup_field}__{lookup_type}"
+            print("lookup: value", f"{lookup}: {value}")
+            return Q(**{lookup: value})
+
+        def create_isnull_or_isempty_q_object(field_chain):
             """
             Creates Q objects which check whether
             each foreign key or field in the field_chain is null or,
@@ -36,13 +41,7 @@ class Query(graphene.ObjectType):
             q_objects = Q()
             for i in range(len(fields), 0, -1):
                 f_chain = "__".join(fields[:i])
-                if i == len(fields):
-                    # checks if it is the first iteration in the reversed loop
-                    q_objects |= Q(**{f_chain + "__isnull": True}) | Q(
-                        **{f_chain + "__exact": ""}
-                    )
-                else:
-                    q_objects |= Q(**{f_chain + "__isnull": True})
+                q_objects |= Q(**{f_chain + "__isnull": True})
             return q_objects
 
         qs = NovelFood.objects.all()
@@ -62,23 +61,13 @@ class Query(graphene.ObjectType):
             lookup_type = map[f.get("qualifier")]
             value = f.get("value")
 
-            if lookup_type == "isnull":
-                # if any attribute in the lookup_field chain is null,
-                # we need to check whether any foreign key in the chain is null
-                q_object = create_null_or_empty_filter(lookup_field)
-            else:
-                # Construct the lookup expression, e.g., 'title__icontains'
-                lookup = f"{lookup_field}__{lookup_type}"
-                q_object = Q(**{lookup: value})
-                print("lookup: value", f"{lookup}: {value}")
-
-            # the value searched on TaxonomyNode instances might be
-            # either in short_name or in extended_name attributes
             if lookup_field.endswith("__tax_node"):
+                # the value searched on TaxonomyNode instances might be
+                # either in short_name or in extended_name attributes
                 prefix = lookup_field[: -len("__tax_node")]
 
                 if lookup_type == "isnull":
-                    q_object = create_null_or_empty_filter(prefix)
+                    q_object = create_isnull_or_isempty_q_object(prefix)
                     q_object |= Q(**{f"{prefix}__short_name__isnull": True}) & Q(
                         **{f"{prefix}__extended_name__isnull": True}
                     )
@@ -94,6 +83,21 @@ class Query(graphene.ObjectType):
                         )
                         & Q(**{f"{prefix}__extended_name__{lookup_type}": value})
                     )
+
+            elif lookup_field.endswith("__text_field"):
+                lookup_field = lookup_field[: -len("__text_field")]
+
+                if lookup_type == "isnull":
+                    q_object = create_isnull_or_isempty_q_object(lookup_field)
+                    q_object |= Q(**{lookup_field + "__exact": ""})
+                else:
+                    q_object = create_q_object(lookup_field, lookup_type, value)
+
+            else:
+                if lookup_type == "isnull":
+                    q_object = create_isnull_or_isempty_q_object(lookup_field)
+                else:
+                    q_object = create_q_object(lookup_field, lookup_type, value)
 
             print("q_object", q_object)
 
