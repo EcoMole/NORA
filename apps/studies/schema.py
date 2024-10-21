@@ -26,10 +26,14 @@ class ADMEType(DjangoObjectType):
     guideline_qualifier = graphene.String()
     study_source = graphene.String()
     investigation_types = graphene.List(InvestigationTypeObjectType)
+    django_admin_adme = graphene.String()
 
     class Meta:
         model = ADME
         fields = "__all__"
+
+    def resolve_django_admin_adme(self, info):
+        return f"studies/adme/{self.id}/change/"
 
     def resolve_test_type(self, info):
         return self.test_type.name if self.test_type else None
@@ -53,10 +57,14 @@ class GenotoxType(DjangoObjectType):
     test_type = graphene.String()
     outcome = graphene.String()
     guideline = graphene.String()
+    django_admin_genotox = graphene.String()
 
     class Meta:
         model = Genotox
         fields = "__all__"
+
+    def resolve_django_admin_genotox(self, info):
+        return f"studies/genotox/{self.id}/change/"
 
     def resolve_guideline_qualifier(self, info):
         return self.guideline_qualifier.title if self.guideline_qualifier else None
@@ -79,10 +87,14 @@ class FinalOutcomeType(DjangoObjectType):
     qualifier = graphene.String()
     value = graphene.String()
     populations = graphene.List(PopulationType)
+    django_admin_final_outcome = graphene.String()
 
     class Meta:
         model = FinalOutcome
         exclude = ["unit"]
+
+    def resolve_django_admin_final_outcome(self, info):
+        return f"studies/finaloutcome/{self.id}/change/"
 
     def resolve_outcome(self, info):
         return self.outcome.name if self.outcome else None
@@ -135,10 +147,14 @@ class EndpointStudyType(DjangoObjectType):
     sex = graphene.String()
     study_duration = graphene.String()
     endpoints = graphene.List(EndpointType)
+    django_admin_endpointstudy = graphene.String()
 
     class Meta:
         model = Endpointstudy
         exclude = ["duration_unit"]
+
+    def resolve_django_admin_endpointstudy(self, info):
+        return f"studies/endpointstudy/{self.id}/change/"
 
     def resolve_test_type(self, info):
         return self.test_type.name if self.test_type else None

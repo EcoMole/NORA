@@ -63,11 +63,19 @@ class NovelFoodType(DjangoObjectType):
     genotoxes = graphene.List(GenotoxType)
     endpointstudies = graphene.List(EndpointStudyType)
     novel_food_id = graphene.Int()
+    django_admin_opinion = graphene.String()
+    django_admin_novel_food = graphene.String()
 
     class Meta:
         model = NovelFood
         fields = "__all__"
         interfaces = (graphene.relay.Node,)
+
+    def resolve_django_admin_opinion(self, info):
+        return f"administrative/opinion/{self.opinion.id}/change/"
+
+    def resolve_django_admin_novel_food(self, info):
+        return f"novel_food/novelfood/{self.id}/change/"
 
     def resolve_novel_food_id(self, info):
         return self.id

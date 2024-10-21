@@ -23,6 +23,14 @@
           <a v-else-if="header.value === 'opinionUrl'" :href="item[header.value]" target="_blank">{{
             item[header.value]
           }}</a>
+          <v-btn
+            v-else-if="header.value.includes('djangoAdmin')"
+            @click="goToDjangoAdmin(item[header.value])"
+            size="x-small"
+          >
+            <v-icon>mdi-open-in-new</v-icon>
+            go to {{ header.title.slice(0, -'Admin'.length) }}
+          </v-btn>
           <div v-else>
             {{ item[header.value] }}
           </div>
@@ -33,6 +41,9 @@
 </template>
 
 <script>
+import { useMainStore } from '@/stores/main'
+import { mapState } from 'pinia'
+
 export default {
   name: 'RecursiveDataTable',
   props: {
@@ -62,6 +73,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(useMainStore, ['settings']),
     items() {
       if (Array.isArray(this.data)) {
         return this.data
@@ -100,6 +112,11 @@ export default {
         value &&
         (Array.isArray(value) || (typeof value === 'object' && Object.keys(value).length > 0))
       )
+    },
+    goToDjangoAdmin(entityPath) {
+      const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || window.location.origin
+      const url = `${backendOrigin}/${this.settings.adminPath}${entityPath}`
+      window.open(url, '_blank')
     }
   }
 }

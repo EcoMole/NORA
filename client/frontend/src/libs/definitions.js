@@ -989,5 +989,54 @@ export const fields = {
     filterDescription: 'description for Value',
     tooltipDescription: 'Value tooltip description',
     showInFilters: false
-  }
+  },
+  // links do django admin
+  djangoAdminOpinion: {
+    displayName: 'Opinion Admin',
+    flattenedDisplayName: 'Opinion Admin',
+    icon: 'mdi-account-cowboy-hat',
+    filterDescription: 'will provide a link to django admin',
+    tooltipDescription: 'will provide a link to django admin',
+    showInFilters: false
+  },
+  djangoAdminNovelFood: {
+    displayName: 'Novel Food Admin',
+    flattenedDisplayName: 'Novel Food Admin',
+    icon: 'mdi-account-cowboy-hat',
+    filterDescription: 'will provide a link to django admin',
+    tooltipDescription: 'will provide a link to django admin',
+    showInFilters: false
+  },
+  'admes.djangoAdminAdme': {
+    displayName: 'ADME Admin',
+    flattenedDisplayName: 'ADME Admin',
+    icon: 'mdi-account-cowboy-hat',
+    filterDescription: 'will provide a link to django admin',
+    tooltipDescription: 'will provide a link to django admin',
+    showInFilters: false
+  },
+  'genotoxes.djangoAdminGenotox': {
+    displayName: 'Genotox Admin',
+    flattenedDisplayName: 'Genotox Admin',
+    icon: 'mdi-account-cowboy-hat',
+    filterDescription: 'will provide a link to django admin',
+    tooltipDescription: 'Opinion tooltip description',
+    showInFilters: false
+  },
+  'endpointstudies.djangoAdminEndpointstudy': {
+    displayName: 'Endpoint Study Admin',
+    flattenedDisplayName: 'Endpoint Study Admin',
+    icon: 'mdi-account-cowboy-hat',
+    filterDescription: 'will provide a link to django admin',
+    tooltipDescription: 'will provide a link to django admin',
+    showInFilters: false
+  },
+  'endpointstudies.endpoints.finalOutcomes.djangoAdminFinalOutcome': {
+    displayName: 'Final Outcome Admin',
+    flattenedDisplayName: 'Final Outcome Admin',
+    icon: 'mdi-account-cowboy-hat',
+    filterDescription: 'will provide a link to django admin',
+    tooltipDescription: 'will provide a link to django admin',
+    showInFilters: false
+  },
 }
