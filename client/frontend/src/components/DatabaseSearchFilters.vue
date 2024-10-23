@@ -458,6 +458,8 @@ export default {
         value: this.addedFilters[index].value,
         options: this.addedFilters[index].options ? this.addedFilters[index].options : []
       }
+      const selectedField = this.fields[this.newFilter.key]
+      this.getOptions(selectedField)
       this.removeFilter(index)
     },
     removeFilter(index) {
