@@ -145,16 +145,19 @@ class EndpointStudyType(DjangoObjectType):
     guideline_qualifier = graphene.String()
     study_source = graphene.String()
     sex = graphene.String()
-    study_duration = graphene.String()
     endpoints = graphene.List(EndpointType)
     django_admin_endpointstudy = graphene.String()
+    duration_unit = graphene.String()
 
     class Meta:
         model = Endpointstudy
-        exclude = ["duration_unit"]
+        fields = "__all__"
 
     def resolve_django_admin_endpointstudy(self, info):
         return f"studies/endpointstudy/{self.id}/change/"
+
+    def resolve_duration_unit(self, info):
+        return self.duration_unit.name if self.duration_unit else None
 
     def resolve_test_type(self, info):
         return self.test_type.name if self.test_type else None
@@ -173,11 +176,6 @@ class EndpointStudyType(DjangoObjectType):
 
     def resolve_study_source(self, info):
         return self.study_source.title if self.study_source else None
-
-    def resolve_study_duration(self, info):
-        duration = str(self.study_duration)
-        unit = self.duration_unit.name if self.duration_unit else None
-        return f"{duration} {unit}"
 
     def resolve_endpoints(self, info):
         return Endpoint.objects.filter(endpointstudy=self)
