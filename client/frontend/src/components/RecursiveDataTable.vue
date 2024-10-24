@@ -85,16 +85,11 @@ export default {
       }
     },
     headers() {
-      const itemsKeys = this.items.reduce((result, obj) => {
-        Object.keys(obj).forEach((key) => {
-          if (!result.includes(key)) {
-            result.push(key)
-          }
-        })
-        return result
-      }, [])
-
-      return itemsKeys
+      const dataItem = this.items[0]
+      if (!dataItem || typeof dataItem !== 'object') {
+        return []
+      }
+      return Object.keys(dataItem)
         .filter((key) => !this.headdersToHide.includes(key))
         .map((key) => {
           const fullPath = [...this.path, key].join('.')
