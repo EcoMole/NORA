@@ -3,6 +3,7 @@
     :headers="headers"
     :items="items"
     :hide-default-footer="level === 0 ? false : true"
+    :items-per-page="-1"
     :dense="true"
     :style="{ fontSize: fontSize }"
     :loading="loading"
@@ -84,11 +85,16 @@ export default {
       }
     },
     headers() {
-      const dataItem = this.items[0]
-      if (!dataItem || typeof dataItem !== 'object') {
-        return []
-      }
-      return Object.keys(dataItem)
+      const itemsKeys = this.items.reduce((result, obj) => {
+        Object.keys(obj).forEach((key) => {
+          if (!result.includes(key)) {
+            result.push(key)
+          }
+        })
+        return result
+      }, [])
+
+      return itemsKeys
         .filter((key) => !this.headdersToHide.includes(key))
         .map((key) => {
           const fullPath = [...this.path, key].join('.')
