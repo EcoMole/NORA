@@ -85,13 +85,13 @@ class GenotoxType(DjangoObjectType):
 class FinalOutcomeType(DjangoObjectType):
     outcome = graphene.String()
     qualifier = graphene.String()
-    value = graphene.String()
+    unit = graphene.String()
     populations = graphene.List(PopulationType)
     django_admin_final_outcome = graphene.String()
 
     class Meta:
         model = FinalOutcome
-        exclude = ["unit"]
+        fields = "__all__"
 
     def resolve_django_admin_final_outcome(self, info):
         return f"studies/finaloutcome/{self.id}/change/"
@@ -102,8 +102,8 @@ class FinalOutcomeType(DjangoObjectType):
     def resolve_qualifier(self, info):
         return self.qualifier.name if self.qualifier else None
 
-    def resolve_value(self, info):
-        return f"{str(self.value)} {self.unit.name if self.unit else None}"
+    def resolve_unit(self, info):
+        return self.unit.name if self.unit else None
 
     def resolve_populations(self, info):
         return Population.objects.filter(
@@ -115,12 +115,12 @@ class EndpointType(DjangoObjectType):
     reference_point = graphene.String()
     qualifier = graphene.String()
     subpopulation = graphene.String()
-    lovalue = graphene.String()
+    unit = graphene.String()
     final_outcomes = graphene.List(FinalOutcomeType)
 
     class Meta:
         model = Endpoint
-        exclude = ["unit"]
+        fields = "__all__"
 
     def resolve_reference_point(self, info):
         return self.reference_point.name if self.reference_point else None
@@ -131,8 +131,8 @@ class EndpointType(DjangoObjectType):
     def resolve_subpopulation(self, info):
         return self.subpopulation.name if self.subpopulation else None
 
-    def resolve_lovalue(self, info):
-        return f"{str(self.lovalue)} {self.unit.name if self.unit else None}"
+    def resolve_unit(self, info):
+        return self.unit.name if self.unit else None
 
     def resolve_final_outcomes(self, info):
         return FinalOutcome.objects.filter(endpoint=self)

@@ -1051,48 +1051,95 @@ export const fields = {
     showInFilters: true
   },
 
+  // endpoint
+
   'endpointstudies.endpoints.referencePoint': {
     displayName: 'Reference Point',
+    flattenedDisplayName: 'Endpoint Reference Point',
     displayGroupName: 'Endpoint',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'endpointstudy__endpoints__reference_point__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'Endpoint',
+    djangoLimitchoicesField: 'reference_point',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-target',
     filterDescription: 'description for Reference Point',
     tooltipDescription: 'Reference Point tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'endpointstudies.endpoints.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Endpoint Qualifier',
     displayGroupName: 'Endpoint',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'endpointstudy__endpoints__qualifier__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'Endpoint',
+    djangoLimitchoicesField: 'qualifier',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Qualifier',
     tooltipDescription: 'Qualifier tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'endpointstudies.endpoints.subpopulation': {
     displayName: 'Subpopulation',
     flattenedDisplayName: 'Endpoint Subpopulation',
     displayGroupName: 'Endpoint',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'endpointstudy__endpoints__subpopulation__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'Endpoint',
+    djangoLimitchoicesField: 'subpopulation',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-account-group',
     filterDescription: 'description for Subpopulation',
     tooltipDescription: 'Subpopulation tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'endpointstudies.endpoints.lovalue': {
     displayName: 'Value',
     flattenedDisplayName: 'Endpoint Value',
     displayGroupName: 'Endpoint',
     type: 'number',
+    djangoLookupField: 'endpointstudy__endpoints__lovalue',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-arrow-down',
     filterDescription: 'description for Value',
     tooltipDescription: 'Value tooltip description',
-    showInFilters: false
+    showInFilters: true
+  },
+  'endpointstudies.endpoints.unit': {
+    displayName: 'Unit',
+    flattenedDisplayName: 'Endpoint Unit',
+    displayGroupName: 'Endpoint',
+    type: 'text',
+    djangoLookupField: 'endpointstudy__endpoints__unit__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'Endpoint',
+    djangoLimitchoicesField: 'unit',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-scale',
+    filterDescription: 'description for Endpoint Unit',
+    tooltipDescription: 'Endpoint Unit tooltip description',
+    showInFilters: true
   },
 
   'endpointstudies.endpoints.finalOutcomes.outcome': {
