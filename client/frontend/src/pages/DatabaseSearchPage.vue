@@ -67,51 +67,6 @@
           new search
         </v-btn>
       </v-hover>
-      <!-- grouped repeated switch -->
-      <!-- <v-sheet
-      elevation="24"
-      position="fixed"
-      location="bottom"
-      class="mb-8 px-5"
-      rounded="lg"
-      border
-    >
-      <v-row class="d-flex align-center">
-        <v-col class="text-right">
-          <label
-            for="custom-switch"
-            :style="{ fontWeight: tableStyle == grouped ? 'bold' : 'normal' }"
-            >{{ grouped }}
-            <v-tooltip activator="parent" location="left"
-              >Shows a single value for all rows that share the same value.</v-tooltip
-            ></label
-          >
-        </v-col>
-
-        <v-col>
-          <v-switch
-            density="compact"
-            v-model="tableStyle"
-            id="custom-switch"
-            hide-details
-            :false-value="grouped"
-            :true-value="repeated"
-          ></v-switch>
-        </v-col>
-
-        <v-col>
-          <label
-            for="custom-switch"
-            :style="{ fontWeight: tableStyle == repeated ? 'bold' : 'normal' }"
-          >
-            {{ repeated }}
-            <v-tooltip activator="parent" location="right"
-              >Repeats each value for all rows that share the same value.</v-tooltip
-            ></label
-          >
-        </v-col>
-      </v-row>
-    </v-sheet> -->
       <v-btn
         elevation="24"
         @click="showFilterInterface = true"
@@ -138,7 +93,6 @@ import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
 import { buildVariables } from '@/libs/utils.js'
 import axios from '@/libs/axios'
-import gql from 'graphql-tag'
 
 export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },

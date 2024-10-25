@@ -33,7 +33,7 @@
             go to {{ header.title.slice(0, -'Admin'.length) }}
           </v-btn>
           <div v-else>
-            {{ item[header.value] }}
+            {{ displayValue(item[header.value]) }}
           </div>
         </td>
       </tr>
@@ -109,15 +109,25 @@ export default {
   },
   methods: {
     isNested(value) {
+      // returns true if the value is non-empty object or non-empty array and is not a Date
       return (
         value &&
-        (Array.isArray(value) || (typeof value === 'object' && Object.keys(value).length > 0))
+        typeof value == 'object' &&
+        Object.keys(value).length > 0 &&
+        !(value instanceof Date)
       )
     },
     goToDjangoAdmin(entityPath) {
       const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || window.location.origin
       const url = `${backendOrigin}/${this.settings.adminPath}${entityPath}`
       window.open(url, '_blank')
+    },
+    displayValue(value) {
+      // Check for null, empty array, or empty object
+      if (value === null || (typeof value === 'object' && Object.keys(value).length === 0)) {
+        return '-'
+      }
+      return value
     }
   }
 }
