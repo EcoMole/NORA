@@ -72,14 +72,9 @@ class Query(graphene.ObjectType):
 
                 if lookup_type == "isnull":
                     q_object = create_isnull_or_isempty_q_object(prefix)
-                    q_object |= Q(**{f"{prefix}__short_name__isnull": True}) & Q(
-                        **{f"{prefix}__extended_name__isnull": True}
-                    )
                 else:
                     q_object = (
-                        Q(**{f"{prefix}__short_name__isnull": False})
-                        & ~Q(**{f"{prefix}__short_name": ""})
-                        & Q(**{f"{prefix}__short_name__{lookup_type}": value})
+                        Q(**{f"{prefix}__short_name__{lookup_type}": value})
                     ) | (
                         (
                             Q(**{f"{prefix}__short_name__isnull": True})
@@ -106,9 +101,10 @@ class Query(graphene.ObjectType):
             print("q_object", q_object)
 
             if include == "must have":
-                qs = qs.filter(q_object)
+                qs = qs.filter(q_object).distinct()
             elif include == "must not have":
-                qs = qs.exclude(q_object)
+                qs = qs.exclude(q_object).distinct()
+        print("QUERYSET: ", qs)
         return qs
 
 
