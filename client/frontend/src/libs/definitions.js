@@ -1142,38 +1142,102 @@ export const fields = {
     showInFilters: true
   },
 
+  // Final Outcome
+
   'endpointstudies.endpoints.finalOutcomes.outcome': {
-    displayName: '',
-    flattenedDisplayName: 'Final Outcome',
+    displayName: 'Outcome',
+    flattenedDisplayName: 'Final Outcome Outcome',
     displayGroupName: 'Final Outcome',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__outcome__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'FinalOutcome',
+    djangoLimitchoicesField: 'outcome',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-check-circle-outline',
-    filterDescription: 'description for Outcome',
-    tooltipDescription: 'Outcome tooltip description',
-    showInFilters: false
+    filterDescription: 'description for Final Outcome Outcome',
+    tooltipDescription: 'Final Outcome Outcome tooltip description',
+    showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Final Outcome Qualifier',
     displayGroupName: 'Final Outcome',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__qualifier__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'FinalOutcome',
+    djangoLimitchoicesField: 'qualifier',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Qualifier',
     tooltipDescription: 'Qualifier tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Final Outcome Value',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__value',
     displayGroupName: 'Final Outcome',
     type: 'number',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Value',
     tooltipDescription: 'Value tooltip description',
-    showInFilters: false
+    showInFilters: true
+  },
+
+  'endpointstudies.endpoints.finalOutcomes.unit': {
+    displayName: 'Unit',
+    flattenedDisplayName: 'Final Outcome Unit',
+    displayGroupName: 'Final Outcome',
+    type: 'text',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__unit__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'FinalOutcome',
+    djangoLimitchoicesField: 'unit',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-scale',
+    filterDescription: 'description for Final Outcome Unit',
+    tooltipDescription: 'Final Outcome Unit tooltip description',
+    showInFilters: true
+  },
+
+  'endpointstudies.endpoints.finalOutcomes.uncertaintyFactor': {
+    displayName: 'Uncertainty Factor',
+    flattenedDisplayName: 'Final Outcome Uncertainty Factor',
+    displayGroupName: 'Final Outcome',
+    type: 'text',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__uncertainty_factor',
+    qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
+    icon: 'mdi-scale',
+    filterDescription: 'description for Final Outcome Uncertainty Factor',
+    tooltipDescription: 'Final Outcome Uncertainty Factor tooltip description',
+    showInFilters: true
+  },
+  'endpointstudies.endpoints.finalOutcomes.remarks': {
+    displayName: 'Remarks',
+    flattenedDisplayName: 'Final Outcome Remarks',
+    displayGroupName: 'Final Outcome',
+    type: 'text',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__remarks__text_field',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: 'mdi-scale',
+    filterDescription: 'description for Final Outcome Remarks',
+    tooltipDescription: 'Final Outcome Remarks tooltip description',
+    showInFilters: true
   },
 
   'endpointstudies.endpoints.finalOutcomes.populations.subgroup': {
@@ -1181,33 +1245,83 @@ export const fields = {
     flattenedDisplayName: 'Final Outcome Population Subgroup',
     displayGroupName: 'Population',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField:
+      'endpointstudy__endpoints__finaloutcome__populations__population__subgroup__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'Subgroup',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-account-multiple-outline',
     filterDescription: 'description for Subgroup',
     tooltipDescription: 'Subgroup tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Final Outcome Population Qualifier',
     displayGroupName: 'Population',
     type: 'text',
-    qualifiers: ['contains', 'is', 'is None'],
+    djangoLookupField:
+      'endpointstudy__endpoints__finaloutcome__populations__population__qualifier__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'taxonomies',
+    djangoLimitchoicesModel: 'Population',
+    djangoLimitchoicesField: 'qualifier',
+    qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Qualifier',
     tooltipDescription: 'Qualifier tooltip description',
-    showInFilters: false
+    showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Final Outcome Population Value',
     displayGroupName: 'Population',
     type: 'number',
+    djangoLookupField:
+    'endpointstudy__endpoints__finaloutcome__populations__population__value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Value',
     tooltipDescription: 'Value tooltip description',
-    showInFilters: false
+    showInFilters: true
+  },
+  'endpointstudies.endpoints.finalOutcomes.populations.upperRangeValue': {
+    displayName: 'Upper Range Value',
+    flattenedDisplayName: 'Final Outcome Population Upper Range Value',
+    displayGroupName: 'Population',
+    type: 'number',
+    djangoLookupField:
+    'endpointstudy__endpoints__finaloutcome__populations__population__upper_range_value',
+    qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
+    icon: 'mdi-numeric',
+    filterDescription: 'description for Upper Range Value',
+    tooltipDescription: 'Upper Range Value tooltip description',
+    showInFilters: true
+  },
+  'endpointstudies.endpoints.finalOutcomes.populations.unit': {
+    displayName: 'Unit',
+    flattenedDisplayName: 'Final Outcome Population Unit',
+    displayGroupName: 'Population',
+    type: 'text',
+    djangoLookupField:
+      'endpointstudy__endpoints__finaloutcome__populations__population__unit__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'taxonomies',
+    djangoLimitchoicesModel: 'Population',
+    djangoLimitchoicesField: 'unit',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-scale',
+    filterDescription: 'description for Unit',
+    tooltipDescription: 'Unit tooltip description',
+    showInFilters: true
   },
   // links do django admin
   djangoAdminOpinion: {
@@ -1257,5 +1371,13 @@ export const fields = {
     filterDescription: 'will provide a link to django admin',
     tooltipDescription: 'will provide a link to django admin',
     showInFilters: false
-  },
+  }
+  // djagoAdminNovelFoodVariant: {
+  //   displayName: 'Novel Food Variant Admin',
+  //   flattenedDisplayName: 'Novel Food Variant Admin',
+  //   icon: 'mdi-account-cowboy-hat',
+  //   filterDescription: 'will provide a link to django admin',
+  //   tooltipDescription: 'will provide a link to django admin',
+  //   showInFilters: false
+  // }
 }
