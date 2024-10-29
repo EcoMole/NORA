@@ -6,6 +6,8 @@ from administrative.schema import (  # noqa
     QuestionType,
     ScientificOfficerType,
 )
+from composition.models import NovelFoodVariant
+from composition.schema import NovelFoodVariantType
 from graphene_django.types import DjangoObjectType
 from studies.models import ADME, Endpointstudy, Genotox
 from studies.schema import ADMEType, EndpointStudyType, GenotoxType
@@ -65,6 +67,7 @@ class NovelFoodType(DjangoObjectType):
     novel_food_id = graphene.Int()
     django_admin_opinion = graphene.String()
     django_admin_novel_food = graphene.String()
+    novel_food_variants = graphene.List(NovelFoodVariantType)
 
     class Meta:
         model = NovelFood
@@ -158,3 +161,6 @@ class NovelFoodType(DjangoObjectType):
 
     def resolve_endpointstudies(self, info):
         return Endpointstudy.objects.filter(novel_food=self)
+
+    def resolve_novel_food_variants(self, info):
+        return NovelFoodVariant.objects.filter(novel_food=self)
