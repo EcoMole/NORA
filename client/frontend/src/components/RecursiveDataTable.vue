@@ -1,9 +1,9 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="items"
-    :hide-default-footer="level === 0 ? false : true"
-    :items-per-page="-1"
+    :items="data"
+    :hide-default-footer="hideFooter(data)"
+    :items-per-page="10"
     :dense="true"
     :style="{ fontSize: fontSize }"
     :loading="loading"
@@ -14,7 +14,7 @@
         <td v-for="header in headers" :key="header.value" class="table-cell">
           <div v-if="isNested(item[header.value])">
             <RecursiveDataTable
-              :data="item[header.value]"
+              :data="toArray(item[header.value])"
               :level="level + 1"
               :path="[...path, header.value]"
               :nameMappingObj="nameMappingObj"
@@ -49,7 +49,7 @@ export default {
   name: 'RecursiveDataTable',
   props: {
     data: {
-      type: [Object, Array],
+      type: [Array],
       required: true
     },
     level: {
@@ -75,17 +75,8 @@ export default {
   },
   computed: {
     ...mapState(useMainStore, ['settings']),
-    items() {
-      if (Array.isArray(this.data)) {
-        return this.data
-      } else if (typeof this.data === 'object') {
-        return [this.data]
-      } else {
-        return []
-      }
-    },
     headers() {
-      const dataItem = this.items[0]
+      const dataItem = this.data[0]
       if (!dataItem || typeof dataItem !== 'object') {
         return []
       }
@@ -108,6 +99,9 @@ export default {
     }
   },
   methods: {
+    toArray(value) {
+      return Array.isArray(value) ? value : [value]
+    },
     isNested(value) {
       // returns true if the value is non-empty object or non-empty array and is not a Date
       return (
@@ -116,6 +110,19 @@ export default {
         Object.keys(value).length > 0 &&
         !(value instanceof Date)
       )
+    },
+    hideFooter(value) {
+      // footer will be shown for level 0 table and for recursive tables with more than 10 rows
+      if (this.level === 0) {
+        return false
+      }
+      if (!value || value instanceof Date) {
+        return true
+      }
+      if (Array.isArray(value) && value.length < 11) {
+        return true
+      }
+      return false
     },
     goToDjangoAdmin(entityPath) {
       const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || window.location.origin

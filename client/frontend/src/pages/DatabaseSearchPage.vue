@@ -21,7 +21,7 @@
         ></v-skeleton-loader>
         <div v-else>
           <RecursiveDataTable
-            :data="fetchedNovelFoods"
+            :data="toArray(fetchedNovelFoods)"
             :loading="tableIsLoading"
             :nameMappingObj="nameMappingObj"
             :headdersToHide="headdersToHide"
@@ -107,6 +107,9 @@ export default {
     exporting: false
   }),
   methods: {
+    toArray(value) {
+      return Array.isArray(value) ? value : [value]
+    },
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
     formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
@@ -132,6 +135,7 @@ export default {
           }
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
+        console.log("this.fetchedNovelFoods", this.fetchedNovelFoods)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
