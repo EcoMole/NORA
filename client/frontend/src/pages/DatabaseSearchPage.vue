@@ -114,9 +114,6 @@ export default {
     formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
     async renderTable(addedFilters, selectedFields, headdersToHide) {
-      // const QUERY = this.buildQueryFromSelectedFields(variables, this.selectedFields)
-      // console.log('QUERY', QUERY)
-      // todo: first create viariables using buildVariables and then use this to include it in query and add value types using some method.
       this.headdersToHide = headdersToHide
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
@@ -132,10 +129,11 @@ export default {
           query: query,
           variables: {
             filters: filters
-          }
+          },
+          fetchPolicy: 'network-only' // Ensures that the cache is bypassed and data is fetched from the network
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
-        console.log("this.fetchedNovelFoods", this.fetchedNovelFoods)
+        console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
