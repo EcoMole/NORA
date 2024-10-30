@@ -2,7 +2,6 @@ import graphene
 from composition.models import (
     Composition,
     NovelFoodVariant,
-    Parameter,
     ProductionNovelFoodVariant,
     ProposedUse,
     RiskAssessRedFlag,
@@ -35,25 +34,12 @@ class ProposedUseType(DjangoObjectType):
         fields = "__all__"
 
 
-class ParameterObjectType(DjangoObjectType):
-    class Meta:
-        model = Parameter
-        fields = "__all__"
-
-    type_title = graphene.String()
-    vocab_id = graphene.String()
-
-    def resolve_type_title(self, info):
-        return self.type.title if self.type else None
-
-    def resolve_vocab_id(self, info):
-        return self.vocab_id.name if self.vocab_id else None
-
-
 class CompositionType(DjangoObjectType):
-    parameter = graphene.Field(ParameterObjectType)
     unit = graphene.String()
     qualifier = graphene.String()
+    parameter_title = graphene.String()
+    parameter_vocab_id = graphene.String()
+    parameter_type_title = graphene.String()
 
     class Meta:
         model = Composition
@@ -67,6 +53,23 @@ class CompositionType(DjangoObjectType):
 
     def resolve_qualifier(self, info):
         return self.qualifier.name if self.qualifier else None
+
+    def resolve_parameter_title(self, info):
+        return self.parameter.title if self.parameter else None
+
+    def resolve_parameter_vocab_id(self, info):
+        return (
+            self.parameter.vocab_id.name
+            if self.parameter and self.parameter.vocab_id
+            else None
+        )
+
+    def resolve_parameter_type_title(self, info):
+        return (
+            self.parameter.type.title
+            if self.parameter and self.parameter.type
+            else None
+        )
 
 
 class NovelFoodVariantType(DjangoObjectType):

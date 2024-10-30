@@ -1578,9 +1578,7 @@ export const fields = {
     tooltipDescription: 'Composition Footnote tooltip description',
     showInFilters: true
   },
-
-
-  'novelFoodVariants.compositions.parameter.title': {
+  'novelFoodVariants.compositions.parameterTitle': {
     displayName: 'Title',
     flattenedDisplayName: 'Parameter Title',
     displayGroupName: 'Novel Food Variant',
@@ -1592,7 +1590,7 @@ export const fields = {
     tooltipDescription: 'Parameter Title tooltip description',
     showInFilters: true
   },
-  'novelFoodVariants.compositions.parameter.typeTitle': {
+  'novelFoodVariants.compositions.parameterTypeTitle': {
     displayName: 'Type',
     flattenedDisplayName: 'Parameter Type',
     displayGroupName: 'Novel Food Variant',
@@ -1608,7 +1606,7 @@ export const fields = {
     tooltipDescription: 'Parameter Type tooltip description',
     showInFilters: true
   },
-  'novelFoodVariants.compositions.parameter.vocabId': {
+  'novelFoodVariants.compositions.parameterVocabId': {
     displayName: 'Vocab ID',
     flattenedDisplayName: 'Parameter Vocabulary ID',
     displayGroupName: 'Novel Food Variant',
