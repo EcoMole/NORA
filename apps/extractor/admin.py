@@ -30,7 +30,7 @@ class FreqUsedVocabNodeAdmin(admin.ModelAdmin):
     autocomplete_fields = ["node"]
 
     def get_code(self, obj):
-        return obj.node.code
+        return obj.node.code if obj.node else ""
 
     get_code.short_description = "Code"
 
