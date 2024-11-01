@@ -27,7 +27,8 @@ export const useMainStore = defineStore({
       message: '',
       icon: '',
       timeout: 4000
-    }
+    },
+    offeringCompactTable: false
   }),
   getters: {},
   actions: {
@@ -86,6 +87,13 @@ export const useMainStore = defineStore({
     },
     deauthenticate() {
       this.isAuthenticated = false
+    },
+    offerCompactTable() {
+      this.offeringCompactTable = true
+
+    },
+    resetOfferingCompactTable() {
+      this.offeringCompactTable = false
     },
     async logOut() {
       axios

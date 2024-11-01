@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- {{this.fetchedNovelFoods || ""}} -->
   </div>
   <div>
     <h1>Database Search</h1>
@@ -25,6 +24,7 @@
             :loading="tableIsLoading"
             :nameMappingObj="nameMappingObj"
             :headdersToHide="headdersToHide"
+            :showCompactTable="showCompactTable"
           />
         </div>
       </v-sheet>
@@ -67,6 +67,42 @@
           new search
         </v-btn>
       </v-hover>
+      <!-- compact extended table switch -->
+      <v-sheet v-if="offeringCompactTable" elevation="24" position="fixed" location="bottom" class="mb-8 px-5" rounded="lg">
+        <v-row class="d-flex align-center">
+          <v-col class="text-right">
+            <label
+              for="custom-switch"
+              :style="{ fontWeight: showCompactTable ? 'normal' : 'bold' }"
+              >extended
+              <!-- <v-tooltip activator="parent" location="left"
+                >all the items will be displayed plainly</v-tooltip
+              > -->
+              </label
+            >
+          </v-col>
+          <v-col>
+            <v-switch
+              density="compact"
+              v-model="showCompactTable"
+              id="custom-switch"
+              hide-details
+            ></v-switch>
+          </v-col>
+
+          <v-col>
+            <label
+              for="custom-switch"
+              :style="{ fontWeight: showCompactTable ? 'bold' : 'normal' }"
+              >compact
+              <!-- <v-tooltip activator="parent" location="right"
+                >if more than 10 items will be displayed in table with pages</v-tooltip
+              > -->
+              </label
+            >
+          </v-col>
+        </v-row>
+      </v-sheet>
       <v-btn
         elevation="24"
         @click="showFilterInterface = true"
@@ -93,6 +129,7 @@ import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
 import { buildVariables } from '@/libs/utils.js'
 import axios from '@/libs/axios'
+import { mapState, mapActions } from 'pinia'
 
 export default {
   components: { DatabaseSearchFilters, RecursiveDataTable },
@@ -104,9 +141,14 @@ export default {
     selectedFields: {},
     headdersToHide: [],
     nameMappingObj: { ...objectTypes, ...fields },
-    exporting: false
+    exporting: false,
+    showCompactTable: true
   }),
+  computed: {
+    ...mapState(useMainStore, ['offeringCompactTable']),
+  },
   methods: {
+    ...mapActions(useMainStore, ['resetOfferingCompactTable']),
     toArray(value) {
       return Array.isArray(value) ? value : [value]
     },
@@ -114,6 +156,7 @@ export default {
     formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
     async renderTable(addedFilters, selectedFields, headdersToHide) {
+      this.resetOfferingCompactTable()
       this.headdersToHide = headdersToHide
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields

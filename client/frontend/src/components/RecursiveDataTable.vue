@@ -3,7 +3,7 @@
     :headers="headers"
     :items="data"
     :hide-default-footer="hideFooter(data)"
-    :items-per-page="10"
+    :items-per-page="itemsPerPage(data)"
     :dense="true"
     :style="{ fontSize: fontSize }"
     :loading="loading"
@@ -19,6 +19,7 @@
               :path="[...path, header.value]"
               :nameMappingObj="nameMappingObj"
               :headdersToHide="headdersToHide"
+              :showCompactTable="showCompactTable"
             />
           </div>
           <a v-else-if="header.value === 'opinionUrl'" :href="item[header.value]" target="_blank">{{
@@ -43,7 +44,7 @@
 
 <script>
 import { useMainStore } from '@/stores/main'
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 
 export default {
   name: 'RecursiveDataTable',
@@ -71,10 +72,14 @@ export default {
     headdersToHide: {
       type: Array,
       default: () => []
+    },
+    showCompactTable: {
+      type: Boolean,
+      default: () => true
     }
   },
   computed: {
-    ...mapState(useMainStore, ['settings']),
+    ...mapState(useMainStore, ['settings', 'offeringCompactTable']),
     headers() {
       const dataItem = this.data[0]
       if (!dataItem || typeof dataItem !== 'object') {
@@ -99,6 +104,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(useMainStore, ['offerCompactTable']),
+    itemsPerPage(value) {
+      if (this.level === 0) {
+        return 25
+      } else {
+        return this.hideFooter(value) ? -1 : 10
+      }
+    },
     toArray(value) {
       return Array.isArray(value) ? value : [value]
     },
@@ -111,18 +124,25 @@ export default {
         !(value instanceof Date)
       )
     },
+    couldBeCompacted(value) {
+      if (!value || value instanceof Date || (Array.isArray(value) && value.length < 11)) {
+        return false
+      } else {
+        if (!this.offeringCompactTable) {
+          this.offerCompactTable()
+        }
+        return true
+      }
+    },
     hideFooter(value) {
       // footer will be shown for level 0 table and for recursive tables with more than 10 rows
       if (this.level === 0) {
         return false
-      }
-      if (!value || value instanceof Date) {
+      } else if (this.couldBeCompacted(value) && this.showCompactTable) {
+        return false
+      } else {
         return true
       }
-      if (Array.isArray(value) && value.length < 11) {
-        return true
-      }
-      return false
     },
     goToDjangoAdmin(entityPath) {
       const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || window.location.origin
