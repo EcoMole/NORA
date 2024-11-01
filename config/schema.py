@@ -52,7 +52,7 @@ class Query(graphene.ObjectType):
         map = {
             "is before": "lt",
             "is after": "gt",
-            "is": "exact",
+            "is": "iexact",
             "contains": "icontains",
             "is None": "isnull",
             "is greater than": "gt",
