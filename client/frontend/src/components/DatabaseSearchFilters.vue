@@ -75,7 +75,7 @@
                           :disabled="!newFilter.key"
                           v-model="newFilter.qualifier"
                           :items="fields[newFilter.key]?.qualifiers || []"
-                          max-width="180px"
+                          max-width="150px"
                           variant="underlined"
                           class="ml-6"
                           @update:modelValue="updateFilterQualifier"
@@ -84,7 +84,6 @@
                           v-if="showOptionsListField"
                           v-model="newFilter.value"
                           :items="newFilter.options"
-                          max-width="180px"
                           variant="underlined"
                           class="ml-6"
                         ></v-autocomplete>
