@@ -65,9 +65,13 @@ class Query(graphene.ObjectType):
             lookup_type = map[f.get("qualifier")]
             value = f.get("value")
 
+            # for taxonomy node fields
             if lookup_field.endswith("__tax_node"):
-                # the value searched on TaxonomyNode instances might be
-                # either in short_name or in extended_name attributes
+                # values offered in frontend are:
+                # TaxonomyNode.short_name values or
+                # TaxonomyNode.extended_name values if TaxonomyNode.short_name is empty,
+                # therefore here we match incomming value with TaxonomyNode.short_name or
+                # with TaxonomyNode.extended_name if TaxonomyNode.short_name is empty
                 prefix = lookup_field[: -len("__tax_node")]
 
                 if lookup_type == "isnull":
