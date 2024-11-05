@@ -211,7 +211,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale-balance',
     filterDescription: 'description for Antinutritional Factors',
-    tooltipDescription: 'Antinutritional Factors tooltip description',
     showInFilters: true
   },
   hasNutriDisadvantage: {
@@ -427,7 +426,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Specific Toxicity',
-    tooltipDescription: 'Specific Toxicity tooltip description',
     showInFilters: true
   },
   'substancesOfConcern.substanceOfConcern': {
@@ -446,7 +444,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Substance of Concern',
-    tooltipDescription: 'Substance of Concern tooltip description',
     showInFilters: true
   },
   'backgroundExposureAssessments.compOfInterest': {
@@ -465,7 +462,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Background Exposure Assessment',
-    tooltipDescription: 'Background Exposure Assessment tooltip description',
     showInFilters: true
   },
   'hbgvs.type': {
@@ -484,7 +480,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for HBGV Type',
-    tooltipDescription: 'HBGV Type tooltip description',
     showInFilters: true
   },
   'hbgvs.exceeded': {
@@ -503,7 +498,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for HBGV Exceeded',
-    tooltipDescription: 'HBGV Exceeded tooltip description',
     showInFilters: true
   },
   'hbgvs.substance': {
@@ -522,7 +516,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for HBGV Substance',
-    tooltipDescription: 'HBGV Substance tooltip description',
     showInFilters: true
   },
 
@@ -541,7 +534,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Novel Food Synonym',
-    tooltipDescription: 'Novel Food Synonym tooltip description',
     showInFilters: true
   },
   'synonyms.typeTitle': {
@@ -557,7 +549,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Novel Food Synonym Type',
-    tooltipDescription: 'Novel Food Synonym Type tooltip description',
     showInFilters: true
   },
   'synonyms.typeDefinition': {
@@ -569,7 +560,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: '',
     filterDescription: 'description for Novel Food Synonym Type Definition',
-    tooltipDescription: 'Novel Food ∂nym Type Definition tooltip description',
     showInFilters: true
   },
 
@@ -788,7 +778,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'description for Food Category Name',
-    tooltipDescription: 'Food Category Name tooltip description',
     showInFilters: true
   },
   'foodCategories.definition': {
@@ -800,7 +789,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'description for Food Category Definition',
-    tooltipDescription: 'Food Category Definition tooltip description',
     showInFilters: true
   },
 
@@ -870,7 +858,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Vocab ID',
-    tooltipDescription: 'Organism Vocab ID tooltip description',
     showInFilters: true
   },
   'organisms.orgPart': {
@@ -889,7 +876,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Part',
-    tooltipDescription: 'Organism Part tooltip description',
     showInFilters: true
   },
   'organisms.variant': {
@@ -905,7 +891,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Variant',
-    tooltipDescription: 'Organism Variant tooltip description',
     showInFilters: true
   },
   'organisms.isGmo': {
@@ -924,7 +909,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism is GMO',
-    tooltipDescription: 'Organism is GMO tooltip description',
     showInFilters: true
   },
   'organisms.hasQps': {
@@ -943,7 +927,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism has QPS',
-    tooltipDescription: 'Organism has QPS tooltip description',
     showInFilters: true
   },
 
@@ -960,7 +943,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Cell Culture',
-    tooltipDescription: 'Organism Cell Culture tooltip description',
     showInFilters: true
   },
 
@@ -980,7 +962,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Cell Modification',
-    tooltipDescription: 'Organism Cell Modification tooltip description',
     showInFilters: true
   },
   'organisms.species.name': {
@@ -996,7 +977,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Species Name',
-    tooltipDescription: 'Species Name tooltip description',
     showInFilters: true
   },
   'organisms.species.scientificName': {
@@ -1012,7 +992,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Species Scientific Name',
-    tooltipDescription: 'Species Scientific Name tooltip description',
     showInFilters: true
   },
   'organisms.species.genus': {
@@ -1028,7 +1007,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Species Genus',
-    tooltipDescription: 'Species Genus tooltip description',
     showInFilters: true
   },
   'organisms.species.family': {
@@ -1044,7 +1022,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Species Family',
-    tooltipDescription: 'Species Family tooltip description',
     showInFilters: true
   },
   'organisms.species.orgType': {
@@ -1060,7 +1037,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Species Organism Type',
-    tooltipDescription: 'Species Organism Type tooltip description',
     showInFilters: true
   },
   'organisms.orgSynonyms.title': {
@@ -1076,7 +1052,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Synonym',
-    tooltipDescription: 'Organism Synonym tooltip description',
     showInFilters: true
   },
   'organisms.orgSynonyms.typeTitle': {
@@ -1092,7 +1067,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Synonym Type',
-    tooltipDescription: 'Organism Synonym Type tooltip description',
     showInFilters: true
   },
   'organisms.orgSynonyms.typeDefinition': {
@@ -1104,7 +1078,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: '',
     filterDescription: 'description for Organism Synonym Type Definition',
-    tooltipDescription: 'Organism ∂nym Type Definition tooltip description',
     showInFilters: true
   },
 
@@ -1124,7 +1097,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Chemical Vocab ID',
-    tooltipDescription: 'Chemical Vocab ID tooltip description',
     showInFilters: true
   },
   'chemicals.chemSynonyms.title': {
@@ -1140,7 +1112,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Chemical Synonym',
-    tooltipDescription: 'Chemical Synonym tooltip description',
     showInFilters: true
   },
   'chemicals.chemSynonyms.typeTitle': {
@@ -1156,7 +1127,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Chemical Synonym Type',
-    tooltipDescription: 'Chemical Synonym Type tooltip description',
     showInFilters: true
   },
   'chemicals.chemSynonyms.typeDefinition': {
@@ -1168,7 +1138,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: '',
     filterDescription: 'description for Chemical Synonym Type Definition',
-    tooltipDescription: 'Chemical ∂nym Type Definition tooltip description',
     showInFilters: true
   },
   'chemicals.chemDescriptors.type': {
@@ -1184,7 +1153,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: '',
     filterDescription: 'description for Chemical Descriptor Type',
-    tooltipDescription: 'Chemical Descriptor Type tooltip description',
     showInFilters: true
   },
   'chemicals.chemDescriptors.value': {
@@ -1196,7 +1164,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: '',
     filterDescription: 'description for Chemical Descriptor Value',
-    tooltipDescription: 'Chemical Descriptor Value tooltip description',
     showInFilters: true
   },
 
@@ -1298,7 +1265,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription: 'description for ADME remarks',
-    tooltipDescription: 'ADME remarks tooltip description',
     showInFilters: true
   },
   'admes.testMaterial': {
@@ -1314,7 +1280,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription: 'description for ADME Test Material',
-    tooltipDescription: 'ADME Test Material tooltip description',
     showInFilters: true
   },
 
@@ -1419,7 +1384,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription: 'description for Genotox remarks',
-    tooltipDescription: 'Genotox remarks tooltip description',
     showInFilters: true
   },
   'genotoxes.testMaterial': {
@@ -1435,7 +1399,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription: 'description for Genotox Test Material',
-    tooltipDescription: 'Genotox Test Material tooltip description',
     showInFilters: true
   },
 
@@ -1473,7 +1436,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription: 'description for Guideline Qualifier',
-    tooltipDescription: 'Guideline Qualifier tooltip description',
     showInFilters: true
   },
   'endpointstudies.guideline': {
@@ -1561,7 +1523,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-clock-outline',
     filterDescription: 'description for Study Duration Unit',
-    tooltipDescription: 'Study Duration Unit tooltip description',
     showInFilters: true
   },
   'endpointstudies.studySource': {
@@ -1577,7 +1538,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription: 'description for Study Source',
-    tooltipDescription: 'Study Source tooltip description',
     showInFilters: true
   },
   'endpointstudies.remarks': {
@@ -1589,7 +1549,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription: 'description for Endpoint Study Remarks',
-    tooltipDescription: 'Endpoint Study Remarks tooltip description',
     showInFilters: true
   },
   'endpointstudies.testMaterial': {
@@ -1605,7 +1564,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription: 'description for Endpoint Study Test Material',
-    tooltipDescription: 'Endpoint Study Test Material tooltip description',
     showInFilters: true
   },
 
@@ -1696,7 +1654,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Endpoint Unit',
-    tooltipDescription: 'Endpoint Unit tooltip description',
     showInFilters: true
   },
 
@@ -1769,7 +1726,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Final Outcome Unit',
-    tooltipDescription: 'Final Outcome Unit tooltip description',
     showInFilters: true
   },
 
@@ -1782,7 +1738,6 @@ export const fields = {
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Final Outcome Uncertainty Factor',
-    tooltipDescription: 'Final Outcome Uncertainty Factor tooltip description',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.remarks': {
@@ -1794,7 +1749,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Final Outcome Remarks',
-    tooltipDescription: 'Final Outcome Remarks tooltip description',
     showInFilters: true
   },
 
@@ -1857,7 +1811,6 @@ export const fields = {
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Upper Range Value',
-    tooltipDescription: 'Upper Range Value tooltip description',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.unit': {
@@ -1877,7 +1830,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Unit',
-    tooltipDescription: 'Unit tooltip description',
     showInFilters: true
   },
 
@@ -1896,7 +1848,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-rice',
     filterDescription: 'description for Novel Food Variant Food Form',
-    tooltipDescription: 'Novel Food Variant Food Form tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.riskAssessRedFlags.title': {
@@ -1912,7 +1863,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-rice',
     filterDescription: 'description for Risk Assessment Red Flags',
-    tooltipDescription: 'Risk Assessment Red Flags tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.productionProcesses.process': {
@@ -1931,7 +1881,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-rice',
     filterDescription: 'description for Production Process',
-    tooltipDescription: 'Production Process tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.useType': {
@@ -1947,7 +1896,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-rice',
     filterDescription: 'description for Proposed Use Type',
-    tooltipDescription: 'Proposed Use Type tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.remarks': {
@@ -1959,7 +1907,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-rice',
     filterDescription: 'description for Proposed Use Remarks',
-    tooltipDescription: 'Proposed Use Remarks tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.subgroup': {
@@ -1975,7 +1922,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-account-multiple-outline',
     filterDescription: 'description for Subgroup',
-    tooltipDescription: 'Subgroup tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.qualifier': {
@@ -1994,7 +1940,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Qualifier',
-    tooltipDescription: 'Qualifier tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.value': {
@@ -2006,7 +1951,6 @@ export const fields = {
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Value',
-    tooltipDescription: 'Value tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.upperRangeValue': {
@@ -2018,7 +1962,6 @@ export const fields = {
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Upper Range Value',
-    tooltipDescription: 'Upper Range Value tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.unit': {
@@ -2037,7 +1980,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Unit',
-    tooltipDescription: 'Unit tooltip description',
     showInFilters: true
   },
 
@@ -2051,7 +1993,6 @@ export const fields = {
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Composition Value',
-    tooltipDescription: 'Composition Value tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.upperRangeValue': {
@@ -2063,7 +2004,6 @@ export const fields = {
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Composition Upper Range Value',
-    tooltipDescription: 'Composition Upper Range Value tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.unit': {
@@ -2082,7 +2022,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Composition Unit',
-    tooltipDescription: 'Composition Unit tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.qualifier': {
@@ -2101,7 +2040,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Composition Qualifier',
-    tooltipDescription: 'Composition Qualifier tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.type': {
@@ -2117,7 +2055,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Composition Type',
-    tooltipDescription: 'Composition Type tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.footnote': {
@@ -2133,7 +2070,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Composition Footnote',
-    tooltipDescription: 'Composition Footnote tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.parameterTitle': {
@@ -2149,7 +2085,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Parameter Title',
-    tooltipDescription: 'Parameter Title tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.parameterTypeTitle': {
@@ -2165,7 +2100,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Parameter Type',
-    tooltipDescription: 'Parameter Type tooltip description',
     showInFilters: true
   },
   'novelFoodVariants.compositions.parameterVocabId': {
@@ -2184,7 +2118,6 @@ export const fields = {
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Parameter Vocabulary ID',
-    tooltipDescription: 'Parameter Vocabulary ID tooltip description',
     showInFilters: true
   },
 
@@ -2194,7 +2127,6 @@ export const fields = {
     flattenedDisplayName: 'Opinion Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
-    tooltipDescription: 'will provide a link to django admin',
     showInFilters: false
   },
   djangoAdminNovelFood: {
@@ -2202,7 +2134,6 @@ export const fields = {
     flattenedDisplayName: 'Novel Food Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
-    tooltipDescription: 'will provide a link to django admin',
     showInFilters: false
   },
   'admes.djangoAdminAdme': {
@@ -2210,7 +2141,6 @@ export const fields = {
     flattenedDisplayName: 'ADME Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
-    tooltipDescription: 'will provide a link to django admin',
     showInFilters: false
   },
   'genotoxes.djangoAdminGenotox': {
@@ -2218,7 +2148,6 @@ export const fields = {
     flattenedDisplayName: 'Genotox Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
-    tooltipDescription: 'Opinion tooltip description',
     showInFilters: false
   },
   'endpointstudies.djangoAdminEndpointstudy': {
@@ -2226,7 +2155,6 @@ export const fields = {
     flattenedDisplayName: 'Endpoint Study Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
-    tooltipDescription: 'will provide a link to django admin',
     showInFilters: false
   },
   'endpointstudies.endpoints.finalOutcomes.djangoAdminFinalOutcome': {
@@ -2234,7 +2162,6 @@ export const fields = {
     flattenedDisplayName: 'Final Outcome Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
-    tooltipDescription: 'will provide a link to django admin',
     showInFilters: false
   },
   'novelFoodVariants.djangoAdminNovelFoodVariant': {
@@ -2242,7 +2169,6 @@ export const fields = {
     flattenedDisplayName: 'Novel Food Variant Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
-    tooltipDescription: 'will provide a link to django admin',
     showInFilters: false
   }
 }

@@ -203,24 +203,20 @@
             </v-row>
             <v-row class="mt-0">
               <template v-for="(field, key) in selectedFields" :key="key">
-                <v-tooltip :text="field.tooltipDescription" location="left">
-                  <template v-slot:activator="{ props }">
-                    <v-col class="py-1 pe-0" cols="auto">
-                      <v-chip
-                        v-bind="props"
-                        size="large"
-                        closable
-                        elevation="3"
-                        @click:close="delete selectedFields[key]"
-                        variant="elevated"
-                        :color="theme.global.current.value.dark ? 'black' : 'white'"
-                      >
-                        <v-icon :icon="field.icon" start></v-icon>
-                        {{ field.flattenedDisplayName || field.displayName }}
-                      </v-chip>
-                    </v-col>
-                  </template>
-                </v-tooltip>
+                <v-col class="py-1 pe-0" cols="auto">
+                  <v-chip
+                    v-bind="props"
+                    size="large"
+                    closable
+                    elevation="3"
+                    @click:close="delete selectedFields[key]"
+                    variant="elevated"
+                    :color="theme.global.current.value.dark ? 'black' : 'white'"
+                  >
+                    <v-icon :icon="field.icon" start></v-icon>
+                    {{ field.flattenedDisplayName || field.displayName }}
+                  </v-chip>
+                </v-col>
               </template>
             </v-row>
           </v-container>
@@ -262,28 +258,15 @@
             </v-row>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
               <template v-for="(field, key) in fieldsSearched" :key="key">
-                <v-tooltip
-                  :text="field.tooltipDescription"
-                  v-model="tooltipVisibility[key]"
-                  location="left"
-                >
-                  <template v-slot:activator="{ props }">
-                    <v-list-item
-                      v-bind="props"
-                      v-show="!(key in selectedFields)"
-                      :key="key"
-                      @click="handleClick(field, key)"
-                    >
-                      <template v-slot:prepend>
-                        <v-icon :icon="field.icon"></v-icon>
-                      </template>
-
-                      <v-list-item-title>{{
-                        field.flattenedDisplayName ? field.flattenedDisplayName : field.displayName
-                      }}</v-list-item-title>
-                    </v-list-item>
+                <v-list-item v-show="!(key in selectedFields)" @click="handleClick(field, key)">
+                  <template v-slot:prepend>
+                    <v-icon :icon="field.icon"></v-icon>
                   </template>
-                </v-tooltip>
+
+                  <v-list-item-title>
+                    {{ field.flattenedDisplayName || field.displayName }}
+                  </v-list-item-title>
+                </v-list-item>
               </template>
             </v-list>
           </v-container>
