@@ -65,7 +65,7 @@ export const objectTypes = {
   'novelFoodVariants.compositions': {
     displayName: 'Composition'
   },
-  'organisms': {
+  organisms: {
     displayName: 'Organism'
   },
   'organisms.species': {
@@ -74,7 +74,7 @@ export const objectTypes = {
   'organisms.orgSynonyms': {
     displayName: 'Organism Synonym'
   },
-  'chemicals': {
+  chemicals: {
     displayName: 'Chemical'
   },
   'chemicals.chemSynonyms': {
@@ -83,22 +83,18 @@ export const objectTypes = {
   'chemicals.chemDescriptors': {
     displayName: 'Chemical Descriptor'
   },
-  'specificToxicities': {
+  specificToxicities: {
     displayName: 'Specific Toxicity'
   },
-  'substancesOfConcern': {
+  substancesOfConcern: {
     displayName: 'Substance of Concern'
   },
-  'backgroundExposureAssessments': {
+  backgroundExposureAssessments: {
     displayName: 'Background Exposure Assessment'
   },
-  'hbgvs': {
+  hbgvs: {
     displayName: 'HBGV'
-  },
-
-
-
-
+  }
 }
 
 export const fields = {
@@ -111,8 +107,7 @@ export const fields = {
     type: 'number',
     qualifiers: ['is', 'is greater than', 'is less than'],
     icon: 'mdi-numeric',
-    filterDescription: 'description for ID',
-    tooltipDescription: 'ID tooltip description',
+    filterDescription: 'A unique numerical ID of the Novel Food in the database',
     showInFilters: false
   },
 
@@ -124,8 +119,7 @@ export const fields = {
     djangoLookupField: 'nf_code',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-rice',
-    filterDescription: 'description for Code',
-    tooltipDescription: 'Code tooltip description',
+    filterDescription: 'Dossier number, e.g., NF 2018/0381',
     showInFilters: true
   },
   title: {
@@ -136,12 +130,13 @@ export const fields = {
     djangoLookupField: 'title',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-rice',
-    filterDescription: 'description for Title',
-    tooltipDescription: 'Title tooltip description',
+    filterDescription:
+      'Name of the Novel Food taken word-for-word from the title of the opinion, e.g., mung bean protein',
     showInFilters: true
   },
   toxStudyRequired: {
     displayName: 'Toxicology Study Required',
+    flattenedDisplayName: 'Toxicology Study Required',
     displayGroupName: 'Toxicology',
     type: 'text',
     apiEndpoint: 'novel-food-values-list/',
@@ -151,12 +146,12 @@ export const fields = {
     djangoLookupField: 'tox_study_required',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-flask-outline',
-    filterDescription: 'description for Toxicology Study Required',
-    tooltipDescription: 'Toxicology Study Required tooltip description',
+    filterDescription: 'Were toxicology studies required for the assessment of the NF/TF?',
     showInFilters: true
   },
   genotoxFinalOutcome: {
     displayName: 'Genotoxicity Final Outcome',
+    flattenedDisplayName: 'Genotoxicity Final Outcome',
     displayGroupName: 'Novel Food',
     type: 'text',
     apiEndpoint: 'novel-food-values-list/',
@@ -166,23 +161,25 @@ export const fields = {
     djangoLookupField: 'genotox_final_outcome__title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-dna',
-    filterDescription: 'description for Genotoxicity Final Outcome',
-    tooltipDescription: 'Genotoxicity Final Outcome tooltip description',
+    filterDescription:
+      'Panel’s final conclusion on genotoxicity. Can be either blank, “no concerns”, “concerns” or “inconclusive”',
     showInFilters: true
   },
   finalToxicologyRemarks: {
     displayName: 'Final Toxicology Remarks',
+    flattenedDisplayName: 'Final Toxicology Remarks',
     displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'final_toxicology_remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-comment-text-outline',
-    filterDescription: 'description for Final Toxicology Remarks',
-    tooltipDescription: 'Final Toxicology Remarks tooltip description',
+    filterDescription:
+      'Remarks relevant to the final assessment of toxicology, e.g.,  “insufficient data to support the use of the NF at the proposed level”',
     showInFilters: true
   },
   proteinDigestibility: {
     displayName: 'Protein Digestibility',
+    flattenedDisplayName: 'Nutrition - Protein Digestibility',
     displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'protein_digestibility__tax_node',
@@ -195,8 +192,8 @@ export const fields = {
     djangoLimitchoicesField: 'protein_digestibility',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-food-drumstick-outline',
-    filterDescription: 'description for Protein Digestibility',
-    tooltipDescription: 'Protein Digestibility tooltip description',
+    filterDescription:
+      'Was the digestibility of protein in the NF/TF discussed within the opinion?',
     showInFilters: true
   },
   antinutritionalFactors: {
@@ -220,6 +217,7 @@ export const fields = {
   hasNutriDisadvantage: {
     displayName: 'Nutritional Disadvantage',
     displayGroupName: 'Novel Food',
+    flattenedDisplayName: 'Nutrition - Nutritional Disadvantage',
     type: 'text',
     djangoLookupField: 'has_nutri_disadvantage__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -231,19 +229,20 @@ export const fields = {
     djangoLimitchoicesField: 'has_nutri_disadvantage',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale-balance',
-    filterDescription: 'description for Nutritional Disadvantage',
-    tooltipDescription: 'Nutritional Disadvantage tooltip description',
+    filterDescription:
+      'The Panel’s conclusion on whether the NF/TF is nutritionally disadvantageous, e.g., due to a significant amount of antinutritional factors',
     showInFilters: true
   },
   nutriDisadvantageExplanation: {
     displayName: 'Nutritional Disadvantage Explanation',
     displayGroupName: 'Novel Food',
+    flattenedDisplayName: 'Nutrition - Nutritional Disadvantage Explanation',
     type: 'text',
     djangoLookupField: 'nutri_disadvantage_explanation__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-text-box-outline',
-    filterDescription: 'description for Nutritional Disadvantage Explanation',
-    tooltipDescription: 'Nutritional Disadvantage Explanation tooltip description',
+    filterDescription:
+      'Reasoning for why the NF/TF is considered nutritionally disadvantageous. Only filled in for NF/TF which were claimed nutritionally disadvantageous by the Panel.',
     showInFilters: true
   },
   sufficientData: {
@@ -261,8 +260,7 @@ export const fields = {
     djangoLimitchoicesField: 'sufficient_data',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-database-check',
-    filterDescription: 'description for Sufficient Data',
-    tooltipDescription: 'Sufficient Data tooltip description',
+    filterDescription: 'Were sufficient data provided to demonstrate the stability of the NF/TF?',
     showInFilters: true
   },
   foodMatrices: {
@@ -280,13 +278,13 @@ export const fields = {
     djangoLimitchoicesField: 'food_matrices',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-grid',
-    filterDescription: 'description for Food Matrices',
-    tooltipDescription: 'Food Matrices tooltip description',
+    filterDescription: 'Was stability within different food matrices discussed within the opinion?',
     showInFilters: true
   },
   instabilityConcerns: {
     displayName: 'Instability Concerns',
-    displayGroupName: 'Novel Food',
+    displayGroupName: 'Stability',
+    flattenedDisplayName: 'Stability - Instability concerns',
     type: 'text',
     djangoLookupField: 'instability_concerns__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -298,24 +296,26 @@ export const fields = {
     djangoLimitchoicesField: 'instability_concerns',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
-    filterDescription: 'description for Instability Concerns',
-    tooltipDescription: 'Instability Concerns tooltip description',
+    filterDescription:
+      'Were any instability concerns identified within the opinion (e.g., instability within certain food matrices, at high temperatures or in the absence of stabilisers)?',
     showInFilters: true
   },
   shelflifeValue: {
     displayName: 'Shelf Life Value',
-    displayGroupName: 'Novel Food',
+    displayGroupName: 'Stability',
+    flattenedDisplayName: 'Stability - Shelf Life Value',
     type: 'number',
     djangoLookupField: 'shelflife_value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-clock-outline',
-    filterDescription: 'description for Shelf Life Value',
-    tooltipDescription: 'Shelf Life Value tooltip description',
+    filterDescription:
+      'The numerical value for shelf life, either proposed by the applicant or specified by the Panel.',
     showInFilters: true
   },
   shelflifeUnit: {
     displayName: 'Shelf Life Unit',
-    displayGroupName: 'Novel Food',
+    displayGroupName: 'Stability',
+    flattenedDisplayName: 'Stability - Shelf Life Unit',
     type: 'text',
     djangoLookupField: 'shelflife_unit__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -327,13 +327,13 @@ export const fields = {
     djangoLimitchoicesField: 'shelflife_unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-timer-sand',
-    filterDescription: 'description for Shelf Life Unit',
-    tooltipDescription: 'Shelf Life Unit tooltip description',
+    filterDescription: 'Unit of the proposed shelf life (e.g., day, month, year)',
     showInFilters: true
   },
   endocrineDisruptProp: {
     displayName: 'Endocrine Disruptive Properties',
-    displayGroupName: 'Novel Food',
+    displayGroupName: 'Hazards',
+    flattenedDisplayName: 'Hazards - Endocrine Disruptive Properties',
     type: 'text',
     djangoLookupField: 'endocrine_disrupt_prop__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -345,8 +345,7 @@ export const fields = {
     djangoLimitchoicesField: 'endocrine_disrupt_prop',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
-    filterDescription: 'description for Endocrine Disruptive Properties',
-    tooltipDescription: 'Endocrine Disruptive Properties tooltip description',
+    filterDescription: 'Were endocrine disrupting properties identified in the NF/TF?',
     showInFilters: true
   },
   outcome: {
@@ -361,8 +360,8 @@ export const fields = {
     djangoLookupField: 'outcome',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-check-circle-outline',
-    filterDescription: 'description for Outcome',
-    tooltipDescription: 'Outcome tooltip description',
+    filterDescription:
+      'Conclusion of the opinion. Can be either: “positive”, “partially negative”, or “negative”.',
     showInFilters: true
   },
   outcomeRemarks: {
@@ -373,8 +372,7 @@ export const fields = {
     djangoLookupField: 'outcome_remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-comment-text-outline',
-    filterDescription: 'description for Outcome Remarks',
-    tooltipDescription: 'Outcome Remarks tooltip description',
+    filterDescription: 'Reasoning for a partially negative or negative Opinion Outcome',
     showInFilters: true
   },
   vocabId: {
@@ -392,8 +390,8 @@ export const fields = {
     djangoLimitchoicesField: 'vocab_id',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Vocabulary Name',
-    tooltipDescription: 'Vocabulary Name tooltip description',
+    filterDescription:
+      'Specifies the name from the PARAM catalogue used to map the Novel Food to an existing entry in the catalogue. This field is only used for Novel Foods that already exist in the catalogue, as no new terms are added.',
     showInFilters: true
   },
 
@@ -409,8 +407,7 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
-    filterDescription: 'description for Allergenicity',
-    tooltipDescription: 'Allergenicity tooltip description',
+    filterDescription: 'Panel’s conclusion on allergenicity risk posed by the NF/TF',
     showInFilters: true
   },
 
@@ -529,9 +526,6 @@ export const fields = {
     showInFilters: true
   },
 
-
-
-
   // Novel Food Synonyms
 
   'synonyms.title': {
@@ -595,8 +589,8 @@ export const fields = {
     djangoLimitchoicesField: 'document_type',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Opinion Document Type',
-    tooltipDescription: 'Opinion Document Type tooltip description',
+    filterDescription:
+      'Defines whether the document is an EFSA opinion, Technical Report or an EFSA statement.',
     showInFilters: true
   },
   opinionTitle: {
@@ -606,8 +600,8 @@ export const fields = {
     djangoLookupField: 'opinion__title',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Opinion Title',
-    tooltipDescription: 'Opinion Title tooltip description',
+    filterDescription:
+      'Title of the publication, e.g., “Safety of chia seeds (Salvia hispanica L.) powders, as novel foods, pursuant to Regulation (EU) 2015/2283”',
     showInFilters: true
   },
   opinionDoi: {
@@ -617,8 +611,8 @@ export const fields = {
     djangoLookupField: 'opinion__doi',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Opinion DOI',
-    tooltipDescription: 'Opinion DOI tooltip description',
+    filterDescription:
+      'Digital Object Identifier (DOI) of the publication, e.g., “10.2903/j.efsa.2021.6846”',
     showInFilters: true
   },
   opinionUrl: {
@@ -628,8 +622,8 @@ export const fields = {
     djangoLookupField: 'opinion__url',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Opinion URL',
-    tooltipDescription: 'Opinion URL tooltip description',
+    filterDescription:
+      'URL to the publication on the EFSA Journal website, e.g., “https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2021.6846”',
     showInFilters: true
   },
   opinionPublicationDate: {
@@ -639,8 +633,8 @@ export const fields = {
     djangoLookupField: 'opinion__publication_date',
     qualifiers: ['is before', 'is after', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Opinion Publication Date',
-    tooltipDescription: 'Opinion Publication Date tooltip description',
+    filterDescription:
+      'The date when the publication (scientific opinion/technical report/statement) was published',
     showInFilters: true
   },
   opinionAdoptionDate: {
@@ -650,14 +644,14 @@ export const fields = {
     djangoLookupField: 'opinion__adoption_date',
     qualifiers: ['is before', 'is after', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Opinion Adoption Date',
-    tooltipDescription: 'Opinion Adoption Date tooltip description',
+    filterDescription:
+      'The date when the publication (scientific opinion/statement) was adopted by the Panel. For Technical reports, this is the “Approval date”.',
     showInFilters: true
   },
 
   'panels.title': {
     displayName: 'Name',
-    flattenedDisplayName: 'Panel',
+    flattenedDisplayName: 'Opinion - Panel',
     displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__panels__panel__title',
@@ -667,45 +661,43 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: "description for Panel's Name",
-    tooltipDescription: "Panel's Name tooltip description",
+    filterDescription:
+      'The abbreviation of the EFSA Panel that authored the publication. “EFSA” was used instead of Panel in cases of Technical Reports or when EFSA was the sole author.',
     showInFilters: true
   },
 
   'sciOfficers.firstName': {
     displayName: 'First Name',
-    flattenedDisplayName: "Scientific Officer's First Name",
+    flattenedDisplayName: "Opinion - Scientific Officer's First Name",
     displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__first_name',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: "description for Scientific Officer's First Name",
-    tooltipDescription: "Scientific Officer's First Name tooltip description",
+    filterDescription: 'First Name of the EFSA Scientific officer that authored the publication',
     showInFilters: true
   },
   'sciOfficers.middleName': {
     displayName: 'Middle Name',
-    flattenedDisplayName: "Scientific officer's Middle Name",
+    flattenedDisplayName: "Opinion - Scientific officer's Middle Name",
     displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__middle_name',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: "description for scientific officer's Middle Name",
-    tooltipDescription: "Scientific officer's Middle Name tooltip description",
+    filterDescription: 'Middle name of the EFSA Scientific officer that authored the publication',
     showInFilters: true
   },
   'sciOfficers.lastName': {
     displayName: 'Last Name',
-    flattenedDisplayName: "Scientific officer's Last Name",
+    flattenedDisplayName: "Opinion - Scientific officer's Last Name",
     displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__last_name',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: "description for scientific officer's Last Name",
-    tooltipDescription: "Scientific officer's Last Name tooltip description",
+    filterDescription:
+      'Last name (family name) of the EFSA Scientific officer that authored the publication',
     showInFilters: true
   },
 
@@ -713,33 +705,31 @@ export const fields = {
 
   'questions.number': {
     displayName: 'Number',
-    flattenedDisplayName: 'Question Number',
+    flattenedDisplayName: 'Opinion - Question Number',
     displayGroupName: 'Question',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__number',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Number',
-    tooltipDescription: 'Number tooltip description',
+    filterDescription: 'Question number of the opinion/techical report, e.g., EFSA-Q-2018-00373',
     showInFilters: true
   },
 
   'questions.applicants.title': {
     displayName: 'Name',
-    flattenedDisplayName: 'Applicant',
+    flattenedDisplayName: 'Opinion - Applicant',
     displayGroupName: 'Applicant',
     djangoLookupField: 'opinion__questions__question__applicants__applicant__title',
     type: 'text',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for applicant title',
-    tooltipDescription: 'Applicant title tooltip description',
+    filterDescription: 'Name of the applicant (usually a company)',
     showInFilters: true
   },
 
   'questions.mandates.mandateTypeTitle': {
     displayName: 'Type',
-    flattenedDisplayName: 'Mandate Type',
+    flattenedDisplayName: 'Opinion - Mandate Type',
     displayGroupName: 'Mandate',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__mandates__mandate_type__title',
@@ -749,8 +739,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Mandate Type',
-    tooltipDescription: 'Mandate Type tooltip description',
+    filterDescription:
+      'Describes the whether the mandate was for Novel Food (New dossier, Extension of use, or Nutrient source) or Traditional Food.',
     showInFilters: true
   },
   'questions.mandates.mandateTypeDefinition': {
@@ -763,12 +753,11 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Mandate Type Definition',
-    tooltipDescription: 'Mandate Type Definition tooltip description',
     showInFilters: true
   },
   'questions.mandates.regulation': {
     displayName: 'Regulation',
-    flattenedDisplayName: 'Mandate Regulation',
+    flattenedDisplayName: 'Opinion - Mandate Regulation',
     displayGroupName: 'Mandate',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__mandates__regulation__tax_node',
@@ -781,8 +770,8 @@ export const fields = {
     djangoLimitchoicesField: 'regulation',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Mandate Regulation',
-    tooltipDescription: 'Mandate Regulation tooltip description',
+    filterDescription:
+      'Assigns the regulation(s) according to which the NF/TF was assessed, e.g., EU 2015/2283.',
     showInFilters: true
   },
 
@@ -827,8 +816,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
-    filterDescription: 'description for Novel Food Category',
-    tooltipDescription: 'Novel Food Category tooltip description',
+    filterDescription:
+      'Describes which food category as defined by a relevant legislation (e.g., Article 3 of Regulation (EU) 2015/22832) the NF/TF falls under (e.g., “From microorganisms, fungi or algae” or “New production process”',
     showInFilters: true
   },
   'novelFoodCategories.definition': {
@@ -839,8 +828,8 @@ export const fields = {
     djangoLookupField: 'novel_food_categories__novel_food_category__definition__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
-    filterDescription: 'description for Novel Food Category Definition',
-    tooltipDescription: 'Novel Food Category Definition tooltip description',
+    filterDescription:
+      'The full text of the definition of the food category in the legislation (e.g., Article 3 of Regulation (EU) 2015/2283).',
     showInFilters: true
   },
   'novelFoodCategories.regulation': {
@@ -858,13 +847,12 @@ export const fields = {
     djangoLimitchoicesField: 'regulation',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Novel Food Category regulation',
-    tooltipDescription: 'Novel Food Category regulation tooltip description',
+    filterDescription:
+      'Describes which legislation (e.g., Article 3 of Regulation (EU) 2015/22832) defined the NF category.',
     showInFilters: true
   },
 
   // identities
-
 
   'organisms.organism': {
     displayName: 'Vocab ID',
@@ -1212,7 +1200,6 @@ export const fields = {
     showInFilters: true
   },
 
-
   // adme
 
   'admes.testType': {
@@ -1230,8 +1217,8 @@ export const fields = {
     djangoLimitchoicesField: 'test_type',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-flask-outline',
-    filterDescription: 'description for Test Type',
-    tooltipDescription: 'Test Type tooltip description',
+    filterDescription:
+      'Selects the type of study from the following options: In silico, In vitro, Animal, Human interventional clinical trial, Human observational clinical trial, Human other, Other, Not reported',
     showInFilters: true
   },
   'admes.guideline': {
@@ -1249,8 +1236,8 @@ export const fields = {
     djangoLimitchoicesField: 'guideline',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Guideline',
-    tooltipDescription: 'Guideline tooltip description',
+    filterDescription:
+      'Describes the guideline according to which the study was carried out (e.g. ICH-GCP).',
     showInFilters: true
   },
   'admes.guidelineQualifier': {
@@ -1265,8 +1252,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Guideline Qualifier',
-    tooltipDescription: 'Guideline Qualifier tooltip description',
+    filterDescription:
+      'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
     showInFilters: true
   },
   'admes.studySource': {
@@ -1281,8 +1268,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for Study Source',
-    tooltipDescription: 'Study Source tooltip description',
+    filterDescription:
+      'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA)',
     showInFilters: true
   },
 
@@ -1298,8 +1285,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-flask',
-    filterDescription: 'description for Investigation Type Name',
-    tooltipDescription: 'Investigation Type Name tooltip description',
+    filterDescription:
+      'Describes what was investigated in the study, e.g. “absorption”, “metabolism”, or “bioavailability”. A study can have multiple investigation types.',
     showInFilters: true
   },
   'admes.remarks': {
@@ -1335,7 +1322,7 @@ export const fields = {
 
   'genotoxes.testType': {
     displayName: 'Test Type',
-    flattenedDisplayName: 'Genotox Test Type',
+    flattenedDisplayName: 'Genotoxicity Test Type',
     displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__test_type__tax_node',
@@ -1348,13 +1335,13 @@ export const fields = {
     djangoLimitchoicesField: 'test_type',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-dna',
-    filterDescription: 'description for Test Type',
-    tooltipDescription: 'Test Type tooltip description',
+    filterDescription:
+      'Specifies the type of genotoxicity test conducted in the study, such as "bacterial reverse mutation test," "in vitro mammalian chromosome aberration test," or "in vivo micronucleus test”.',
     showInFilters: true
   },
   'genotoxes.guideline': {
     displayName: 'Guideline',
-    flattenedDisplayName: 'Genotox Guideline',
+    flattenedDisplayName: 'Genotoxicity Guideline',
     displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__guideline__tax_node',
@@ -1367,13 +1354,13 @@ export const fields = {
     djangoLimitchoicesField: 'guideline',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Guideline',
-    tooltipDescription: 'Guideline tooltip description',
+    filterDescription:
+      'Specifies the guideline followed by the genotoxicity study, such as OECD test guidelines (e.g., OECD TG471).',
     showInFilters: true
   },
   'genotoxes.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
-    flattenedDisplayName: 'Genotox Guideline Qualifier',
+    flattenedDisplayName: 'Genotoxicity Guideline Qualifier',
     displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__guideline_qualifier__title',
@@ -1383,13 +1370,13 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Guideline Qualifier',
-    tooltipDescription: 'Guideline Qualifier tooltip description',
+    filterDescription:
+      'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
     showInFilters: true
   },
   'genotoxes.studySource': {
     displayName: 'Study Source',
-    flattenedDisplayName: 'Genotox Study Source',
+    flattenedDisplayName: 'Genotoxicity Study Source',
     displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__study_source__title',
@@ -1399,13 +1386,13 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for Study Source',
-    tooltipDescription: 'Study Source tooltip description',
+    filterDescription:
+      'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA)',
     showInFilters: true
   },
   'genotoxes.outcome': {
     displayName: 'Outcome',
-    flattenedDisplayName: 'Genotox Outcome',
+    flattenedDisplayName: 'Genotoxicity Outcome',
     displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__outcome__tax_node',
@@ -1418,10 +1405,11 @@ export const fields = {
     djangoLimitchoicesField: 'outcome',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-check-circle-outline',
-    filterDescription: 'description for Genotox Outcome',
-    tooltipDescription: 'Genotox Outcome tooltip description',
+    filterDescription:
+      'Specifies the outcome of the genotoxicity test. The available options are: "Negative/Absent," "Positive/Present," and "Inconclusive".',
     showInFilters: true
   },
+
   'genotoxes.remarks': {
     displayName: 'Remarks',
     flattenedDisplayName: 'Genotox Remarks',
@@ -1455,7 +1443,7 @@ export const fields = {
 
   'endpointstudies.testType': {
     displayName: 'Test Type',
-    flattenedDisplayName: 'Endpoint Study Test Type',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Test Type',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__test_type__tax_node',
@@ -1468,8 +1456,8 @@ export const fields = {
     djangoLimitchoicesField: 'test_type',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-flask-outline',
-    filterDescription: 'description for Test Type',
-    tooltipDescription: 'Test Type tooltip description',
+    filterDescription:
+      'Specifies the type of test conducted in the endpoint study, such as "In vitro," "Animal," or "Human clinical trial".',
     showInFilters: true
   },
   'endpointstudies.guidelineQualifier': {
@@ -1490,7 +1478,7 @@ export const fields = {
   },
   'endpointstudies.guideline': {
     displayName: 'Guideline',
-    flattenedDisplayName: 'Endpoint Study Guideline',
+    flattenedDisplayName: 'Toxicolgy - Endpoint Study Guideline',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__guideline__tax_node',
@@ -1503,13 +1491,13 @@ export const fields = {
     djangoLimitchoicesField: 'guideline',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Guideline',
-    tooltipDescription: 'Guideline tooltip description',
+    filterDescription:
+      'Specifies the guideline followed for the endpoint study, such as OECD guidelines (e.g. OECD TG 407)',
     showInFilters: true
   },
   'endpointstudies.species': {
     displayName: 'Species',
-    flattenedDisplayName: 'Endpoint Study Species',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Species',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__species__tax_node',
@@ -1522,13 +1510,13 @@ export const fields = {
     djangoLimitchoicesField: 'species',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-paw',
-    filterDescription: 'description for Species',
-    tooltipDescription: 'Species tooltip description',
+    filterDescription:
+      'Specifies the species used in the endpoint study, such as "rat," "mouse," or "human".',
     showInFilters: true
   },
   'endpointstudies.sex': {
     displayName: 'Sex',
-    flattenedDisplayName: 'Endpoint Study Sex',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Sex',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__sex__tax_node',
@@ -1541,20 +1529,20 @@ export const fields = {
     djangoLimitchoicesField: 'sex',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-gender-male-female',
-    filterDescription: 'description for Sex',
-    tooltipDescription: 'Sex tooltip description',
+    filterDescription:
+      'Specifies the sex of the subjects or test animals used in the endpoint study, such as "male," "female," or "Mixed females and males".',
     showInFilters: true
   },
   'endpointstudies.studyDuration': {
     displayName: 'Study Duration',
-    flattenedDisplayName: 'Endpoint Study Duration',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Duration',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__study_duration',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-clock-outline',
-    filterDescription: 'description for Study Duration',
-    tooltipDescription: 'Study Duration tooltip description',
+    filterDescription:
+      'Specifies the duration of the endpoint study, expressed in time units such as days, weeks, or months.',
     showInFilters: true
   },
   'endpointstudies.durationUnit': {
@@ -1625,7 +1613,7 @@ export const fields = {
 
   'endpointstudies.endpoints.referencePoint': {
     displayName: 'Reference Point',
-    flattenedDisplayName: 'Endpoint Reference Point',
+    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point',
     displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__reference_point__tax_node',
@@ -1638,13 +1626,13 @@ export const fields = {
     djangoLimitchoicesField: 'reference_point',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-target',
-    filterDescription: 'description for Reference Point',
-    tooltipDescription: 'Reference Point tooltip description',
+    filterDescription:
+      'Specifies the reference point which was derived from the endpoint study, such as NOAEL or LOAEL.',
     showInFilters: true
   },
   'endpointstudies.endpoints.qualifier': {
     displayName: 'Qualifier',
-    flattenedDisplayName: 'Endpoint Qualifier',
+    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point qualifier',
     displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__qualifier__tax_node',
@@ -1657,13 +1645,13 @@ export const fields = {
     djangoLimitchoicesField: 'qualifier',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Qualifier',
-    tooltipDescription: 'Qualifier tooltip description',
+    filterDescription:
+      'Specifies the qualifier for the reference point, such as "greater than," "less than," or "equal to".',
     showInFilters: true
   },
   'endpointstudies.endpoints.subpopulation': {
     displayName: 'Subpopulation',
-    flattenedDisplayName: 'Endpoint Subpopulation',
+    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point subpopulation',
     displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__subpopulation__tax_node',
@@ -1676,20 +1664,20 @@ export const fields = {
     djangoLimitchoicesField: 'subpopulation',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-account-group',
-    filterDescription: 'description for Subpopulation',
-    tooltipDescription: 'Subpopulation tooltip description',
+    filterDescription:
+      'Specifies the subpopulation for which the reference point (e.g., LOAEL or NOAEL) was derived, such as "males," "females," or "fetus." This field is used when different reference points are determined for specific subpopulations within the study.',
     showInFilters: true
   },
   'endpointstudies.endpoints.lovalue': {
     displayName: 'Value',
-    flattenedDisplayName: 'Endpoint Value',
+    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point value',
     displayGroupName: 'Endpoint',
     type: 'number',
     djangoLookupField: 'endpointstudy__endpoints__lovalue',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-arrow-down',
-    filterDescription: 'description for Value',
-    tooltipDescription: 'Value tooltip description',
+    filterDescription:
+      'Specifies the numerical value of the reference point (e.g. NOAEL), as determined in the endpoint study or by EFSA.',
     showInFilters: true
   },
   'endpointstudies.endpoints.unit': {
@@ -1729,13 +1717,13 @@ export const fields = {
     djangoLimitchoicesField: 'outcome',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-check-circle-outline',
-    filterDescription: 'description for Final Outcome Outcome',
-    tooltipDescription: 'Final Outcome Outcome tooltip description',
+    filterDescription:
+      '"Specifies the final outcome derived from a reference point in the endpoint study, such as a margin of exposure (MOE), acceptable daily intake (ADI), or tolerable upper intake level (UL).',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.qualifier': {
     displayName: 'Qualifier',
-    flattenedDisplayName: 'Final Outcome Qualifier',
+    flattenedDisplayName: 'Toxicology - Final Outcome Qualifier',
     displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__qualifier__tax_node',
@@ -1748,20 +1736,20 @@ export const fields = {
     djangoLimitchoicesField: 'qualifier',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Qualifier',
-    tooltipDescription: 'Qualifier tooltip description',
+    filterDescription:
+      'Specifies the qualifier for the final outcome, such as "greater than," "less than," or "equal to," in relation to the derived value (e.g., margin of exposure or safe intake level).',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.value': {
     displayName: 'Value',
-    flattenedDisplayName: 'Final Outcome Value',
+    flattenedDisplayName: 'Toxicology - Final Outcome Value',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__value',
     displayGroupName: 'Final Outcome',
     type: 'number',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
-    filterDescription: 'description for Value',
-    tooltipDescription: 'Value tooltip description',
+    filterDescription:
+      'Specifies the numerical value of the final outcome, such as a margin of exposure (MOE), acceptable daily intake (ADI), or tolerable upper intake level (UL), as derived by EFSA (in most cases).',
     showInFilters: true
   },
 
@@ -1812,7 +1800,7 @@ export const fields = {
 
   'endpointstudies.endpoints.finalOutcomes.populations.subgroup': {
     displayName: 'Subgroup',
-    flattenedDisplayName: 'Final Outcome Population Subgroup',
+    flattenedDisplayName: 'Toxicology - Final Outcome Population Subgroup',
     displayGroupName: 'Population',
     type: 'text',
     djangoLookupField:
@@ -1823,13 +1811,13 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-account-multiple-outline',
-    filterDescription: 'description for Subgroup',
-    tooltipDescription: 'Subgroup tooltip description',
+    filterDescription:
+      'Specifies the population subgroup based on age for which the final outcome is derived, such as "infants", "other children", "adolescents", "adults” (including or excluding pregnant and lactating women), or "general population." This field is used when different final outcome values are calculated for specific age-based subpopulations in the study.',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.qualifier': {
     displayName: 'Qualifier',
-    flattenedDisplayName: 'Final Outcome Population Qualifier',
+    flattenedDisplayName: 'Toxicology - Final Outcome Population Qualifier',
     displayGroupName: 'Population',
     type: 'text',
     djangoLookupField:
@@ -1843,20 +1831,20 @@ export const fields = {
     djangoLimitchoicesField: 'qualifier',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Qualifier',
-    tooltipDescription: 'Qualifier tooltip description',
+    filterDescription:
+      'Specifies the qualifier for the age of the population subgroup, such as "greater than," "less than," or "equal to," indicating the age range for which the final outcome (e.g., MOE, ADI) is applicable, such as children from 5 years of age.',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.value': {
     displayName: 'Value',
-    flattenedDisplayName: 'Final Outcome Population Value',
+    flattenedDisplayName: 'Toxicology - Final Outcome Population Value',
     displayGroupName: 'Population',
     type: 'number',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
-    filterDescription: 'description for Value',
-    tooltipDescription: 'Value tooltip description',
+    filterDescription:
+      'Specifies the exact age or age range of the population subgroup (e.g., months, 18-65 years) for which the final outcome was determined.',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.upperRangeValue': {
