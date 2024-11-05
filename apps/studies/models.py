@@ -186,7 +186,7 @@ class FinalOutcome(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV") & ~models.Q(short_name="root"),
         db_column="id_assessment_type",
-        related_name=", ",
+        related_name="outcome_final_outcomes",
         help_text="(ENDPOINT_HGV vocab)",
     )
     qualifier = models.ForeignKey(

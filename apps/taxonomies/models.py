@@ -255,7 +255,7 @@ class Population(models.Model):
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name="",
+        related_name="unit_populations",
         db_column="id_unit",
         limit_choices_to=models.Q(taxonomy__code="UNIT")
         & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"]),

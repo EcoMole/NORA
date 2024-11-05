@@ -250,7 +250,7 @@ class Composition(models.Model):
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name=",",
+        related_name="unit_compositions",
         db_column="id_unit",
         limit_choices_to=models.Q(taxonomy__code="UNIT") & ~models.Q(short_name="root"),
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
