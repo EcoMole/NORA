@@ -20,7 +20,7 @@ class AllergenicityNovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_allergenicity_novel_food")
     allergenicity = models.ForeignKey(
         Allergenicity,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_allergenicity",
         verbose_name="Allergenicity Risk",
     )
@@ -56,7 +56,7 @@ class FoodCategoryNovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_food_category_study")
     food_category = models.ForeignKey(
         FoodCategory,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_food_category",
         verbose_name="Food Category Tool",
     )
@@ -94,7 +94,7 @@ class NovelFoodCategory(models.Model):
         "taxonomies.TaxonomyNode",
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         # related_name="regulation_categories",
         db_column="id_regulation",
         limit_choices_to=models.Q(taxonomy__code="LEGREF")
@@ -122,7 +122,7 @@ class NovelFoodCategoryNovelFood(models.Model):
     )
     novel_food_category = models.ForeignKey(
         NovelFoodCategory,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_sub_type",
         verbose_name="Regulation Category",
     )
@@ -169,7 +169,7 @@ class NovelFoodSyn(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study_syn")
     syn_type = models.ForeignKey(
         SynonymType,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_syn",
         verbose_name="Synonym Type",
     )
@@ -209,7 +209,7 @@ class Family(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_family")
     org_type = models.ForeignKey(
         OrgType,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         null=True,
         blank=False,
         db_column="id_org_type",
@@ -229,7 +229,7 @@ class Family(models.Model):
 class Genus(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_genus")
     family = models.ForeignKey(
-        Family, on_delete=models.SET_NULL, null=True, blank=False, db_column="id_family"
+        Family, on_delete=models.PROTECT, null=True, blank=False, db_column="id_family"
     )
     title = models.CharField(max_length=255, unique=True)
 
@@ -250,7 +250,7 @@ class Organism(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=False,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="MTX")
         & (
             models.Q(extended_name__icontains="(as animal)")
@@ -284,7 +284,7 @@ class OrganismSyn(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_org_syn")
     syn_type = models.ForeignKey(
         SynonymType,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_syn",
         verbose_name="Synonym Type",
     )
@@ -317,7 +317,7 @@ class Species(models.Model):
         related_name="species",
     )
     genus = models.ForeignKey(
-        Genus, on_delete=models.SET_NULL, null=True, blank=False, db_column="id_genus"
+        Genus, on_delete=models.PROTECT, null=True, blank=False, db_column="id_genus"
     )
 
     def __str__(self):
@@ -339,7 +339,7 @@ class NovelFoodOrganism(models.Model):
     )
     organism = models.ForeignKey(
         Organism,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_organism",
         verbose_name="Organism Identity",
     )
@@ -347,7 +347,7 @@ class NovelFoodOrganism(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="org_part_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="MTX")
         & ~models.Q(short_name="root")
@@ -367,7 +367,7 @@ class NovelFoodOrganism(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="is_gmo_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
@@ -380,7 +380,7 @@ class NovelFoodOrganism(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="has_qps_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
@@ -397,7 +397,7 @@ class NovelFoodOrganism(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="cells_modified_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
@@ -421,7 +421,7 @@ class NovelFoodChemical(models.Model):
     )
     chemical = models.ForeignKey(
         "Chemical",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_com",
         verbose_name="Chemical Identity",
     )
@@ -439,7 +439,7 @@ class Chemical(models.Model):
         db_column="id_rnc_efsa",
         blank=False,
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="vocab_id_chemicals",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
         & ~models.Q(short_name="root"),
@@ -516,7 +516,7 @@ class ChemicalSyn(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_com_syn")
     syn_type = models.ForeignKey(
         SynonymType,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_syn",
         verbose_name="Synonym Type",
     )
@@ -542,7 +542,7 @@ class SubstanceOfConcernNovelFood(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="substance_of_concern_substance_of_concern_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
         & ~models.Q(short_name="root"),
@@ -594,7 +594,7 @@ class NovelFood(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_study")
     opinion = models.ForeignKey(
         Opinion,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         db_column="id_op",
         related_name="opinion_novel_foods",
         null=True,
@@ -614,7 +614,7 @@ class NovelFood(models.Model):
     )
     genotox_final_outcome = models.ForeignKey(
         GenotoxFinalOutcome,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
         db_column="id_is_genotoxic",
@@ -633,7 +633,7 @@ class NovelFood(models.Model):
         blank=True,
         db_column="id_protein_digestibility",
         verbose_name="Protein digestibility",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
         & models.Q(is_yesno=True),
@@ -646,7 +646,7 @@ class NovelFood(models.Model):
         blank=True,
         db_column="id_antinutritional_factors",
         verbose_name="Antinutritional factors",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
         & models.Q(is_yesno=True),
@@ -659,7 +659,7 @@ class NovelFood(models.Model):
         blank=True,
         db_column="id_has_nutri_disadvantage",
         verbose_name="Nutritionally Disadvantageous",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
         & models.Q(is_yesno=True),
@@ -678,7 +678,7 @@ class NovelFood(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
         & models.Q(is_yesno=True),
@@ -691,7 +691,7 @@ class NovelFood(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
         & models.Q(is_yesno=True),
@@ -703,7 +703,7 @@ class NovelFood(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
         & models.Q(is_yesno=True),
@@ -722,7 +722,7 @@ class NovelFood(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="UNIT")
         & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"]),
         db_column="id_shelflife_unit",
@@ -734,7 +734,7 @@ class NovelFood(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
         & models.Q(is_yesno=True),
@@ -760,7 +760,7 @@ class NovelFood(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="PARAM")
         & ~models.Q(short_name="root"),
         db_column="id_rms_efsa",
@@ -793,7 +793,7 @@ class SpecificToxicity(models.Model):
         blank=False,
         db_column="id_toxicity",
         verbose_name="Specific Toxicity",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="TOXICITY")
         & ~models.Q(short_name="root"),
         related_name="novel_foods",
@@ -832,7 +832,7 @@ class BackgroundExposureAssessment(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="comp_of_interest_bg_expo_assessments",
         db_column="id_comp_of_interest",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
@@ -860,7 +860,7 @@ class HBGV(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="type_hbgvs",
         limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV")
         & ~models.Q(short_name="root"),
@@ -872,7 +872,7 @@ class HBGV(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="substance_hbgvs",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
         & ~models.Q(short_name="root"),
@@ -883,7 +883,7 @@ class HBGV(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="exceeded_hbgvs",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")

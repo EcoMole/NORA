@@ -16,7 +16,7 @@ class Opinion(models.Model):
         blank=True,
         related_name="opinions",
         verbose_name="Document type",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="REF_TYPE")
         & ~models.Q(short_name="root"),
         help_text="(REF_TYPE vocab)",
@@ -110,7 +110,7 @@ class OpinionPanel(models.Model):
         Panel,
         blank=False,
         null=False,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_panel",
         verbose_name="EFSA Panel",
     )
@@ -189,7 +189,7 @@ class OpinionQuestion(models.Model):
         Question,
         blank=False,
         null=False,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_question",
         verbose_name="Question Number",
     )
@@ -242,7 +242,7 @@ class OpinionSciOfficer(models.Model):
         ScientificOfficer,
         blank=False,
         null=False,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name="Scientific Officer",
     )
 
@@ -277,14 +277,14 @@ class Mandate(models.Model):
         MandateType,
         blank=False,
         null=False,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_mandate_type",
     )
     regulation = models.ForeignKey(
         "taxonomies.TaxonomyNode",
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="regulation_mandates",
         db_column="id_regulation",
         limit_choices_to=models.Q(taxonomy__code="LEGREF")
@@ -313,7 +313,7 @@ class QuestionApplicant(models.Model):
         related_name="applicants",
     )
     applicant = models.ForeignKey(
-        Applicant, on_delete=models.CASCADE, db_column="id_applicant"
+        Applicant, on_delete=models.PROTECT, db_column="id_applicant"
     )
 
     def __str__(self) -> str:
