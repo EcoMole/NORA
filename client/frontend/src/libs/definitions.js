@@ -2,6 +2,9 @@ export const objectTypes = {
   allergenicities: {
     displayName: 'Allergenicity'
   },
+  synonyms: {
+    displayName: 'Novel Food Synonym'
+  },
   panels: {
     displayName: 'Panel'
   },
@@ -43,7 +46,44 @@ export const objectTypes = {
   },
   'endpointstudies.endpoints.finalOutcomes.populations': {
     displayName: 'Population'
-  }
+  },
+  novelFoodVariants: {
+    displayName: 'Novel Food Variant'
+  },
+  'novelFoodVariants.riskAssessRedFlags': {
+    displayName: 'Risk Assessment Red Flag'
+  },
+  'novelFoodVariants.productionProcesses': {
+    displayName: 'Production Process'
+  },
+  'novelFoodVariants.proposedUses': {
+    displayName: 'Proposed Use'
+  },
+  'novelFoodVariants.proposedUses.population': {
+    displayName: 'Proposed Uses Population'
+  },
+  'novelFoodVariants.compositions': {
+    displayName: 'Composition'
+  },
+  'organisms': {
+    displayName: 'Organism'
+  },
+  'organisms.species': {
+    displayName: 'Taxonomy'
+  },
+  'organisms.orgSynonyms': {
+    displayName: 'Organism Synonym'
+  },
+  'chemicals': {
+    displayName: 'Chemical'
+  },
+  'chemicals.chemSynonyms': {
+    displayName: 'Chemical Synonym'
+  },
+  'chemicals.chemDescriptors': {
+    displayName: 'Chemical Descriptor'
+  },
+
 }
 
 export const fields = {
@@ -359,6 +399,53 @@ export const fields = {
     showInFilters: true
   },
 
+  // Novel Food Synonyms
+
+  'synonyms.title': {
+    displayName: 'Name',
+    flattenedDisplayName: 'Novel Food Synonym',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'synonyms__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodSyn',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Novel Food Synonym',
+    tooltipDescription: 'Novel Food Synonym tooltip description',
+    showInFilters: true
+  },
+  'synonyms.typeTitle': {
+    displayName: 'Type',
+    flattenedDisplayName: 'Novel Food Synonym Type',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'synonyms__syn_type__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'SynonymType',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Novel Food Synonym Type',
+    tooltipDescription: 'Novel Food Synonym Type tooltip description',
+    showInFilters: true
+  },
+  'synonyms.typeDefinition': {
+    displayName: 'Type Definition',
+    flattenedDisplayName: 'Novel Food Synonym Type Definition',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'synonyms__syn_type__definition',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Novel Food Synonym Type Definition',
+    tooltipDescription: 'Novel Food ∂nym Type Definition tooltip description',
+    showInFilters: true
+  },
+
   // opinion
 
   opinionDocumentType: {
@@ -642,6 +729,356 @@ export const fields = {
     tooltipDescription: 'Novel Food Category regulation tooltip description',
     showInFilters: true
   },
+
+  // identities
+
+
+  'organisms.organism': {
+    displayName: 'Vocab ID',
+    flattenedDisplayName: 'Organism Vocab ID',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__vocab_id__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'Organism',
+    djangoLimitchoicesField: 'vocab_id',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Vocab ID',
+    tooltipDescription: 'Organism Vocab ID tooltip description',
+    showInFilters: true
+  },
+  'organisms.orgPart': {
+    displayName: 'Part',
+    flattenedDisplayName: 'Organism Part',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__org_part__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFoodOrganism',
+    djangoLimitchoicesField: 'org_part',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Part',
+    tooltipDescription: 'Organism Part tooltip description',
+    showInFilters: true
+  },
+  'organisms.variant': {
+    displayName: 'Variant',
+    flattenedDisplayName: 'Organism Variant',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__variant',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodOrganism',
+    djangoField: 'variant',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Variant',
+    tooltipDescription: 'Organism Variant tooltip description',
+    showInFilters: true
+  },
+  'organisms.isGmo': {
+    displayName: 'is GMO',
+    flattenedDisplayName: 'Organism is GMO',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__is_gmo__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFoodOrganism',
+    djangoLimitchoicesField: 'is_gmo',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism is GMO',
+    tooltipDescription: 'Organism is GMO tooltip description',
+    showInFilters: true
+  },
+  'organisms.hasQps': {
+    displayName: 'has QPS',
+    flattenedDisplayName: 'Organism has QPS',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__has_qps__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFoodOrganism',
+    djangoLimitchoicesField: 'has_qps',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism has QPS',
+    tooltipDescription: 'Organism has QPS tooltip description',
+    showInFilters: true
+  },
+
+  'organisms.cellCulture': {
+    displayName: 'Cell Culture',
+    flattenedDisplayName: 'Organism Cell Culture',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__cell_culture',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodOrganism',
+    djangoField: 'cell_culture',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Cell Culture',
+    tooltipDescription: 'Organism Cell Culture tooltip description',
+    showInFilters: true
+  },
+
+  'organisms.cellsModified': {
+    displayName: 'Cells Modified',
+    flattenedDisplayName: 'Organism Cell Modification',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__cells_modified__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'NovelFoodOrganism',
+    djangoLimitchoicesField: 'cells_modified',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Cell Modification',
+    tooltipDescription: 'Organism Cell Modification tooltip description',
+    showInFilters: true
+  },
+  'organisms.species.name': {
+    displayName: 'Species Name',
+    flattenedDisplayName: 'Species Name',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__species__name',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'Species',
+    djangoField: 'name',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Species Name',
+    tooltipDescription: 'Species Name tooltip description',
+    showInFilters: true
+  },
+  'organisms.species.scientificName': {
+    displayName: 'Scientific Name',
+    flattenedDisplayName: 'Species Scientific Name',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__species__scientific_name',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'Species',
+    djangoField: 'scientific_name',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Species Scientific Name',
+    tooltipDescription: 'Species Scientific Name tooltip description',
+    showInFilters: true
+  },
+  'organisms.species.genus': {
+    displayName: 'Genus',
+    flattenedDisplayName: 'Species Genus',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__species__genus__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'Genus',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Species Genus',
+    tooltipDescription: 'Species Genus tooltip description',
+    showInFilters: true
+  },
+  'organisms.species.family': {
+    displayName: 'Family',
+    flattenedDisplayName: 'Species Family',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__species__genus__family__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'Family',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Species Family',
+    tooltipDescription: 'Species Family tooltip description',
+    showInFilters: true
+  },
+  'organisms.species.orgType': {
+    displayName: 'Organism Type',
+    flattenedDisplayName: 'Species Organism Type',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__species__genus__family__org_type__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'OrgType',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Species Organism Type',
+    tooltipDescription: 'Species Organism Type tooltip description',
+    showInFilters: true
+  },
+  'organisms.orgSynonyms.title': {
+    displayName: 'Name',
+    flattenedDisplayName: 'Organism Synonym',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__synonyms__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'OrganismSyn',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Synonym',
+    tooltipDescription: 'Organism Synonym tooltip description',
+    showInFilters: true
+  },
+  'organisms.orgSynonyms.typeTitle': {
+    displayName: 'Type',
+    flattenedDisplayName: 'Organism Synonym Type',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__synonyms__syn_type__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'SynonymType',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Synonym Type',
+    tooltipDescription: 'Organism Synonym Type tooltip description',
+    showInFilters: true
+  },
+  'organisms.orgSynonyms.typeDefinition': {
+    displayName: 'Type Definition',
+    flattenedDisplayName: 'Organism Synonym Type Definition',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'organisms__organism__synonyms__syn_type__definition',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Organism Synonym Type Definition',
+    tooltipDescription: 'Organism ∂nym Type Definition tooltip description',
+    showInFilters: true
+  },
+
+  'chemicals.chemical': {
+    displayName: 'Vocab ID',
+    flattenedDisplayName: 'Chemical Vocab ID',
+    displayGroupName: 'Identity',
+    type: 'text',
+    djangoLookupField: 'chemicals__chemical__vocab_id__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'Chemical',
+    djangoLimitchoicesField: 'vocab_id',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Chemical Vocab ID',
+    tooltipDescription: 'Chemical Vocab ID tooltip description',
+    showInFilters: true
+  },
+  'chemicals.chemSynonyms.title': {
+    displayName: 'Name',
+    flattenedDisplayName: 'Chemical Synonym',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'chemicals__chemical__synonyms__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'ChemicalSyn',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Chemical Synonym',
+    tooltipDescription: 'Chemical Synonym tooltip description',
+    showInFilters: true
+  },
+  'chemicals.chemSynonyms.typeTitle': {
+    displayName: 'Type',
+    flattenedDisplayName: 'Chemical Synonym Type',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'chemicals__chemical__synonyms__syn_type__title',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'SynonymType',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Chemical Synonym Type',
+    tooltipDescription: 'Chemical Synonym Type tooltip description',
+    showInFilters: true
+  },
+  'chemicals.chemSynonyms.typeDefinition': {
+    displayName: 'Type Definition',
+    flattenedDisplayName: 'Chemical Synonym Type Definition',
+    displayGroupName: 'Synonym',
+    type: 'text',
+    djangoLookupField: 'chemicals__chemical__synonyms__syn_type__definition',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Chemical Synonym Type Definition',
+    tooltipDescription: 'Chemical ∂nym Type Definition tooltip description',
+    showInFilters: true
+  },
+  'chemicals.chemDescriptors.type': {
+    displayName: 'Type',
+    flattenedDisplayName: 'Chemical Descriptor Type',
+    displayGroupName: 'Chemical',
+    type: 'text',
+    djangoLookupField: 'chemicals__chemical__chem_descriptors__type',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'novel_food',
+    djangoModel: 'ChemDescriptor',
+    djangoField: 'type',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Chemical Descriptor Type',
+    tooltipDescription: 'Chemical Descriptor Type tooltip description',
+    showInFilters: true
+  },
+  'chemicals.chemDescriptors.value': {
+    displayName: 'Value',
+    flattenedDisplayName: 'Chemical Descriptor Value',
+    displayGroupName: 'Chemical',
+    type: 'text',
+    djangoLookupField: 'chemicals__chemical__chem_descriptors__value',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Chemical Descriptor Value',
+    tooltipDescription: 'Chemical Descriptor Value tooltip description',
+    showInFilters: true
+  },
+
 
   // adme
 

@@ -20,6 +20,8 @@ from rest_framework.response import Response
 
 
 def get_choices_from_field(app_name, model_name, field_name):
+    if not app_name or not model_name or not field_name:
+        return None
     Model = apps.get_model(app_label=app_name, model_name=model_name)
     if not Model:
         raise ValueError(f"Model '{model_name}' in app '{app_name}' does not exist.")
@@ -74,17 +76,13 @@ def get_novel_food_values_list(request):
         )
 
     # for choice fields
-    if get_choices_from_field(django_app, django_model, django_field):
-        res = [
-            pair[0]
-            for pair in get_choices_from_field(django_app, django_model, django_field)
-        ]
+    if choices := get_choices_from_field(django_app, django_model, django_field):
+        res = [pair[0] for pair in choices]
         return Response(res)
 
-    if limitchoices_app and limitchoices_model and limitchoices_field:
-        limit_choices = get_limit_choices_to(
-            limitchoices_app, limitchoices_model, limitchoices_field
-        )
+    if limit_choices := get_limit_choices_to(
+        limitchoices_app, limitchoices_model, limitchoices_field
+    ):
         print("limit_choices: ", limit_choices)
 
         qs = model.objects.filter(limit_choices)
