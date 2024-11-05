@@ -83,6 +83,21 @@ export const objectTypes = {
   'chemicals.chemDescriptors': {
     displayName: 'Chemical Descriptor'
   },
+  'specificToxicities': {
+    displayName: 'Specific Toxicity'
+  },
+  'substancesOfConcern': {
+    displayName: 'Substance of Concern'
+  },
+  'backgroundExposureAssessments': {
+    displayName: 'Background Exposure Assessment'
+  },
+  'hbgvs': {
+    displayName: 'HBGV'
+  },
+
+
+
 
 }
 
@@ -398,6 +413,124 @@ export const fields = {
     tooltipDescription: 'Allergenicity tooltip description',
     showInFilters: true
   },
+
+  'specificToxicities.specificToxicity': {
+    displayName: '',
+    flattenedDisplayName: 'Specific Toxicity',
+    displayGroupName: 'Hazards',
+    type: 'text',
+    djangoLookupField: 'specific_toxicities__specific_toxicity__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'SpecificToxicity',
+    djangoLimitchoicesField: 'specific_toxicity',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Specific Toxicity',
+    tooltipDescription: 'Specific Toxicity tooltip description',
+    showInFilters: true
+  },
+  'substancesOfConcern.substanceOfConcern': {
+    displayName: '',
+    flattenedDisplayName: 'Substance of Concern',
+    displayGroupName: 'Hazards',
+    type: 'text',
+    djangoLookupField: 'substances_of_concern__substance_of_concern__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'SubstanceOfConcernNovelFood',
+    djangoLimitchoicesField: 'substance_of_concern',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Substance of Concern',
+    tooltipDescription: 'Substance of Concern tooltip description',
+    showInFilters: true
+  },
+  'backgroundExposureAssessments.compOfInterest': {
+    displayName: 'Composition of Interest',
+    flattenedDisplayName: 'Background Exposure Assessment - Composition of Interest',
+    displayGroupName: 'Hazards',
+    type: 'text',
+    djangoLookupField: 'bg_expo_assessments__comp_of_interest__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'BackgroundExposureAssessment',
+    djangoLimitchoicesField: 'comp_of_interest',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for Background Exposure Assessment',
+    tooltipDescription: 'Background Exposure Assessment tooltip description',
+    showInFilters: true
+  },
+  'hbgvs.type': {
+    displayName: 'Type',
+    flattenedDisplayName: 'HBGV Type',
+    displayGroupName: 'Hazards',
+    type: 'text',
+    djangoLookupField: 'hbgvs__type__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'HBGV',
+    djangoLimitchoicesField: 'type',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for HBGV Type',
+    tooltipDescription: 'HBGV Type tooltip description',
+    showInFilters: true
+  },
+  'hbgvs.exceeded': {
+    displayName: 'Exceeded',
+    flattenedDisplayName: 'HBGV Exceeded',
+    displayGroupName: 'Hazards',
+    type: 'text',
+    djangoLookupField: 'hbgvs__exceeded__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'HBGV',
+    djangoLimitchoicesField: 'exceeded',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for HBGV Exceeded',
+    tooltipDescription: 'HBGV Exceeded tooltip description',
+    showInFilters: true
+  },
+  'hbgvs.substance': {
+    displayName: 'Substance',
+    flattenedDisplayName: 'HBGV Substance',
+    displayGroupName: 'Hazards',
+    type: 'text',
+    djangoLookupField: 'hbgvs__substance__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'novel_food',
+    djangoLimitchoicesModel: 'HBGV',
+    djangoLimitchoicesField: 'substance',
+    qualifiers: ['is', 'is None'],
+    icon: '',
+    filterDescription: 'description for HBGV Substance',
+    tooltipDescription: 'HBGV Substance tooltip description',
+    showInFilters: true
+  },
+
+
+
 
   // Novel Food Synonyms
 

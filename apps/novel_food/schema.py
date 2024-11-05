@@ -13,7 +13,9 @@ from studies.models import ADME, Endpointstudy, Genotox
 from studies.schema import ADMEType, EndpointStudyType, GenotoxType
 
 from .models import (
+    HBGV,
     Allergenicity,
+    BackgroundExposureAssessment,
     ChemDescriptor,
     ChemicalSyn,
     FoodCategory,
@@ -24,6 +26,8 @@ from .models import (
     NovelFoodSyn,
     OrganismSyn,
     Species,
+    SpecificToxicity,
+    SubstanceOfConcernNovelFood,
 )
 
 
@@ -186,6 +190,58 @@ class NovelFoodChemicalType(DjangoObjectType):
         return ChemDescriptor.objects.filter(chemical__novelfoodchemical=self)
 
 
+class SpecificToxicityType(DjangoObjectType):
+    class Meta:
+        model = SpecificToxicity
+        fields = "__all__"
+
+    specific_toxicity = graphene.String()
+
+    def resolve_specific_toxicity(self, info):
+        return self.specific_toxicity.name if self.specific_toxicity else None
+
+
+class SubstanceOfConcernNovelFoodType(DjangoObjectType):
+    class Meta:
+        model = SubstanceOfConcernNovelFood
+        fields = "__all__"
+
+    substance_of_concern = graphene.String()
+
+    def resolve_substance_of_concern(self, info):
+        return self.substance_of_concern.name if self.substance_of_concern else None
+
+
+class BackgroundExposureAssessmentType(DjangoObjectType):
+    class Meta:
+        model = BackgroundExposureAssessment
+        fields = "__all__"
+
+    comp_of_interest = graphene.String()
+
+    def resolve_comp_of_interest(self, info):
+        return self.comp_of_interest.name if self.comp_of_interest else None
+
+
+class HBGVType(DjangoObjectType):
+    class Meta:
+        model = HBGV
+        fields = "__all__"
+
+    type = graphene.String()
+    exceeded = graphene.String()
+    substance = graphene.String()
+
+    def resolve_type(self, info):
+        return self.type.name if self.type else None
+
+    def resolve_exceeded(self, info):
+        return self.exceeded.name if self.exceeded else None
+
+    def resolve_substance(self, info):
+        return self.substance.name if self.substance else None
+
+
 class NovelFoodType(DjangoObjectType):
     opinion_document_type = graphene.String()
     opinion_title = graphene.String()
@@ -219,11 +275,27 @@ class NovelFoodType(DjangoObjectType):
     synonyms = graphene.List(NovelFoodSynType)
     organisms = graphene.List(NovelFoodOrganismType)
     chemicals = graphene.List(NovelFoodChemicalType)
+    specific_toxicities = graphene.List(SpecificToxicityType)
+    substances_of_concern = graphene.List(SubstanceOfConcernNovelFoodType)
+    background_exposure_assessments = graphene.List(BackgroundExposureAssessmentType)
+    hbgvs = graphene.List(HBGVType)
 
     class Meta:
         model = NovelFood
         fields = "__all__"
         interfaces = (graphene.relay.Node,)
+
+    def resolve_specific_toxicities(self, info):
+        return SpecificToxicity.objects.filter(novel_food=self)
+
+    def resolve_substances_of_concern(self, info):
+        return SubstanceOfConcernNovelFood.objects.filter(novel_food=self)
+
+    def resolve_background_exposure_assessments(self, info):
+        return BackgroundExposureAssessment.objects.filter(novel_food=self)
+
+    def resolve_hbgvs(self, info):
+        return HBGV.objects.filter(novel_food=self)
 
     def resolve_chemicals(self, info):
         return NovelFoodChemical.objects.filter(novel_food=self)
