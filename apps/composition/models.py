@@ -58,7 +58,7 @@ class Parameter(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="vocab_id_parameters",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
         & ~models.Q(short_name="root"),
@@ -115,7 +115,7 @@ class NovelFoodVariant(models.Model):
         "FoodForm",
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         db_column="id_food_form",
     )
 
@@ -156,7 +156,7 @@ class ProductionNovelFoodVariant(models.Model):
         "taxonomies.TaxonomyNode",
         null=False,
         blank=False,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="process_production_novel_food_variants",
         limit_choices_to=models.Q(taxonomy__code="MTX")
         & ~models.Q(short_name="root")
@@ -214,7 +214,7 @@ class Composition(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="qualifier_compositions",
         db_column="id_qualifier",
         limit_choices_to=models.Q(taxonomy__code="QUALIFIER")
@@ -249,7 +249,7 @@ class Composition(models.Model):
         "taxonomies.TaxonomyNode",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="unit_compositions",
         db_column="id_unit",
         limit_choices_to=models.Q(taxonomy__code="UNIT") & ~models.Q(short_name="root"),
@@ -304,7 +304,7 @@ class ProposedUse(models.Model):
         "taxonomies.Population",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="population_proposed_uses",
         db_column="id_age",
         verbose_name="Target Population",
@@ -355,7 +355,7 @@ class RiskAssessRedFlagNFVariant(models.Model):
         RiskAssessRedFlag,
         blank=False,
         null=False,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_column="id_risk_assess_red_flag",
         verbose_name="Risk Assessment Red Flag",
     )
