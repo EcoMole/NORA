@@ -87,6 +87,7 @@ class Query(graphene.ObjectType):
                         & Q(**{f"{prefix}__extended_name__{lookup_type}": value})
                     )
 
+            # for fields which are django.db.models.TextField
             elif lookup_field.endswith("__text_field"):
                 lookup_field = lookup_field[: -len("__text_field")]
 
@@ -96,6 +97,7 @@ class Query(graphene.ObjectType):
                 else:
                     q_object = create_q_object(lookup_field, lookup_type, value)
 
+            # for all other fields
             else:
                 if lookup_type == "isnull":
                     q_object = create_isnull_or_isempty_q_object(lookup_field)

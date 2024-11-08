@@ -21,8 +21,6 @@ class Opinion(models.Model):
         & ~models.Q(short_name="root"),
         help_text="(REF_TYPE vocab)",
         db_column="id_op_type",
-        #   limit_choices_to=lambda: Q(pk__in=TaxonomyNode.objects.get(
-        # taxonomy__code='REF_TYPE', code='').get_descendants()))
     )
     title = models.CharField(
         max_length=2000,
