@@ -30,7 +30,14 @@ class Command(BaseCommand):
         exclude_models = {
             model_name.strip() for model_name in options["exclude_models"].split(",")
         }
-        exclude_models.update({"TaxonomyNode", "Taxonomy"})
+        exclude_models.update(
+            {
+                "TaxonomyNode",
+                "Taxonomy",
+                "ImplicitAttribute",
+                "ExtendedTaxonomyNodeInformation",
+            }
+        )
 
         try:
             app_config = apps.get_app_config(app_label)
