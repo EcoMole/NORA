@@ -131,9 +131,12 @@ class TaxonomyNode(MPTTModel, SyncMixin):
 
     @property
     def name(self):
+        suffix = ""
+        if self.status == self.STATUS.DEPRECATED:
+            suffix = " (deprecated)"
         if self.short_name:
-            return self.short_name
-        return self.extended_name
+            return self.short_name + suffix
+        return self.extended_name + suffix
 
     @property
     def all_names(self):

@@ -78,7 +78,7 @@ class TaxonomyAdmin(admin.ModelAdmin):
 
 @admin.register(TaxonomyNode)
 class TaxonomyNodeAdmin(admin.ModelAdmin):
-    list_display = ["code", "get_name", "taxonomy"]
+    list_display = ["code", "get_name", "taxonomy", "status"]
     list_display_links = ["code", "get_name", "taxonomy"]
     search_fields = [
         "code",
@@ -95,7 +95,7 @@ class TaxonomyNodeAdmin(admin.ModelAdmin):
         "is_process",
         "is_part_nature",
     ]
-    list_filter = ["taxonomy"]
+    list_filter = ["taxonomy", "status"]
     actions = [duplicate_model]
 
     def get_queryset(self, request):
