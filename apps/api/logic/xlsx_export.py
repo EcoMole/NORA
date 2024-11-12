@@ -235,9 +235,13 @@ def process_chemicals(chemicals, nf_id):
         chemical.pop('__typename', '')
 
         descriptors = chemical.get("chemDescriptors", [])
+        
         if len(descriptors) > 0:
             for descriptor in descriptors:
-                chemical[descriptor['type']] = f"{descriptor['value']} "
+                try:
+                    chemical[descriptor['type']] = f"{descriptor.get('value', '')} "
+                except:
+                    pass
 
         chemical.pop('chemDescriptors', '')
 
