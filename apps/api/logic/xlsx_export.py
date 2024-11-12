@@ -127,7 +127,7 @@ def serialize_species(species):
 def serialize_synonyms(synonyms):
     names = []
     for synonym in synonyms:
-        names.append(synonym['title'])
+        names.append(synonym.get('title', ''))
 
     return " ; ".join(names)
 
@@ -146,6 +146,15 @@ def process_organism_identity(organisms, nf_id):
             organism_trade_names = [synonym for synonym in organism_synonyms if synonym['typeTitle'] == 'trade name']
             organism['common names'] = serialize_synonyms(organism_common_names)
             organism['trade names'] = serialize_synonyms(organism_trade_names)
+
+        if len(organism_synonyms) > 0:
+            if organism_synonyms[0].get('typeTitle', '') != '':
+                organism_common_names = [synonym for synonym in organism_synonyms if synonym['typeTitle'] == 'common name']
+                organism_trade_names = [synonym for synonym in organism_synonyms if synonym['typeTitle'] == 'trade name']
+                organism['common names'] = serialize_synonyms(organism_common_names)
+                organism['trade names'] = serialize_synonyms(organism_trade_names)
+            else:
+                organism['synonyms'] = serialize_synonyms(organism_synonyms)
         
         organism.pop('orgSynonyms', '')
         organism.pop('__typename', '')
@@ -214,10 +223,13 @@ def process_chemicals(chemicals, nf_id):
         chemical['novelFoodId'] = nf_id
         chem_synonyms = chemical.get('chemSynonyms', [])
         if len(chem_synonyms) > 0:
-            chemical_common_names = [synonym for synonym in chem_synonyms if synonym['typeTitle'] == 'common name']
-            chemical_trade_names = [synonym for synonym in chem_synonyms if synonym['typeTitle'] == 'trade name']
-            chemical['common names'] = serialize_synonyms(chemical_common_names)
-            chemical['trade names'] = serialize_synonyms(chemical_trade_names)
+            if chem_synonyms[0].get('typeTitle', '') != '':
+                chemical_common_names = [synonym for synonym in chem_synonyms if synonym['typeTitle'] == 'common name']
+                chemical_trade_names = [synonym for synonym in chem_synonyms if synonym['typeTitle'] == 'trade name']
+                chemical['common names'] = serialize_synonyms(chemical_common_names)
+                chemical['trade names'] = serialize_synonyms(chemical_trade_names)
+            else:
+                chemical['synonyms'] = serialize_synonyms(chem_synonyms)
         
         chemical.pop('chemSynonyms', '')
         chemical.pop('__typename', '')
@@ -232,6 +244,33 @@ def process_chemicals(chemicals, nf_id):
         chemicals_rows.append(chemical)
     
     return chemicals_rows
+
+def process_synonyms(synonyms):
+    serialized_common_names = ''
+    serialized_trade_names = ''
+    serialized_synonyms = None
+    if len(synonyms) > 0:
+        if synonyms[0].get('typeTitle', '') != '':
+            common_names = [synonym for synonym in synonyms if synonym['typeTitle'] == 'common name']
+            trade_names = [synonym for synonym in synonyms if synonym['typeTitle'] == 'trade name']
+            serialized_common_names = serialize_synonyms(common_names)
+            serialized_trade_names = serialize_synonyms(trade_names)
+        else:
+            serialized_synonyms = serialize_synonyms(synonyms)
+    else: 
+        serialized_synonyms = serialize_synonyms(synonyms)
+    return serialized_common_names, serialized_trade_names, serialized_synonyms
+
+def process_hbgvs(hbgvs):
+    hbgvs_result = []
+    for hbgv in hbgvs:
+        substance = hbgv.get("substance", "")
+        exceeded = hbgv.get("exceeded", "")
+        type = hbgv.get("type", "")
+        hbgv_repr =  " - ".join(filter(bool, [substance, exceeded, type]))
+        hbgvs_result.append(hbgv_repr)
+    
+    return " ; ".join(hbgvs_result)
 
 
 def flatten_json(
@@ -268,6 +307,20 @@ def flatten_json(
                 nf_variants_rows += new_nf_variant_rows
                 composition_rows += new_composition_rows
                 continue
+            if key == "synonyms":
+                serialized_common_names, serialized_trade_names, serialized_synonyms = process_synonyms(value)
+                if serialized_synonyms is not None:
+                    if serialized_synonyms != '':
+                        items.append(("synonyms", serialized_synonyms))
+                else:
+                    items.append(("common names", serialized_common_names))
+                    items.append(("trade names", serialized_trade_names))
+                continue
+            if key == "hbgvs":
+                hbgvs = process_hbgvs(value)
+                items.append(("hbvgs", hbgvs))
+                continue
+
             if (
                 key.startswith("__") or key == "id" or "djangoAdmin" in key
             ):  # Skip all the inner keys from graphql + djangoAdmin keys
@@ -349,9 +402,7 @@ def flatten_json(
 
 
 def create_export(novel_food_data):
-    print("Creating export...")
-    print(novel_food_data[0])
-    #print(novel_food_data['organisms'])
+
     novel_food_df_data = []
     genotox_rows = []
     endpoint_rows = []
@@ -409,23 +460,6 @@ def create_export(novel_food_data):
         # Autofit column width for each sheet
         for sheet in writer.sheets.values():
             sheet.autofit()
-
-    """ output = BytesIO()
-
-    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-        novel_food_df.to_excel(writer, sheet_name="novel_food", index=False)
-        organisms_df.to_excel(writer, sheet_name="organism identity", index=False)
-        chemicals_df.to_excel(writer, sheet_name="chemical identity", index=False)
-        nf_variants_df.to_excel(writer, sheet_name="novel food variants", index=False)
-        composition_df.to_excel(writer, sheet_name="composition", index=False)
-        genotox_df.to_excel(writer, sheet_name="genotox", index=False)
-        endpoint_df.to_excel(writer, sheet_name="endpointstudies", index=False)
-        adme_df.to_excel(writer, sheet_name="adme", index=False)
-        final_outcomes_df.to_excel(writer, sheet_name="final_outcomes", index=False)
-
-        # Get the worksheets
-        for sheet in writer.sheets.values():
-            sheet.autofit()  # Make the columns more wide """
 
     output.seek(0)
 
