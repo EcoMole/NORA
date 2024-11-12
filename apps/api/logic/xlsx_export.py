@@ -13,6 +13,7 @@ def process_genotox_studies(genotoxes, nf_id):
             if not key.startswith("__") and key != "id"
         }  # ignore GraphQl metadata
         genotox_study["novelFoodId"] = nf_id  # Add NF id
+        genotox_study.pop("djangoAdminGenotox", '')
         genotox_rows.append(genotox_study)
     return genotox_rows
 
@@ -42,6 +43,7 @@ def create_final_outcome_rows(endpoint, nf_id):
     final_outcomes = endpoint.get("finalOutcomes", "")
     final_outcome_rows = []
     for final_outcome in final_outcomes:
+        final_outcome.pop("djangoAdminFinalOutcome", "")
         final_outcome = {
             key: value
             for key, value in final_outcome.items()
@@ -65,6 +67,7 @@ def process_endpoint_studies(endpointstudies, nf_id):
     endpoint_rows = []
     final_outcome_rows = []
     for endpoint_study in endpointstudies:
+        endpoint_study.pop("djangoAdminEndpointstudy", '')
         endpoint_study = {
             key: value
             for key, value in endpoint_study.items()
@@ -92,6 +95,7 @@ def process_endpoint_studies(endpointstudies, nf_id):
 def process_adme_studies(admes, nf_id):
     adme_rows = []
     for adme_study in admes:
+        adme_study.pop("djangoAdminAdme", '')
         investig_types = [
             investigation_type["title"]
             for investigation_type in adme_study["investigationTypes"]
@@ -110,11 +114,11 @@ def process_adme_studies(admes, nf_id):
 
 
 def serialize_species(species):
-    name = species['name']
-    scientific_name = species['scientificName']
-    genus = species['genus']
-    family = species['family']
-    organism_type = species['orgType']
+    name = species.get('name', '')
+    scientific_name = species.get('scientificName', '')
+    genus = species.get('genus', '')
+    family = species.get('family')
+    organism_type = species.get('orgType')
 
     return " < ".join(
         filter(bool, [name, scientific_name, genus, family, organism_type])
@@ -131,18 +135,20 @@ def process_organism_identity(organisms, nf_id):
     organism_rows = []
     for organism in organisms:
         organism["novelFoodId"] = nf_id
-        serialized_species = [serialize_species(species) for species in organism.get("species", [])]
-        organism["species"] = " ; ".join(serialized_species)
+        species_list = organism.get("species", [])
+        if len(species_list) > 0:
+            serialized_species = [serialize_species(species) for species in species_list]
+            organism["species"] = " ; ".join(serialized_species)
 
-        organism_synonyms = organism['orgSynonyms']
-        organism_common_names = [synonym for synonym in organism_synonyms if synonym['typeTitle'] == 'common name']
-        organism_trade_names = [synonym for synonym in organism_synonyms if synonym['typeTitle'] == 'trade name']
-
-        organism['common names'] = serialize_synonyms(organism_common_names)
-        organism['trade names'] = serialize_synonyms(organism_trade_names)
+        organism_synonyms = organism.get('orgSynonyms', [])
+        if len(organism_synonyms) > 0:
+            organism_common_names = [synonym for synonym in organism_synonyms if synonym['typeTitle'] == 'common name']
+            organism_trade_names = [synonym for synonym in organism_synonyms if synonym['typeTitle'] == 'trade name']
+            organism['common names'] = serialize_synonyms(organism_common_names)
+            organism['trade names'] = serialize_synonyms(organism_trade_names)
         
-        del organism['orgSynonyms']
-        del organism['__typename']
+        organism.pop('orgSynonyms', '')
+        organism.pop('__typename', '')
 
         organism_rows.append(organism)
     return organism_rows
@@ -154,14 +160,13 @@ def serialize_production_processes(processes):
     return " , ".join(procs)
 
 
-
 def process_compositions(compositions, nf_id, food_form):
     composition_rows = [] #radek s nf id, nf food form, slozenim
     for composition in compositions:
         composition['novelFoodId'] = nf_id
         composition['foodForm'] = food_form
         composition_rows.append(composition)
-        del composition['__typename']
+        composition.pop('__typename', '')
     return composition_rows
 
 
@@ -171,31 +176,66 @@ def process_nf_variants(variants, nf_id):
     for variant in variants:
         var = {}
         var["novelFoodId"] = nf_id
-        var["foodForm"] = variant["foodForm"]
+        var["foodForm"] = variant.get("foodForm", "not selected for export")
         #var["proposedUses"] = 
         uses = []
-        for proposed_use in variant["proposedUses"]:
-            use = proposed_use["useType"]
-            proposed_population = serialize_population(proposed_use['population'])
-            remarks = proposed_use["remarks"]
+        for proposed_use in variant.get("proposedUses", []):
+            use = proposed_use.get("useType", "")
+            population = proposed_use.get('population', None)
+            if population:
+                proposed_population = serialize_population(population)
+            remarks = proposed_use.get("remarks", "")
             prop_use = f"{use}"
-            if proposed_population != '':
+            if population:
                 prop_use += f"( {proposed_population} )"
-            if remarks:
+            if remarks != "":
                 prop_use += f" - {remarks}"
             uses.append(prop_use)
-        var["proposedUses"] = " ; ".join(uses)
-        var["riskAssessRedFlags"] = serialize_synonyms(variant["riskAssessRedFlags"])
-        var["productionProcesses"] = serialize_production_processes(variant["productionProcesses"])
+        if len(uses) > 0:
+            var["proposedUses"] = " ; ".join(uses)
+        risk_flags = variant.get("riskAssessRedFlags", [])
+        if len(risk_flags) > 0:
+            var["riskAssessRedFlags"] = serialize_synonyms(risk_flags)
+        processes = variant.get("productionProcesses", [])
+        if len(processes) > 0:
+            var["productionProcesses"] = serialize_production_processes(processes)
 
-        composition_rows += process_compositions(variant["compositions"], nf_id, variant["foodForm"])
+        compositions = variant.get("compositions", [])
+        if len(compositions) > 0:
+            composition_rows += process_compositions(compositions, nf_id, var["foodForm"])
         nf_variants_rows.append(var)
 
     return nf_variants_rows, composition_rows
 
+def process_chemicals(chemicals, nf_id):
+    chemicals_rows = []
+
+    for chemical in chemicals:
+        chemical['novelFoodId'] = nf_id
+        chem_synonyms = chemical.get('chemSynonyms', [])
+        if len(chem_synonyms) > 0:
+            chemical_common_names = [synonym for synonym in chem_synonyms if synonym['typeTitle'] == 'common name']
+            chemical_trade_names = [synonym for synonym in chem_synonyms if synonym['typeTitle'] == 'trade name']
+            chemical['common names'] = serialize_synonyms(chemical_common_names)
+            chemical['trade names'] = serialize_synonyms(chemical_trade_names)
+        
+        chemical.pop('chemSynonyms', '')
+        chemical.pop('__typename', '')
+
+        descriptors = chemical.get("chemDescriptors", [])
+        if len(descriptors) > 0:
+            for descriptor in descriptors:
+                chemical[descriptor['type']] = f"{descriptor['value']} "
+
+        chemical.pop('chemDescriptors', '')
+
+        chemicals_rows.append(chemical)
+    
+    return chemicals_rows
+
 
 def flatten_json(
-    data, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows, parent_key=""
+    data, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows, chemicals_rows, parent_key=""
 ):
     items = []
 
@@ -220,7 +260,10 @@ def flatten_json(
             if key == "organisms": # process_organism_identity
                 organism_rows += process_organism_identity(value, nf_id)
                 continue
-            if key == "novelFoodVariants": #TODO process NF variants
+            if key == "chemicals":
+                chemicals_rows += process_chemicals(value, nf_id)
+                continue
+            if key == "novelFoodVariants": 
                 new_nf_variant_rows, new_composition_rows = process_nf_variants(value, nf_id)
                 nf_variants_rows += new_nf_variant_rows
                 composition_rows += new_composition_rows
@@ -239,7 +282,8 @@ def flatten_json(
                     final_outcome_rows,
                     organism_rows,
                     nf_variants_rows,
-                    composition_rows
+                    composition_rows,
+                    chemicals_rows
                 ) = flatten_json(
                     value,
                     genotox_rows,
@@ -249,6 +293,7 @@ def flatten_json(
                     organism_rows,
                     nf_variants_rows,
                     composition_rows,
+                    chemicals_rows,
                     new_key,
                 )
                 items.extend(item.items())
@@ -265,7 +310,8 @@ def flatten_json(
                             final_outcome_rows,
                             organism_rows,
                             nf_variants_rows,
-                            composition_rows
+                            composition_rows,
+                            chemicals_rows
                         ) = flatten_json(
                             item,
                             genotox_rows,
@@ -275,6 +321,7 @@ def flatten_json(
                             organism_rows,
                             nf_variants_rows,
                             composition_rows,
+                            chemicals_rows,
                             "",
                         )
                         flattened_list.append(item)
@@ -298,7 +345,7 @@ def flatten_json(
     else:
         items.append((parent_key, data))
 
-    return dict(items), genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows
+    return dict(items), genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows, chemicals_rows
 
 
 def create_export(novel_food_data):
@@ -313,9 +360,10 @@ def create_export(novel_food_data):
     organism_rows = []
     nf_variants_rows = []
     composition_rows = []
+    chemicals_rows = []
     for item in novel_food_data:
-        nf, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows = flatten_json(
-            item, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows
+        nf, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows, chemicals_rows = flatten_json(
+            item, genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows, chemicals_rows
         )
         novel_food_df_data.append(nf)
 
@@ -327,20 +375,47 @@ def create_export(novel_food_data):
     organisms_df = pd.DataFrame(organism_rows)
     nf_variants_df = pd.DataFrame(nf_variants_rows)
     composition_df = pd.DataFrame(composition_rows)
+    chemicals_df = pd.DataFrame(chemicals_rows)
 
-    dataframes = [novel_food_df, organisms_df, genotox_df, endpoint_df, adme_df, final_outcomes_df, nf_variants_df, composition_df]
+    #dataframes = [novel_food_df, organisms_df, genotox_df, endpoint_df, adme_df, final_outcomes_df, nf_variants_df, composition_df, chemicals_df]
 
-    for df in dataframes:  # Reorder the columns so that novelFoodId is first in each df
+    dataframes = {
+        "Novel foods": novel_food_df,
+        "Organism identity of NF": organisms_df,
+        "Chemical identity of NF": chemicals_df,
+        "Novel Food variants": nf_variants_df,
+        "Composition": composition_df,
+        "Genotox studies": genotox_df,
+        "Endpoint studies": endpoint_df,
+        "ADME studies": adme_df,
+        "Final outcomes": final_outcomes_df,
+    }
+
+    for sheet_name, df in dataframes.items():
         if "novelFoodId" in df.columns:
-            df = df[
-                ["novelFoodId"] + [col for col in df.columns if col != "novelFoodId"]
-            ]
+            dataframes[sheet_name] = df[["novelFoodId"] + [col for col in df.columns if col != "novelFoodId"]]
+
+    # Filter out empty DataFrames
+    non_empty_dataframes = {name: df for name, df in dataframes.items() if not df.empty}
+
 
     output = BytesIO()
+
+    # Write non-empty DataFrames to Excel
+    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+        for sheet_name, df in non_empty_dataframes.items():
+            df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+        # Autofit column width for each sheet
+        for sheet in writer.sheets.values():
+            sheet.autofit()
+
+    """ output = BytesIO()
 
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         novel_food_df.to_excel(writer, sheet_name="novel_food", index=False)
         organisms_df.to_excel(writer, sheet_name="organism identity", index=False)
+        chemicals_df.to_excel(writer, sheet_name="chemical identity", index=False)
         nf_variants_df.to_excel(writer, sheet_name="novel food variants", index=False)
         composition_df.to_excel(writer, sheet_name="composition", index=False)
         genotox_df.to_excel(writer, sheet_name="genotox", index=False)
@@ -350,7 +425,7 @@ def create_export(novel_food_data):
 
         # Get the worksheets
         for sheet in writer.sheets.values():
-            sheet.autofit()  # Make the columns more wide
+            sheet.autofit()  # Make the columns more wide """
 
     output.seek(0)
 

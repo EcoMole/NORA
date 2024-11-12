@@ -165,6 +165,7 @@ export function formatGraphQLQuery(data) {
     novelFoods(filters: $filters) {
       edges {
         node {
+          novelFoodId
           ${formatTree(tree, 1)}
         }
       }
