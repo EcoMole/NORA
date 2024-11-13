@@ -4,6 +4,7 @@ from django.db.models import Q
 
 # from django.db.models.functions import Lower
 from novel_food.models import NovelFood
+from taxonomies.models import TaxonomyNode
 
 
 def validate_case_insensitive_parameter_title(value):
@@ -61,7 +62,8 @@ class Parameter(models.Model):
         on_delete=models.PROTECT,
         related_name="vocab_id_parameters",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(PARAM vocab)",
         verbose_name="Parameter Vocabulary Identification",
         db_column="id_param",
@@ -160,7 +162,8 @@ class ProductionNovelFoodVariant(models.Model):
         related_name="process_production_novel_food_variants",
         limit_choices_to=models.Q(taxonomy__code="MTX")
         & ~models.Q(short_name="root")
-        & models.Q(is_process=True),
+        & models.Q(is_process=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(MTX vocab)",
         db_column="id_process",
         verbose_name="Process Step",
@@ -228,7 +231,8 @@ class Composition(models.Model):
                 "Circa",
                 "traces",
             ]
-        ),
+        )
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(QUALIFIER vocab)",
     )
     value = models.DecimalField(
@@ -252,7 +256,9 @@ class Composition(models.Model):
         on_delete=models.PROTECT,
         related_name="unit_compositions",
         db_column="id_unit",
-        limit_choices_to=models.Q(taxonomy__code="UNIT") & ~models.Q(short_name="root"),
+        limit_choices_to=models.Q(taxonomy__code="UNIT")
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
     TYPE_CHOICES = (

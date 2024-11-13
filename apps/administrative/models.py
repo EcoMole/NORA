@@ -1,4 +1,5 @@
 from django.db import models
+from taxonomies.models import TaxonomyNode
 
 
 class Opinion(models.Model):
@@ -18,7 +19,8 @@ class Opinion(models.Model):
         verbose_name="Document type",
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="REF_TYPE")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(REF_TYPE vocab)",
         db_column="id_op_type",
     )
@@ -286,7 +288,8 @@ class Mandate(models.Model):
         related_name="regulation_mandates",
         db_column="id_regulation",
         limit_choices_to=models.Q(taxonomy__code="LEGREF")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(LEGREF vocab)",
     )
 

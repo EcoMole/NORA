@@ -1,5 +1,6 @@
 from administrative.models import Opinion
 from django.db import models
+from taxonomies.models import TaxonomyNode
 from taxonomies.util import Descriptor
 
 
@@ -98,7 +99,8 @@ class NovelFoodCategory(models.Model):
         # related_name="regulation_categories",
         db_column="id_regulation",
         limit_choices_to=models.Q(taxonomy__code="LEGREF")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(LEGREF vocab)",
     )
 
@@ -259,7 +261,8 @@ class Organism(models.Model):
             | models.Q(short_name__icontains="(as animal)")
             | models.Q(short_name__icontains="(as organism)")
             | models.Q(short_name__icontains="(as plant)")
-        ),
+        )
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(MTX vocab) - only records with '(as animal)' or '(as plant)' or "
         "'(as organism)' in the name are allowed",
         related_name="vocab_id_organisms",
@@ -351,7 +354,8 @@ class NovelFoodOrganism(models.Model):
         related_name="org_part_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="MTX")
         & ~models.Q(short_name="root")
-        & models.Q(is_part_nature=True),
+        & models.Q(is_part_nature=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(MTX vocab)",
         db_column="id_org_part",
         verbose_name="organism part",
@@ -371,7 +375,8 @@ class NovelFoodOrganism(models.Model):
         related_name="is_gmo_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         verbose_name="is GMO",
         db_column="id_is_gmo",
         help_text="Is the organism genetically modified? (YESNO vocab)",
@@ -384,7 +389,8 @@ class NovelFoodOrganism(models.Model):
         related_name="has_qps_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         verbose_name="has QPS",
         db_column="id_has_qps",
         help_text="Has qualified presumption of safety? applies only if the organism is a "
@@ -401,7 +407,8 @@ class NovelFoodOrganism(models.Model):
         related_name="cells_modified_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         verbose_name="Cells Modified? (Cell Culture)",
         db_column="id_cells_modified",
         help_text="(YESNO vocab)",
@@ -442,7 +449,8 @@ class Chemical(models.Model):
         on_delete=models.PROTECT,
         related_name="vocab_id_chemicals",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="(PARAM vocab)",
         verbose_name="Chemical vocabulary identification",
     )
@@ -545,7 +553,8 @@ class SubstanceOfConcernNovelFood(models.Model):
         on_delete=models.PROTECT,
         related_name="substance_of_concern_substance_of_concern_novel_foods",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_sub_of_concern",
         help_text="Fill only if there is a substance of concern, if not leave blank. (PARAM vocab)",
     )
@@ -636,7 +645,8 @@ class NovelFood(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         related_name="protein_digestibility_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -649,7 +659,8 @@ class NovelFood(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         related_name="antinutritional_factors_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -662,7 +673,8 @@ class NovelFood(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         related_name="has_nutri_disadvantage_novel_foods",
         help_text="(YESNO vocab)",
     )
@@ -681,7 +693,8 @@ class NovelFood(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_is_sufficient_data",
         related_name="sufficient_data_novel_foods",
         help_text="Were sufficient data provided? (YESNO vocab)",
@@ -694,7 +707,8 @@ class NovelFood(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_is_food_matrices",
         help_text="Were food matrices provided? (YESNO vocab)",
         related_name="food_matrices_novel_foods",
@@ -706,7 +720,8 @@ class NovelFood(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_instability_concerns",
         related_name="instability_concerns_novel_foods",
         help_text="(YESNO vocab)",
@@ -724,7 +739,8 @@ class NovelFood(models.Model):
         blank=True,
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="UNIT")
-        & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"]),
+        & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"])
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_shelflife_unit",
         related_name="shelflife_unit_novel_foods",
         verbose_name="Shelf Life Unit",
@@ -737,7 +753,8 @@ class NovelFood(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_has_endocrine_disrupt_prop",
         verbose_name="Endocrine Disrupting Properties",
         related_name="endocrine_disrupt_prop_novel_foods",
@@ -762,7 +779,8 @@ class NovelFood(models.Model):
         blank=True,
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="PARAM")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_rms_efsa",
         related_name="vocab_id_novel_foods",
         verbose_name="NovelFood Vocabulary Identification",
@@ -795,7 +813,8 @@ class SpecificToxicity(models.Model):
         verbose_name="Specific Toxicity",
         on_delete=models.PROTECT,
         limit_choices_to=models.Q(taxonomy__code="TOXICITY")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         related_name="novel_foods",
         help_text="if novel food has specific toxicity, specify which one. (TOXICITY vocab)",
     )
@@ -836,7 +855,8 @@ class BackgroundExposureAssessment(models.Model):
         related_name="comp_of_interest_bg_expo_assessments",
         db_column="id_comp_of_interest",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         help_text="Compound of interest (PARAM vocab)",
         verbose_name="Compound Assessed For Background Exposure",
     )
@@ -863,7 +883,8 @@ class HBGV(models.Model):
         on_delete=models.PROTECT,
         related_name="type_hbgvs",
         limit_choices_to=models.Q(taxonomy__code="ENDPOINT_HGV")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_type",
         help_text="(ENDPOINT_HGV vocab)",
         verbose_name="Health-Based Guidance Value",
@@ -875,7 +896,8 @@ class HBGV(models.Model):
         on_delete=models.PROTECT,
         related_name="substance_hbgvs",
         limit_choices_to=models.Q(taxonomy__code="PARAM")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_substance",
         help_text="(PARAM vocab)",
     )
@@ -887,7 +909,8 @@ class HBGV(models.Model):
         related_name="exceeded_hbgvs",
         limit_choices_to=models.Q(taxonomy__code="YESNO")
         & ~models.Q(short_name="root")
-        & models.Q(is_yesno=True),
+        & models.Q(is_yesno=True)
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         db_column="id_exceeded",
         help_text="(YESNO vocab)",
         verbose_name="Exceedance",

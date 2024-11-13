@@ -126,7 +126,8 @@ class TaxonomyNode(MPTTModel, SyncMixin):
     def __str__(self):
         # return "%s %s %s (%s)" % (self.code, self.short_name,
         # self.extended_name, self.taxonomy.code)
-        base = " ".join(filter(None, [self.short_name, self.extended_name]))
+        suffix = "(deprecated)" if self.status == self.STATUS.DEPRECATED else None
+        base = " ".join(filter(None, [self.short_name, self.extended_name, suffix]))
         return "%s (%s)" % (base, self.code)
 
     @property
@@ -236,7 +237,8 @@ class Population(models.Model):
         db_column="id_qualifier",
         verbose_name="Age Qualifier",
         limit_choices_to=models.Q(taxonomy__code="QUALIFIER")
-        & ~models.Q(short_name="root"),
+        & ~models.Q(short_name="root")
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
     )
     value = models.DecimalField(
         max_digits=10,
@@ -261,7 +263,8 @@ class Population(models.Model):
         related_name="unit_populations",
         db_column="id_unit",
         limit_choices_to=models.Q(taxonomy__code="UNIT")
-        & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"]),
+        & models.Q(extended_name__in=["Hour", "Day", "Week", "Month", "Year"])
+        & ~models.Q(status=TaxonomyNode.STATUS.DEPRECATED),
         verbose_name="Age Unit",
         help_text="use full name (e.g. 'gram' not 'g'). (UNIT vocab)",
     )
