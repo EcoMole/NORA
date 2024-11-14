@@ -199,6 +199,7 @@ export const fields = {
   antinutritionalFactors: {
     displayName: 'Antinutritional Factors',
     displayGroupName: 'Novel Food',
+    flattenedDisplayName: 'Nutrition - Antinutritional factors',
     type: 'text',
     djangoLookupField: 'antinutritional_factors__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -209,8 +210,8 @@ export const fields = {
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'antinutritional_factors',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale-balance',
-    filterDescription: 'description for Antinutritional Factors',
+    icon: 'mdi-stomach',
+    filterDescription: 'Indicates whether antinutritional factors (substances that may interfere with nutrient absorption or have negative health effects, e.g. tannins or phytic acid) are discussed in the Novel Food assessment.',
     showInFilters: true
   },
   hasNutriDisadvantage: {
@@ -227,7 +228,7 @@ export const fields = {
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'has_nutri_disadvantage',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale-balance',
+    icon: 'mdi-stomach',
     filterDescription:
       'The Panel’s conclusion on whether the NF/TF is nutritionally disadvantageous, e.g., due to a significant amount of antinutritional factors',
     showInFilters: true
@@ -246,7 +247,7 @@ export const fields = {
   },
   sufficientData: {
     displayName: 'Sufficient Data',
-    displayGroupName: 'Novel Food',
+    displayGroupName: 'Stability',
     flattenedDisplayName: 'Stability - Sufficient Data',
     type: 'text',
     djangoLookupField: 'sufficient_data__tax_node',
@@ -412,7 +413,7 @@ export const fields = {
 
   'specificToxicities.specificToxicity': {
     displayName: '',
-    flattenedDisplayName: 'Specific Toxicity',
+    flattenedDisplayName: 'Hazards - Specific Toxicity',
     displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'specific_toxicities__specific_toxicity__tax_node',
@@ -424,13 +425,13 @@ export const fields = {
     djangoLimitchoicesModel: 'SpecificToxicity',
     djangoLimitchoicesField: 'specific_toxicity',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Specific Toxicity',
+    icon: 'mdi-alert-outline',
+    filterDescription: "Indicates whether specific toxicity, such as hepatotoxicity, nephrotoxicity, or neurotoxicity, was discussed in the NF/TF opinion's discussion section. If no specific toxicity is associated with the Novel or Traditional Food, this field will be set to NONE (TOX14A).",
     showInFilters: true
   },
   'substancesOfConcern.substanceOfConcern': {
     displayName: '',
-    flattenedDisplayName: 'Substance of Concern',
+    flattenedDisplayName: 'Hazards - Substance of Concern',
     displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'substances_of_concern__substance_of_concern__tax_node',
@@ -442,14 +443,14 @@ export const fields = {
     djangoLimitchoicesModel: 'SubstanceOfConcernNovelFood',
     djangoLimitchoicesField: 'substance_of_concern',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Substance of Concern',
+    icon: 'mdi-alert-outline',
+    filterDescription: "Specifies the substances of concern, such as contaminants, heavy metals, or pesticide residues, discussed in the Novel Food opinion's discussion section. This field is left blank if no substances of concern were identified.",
     showInFilters: true
   },
   'backgroundExposureAssessments.compOfInterest': {
-    displayName: 'Composition of Interest',
-    flattenedDisplayName: 'Background Exposure Assessment - Composition of Interest',
-    displayGroupName: 'Hazards',
+    displayName: 'Background exposure assess.',
+    flattenedDisplayName: 'Nutrition - Background Exposure Assessment',
+    displayGroupName: 'Nutrition',
     type: 'text',
     djangoLookupField: 'bg_expo_assessments__comp_of_interest__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -460,13 +461,13 @@ export const fields = {
     djangoLimitchoicesModel: 'BackgroundExposureAssessment',
     djangoLimitchoicesField: 'comp_of_interest',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Background Exposure Assessment',
+    icon: 'mdi-scale-balance',
+    filterDescription: 'Specifies the substances for which background exposure was assessed, indicating the baseline dietary exposure levels considered in the NF/TF assessment. This field is left blank if no background exposure assessment was conducted. ',
     showInFilters: true
   },
   'hbgvs.type': {
     displayName: 'Type',
-    flattenedDisplayName: 'HBGV Type',
+    flattenedDisplayName: 'Hazards - HBGV Type',
     displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'hbgvs__type__tax_node',
@@ -478,13 +479,13 @@ export const fields = {
     djangoLimitchoicesModel: 'HBGV',
     djangoLimitchoicesField: 'type',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for HBGV Type',
+    icon: 'mdi-alert-outline',
+    filterDescription: 'Specifies the type of Health-Based Guidance Value (HBGV) considered in the NF/TF assessment, such as Acceptable Daily Intake (ADI), Tolerable Daily Intake (TDI), or Reference Dose (RfD)."',
     showInFilters: true
   },
   'hbgvs.exceeded': {
     displayName: 'Exceeded',
-    flattenedDisplayName: 'HBGV Exceeded',
+    flattenedDisplayName: 'Hazards - HBGV Exceeded',
     displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'hbgvs__exceeded__tax_node',
@@ -496,13 +497,13 @@ export const fields = {
     djangoLimitchoicesModel: 'HBGV',
     djangoLimitchoicesField: 'exceeded',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for HBGV Exceeded',
+    icon: 'mdi-alert-outline',
+    filterDescription: 'Indicates whether the estimated intake of the NF/TF exceeds the established Health-Based Guidance Value (HBGV), such as the Acceptable Daily Intake (ADI) or Tolerable Daily Intake (TDI).',
     showInFilters: true
   },
   'hbgvs.substance': {
     displayName: 'Substance',
-    flattenedDisplayName: 'HBGV Substance',
+    flattenedDisplayName: 'Hazards - HBGV Substance',
     displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'hbgvs__substance__tax_node',
@@ -514,8 +515,8 @@ export const fields = {
     djangoLimitchoicesModel: 'HBGV',
     djangoLimitchoicesField: 'substance',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for HBGV Substance',
+    icon: 'mdi-alert-outline',
+    filterDescription: 'Specifies the substance for which a Health-Based Guidance Value (HBGV) was considered in the NF/TF assessment.',
     showInFilters: true
   },
 
@@ -532,8 +533,8 @@ export const fields = {
     djangoModel: 'NovelFoodSyn',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Novel Food Synonym',
+    icon: 'mdi-book-open-outline',
+    filterDescription: 'Specifies alternative names or synonyms for the NF/TF, including common names and trade names.',
     showInFilters: true
   },
   'synonyms.typeTitle': {
@@ -547,8 +548,8 @@ export const fields = {
     djangoModel: 'SynonymType',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Novel Food Synonym Type',
+    icon: 'mdi-book-open-outline',
+    filterDescription: 'Specifies whether the type of synonym is a common name or trade name.',
     showInFilters: true
   },
   'synonyms.typeDefinition': {
@@ -558,7 +559,7 @@ export const fields = {
     type: 'text',
     djangoLookupField: 'synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
-    icon: '',
+    icon: 'mdi-book-open-outline',
     filterDescription: 'description for Novel Food Synonym Type Definition',
     showInFilters: true
   },
@@ -701,7 +702,7 @@ export const fields = {
     djangoLookupField: 'opinion__questions__question__number',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
-    filterDescription: 'Question number of the opinion/techical report, e.g., EFSA-Q-2018-00373',
+    filterDescription: 'Question number of the opinion/technical report, e.g., EFSA-Q-2018-00373',
     showInFilters: true
   },
 
@@ -767,7 +768,7 @@ export const fields = {
 
   'foodCategories.title': {
     displayName: 'Name',
-    flattenedDisplayName: 'Food Category Name',
+    flattenedDisplayName: 'Food Category Tool Name',
     displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'food_categories__food_category__title',
@@ -777,7 +778,7 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
-    filterDescription: 'description for Food Category Name',
+    filterDescription: 'Specifies if the FAIM, FoodEx, or both food category tools were used in the assessment.',
     showInFilters: true
   },
   'foodCategories.definition': {
@@ -844,7 +845,7 @@ export const fields = {
 
   'organisms.organism': {
     displayName: 'Vocab ID',
-    flattenedDisplayName: 'Organism Vocab ID',
+    flattenedDisplayName: 'Identity - Organism Vocab ID',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__vocab_id__tax_node',
@@ -856,13 +857,13 @@ export const fields = {
     djangoLimitchoicesModel: 'Organism',
     djangoLimitchoicesField: 'vocab_id',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism Vocab ID',
+    icon: 'mdi-leaf',
+    filterDescription: 'Specifies the entry from the MTX vocabulary used to classify the source organism of the NF/TF.',
     showInFilters: true
   },
   'organisms.orgPart': {
     displayName: 'Part',
-    flattenedDisplayName: 'Organism Part',
+    flattenedDisplayName: 'Identity - Organism Part',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__org_part__tax_node',
@@ -874,13 +875,13 @@ export const fields = {
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'org_part',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism Part',
+    icon: 'mdi-leaf',
+    filterDescription: 'Specifies the part of the organism used in the NF/TF, such as "leaf," "root," "seed," or "whole organism."',
     showInFilters: true
   },
   'organisms.variant': {
     displayName: 'Variant',
-    flattenedDisplayName: 'Organism Variant',
+    flattenedDisplayName: 'Identity - Organism Variant',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__variant',
@@ -889,13 +890,13 @@ export const fields = {
     djangoModel: 'NovelFoodOrganism',
     djangoField: 'variant',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism Variant',
+    icon: 'mdi-leaf',
+    filterDescription: 'Specifies the variant of the organism used for the production of the NF/TF, such as strain (microorganisms), subspecies (animals), or cultivar (plants). ',
     showInFilters: true
   },
   'organisms.isGmo': {
     displayName: 'is GMO',
-    flattenedDisplayName: 'Organism is GMO',
+    flattenedDisplayName: 'Identity - Organism is GMO',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__is_gmo__tax_node',
@@ -907,13 +908,13 @@ export const fields = {
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'is_gmo',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism is GMO',
+    icon: 'mdi-leaf',
+    filterDescription: 'Indicates whether the organism used in the NF/TF has been genetically modified (GMO). Options include "Yes" for genetically modified organisms, "No" for non-GMOs, and "Unknown" if the GMO status is not specified.',
     showInFilters: true
   },
   'organisms.hasQps': {
     displayName: 'has QPS',
-    flattenedDisplayName: 'Organism has QPS',
+    flattenedDisplayName: 'Identity - Organism has QPS',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__has_qps__tax_node',
@@ -925,14 +926,14 @@ export const fields = {
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'has_qps',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism has QPS',
+    icon: 'mdi-leaf',
+    filterDescription: 'Indicates whether the organism used in the NF/TF has Qualified Presumption of Safety (QPS) status, which is granted by EFSA for certain microorganisms deemed safe for use. Options include "Yes" if the organism has QPS status, "No" if it does not, and "Unknown" if the QPS status is not specified. Only applicable for microorganisms.',
     showInFilters: true
   },
 
   'organisms.cellCulture': {
     displayName: 'Cell Culture',
-    flattenedDisplayName: 'Organism Cell Culture',
+    flattenedDisplayName: 'Identity - Organism Cell Culture',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__cell_culture',
@@ -941,14 +942,14 @@ export const fields = {
     djangoModel: 'NovelFoodOrganism',
     djangoField: 'cell_culture',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism Cell Culture',
+    icon: 'mdi-leaf',
+    filterDescription: 'Indicates the type of cell culture that the NF/TF was derived from. Only applicable to cell or tissue cultures.',
     showInFilters: true
   },
 
   'organisms.cellsModified': {
     displayName: 'Cells Modified',
-    flattenedDisplayName: 'Organism Cell Modification',
+    flattenedDisplayName: 'Identity - Organism Cell Modification',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__cells_modified__tax_node',
@@ -960,13 +961,13 @@ export const fields = {
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'cells_modified',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism Cell Modification',
+    icon: 'mdi-leaf',
+    filterDescription: 'Indicates whether the cells used in the NF/TF were modified, such as “pluripotent stem cells”. Only applicable to cell or tissue cultures.',
     showInFilters: true
   },
   'organisms.species.name': {
     displayName: 'Species Name',
-    flattenedDisplayName: 'Species Name',
+    flattenedDisplayName: 'Identity - Species Name',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__name',
@@ -975,13 +976,13 @@ export const fields = {
     djangoModel: 'Species',
     djangoField: 'name',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Species Name',
+    icon: 'mdi-file-tree-outline',
+    filterDescription: 'Specifies the species name of the organism used in the NF/TF, following scientific nomenclature (e.g., Escherichia coli, Saccharomyces cerevisiae). ',
     showInFilters: true
   },
   'organisms.species.scientificName': {
-    displayName: 'Scientific Name',
-    flattenedDisplayName: 'Species Scientific Name',
+    displayName: 'Identity - Organism Scientific Name',
+    flattenedDisplayName: 'Identity - Species Scientific Name',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__scientific_name',
@@ -990,13 +991,13 @@ export const fields = {
     djangoModel: 'Species',
     djangoField: 'scientific_name',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Species Scientific Name',
+    icon: 'mdi-file-tree-outline',
+    filterDescription: 'Specifies the full scientific name of the species used in the NF/TF, including genus, species, and the authority who named the species (e.g., Salvia hispanica L., Cryptops ulomoides (Solier, 1851).',
     showInFilters: true
   },
   'organisms.species.genus': {
     displayName: 'Genus',
-    flattenedDisplayName: 'Species Genus',
+    flattenedDisplayName: 'Identity - Species Genus',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__genus__title',
@@ -1005,13 +1006,13 @@ export const fields = {
     djangoModel: 'Genus',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Species Genus',
+    icon: 'mdi-file-tree-outline',
+    filterDescription: 'Specifies the genus of the species used in the NF/TF, representing the broader taxonomic category to which the organism belongs (e.g., Lactobacillus, Salvia). ',
     showInFilters: true
   },
   'organisms.species.family': {
     displayName: 'Family',
-    flattenedDisplayName: 'Species Family',
+    flattenedDisplayName: 'Identity - Species Family',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__genus__family__title',
@@ -1020,13 +1021,13 @@ export const fields = {
     djangoModel: 'Family',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Species Family',
+    icon: 'mdi-file-tree-outline',
+    filterDescription: 'Specifies the family of the species used in the NF/TF, representing a higher taxonomic classification above the genus (e.g., Poaceae, Lamiaceae).',
     showInFilters: true
   },
   'organisms.species.orgType': {
     displayName: 'Organism Type',
-    flattenedDisplayName: 'Species Organism Type',
+    flattenedDisplayName: 'Identity - Species Organism Type',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__genus__family__org_type__title',
@@ -1035,13 +1036,13 @@ export const fields = {
     djangoModel: 'OrgType',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Species Organism Type',
+    icon: 'mdi-file-tree-outline',
+    filterDescription: 'Specifies the broad biological category of the source organism used in the NF/TF, such as “Bacteria”, “Fungi”, “Plant”, or “Animal”.',
     showInFilters: true
   },
   'organisms.orgSynonyms.title': {
     displayName: 'Name',
-    flattenedDisplayName: 'Organism Synonym',
+    flattenedDisplayName: 'Identity - Organism Synonym',
     displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'organisms__organism__synonyms__title',
@@ -1050,13 +1051,13 @@ export const fields = {
     djangoModel: 'OrganismSyn',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism Synonym',
+    icon: 'mdi-leaf',
+    filterDescription: 'Specifies alternative names or synonyms for the organism used in the NF/TF, such as common names. ',
     showInFilters: true
   },
   'organisms.orgSynonyms.typeTitle': {
     displayName: 'Type',
-    flattenedDisplayName: 'Organism Synonym Type',
+    flattenedDisplayName: 'Identity - Organism Synonym Type',
     displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'organisms__organism__synonyms__syn_type__title',
@@ -1065,8 +1066,8 @@ export const fields = {
     djangoModel: 'SynonymType',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Organism Synonym Type',
+    icon: 'mdi-leaf',
+    filterDescription: 'Specifies the type of synonym provided for the organism used in the NF/TF, such as common name, or synonym',
     showInFilters: true
   },
   'organisms.orgSynonyms.typeDefinition': {
@@ -1076,14 +1077,14 @@ export const fields = {
     type: 'text',
     djangoLookupField: 'organisms__organism__synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
-    icon: '',
+    icon: 'mdi-leaf',
     filterDescription: 'description for Organism Synonym Type Definition',
     showInFilters: true
   },
 
   'chemicals.chemical': {
     displayName: 'Vocab ID',
-    flattenedDisplayName: 'Chemical Vocab ID',
+    flattenedDisplayName: 'Identity - Chemical Vocab ID',
     displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__vocab_id__tax_node',
@@ -1095,13 +1096,13 @@ export const fields = {
     djangoLimitchoicesModel: 'Chemical',
     djangoLimitchoicesField: 'vocab_id',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Chemical Vocab ID',
+    icon: 'mdi-molecule',
+    filterDescription: 'Specifies the entry from the PARAM vocabulary used to classify the source substance of the NF/TF.',
     showInFilters: true
   },
   'chemicals.chemSynonyms.title': {
     displayName: 'Name',
-    flattenedDisplayName: 'Chemical Synonym',
+    flattenedDisplayName: 'Identity - Chemical Synonym',
     displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__synonyms__title',
@@ -1110,13 +1111,13 @@ export const fields = {
     djangoModel: 'ChemicalSyn',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Chemical Synonym',
+    icon: 'mdi-molecule',
+    filterDescription: 'Specifies alternative names or synonyms for the chemical component in the NF/TF, including common names, or synonyms',
     showInFilters: true
   },
   'chemicals.chemSynonyms.typeTitle': {
     displayName: 'Type',
-    flattenedDisplayName: 'Chemical Synonym Type',
+    flattenedDisplayName: 'Identity - Chemical Synonym Type',
     displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__synonyms__syn_type__title',
@@ -1125,8 +1126,8 @@ export const fields = {
     djangoModel: 'SynonymType',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Chemical Synonym Type',
+    icon: 'mdi-molecule',
+    filterDescription: 'Specifies the type of synonym provided for the chemical used in the NF/TF, such as "common name" or "synonym"',
     showInFilters: true
   },
   'chemicals.chemSynonyms.typeDefinition': {
@@ -1136,13 +1137,13 @@ export const fields = {
     type: 'text',
     djangoLookupField: 'chemicals__chemical__synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
-    icon: '',
+    icon: 'mdi-molecule',
     filterDescription: 'description for Chemical Synonym Type Definition',
     showInFilters: true
   },
   'chemicals.chemDescriptors.type': {
     displayName: 'Type',
-    flattenedDisplayName: 'Chemical Descriptor Type',
+    flattenedDisplayName: 'Identity - Chemical Descriptor Type',
     displayGroupName: 'Chemical',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__chem_descriptors__type',
@@ -1151,19 +1152,19 @@ export const fields = {
     djangoModel: 'ChemDescriptor',
     djangoField: 'type',
     qualifiers: ['is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Chemical Descriptor Type',
+    icon: 'mdi-molecule',
+    filterDescription: 'Specifies the type of additional descriptors for the chemical component in the NF/TF that were not included in the PARAM catalogue, such as unique identifiers or structural information.',
     showInFilters: true
   },
   'chemicals.chemDescriptors.value': {
     displayName: 'Value',
-    flattenedDisplayName: 'Chemical Descriptor Value',
+    flattenedDisplayName: 'Identity -  Chemical Descriptor Value',
     displayGroupName: 'Chemical',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__chem_descriptors__value',
     qualifiers: ['contains', 'is', 'is None'],
-    icon: '',
-    filterDescription: 'description for Chemical Descriptor Value',
+    icon: 'mdi-molecule',
+    filterDescription: 'Provides the specific value for additional chemical descriptors not found in the PARAM catalogue, such as a unique identifier, molecular formula, or specific structural data.',
     showInFilters: true
   },
 
@@ -1264,7 +1265,7 @@ export const fields = {
     djangoLookupField: 'adme__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for ADME remarks',
+    filterDescription: 'Provides additional comments or context regarding the ADME study for the NF/TF',
     showInFilters: true
   },
   'admes.testMaterial': {
@@ -1279,7 +1280,7 @@ export const fields = {
     djangoField: 'test_material',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for ADME Test Material',
+    filterDescription: 'Specifies the test material used in the ADME study for the NF/TF, such as the specific form or preparation of the substance tested.',
     showInFilters: true
   },
 
@@ -1377,18 +1378,18 @@ export const fields = {
 
   'genotoxes.remarks': {
     displayName: 'Remarks',
-    flattenedDisplayName: 'Genotox Remarks',
+    flattenedDisplayName: 'Genotoxicity Remarks',
     displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for Genotox remarks',
+    filterDescription: 'Provides additional comments or context regarding the genotoxicity study for the NF/TF',
     showInFilters: true
   },
   'genotoxes.testMaterial': {
     displayName: 'Test Material',
-    flattenedDisplayName: 'Genotox Test Material',
+    flattenedDisplayName: 'Genotoxicity Test Material',
     displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__test_material',
@@ -1398,7 +1399,7 @@ export const fields = {
     djangoField: 'test_material',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for Genotox Test Material',
+    filterDescription: 'Specifies the test material used in the genotoxicity study for the NF/TF, such as the specific form or preparation of the substance tested.',
     showInFilters: true
   },
 
@@ -1435,12 +1436,12 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Guideline Qualifier',
+    filterDescription: 'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
     showInFilters: true
   },
   'endpointstudies.guideline': {
     displayName: 'Guideline',
-    flattenedDisplayName: 'Toxicolgy - Endpoint Study Guideline',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Guideline',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__guideline__tax_node',
@@ -1509,7 +1510,7 @@ export const fields = {
   },
   'endpointstudies.durationUnit': {
     displayName: 'Study Duration Unit',
-    flattenedDisplayName: 'Endpoint Study Duration Unit',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Duration Unit',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__duration_unit__tax_node',
@@ -1522,12 +1523,12 @@ export const fields = {
     djangoLimitchoicesField: 'duration_unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-clock-outline',
-    filterDescription: 'description for Study Duration Unit',
+    filterDescription: 'Study Duration Unit',
     showInFilters: true
   },
   'endpointstudies.studySource': {
     displayName: 'Study Source',
-    flattenedDisplayName: 'Endpoint Study Source',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Source',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__study_source__title',
@@ -1537,23 +1538,23 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for Study Source',
+    filterDescription: 'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA).',
     showInFilters: true
   },
   'endpointstudies.remarks': {
     displayName: 'Remarks',
-    flattenedDisplayName: 'Endpoint Study Remarks',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Remarks',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for Endpoint Study Remarks',
+    filterDescription: 'Provides additional comments or context regarding the endpoint study for the NF/TF',
     showInFilters: true
   },
   'endpointstudies.testMaterial': {
     displayName: 'Test Material',
-    flattenedDisplayName: 'Endpoint Study Test Material',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Test Material',
     displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__test_material',
@@ -1563,7 +1564,7 @@ export const fields = {
     djangoField: 'test_material',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'description for Endpoint Study Test Material',
+    filterDescription: 'Specifies the test material used in the endpoint study for the NF/TF, such as the specific form or preparation of the substance tested.',
     showInFilters: true
   },
 
@@ -1571,7 +1572,7 @@ export const fields = {
 
   'endpointstudies.endpoints.referencePoint': {
     displayName: 'Reference Point',
-    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point',
+    flattenedDisplayName: 'Toxicology - Endpoint - Reference point',
     displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__reference_point__tax_node',
@@ -1590,7 +1591,7 @@ export const fields = {
   },
   'endpointstudies.endpoints.qualifier': {
     displayName: 'Qualifier',
-    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point qualifier',
+    flattenedDisplayName: 'Toxicology - Endpoint - Reference point qualifier',
     displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__qualifier__tax_node',
@@ -1609,7 +1610,7 @@ export const fields = {
   },
   'endpointstudies.endpoints.subpopulation': {
     displayName: 'Subpopulation',
-    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point subpopulation',
+    flattenedDisplayName: 'Toxicology - Endpoint - Reference point subpopulation',
     displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__subpopulation__tax_node',
@@ -1628,7 +1629,7 @@ export const fields = {
   },
   'endpointstudies.endpoints.lovalue': {
     displayName: 'Value',
-    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point value',
+    flattenedDisplayName: 'Toxicology - Endpoint - Reference point value',
     displayGroupName: 'Endpoint',
     type: 'number',
     djangoLookupField: 'endpointstudy__endpoints__lovalue',
@@ -1640,7 +1641,7 @@ export const fields = {
   },
   'endpointstudies.endpoints.unit': {
     displayName: 'Unit',
-    flattenedDisplayName: 'Endpoint Unit',
+    flattenedDisplayName: 'Toxicology - Endpoint - Unit',
     displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__unit__tax_node',
@@ -1653,7 +1654,7 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Endpoint Unit',
+    filterDescription: 'Specifies the unit of the numerical value of the reference point (e.g. NOAEL).',
     showInFilters: true
   },
 
@@ -1661,7 +1662,7 @@ export const fields = {
 
   'endpointstudies.endpoints.finalOutcomes.outcome': {
     displayName: 'Outcome',
-    flattenedDisplayName: 'Final Outcome Outcome',
+    flattenedDisplayName: 'Toxicology - Final Outcome',
     displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__outcome__tax_node',
@@ -1712,7 +1713,7 @@ export const fields = {
 
   'endpointstudies.endpoints.finalOutcomes.unit': {
     displayName: 'Unit',
-    flattenedDisplayName: 'Final Outcome Unit',
+    flattenedDisplayName: 'Toxicology - Final Outcome Unit',
     displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__unit__tax_node',
@@ -1725,30 +1726,30 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Final Outcome Unit',
+    filterDescription: 'Specifies the unit of the numerical value of the final outcome (e.g. safe level).',
     showInFilters: true
   },
 
   'endpointstudies.endpoints.finalOutcomes.uncertaintyFactor': {
     displayName: 'Uncertainty Factor',
-    flattenedDisplayName: 'Final Outcome Uncertainty Factor',
+    flattenedDisplayName: 'Toxicology - Final Outcome Uncertainty Factor',
     displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__uncertainty_factor',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Final Outcome Uncertainty Factor',
+    filterDescription: 'Specifies the uncertainty factor applied to the reference point from the endpoint study to reach the final outcome, accounting for variability or gaps in data to ensure safety (e.g., an uncertainty factor of 10 for interspecies differences)',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.remarks': {
     displayName: 'Remarks',
-    flattenedDisplayName: 'Final Outcome Remarks',
+    flattenedDisplayName: 'Toxicology - Final Outcome Remarks',
     displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Final Outcome Remarks',
+    icon: 'mdi-comment-text-outline',
+    filterDescription: 'Provides additional comments or context regarding the Final outcome for the NF/TF',
     showInFilters: true
   },
 
@@ -1798,19 +1799,19 @@ export const fields = {
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription:
-      'Specifies the exact age or age range of the population subgroup (e.g., months, 18-65 years) for which the final outcome was determined.',
+      'Numerical value that specifies the age or lower part of an age range of the population subgroup for which the final outcome was determined.',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.upperRangeValue': {
     displayName: 'Upper Range Value',
-    flattenedDisplayName: 'Final Outcome Population Upper Range Value',
+    flattenedDisplayName: 'Toxicology - Final Outcome Population Upper Range Value',
     displayGroupName: 'Population',
     type: 'number',
     djangoLookupField:
       'endpointstudy__endpoints__finaloutcome__populations__population__upper_range_value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
-    filterDescription: 'description for Upper Range Value',
+    filterDescription: 'Value representing the upper limit of the age range of the population subgroup for which the final outcome was determined.',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.unit': {
@@ -1829,7 +1830,7 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Unit',
+    filterDescription: 'Specifies the unit of measurement for the age of the population subgroup in the final outcome, such as "years" or "months."',
     showInFilters: true
   },
 
@@ -1847,13 +1848,13 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-rice',
-    filterDescription: 'description for Novel Food Variant Food Form',
+    filterDescription: 'variant or food form of Novel Food',
     showInFilters: true
   },
   'novelFoodVariants.riskAssessRedFlags.title': {
-    displayName: 'Title',
-    flattenedDisplayName: 'Risk Assessment Red Flag',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Production process Risk Assessment Red flag',
+    flattenedDisplayName: 'Production process Risk Assessment Red Flag',
+    displayGroupName: 'Production process of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__risk_assess_red_flags__risk_assess_red_flag__title',
     apiEndpoint: 'novel-food-values-list/',
@@ -1861,14 +1862,14 @@ export const fields = {
     djangoModel: 'RiskAssessRedFlag',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-rice',
-    filterDescription: 'description for Risk Assessment Red Flags',
+    icon: 'mdi-alert-circle',
+    filterDescription: 'possible Red Flags in the production process',
     showInFilters: true
   },
   'novelFoodVariants.productionProcesses.process': {
     displayName: 'Production Process',
-    flattenedDisplayName: 'Production Process',
-    displayGroupName: 'Novel Food Variant',
+    flattenedDisplayName: 'Production Process of Novel Food Variant',
+    displayGroupName: 'Production process of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__productions__process__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -1879,14 +1880,14 @@ export const fields = {
     djangoLimitchoicesModel: 'ProductionNovelFoodVariant',
     djangoLimitchoicesField: 'process',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-rice',
-    filterDescription: 'description for Production Process',
+    icon: 'mdi-factory',
+    filterDescription: 'Process in Production of Novel Food Variant',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.useType': {
-    displayName: 'Use Type',
-    flattenedDisplayName: 'Proposed Use Type',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Proposed Use Type',
+    flattenedDisplayName: 'Proposed Use of Novel Food Variant',
+    displayGroupName: 'Proposed Use of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__use_type',
     apiEndpoint: 'novel-food-values-list/',
@@ -1894,25 +1895,25 @@ export const fields = {
     djangoModel: 'ProposedUse',
     djangoField: 'use_type',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-rice',
-    filterDescription: 'description for Proposed Use Type',
+    icon: 'mdi-pill',
+    filterDescription: 'Uses of Novel Food Variant proposed by applicant',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.remarks': {
-    displayName: 'Remarks',
-    flattenedDisplayName: 'Proposed Use Remarks',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Remarks for Proposed Use',
+    flattenedDisplayName: 'Proposed Use - Remarks',
+    displayGroupName: 'Proposed Use of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-rice',
-    filterDescription: 'description for Proposed Use Remarks',
+    icon: 'mdi-comment-text-outline',
+    filterDescription: 'Remarks for Proposed Use of Novel Food Variants',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.subgroup': {
     displayName: 'Subgroup',
-    flattenedDisplayName: 'Proposed Use Population Subgroup',
-    displayGroupName: 'Population',
+    flattenedDisplayName: 'Proposed Use - Population Subgroup',
+    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__subgroup__title',
     apiEndpoint: 'novel-food-values-list/',
@@ -1921,13 +1922,13 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-account-multiple-outline',
-    filterDescription: 'description for Subgroup',
+    filterDescription: 'Subgroup of population for Proposed Use',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.qualifier': {
-    displayName: 'Qualifier',
-    flattenedDisplayName: 'Proposed Use Population Qualifier',
-    displayGroupName: 'Population',
+    displayName: 'Age Qualifier',
+    flattenedDisplayName: 'Proposed Use - Qualifier for Age Value of Population Subgroup',
+    displayGroupName: 'Proposed Use Population subgroup',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__qualifier__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -1939,35 +1940,35 @@ export const fields = {
     djangoLimitchoicesField: 'qualifier',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Qualifier',
+    filterDescription: 'Qualifier for Age Value of Proposed Use Population Subgroup',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.value': {
-    displayName: 'Value',
-    flattenedDisplayName: 'Proposed Use Population Value',
-    displayGroupName: 'Population',
+    displayName: 'Age Value',
+    flattenedDisplayName: 'Proposed Use - Age Value of Population Subgroup',
+    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'number',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
-    filterDescription: 'description for Value',
+    filterDescription: 'Age Value of Proposed Use Population Subgroup',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.upperRangeValue': {
-    displayName: 'Upper Range Value',
-    flattenedDisplayName: 'Proposed Use Population Upper Range Value',
-    displayGroupName: 'Population',
+    displayName: 'Upper Range Age Value',
+    flattenedDisplayName: 'Proposed Use - Upper Range Age Value of Population Subgroup',
+    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'number',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__upper_range_value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
-    filterDescription: 'description for Upper Range Value',
+    filterDescription: 'Upper Range Age Value of Proposed Use Population Subgroup',
     showInFilters: true
   },
   'novelFoodVariants.proposedUses.population.unit': {
-    displayName: 'Unit',
-    flattenedDisplayName: 'Proposed Use Population Unit',
-    displayGroupName: 'Population',
+    displayName: 'Age Value Unit',
+    flattenedDisplayName: 'Proposed Use - Unit for Age Value of Population Subgroup',
+    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__unit__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -1979,7 +1980,7 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Unit',
+    filterDescription: 'Unit for Age Value of Proposed Use Population Subgroup',
     showInFilters: true
   },
 
@@ -1987,29 +1988,29 @@ export const fields = {
   'novelFoodVariants.compositions.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Composition Value',
-    displayGroupName: 'Novel Food Variant',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Composition Value',
+    icon: 'mdi-numeric',
+    filterDescription: 'Value of Composition component',
     showInFilters: true
   },
   'novelFoodVariants.compositions.upperRangeValue': {
     displayName: 'Upper Range Value',
     flattenedDisplayName: 'Composition Upper Range Value',
-    displayGroupName: 'Novel Food Variant',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__upper_range_value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Composition Upper Range Value',
+    icon: 'mdi-numeric',
+    filterDescription: 'Upper Range Value of Composition component',
     showInFilters: true
   },
   'novelFoodVariants.compositions.unit': {
-    displayName: 'Unit',
-    flattenedDisplayName: 'Composition Unit',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Value Unit',
+    flattenedDisplayName: 'Composition Value Unit',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__unit__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -2021,13 +2022,13 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Composition Unit',
+    filterDescription: 'Unit for Composition Value',
     showInFilters: true
   },
   'novelFoodVariants.compositions.qualifier': {
-    displayName: 'Qualifier',
-    flattenedDisplayName: 'Composition Qualifier',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Value Qualifier',
+    flattenedDisplayName: 'Composition Value Qualifier',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__qualifier__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -2039,13 +2040,13 @@ export const fields = {
     djangoLimitchoicesField: 'qualifier',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'description for Composition Qualifier',
+    filterDescription: 'Qualifier for Composition Value',
     showInFilters: true
   },
   'novelFoodVariants.compositions.type': {
-    displayName: 'Type',
+    displayName: 'Composition Type',
     flattenedDisplayName: 'Composition Type',
-    displayGroupName: 'Novel Food Variant',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__type',
     apiEndpoint: 'novel-food-values-list/',
@@ -2053,14 +2054,14 @@ export const fields = {
     djangoModel: 'Composition',
     djangoField: 'type',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Composition Type',
+    icon: 'mdi-beaker',
+    filterDescription: 'Novel Food Variant Composition Type',
     showInFilters: true
   },
   'novelFoodVariants.compositions.footnote': {
     displayName: 'Footnote',
     flattenedDisplayName: 'Composition Footnote',
-    displayGroupName: 'Novel Food Variant',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__footnote__text_field',
     apiEndpoint: 'novel-food-values-list/',
@@ -2068,14 +2069,14 @@ export const fields = {
     djangoModel: 'Composition',
     djangoField: 'footnote',
     qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Composition Footnote',
+    icon: 'mdi-comment-text-outline',
+    filterDescription: 'Footnote for Composition of Novel Food Variant',
     showInFilters: true
   },
   'novelFoodVariants.compositions.parameterTitle': {
-    displayName: 'Title',
-    flattenedDisplayName: 'Parameter Title',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Parameter',
+    flattenedDisplayName: 'Composition - Parameter',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__parameter__title',
     apiEndpoint: 'novel-food-values-list/',
@@ -2083,14 +2084,14 @@ export const fields = {
     djangoModel: 'Parameter',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Parameter Title',
+    icon: 'mdi-test-tube',
+    filterDescription: 'Title of Composition Parameter',
     showInFilters: true
   },
   'novelFoodVariants.compositions.parameterTypeTitle': {
-    displayName: 'Type',
-    flattenedDisplayName: 'Parameter Type',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Parameter Type',
+    flattenedDisplayName: 'Composition - Parameter Type',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__parameter__type__title',
     apiEndpoint: 'novel-food-values-list/',
@@ -2098,14 +2099,14 @@ export const fields = {
     djangoModel: 'ParameterType',
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Parameter Type',
+    icon: 'mdi-beaker',
+    filterDescription: 'Composition Parameter Type',
     showInFilters: true
   },
   'novelFoodVariants.compositions.parameterVocabId': {
-    displayName: 'Vocab ID',
-    flattenedDisplayName: 'Parameter Vocabulary ID',
-    displayGroupName: 'Novel Food Variant',
+    displayName: 'Parameter Vocab ID',
+    flattenedDisplayName: 'Composition - Parameter Vocabulary ID',
+    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__parameter__vocab_id__tax_node',
     apiEndpoint: 'novel-food-values-list/',
@@ -2116,8 +2117,8 @@ export const fields = {
     djangoLimitchoicesModel: 'Parameter',
     djangoLimitchoicesField: 'vocab_id',
     qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'description for Parameter Vocabulary ID',
+    icon: 'mdi-book-open-outline',
+    filterDescription: 'This field is only used for Composition Parameter that already exist in the catalogue',
     showInFilters: true
   },
 
