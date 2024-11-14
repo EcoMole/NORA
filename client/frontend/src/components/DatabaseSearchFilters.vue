@@ -205,7 +205,6 @@
               <template v-for="(field, key) in selectedFields" :key="key">
                 <v-col class="py-1 pe-0" cols="auto">
                   <v-chip
-                    v-bind="props"
                     size="large"
                     closable
                     elevation="3"
@@ -266,6 +265,16 @@
                   <v-list-item-title>
                     {{ field.flattenedDisplayName || field.displayName }}
                   </v-list-item-title>
+                  <template v-slot:append>
+                    <v-icon small @click.stop="toggleDescription(key)"
+                      >mdi-information-outline</v-icon
+                    >
+                  </template>
+                  <v-expand-transition>
+                    <v-list-item-subtitle v-if="expandedItems[key]">
+                      {{ field.filterDescription }}
+                    </v-list-item-subtitle>
+                  </v-expand-transition>
                 </v-list-item>
               </template>
             </v-list>
@@ -305,6 +314,7 @@ export default {
   data: () => ({
     addingFilter: false,
     selectedField: '',
+    expandedItems: {},
     filter: '',
     newFilter: {
       key: '',
@@ -325,6 +335,9 @@ export default {
     handleClick(field, key) {
       this.tooltipVisibility[key] = false
       this.selectedFields[key] = field
+    },
+    toggleDescription(key) {
+      this.expandedItems[key] = !this.expandedItems[key]
     },
     async getOptions(selectedField) {
       if (selectedField.apiEndpoint) {
