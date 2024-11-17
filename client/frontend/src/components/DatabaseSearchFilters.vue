@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="mt-4">
-      <v-col cols="7">
+      <v-col cols="6">
         <v-row class="d-flex justify-center">
           <h1 style="color: #a9a9a9">Novel Food Filters</h1>
         </v-row>
@@ -173,7 +173,7 @@
         </v-row>
       </v-col>
       <v-divider :thickness="2" vertical class="ml-0"></v-divider>
-      <v-col cols="4">
+      <v-col cols="5">
         <v-row class="d-flex justify-center">
           <h1 style="color: #a9a9a9">Data to be fetched</h1>
         </v-row>
@@ -205,6 +205,7 @@
               <template v-for="(field, key) in selectedFields" :key="key">
                 <v-col class="py-1 pe-0" cols="auto">
                   <v-chip
+                    class="wrap-text"
                     size="large"
                     closable
                     elevation="3"
@@ -262,7 +263,7 @@
                     <v-icon :icon="field.icon"></v-icon>
                   </template>
 
-                  <v-list-item-title>
+                  <v-list-item-title class="wrap-text">
                     {{ field.flattenedDisplayName || field.displayName }}
                   </v-list-item-title>
                   <template v-slot:append>
@@ -271,7 +272,7 @@
                     >
                   </template>
                   <v-expand-transition>
-                    <v-list-item-subtitle v-if="expandedItems[key]">
+                    <v-list-item-subtitle v-if="expandedItems[key]" class="wrap-text">
                       {{ field.filterDescription }}
                     </v-list-item-subtitle>
                   </v-expand-transition>
@@ -529,3 +530,11 @@ export default {
   }
 }
 </script>
+<style>
+.wrap-text {
+  display: block;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+</style>
