@@ -1,6 +1,5 @@
 <template>
-  <div>
-  </div>
+  <div></div>
   <div>
     <h1>Database Search</h1>
     <DatabaseSearchFilters
@@ -57,7 +56,7 @@
           size="small"
           min-height="50px"
           color="tertiary"
-          style="margin-bottom: 98px"
+          :style="{ marginBottom: isAtBottom ? '142px' : '80px' }"
           position="fixed"
           location="bottom right"
           class="mr-10"
@@ -68,18 +67,22 @@
         </v-btn>
       </v-hover>
       <!-- compact extended table switch -->
-      <v-sheet v-if="offeringCompactTable" elevation="24" position="fixed" location="bottom" class="mb-8 px-5" rounded="lg">
+      <v-sheet
+        v-if="offeringCompactTable"
+        elevation="24"
+        position="fixed"
+        location="bottom"
+        class="mb-8 px-5"
+        rounded="lg"
+      >
         <v-row class="d-flex align-center">
           <v-col class="text-right">
-            <label
-              for="custom-switch"
-              :style="{ fontWeight: showCompactTable ? 'normal' : 'bold' }"
+            <label for="custom-switch" :style="{ fontWeight: showCompactTable ? 'normal' : 'bold' }"
               >extended
               <!-- <v-tooltip activator="parent" location="left"
                 >all the items will be displayed plainly</v-tooltip
               > -->
-              </label
-            >
+            </label>
           </v-col>
           <v-col>
             <v-switch
@@ -91,15 +94,12 @@
           </v-col>
 
           <v-col>
-            <label
-              for="custom-switch"
-              :style="{ fontWeight: showCompactTable ? 'bold' : 'normal' }"
+            <label for="custom-switch" :style="{ fontWeight: showCompactTable ? 'bold' : 'normal' }"
               >compact
               <!-- <v-tooltip activator="parent" location="right"
                 >if more than 10 items will be displayed in table with pages</v-tooltip
               > -->
-              </label
-            >
+            </label>
           </v-col>
         </v-row>
       </v-sheet>
@@ -110,8 +110,9 @@
         color="secondary"
         position="fixed"
         location="bottom right"
-        class="mb-8 mr-10"
+        class="mr-10"
         :ripple="false"
+        :style="{ marginBottom: isAtBottom ? '82px' : '20px' }"
       >
         <v-icon left>mdi-replay</v-icon>
         edit search
@@ -142,15 +143,32 @@ export default {
     headdersToHide: [],
     nameMappingObj: { ...objectTypes, ...fields },
     exporting: false,
-    showCompactTable: true
+    showCompactTable: true,
+    isAtBottom: false
   }),
   computed: {
-    ...mapState(useMainStore, ['offeringCompactTable']),
+    ...mapState(useMainStore, ['offeringCompactTable'])
   },
   methods: {
     ...mapActions(useMainStore, ['resetOfferingCompactTable']),
     toArray(value) {
       return Array.isArray(value) ? value : [value]
+    },
+    checkScroll() {
+      // scrollTop: How far the user has scrolled from the top.
+      const scrollTop = window.scrollY || document.documentElement.scrollTop
+
+      // windowHeight: The height of the display
+      const windowHeight = window.innerHeight
+
+      // documentHeight: The total height of the document's content
+      const docHeight = document.documentElement.scrollHeight
+
+      if (windowHeight + scrollTop >= docHeight - 1) {
+        this.isAtBottom = true
+      } else {
+        this.isAtBottom = false
+      }
     },
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
     formatGraphQLQuery: formatGraphQLQuery,
@@ -222,6 +240,13 @@ export default {
   created() {
     this.theme = useTheme()
     this.mainStore = useMainStore()
+  },
+  mounted() {
+    // once user scrolls the checkScroll function will be called
+    window.addEventListener('scroll', this.checkScroll)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.checkScroll)
   }
 }
 </script>
