@@ -179,14 +179,15 @@
         </v-row>
         <v-row class="mt-3">
           <v-container>
-            <v-alert
-              class="mb-3"
-              v-if="Object.keys(selectedFields).length < 1"
-              icon="$warning"
-              text="Select data you would like to see"
-              color="secondary"
-              rounded="md"
-            ></v-alert>
+            <v-row v-if="alertText">
+              <v-alert
+                class="mb-3"
+                icon="$warning"
+                :text="alertText"
+                color="secondary"
+                rounded="md"
+              ></v-alert>
+            </v-row>
             <v-row v-if="Object.keys(selectedFields).length > 1" class="mb-2">
               <v-spacer></v-spacer>
               <v-btn
@@ -234,27 +235,19 @@
                 clearable
                 hide-details
               ></v-text-field>
-              <v-tooltip
-                text="Selecting all filelds will result in long time to fetch the data"
-                location="top"
+              <v-btn
+                v-if="!allFieldsSelected"
+                @click="selectedFields = fields"
+                color="secondary"
+                size="x-small"
+                min-height="30"
+                rounded="md"
+                variant="tonal"
+                class="ml-2 mt-2"
               >
-                <template v-slot:activator="{ props }">
-                  <v-btn
-                    v-bind="props"
-                    v-if="!allFieldsSelected"
-                    @click="selectedFields = fields"
-                    color="secondary"
-                    size="x-small"
-                    min-height="30"
-                    rounded="md"
-                    variant="tonal"
-                    class="ml-2 mt-2"
-                  >
-                    select <br />
-                    all
-                  </v-btn>
-                </template>
-              </v-tooltip>
+                select <br />
+                all
+              </v-btn>
             </v-row>
             <v-list bg-color="rgba(0, 0, 0, 0)" density="compact">
               <template v-for="(field, key) in fieldsSearched" :key="key">
@@ -467,6 +460,15 @@ export default {
     }
   },
   computed: {
+    alertText() {
+      if (Object.keys(this.selectedFields).length < 1) {
+        return 'Select data you would like to see'
+      } else if (Object.keys(this.selectedFields).length > 10) {
+        return 'Selecting too many fields will result in a long time to fetch the data'
+      } else {
+        return false
+      }
+    },
     showOptionsListField() {
       return this.newFilter.options.length > 0 && this.newFilter.qualifier !== 'is None'
     },
