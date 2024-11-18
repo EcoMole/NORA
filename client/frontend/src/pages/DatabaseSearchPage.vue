@@ -190,7 +190,7 @@ export default {
           query: query,
           variables: {
             filters: filters
-          },
+          }
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
         console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
