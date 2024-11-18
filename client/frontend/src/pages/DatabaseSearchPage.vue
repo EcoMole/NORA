@@ -191,7 +191,6 @@ export default {
           variables: {
             filters: filters
           },
-          fetchPolicy: 'network-only' // Ensures that the cache is bypassed and data is fetched from the network
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
         console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
