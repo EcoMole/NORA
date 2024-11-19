@@ -174,12 +174,13 @@ export default {
     formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
     selectedFiltersToText() {
-      let listOfFilterTexts = []
-      for (const filter of this.addedFilters) {
-        let filterText = `Novel Foods ${filter.include} ${filter.title} which ${filter.qualifier} ${filter.value}`
-        listOfFilterTexts.push(filterText)
+      if (this.addedFilters.length === 0) {
+        return ['No filters applied']
       }
-      return listOfFilterTexts
+      return this.addedFilters.map(
+        ({ include, title, qualifier, value }) =>
+          `Novel Foods ${include} ${title} which ${qualifier} ${value}`
+      )
     },
     async renderTable(addedFilters, selectedFields, headdersToHide) {
       this.resetOfferingCompactTable()
