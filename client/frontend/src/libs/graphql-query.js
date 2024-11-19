@@ -127,9 +127,16 @@ export function buildQueryFromSelectedFields(variables, selectedFields = fields)
   return buildGraphQLQuery(variables, formattedFields)
 }
 
+export const attrsMandatoryForExport = {
+  endpointstudies: 'endpointstudyId',
+  endpoints: 'endpointId',
+  novelFoodVariants: 'novelfoodvariantId'
+}
+
 export function formatGraphQLQuery(data) {
   // Create a tree structure to manage nested fields
-  const tree = {}
+  // each query needs to have the novelFoodId for the exporting feature
+  const tree = { novelFoodId: {} }
 
   // Function to insert each key into the tree structure
   function insertIntoTree(parts) {
@@ -137,6 +144,10 @@ export function formatGraphQLQuery(data) {
     parts.forEach((part) => {
       if (!current[part]) {
         current[part] = {}
+        // we need to add the mandatory id fields for exporting feature
+        if (part in attrsMandatoryForExport) {
+          current[part][attrsMandatoryForExport[part]] = {}
+        }
       }
       current = current[part]
     })
@@ -165,7 +176,6 @@ export function formatGraphQLQuery(data) {
     novelFoods(filters: $filters) {
       edges {
         node {
-          novelFoodId
           ${formatTree(tree, 1)}
         }
       }

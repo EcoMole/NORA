@@ -299,6 +299,7 @@
 import { fields } from '@/libs/definitions'
 import { useTheme } from 'vuetify'
 import axios from '@/libs/axios'
+import { attrsMandatoryForExport } from '@/libs/graphql-query'
 export default {
   props: {
     selectedFieldsFromPreviousSearch: Object,
@@ -374,6 +375,7 @@ export default {
     getHeadersToHide() {
       // Hide the __typename and id fields by default, also hide the novelFoodId field if user didnt select it
       const fieldsToHide = ['__typename', 'id']
+      fieldsToHide.push(...Object.values(attrsMandatoryForExport))
 
       const isNovelFoodIdSelected = 'novelFoodId' in this.selectedFields
 

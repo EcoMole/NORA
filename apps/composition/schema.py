@@ -80,10 +80,14 @@ class NovelFoodVariantType(DjangoObjectType):
     population = graphene.List(PopulationType)
     compositions = graphene.List(CompositionType)
     django_admin_novel_food_variant = graphene.String()
+    novelfoodvariant_id = graphene.Int()
 
     class Meta:
         model = NovelFoodVariant
         fields = "__all__"
+
+    def resolve_novelfoodvariant_id(self, info):
+        return self.id
 
     def resolve_food_form(self, info):
         return self.food_form.title if self.food_form else None

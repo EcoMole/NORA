@@ -117,10 +117,14 @@ class EndpointType(DjangoObjectType):
     subpopulation = graphene.String()
     unit = graphene.String()
     final_outcomes = graphene.List(FinalOutcomeType)
+    endpoint_id = graphene.Int()
 
     class Meta:
         model = Endpoint
         fields = "__all__"
+
+    def resolve_endpoint_id(self, info):
+        return self.id
 
     def resolve_reference_point(self, info):
         return self.reference_point.name if self.reference_point else None
@@ -148,10 +152,14 @@ class EndpointStudyType(DjangoObjectType):
     endpoints = graphene.List(EndpointType)
     django_admin_endpointstudy = graphene.String()
     duration_unit = graphene.String()
+    endpointstudy_id = graphene.Int()
 
     class Meta:
         model = Endpointstudy
         fields = "__all__"
+
+    def resolve_endpointstudy_id(self, info):
+        return self.id
 
     def resolve_django_admin_endpointstudy(self, info):
         return f"studies/endpointstudy/{self.id}/change/"
