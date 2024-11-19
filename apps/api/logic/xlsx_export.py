@@ -23,10 +23,13 @@ def serialize_endpoint(endpoint):
     qualifier = endpoint.get("qualifier", "")
     lovalue = endpoint.get("lovalue", "")
     subpopulation = endpoint.get("subpopulation", "")
+    id = endpoint.get("endpointId", "")
+
+    id_str = f"({id})"
 
     # Filter the empty strings out
     return " - ".join(
-        filter(bool, [reference_point, qualifier, lovalue, subpopulation])
+        filter(bool, [str(id_str), reference_point, qualifier, lovalue, subpopulation])
     )
 
 
@@ -39,10 +42,13 @@ def serialize_population(population):
     return " ".join(filter(bool, [subgroup, qualifier, value]))
 
 
-def create_final_outcome_rows(endpoint, nf_id):
+def create_final_outcome_rows(endpoint, nf_id, study_id):
     final_outcomes = endpoint.get("finalOutcomes", "")
+    endpoint_id = endpoint.get("endpointId", "")
     final_outcome_rows = []
     for final_outcome in final_outcomes:
+        final_outcome["endpointId"] = endpoint_id
+        final_outcome["endpointstudyId"] = study_id
         final_outcome.pop("djangoAdminFinalOutcome", "")
         final_outcome = {
             key: value
@@ -68,6 +74,7 @@ def process_endpoint_studies(endpointstudies, nf_id):
     final_outcome_rows = []
     for endpoint_study in endpointstudies:
         endpoint_study.pop("djangoAdminEndpointstudy", '')
+        study_id = endpoint_study.get("endpointstudyId", "")
         endpoint_study = {
             key: value
             for key, value in endpoint_study.items()
@@ -82,7 +89,7 @@ def process_endpoint_studies(endpointstudies, nf_id):
         for endpoint in endpoint_study.get(
             "endpoints", []
         ):  # process the final outcomes for given endpoint
-            final_outcomes = create_final_outcome_rows(endpoint, nf_id)
+            final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
             final_outcome_rows += final_outcomes
         endpoint_study["endpoints"] = "; ".join(
             serialized_endpoints
@@ -406,6 +413,8 @@ def flatten_json(
 
 
 def create_export(novel_food_data):
+
+    print(novel_food_data)
 
     novel_food_df_data = []
     genotox_rows = []
