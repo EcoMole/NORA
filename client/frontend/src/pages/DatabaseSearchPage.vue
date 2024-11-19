@@ -173,6 +173,14 @@ export default {
     buildQueryFromSelectedFields: buildQueryFromSelectedFields,
     formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
+    selectedFiltersToText() {
+      let listOfFilterTexts = []
+      for (const filter of this.addedFilters) {
+        let filterText = `Novel Foods ${filter.include} ${filter.title} which ${filter.qualifier} ${filter.value}`
+        listOfFilterTexts.push(filterText)
+      }
+      return listOfFilterTexts
+    },
     async renderTable(addedFilters, selectedFields, headdersToHide) {
       this.resetOfferingCompactTable()
       this.headdersToHide = headdersToHide
@@ -185,6 +193,7 @@ export default {
       const filters = buildVariables(this.addedFilters)
       console.log('filters', filters)
       console.log('query', query)
+      console.log('selectedFiltersToText', this.selectedFiltersToText())
       try {
         const response = await this.$apollo.query({
           query: query,
