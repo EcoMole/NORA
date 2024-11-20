@@ -25,7 +25,7 @@ def serialize_endpoint(endpoint):
     subpopulation = endpoint.get("subpopulation", "")
     id = endpoint.get("endpointId", "")
 
-    id_str = f"({id})"
+    id_str = f"(Id: {id})"
 
     # Filter the empty strings out
     return " - ".join(
@@ -412,9 +412,10 @@ def flatten_json(
     return dict(items), genotox_rows, endpoint_rows, adme_rows, final_outcome_rows, organism_rows, nf_variants_rows, composition_rows, chemicals_rows
 
 
-def create_export(novel_food_data):
+def create_export(novel_food_data):    
+    filters = novel_food_data[1]
 
-    print(novel_food_data)
+    novel_food_data = novel_food_data[0]
 
     novel_food_df_data = []
     genotox_rows = []
@@ -441,7 +442,7 @@ def create_export(novel_food_data):
     composition_df = pd.DataFrame(composition_rows)
     chemicals_df = pd.DataFrame(chemicals_rows)
 
-    #dataframes = [novel_food_df, organisms_df, genotox_df, endpoint_df, adme_df, final_outcomes_df, nf_variants_df, composition_df, chemicals_df]
+    filters_df = pd.DataFrame(filters, columns=["filters"])
 
     dataframes = {
         "Novel foods": novel_food_df,
@@ -469,6 +470,8 @@ def create_export(novel_food_data):
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         for sheet_name, df in non_empty_dataframes.items():
             df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+        filters_df.to_excel(writer, sheet_name="filters", index=False)
 
         # Autofit column width for each sheet
         for sheet in writer.sheets.values():
