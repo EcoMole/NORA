@@ -169,7 +169,7 @@ class MandateType(models.Model):
     class Meta:
         db_table = "MANDATE_TYPE"
         verbose_name = "Mandate Type"
-        verbose_name_plural = "📂 Mandate Typess"
+        verbose_name_plural = "📂 Mandate Types"
 
 
 class OpinionQuestion(models.Model):
