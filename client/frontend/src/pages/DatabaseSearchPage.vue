@@ -143,7 +143,7 @@ export default {
     headdersToHide: [],
     nameMappingObj: { ...objectTypes, ...fields },
     exporting: false,
-    showCompactTable: true,
+    showCompactTable: false,
     isAtBottom: false
   }),
   computed: {
@@ -222,7 +222,9 @@ export default {
       this.exporting = true
       console.log('exporting search result')
       axios
-        .post('/api/v1/export/', [this.fetchedNovelFoods,this.selectedFiltersToText()], { responseType: 'blob' })
+        .post('/api/v1/export/', [this.fetchedNovelFoods, this.selectedFiltersToText()], {
+          responseType: 'blob'
+        })
         .then((response) => {
           // Handle success (e.g., trigger download if needed)
           console.log('Export successful', response)
