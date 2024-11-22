@@ -206,7 +206,7 @@
               <template v-for="(field, key) in selectedFields" :key="key">
                 <v-col class="py-1 pe-0" cols="auto">
                   <v-chip
-                    class="wrap-text"
+                    class="wrap-text-in-chip"
                     size="large"
                     closable
                     elevation="3"
@@ -536,9 +536,16 @@ export default {
 </script>
 <style>
 .wrap-text {
-  display: block;
   white-space: normal;
-  overflow: visible;
-  text-overflow: unset;
+}
+.wrap-text-in-chip {
+  height: auto !important;
+}
+
+.wrap-text-in-chip .v-chip__content {
+  line-height: 1.4;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal;
 }
 </style>
