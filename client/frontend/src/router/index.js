@@ -4,6 +4,7 @@ export default new createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      // for possible future implementation of new user creation and password resetting through the frontend
       path: '/reset-your-password-here/',
       name: 'password-reset-page',
       component: () => import('@/pages/ResetPasswordPage.vue'),

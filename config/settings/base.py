@@ -134,7 +134,9 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 # e-mail address must be provided by the user in order to register
 ACCOUNT_EMAIL_REQUIRED = True
 # to ensure mandatory verification by email for the user to complete the registration process
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = (
+    "none"  # change to "mandatory" if email verification should be mandatory
+)
 # to allow the website to verify the user when the user opens the link received in the email
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 # then we want the user to be redirected to the LOGIN_URL after verification,
@@ -240,6 +242,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Email
+# for possible future implementation of new user creation and password resetting through the frontend
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = config("EMAIL_HOST", default="localhost")

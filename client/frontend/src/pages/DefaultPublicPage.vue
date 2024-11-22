@@ -1,7 +1,13 @@
 <template>
   <v-main class="d-flex flex-column align-center">
-    <h1>public page</h1>
+    <h1 class="mt-8 mb-6 text-secondary">NOvel food Risk Assessment (NORA)</h1>
     <v-card width="450">
+      <v-card-text>
+        <LoginUser />
+      </v-card-text>
+    </v-card>
+    <!-- for possible future implementation of new user creation and password resetting through the frontend -->
+    <!-- <v-card width="450">
       <v-tabs v-model="tab" color="secondary" bg-color="primary">
         <v-tab value="register">Register</v-tab>
         <v-tab value="login">Log in</v-tab>
@@ -20,20 +26,18 @@
           </v-window-item>
         </v-window>
       </v-card-text>
-    </v-card>
+    </v-card> -->
   </v-main>
 </template>
 
 <script>
-import RegisterUser from '@/components/RegisterUser.vue'
 import LoginUser from '@/components/LoginUser.vue'
-import RequestResetPassword from '@/components/RequestResetPassword.vue'
+// import RegisterUser from '@/components/RegisterUser.vue'
+// import RequestResetPassword from '@/components/RequestResetPassword.vue'
 
 export default {
-  components: { LoginUser, RegisterUser, RequestResetPassword },
-  data: () => ({
-    tab: 'login'
-  }),
+  components: { LoginUser }, // RegisterUser, RequestResetPassword
+  data: () => ({}),
   methods: {}
 }
 </script>

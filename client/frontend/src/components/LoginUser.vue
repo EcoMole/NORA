@@ -1,6 +1,7 @@
 <template>
   <v-form @submit.prevent="logIn" v-model="valid">
     <v-card class="mx-auto pa-12 pb-8" variant="text">
+      <v-card-title class="text-h5 text-center mb-4 text-secondary">Login</v-card-title>
       <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
       <v-text-field
@@ -32,9 +33,15 @@
 
       <v-card class="mb-12" color="surface-variant" variant="tonal">
         <v-card-text class="text-medium-emphasis text-caption">
-          <span> If you have forgotten your password, you can reset your password </span>
+          <span>
+            To obtain login credentials for the NORA database viewing interface, please contact the
+            Nutrition, Novel Foods, and Food Allergens (NDA) team at the European Food Safety
+            Authority.
+          </span>
+          <!-- for possible future implementation of new user creation and password resetting through the frontend -->
+          <!-- <span> If you have forgotten your password, you can reset your password </span>
           <a href="#" @click="$emit('reset-password')">here</a>
-          <span>.</span>
+          <span>.</span> -->
         </v-card-text>
       </v-card>
 
