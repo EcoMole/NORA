@@ -8,26 +8,6 @@ function getUserType(user) {
   return user.isSuperuser ? 'superuser' : user.isStaff ? 'staff' : null
 }
 
-// might be unnecessary
-// const mappingObj = {
-//   contains: 'Icontains',
-//   is: 'Exact',
-//   'is None': 'Isnull',
-//   'must have': 'Include',
-//   'must not have': 'Exclude',
-//   'is before': 'Lt',
-//   'is after': 'Gt'
-// }
-// might be unnecessary
-// const mappingObj = {
-//   contains: 'Icontains',
-//   is: 'Exact',
-//   'is None': 'Isnull',
-//   'must have': 'filter',
-//   'must not have': 'exclude',
-//   'is before': 'Lt',
-//   'is after': 'Gt'
-// }
 
 import { fields } from './definitions'
 

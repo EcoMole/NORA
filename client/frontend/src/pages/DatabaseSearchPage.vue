@@ -124,7 +124,7 @@
 <script>
 import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
-import { buildQueryFromSelectedFields, formatGraphQLQuery } from '@/libs/graphql-query.js'
+import {  formatGraphQLQuery } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
 import { objectTypes, fields } from '@/libs/definitions.js'
@@ -170,7 +170,6 @@ export default {
         this.isAtBottom = false
       }
     },
-    buildQueryFromSelectedFields: buildQueryFromSelectedFields,
     formatGraphQLQuery: formatGraphQLQuery,
     buildVariables: buildVariables,
     selectedFiltersToText() {
