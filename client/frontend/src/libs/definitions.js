@@ -211,7 +211,8 @@ export const fields = {
     djangoLimitchoicesField: 'antinutritional_factors',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-stomach',
-    filterDescription: 'Indicates whether antinutritional factors (substances that may interfere with nutrient absorption or have negative health effects, e.g. tannins or phytic acid) are discussed in the Novel Food assessment.',
+    filterDescription:
+      'Indicates whether antinutritional factors (substances that may interfere with nutrient absorption or have negative health effects, e.g. tannins or phytic acid) are discussed in the Novel Food assessment.',
     showInFilters: true
   },
   hasNutriDisadvantage: {
@@ -426,7 +427,8 @@ export const fields = {
     djangoLimitchoicesField: 'specific_toxicity',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
-    filterDescription: "Indicates whether specific toxicity, such as hepatotoxicity, nephrotoxicity, or neurotoxicity, was discussed in the NF/TF opinion's discussion section. If no specific toxicity is associated with the Novel or Traditional Food, this field will be set to NONE (TOX14A).",
+    filterDescription:
+      "Indicates whether specific toxicity, such as hepatotoxicity, nephrotoxicity, or neurotoxicity, was discussed in the NF/TF opinion's discussion section. If no specific toxicity is associated with the Novel or Traditional Food, this field will be set to NONE (TOX14A).",
     showInFilters: true
   },
   'substancesOfConcern.substanceOfConcern': {
@@ -444,7 +446,8 @@ export const fields = {
     djangoLimitchoicesField: 'substance_of_concern',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
-    filterDescription: "Specifies the substances of concern, such as contaminants, heavy metals, or pesticide residues, discussed in the Novel Food opinion's discussion section. This field is left blank if no substances of concern were identified.",
+    filterDescription:
+      "Specifies the substances of concern, such as contaminants, heavy metals, or pesticide residues, discussed in the Novel Food opinion's discussion section. This field is left blank if no substances of concern were identified.",
     showInFilters: true
   },
   'backgroundExposureAssessments.compOfInterest': {
@@ -462,7 +465,8 @@ export const fields = {
     djangoLimitchoicesField: 'comp_of_interest',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale-balance',
-    filterDescription: 'Specifies the substances for which background exposure was assessed, indicating the baseline dietary exposure levels considered in the NF/TF assessment. This field is left blank if no background exposure assessment was conducted. ',
+    filterDescription:
+      'Specifies the substances for which background exposure was assessed, indicating the baseline dietary exposure levels considered in the NF/TF assessment. This field is left blank if no background exposure assessment was conducted. ',
     showInFilters: true
   },
   'hbgvs.type': {
@@ -480,7 +484,8 @@ export const fields = {
     djangoLimitchoicesField: 'type',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
-    filterDescription: 'Specifies the type of Health-Based Guidance Value (HBGV) considered in the NF/TF assessment, such as Acceptable Daily Intake (ADI), Tolerable Daily Intake (TDI), or Reference Dose (RfD)."',
+    filterDescription:
+      'Specifies the type of Health-Based Guidance Value (HBGV) considered in the NF/TF assessment, such as Acceptable Daily Intake (ADI), Tolerable Daily Intake (TDI), or Reference Dose (RfD)."',
     showInFilters: true
   },
   'hbgvs.exceeded': {
@@ -498,7 +503,8 @@ export const fields = {
     djangoLimitchoicesField: 'exceeded',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
-    filterDescription: 'Indicates whether the estimated intake of the NF/TF exceeds the established Health-Based Guidance Value (HBGV), such as the Acceptable Daily Intake (ADI) or Tolerable Daily Intake (TDI).',
+    filterDescription:
+      'Indicates whether the estimated intake of the NF/TF exceeds the established Health-Based Guidance Value (HBGV), such as the Acceptable Daily Intake (ADI) or Tolerable Daily Intake (TDI).',
     showInFilters: true
   },
   'hbgvs.substance': {
@@ -516,7 +522,8 @@ export const fields = {
     djangoLimitchoicesField: 'substance',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-outline',
-    filterDescription: 'Specifies the substance for which a Health-Based Guidance Value (HBGV) was considered in the NF/TF assessment.',
+    filterDescription:
+      'Specifies the substance for which a Health-Based Guidance Value (HBGV) was considered in the NF/TF assessment.',
     showInFilters: true
   },
 
@@ -534,7 +541,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'Specifies alternative names or synonyms for the NF/TF, including common names and trade names.',
+    filterDescription:
+      'Specifies alternative names or synonyms for the NF/TF, including common names and trade names.',
     showInFilters: true
   },
   'synonyms.typeTitle': {
@@ -778,7 +786,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-alert-circle-outline',
-    filterDescription: 'Specifies if the FAIM, FoodEx, or both food category tools were used in the assessment.',
+    filterDescription:
+      'Specifies if the FAIM, FoodEx, or both food category tools were used in the assessment.',
     showInFilters: true
   },
   'foodCategories.definition': {
@@ -858,7 +867,8 @@ export const fields = {
     djangoLimitchoicesField: 'vocab_id',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Specifies the entry from the MTX vocabulary used to classify the source organism of the NF/TF.',
+    filterDescription:
+      'Specifies the entry from the MTX vocabulary used to classify the source organism of the NF/TF.',
     showInFilters: true
   },
   'organisms.orgPart': {
@@ -876,7 +886,8 @@ export const fields = {
     djangoLimitchoicesField: 'org_part',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Specifies the part of the organism used in the NF/TF, such as "leaf," "root," "seed," or "whole organism."',
+    filterDescription:
+      'Specifies the part of the organism used in the NF/TF, such as "leaf," "root," "seed," or "whole organism."',
     showInFilters: true
   },
   'organisms.variant': {
@@ -891,7 +902,8 @@ export const fields = {
     djangoField: 'variant',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Specifies the variant of the organism used for the production of the NF/TF, such as strain (microorganisms), subspecies (animals), or cultivar (plants). ',
+    filterDescription:
+      'Specifies the variant of the organism used for the production of the NF/TF, such as strain (microorganisms), subspecies (animals), or cultivar (plants). ',
     showInFilters: true
   },
   'organisms.isGmo': {
@@ -909,7 +921,8 @@ export const fields = {
     djangoLimitchoicesField: 'is_gmo',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Indicates whether the organism used in the NF/TF has been genetically modified (GMO). Options include "Yes" for genetically modified organisms, "No" for non-GMOs, and "Unknown" if the GMO status is not specified.',
+    filterDescription:
+      'Indicates whether the organism used in the NF/TF has been genetically modified (GMO). Options include "Yes" for genetically modified organisms, "No" for non-GMOs, and "Unknown" if the GMO status is not specified.',
     showInFilters: true
   },
   'organisms.hasQps': {
@@ -927,7 +940,8 @@ export const fields = {
     djangoLimitchoicesField: 'has_qps',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Indicates whether the organism used in the NF/TF has Qualified Presumption of Safety (QPS) status, which is granted by EFSA for certain microorganisms deemed safe for use. Options include "Yes" if the organism has QPS status, "No" if it does not, and "Unknown" if the QPS status is not specified. Only applicable for microorganisms.',
+    filterDescription:
+      'Indicates whether the organism used in the NF/TF has Qualified Presumption of Safety (QPS) status, which is granted by EFSA for certain microorganisms deemed safe for use. Options include "Yes" if the organism has QPS status, "No" if it does not, and "Unknown" if the QPS status is not specified. Only applicable for microorganisms.',
     showInFilters: true
   },
 
@@ -943,7 +957,8 @@ export const fields = {
     djangoField: 'cell_culture',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Indicates the type of cell culture that the NF/TF was derived from. Only applicable to cell or tissue cultures.',
+    filterDescription:
+      'Indicates the type of cell culture that the NF/TF was derived from. Only applicable to cell or tissue cultures.',
     showInFilters: true
   },
 
@@ -962,7 +977,8 @@ export const fields = {
     djangoLimitchoicesField: 'cells_modified',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Indicates whether the cells used in the NF/TF were modified, such as “pluripotent stem cells”. Only applicable to cell or tissue cultures.',
+    filterDescription:
+      'Indicates whether the cells used in the NF/TF were modified, such as “pluripotent stem cells”. Only applicable to cell or tissue cultures.',
     showInFilters: true
   },
   'organisms.species.name': {
@@ -977,7 +993,8 @@ export const fields = {
     djangoField: 'name',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-tree-outline',
-    filterDescription: 'Specifies the species name of the organism used in the NF/TF, following scientific nomenclature (e.g., Escherichia coli, Saccharomyces cerevisiae). ',
+    filterDescription:
+      'Specifies the species name of the organism used in the NF/TF, following scientific nomenclature (e.g., Escherichia coli, Saccharomyces cerevisiae). ',
     showInFilters: true
   },
   'organisms.species.scientificName': {
@@ -992,7 +1009,8 @@ export const fields = {
     djangoField: 'scientific_name',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-tree-outline',
-    filterDescription: 'Specifies the full scientific name of the species used in the NF/TF, including genus, species, and the authority who named the species (e.g., Salvia hispanica L., Cryptops ulomoides (Solier, 1851).',
+    filterDescription:
+      'Specifies the full scientific name of the species used in the NF/TF, including genus, species, and the authority who named the species (e.g., Salvia hispanica L., Cryptops ulomoides (Solier, 1851).',
     showInFilters: true
   },
   'organisms.species.genus': {
@@ -1007,7 +1025,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-tree-outline',
-    filterDescription: 'Specifies the genus of the species used in the NF/TF, representing the broader taxonomic category to which the organism belongs (e.g., Lactobacillus, Salvia). ',
+    filterDescription:
+      'Specifies the genus of the species used in the NF/TF, representing the broader taxonomic category to which the organism belongs (e.g., Lactobacillus, Salvia). ',
     showInFilters: true
   },
   'organisms.species.family': {
@@ -1022,7 +1041,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-tree-outline',
-    filterDescription: 'Specifies the family of the species used in the NF/TF, representing a higher taxonomic classification above the genus (e.g., Poaceae, Lamiaceae).',
+    filterDescription:
+      'Specifies the family of the species used in the NF/TF, representing a higher taxonomic classification above the genus (e.g., Poaceae, Lamiaceae).',
     showInFilters: true
   },
   'organisms.species.orgType': {
@@ -1037,7 +1057,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-file-tree-outline',
-    filterDescription: 'Specifies the broad biological category of the source organism used in the NF/TF, such as “Bacteria”, “Fungi”, “Plant”, or “Animal”.',
+    filterDescription:
+      'Specifies the broad biological category of the source organism used in the NF/TF, such as “Bacteria”, “Fungi”, “Plant”, or “Animal”.',
     showInFilters: true
   },
   'organisms.orgSynonyms.title': {
@@ -1052,7 +1073,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Specifies alternative names or synonyms for the organism used in the NF/TF, such as common names. ',
+    filterDescription:
+      'Specifies alternative names or synonyms for the organism used in the NF/TF, such as common names. ',
     showInFilters: true
   },
   'organisms.orgSynonyms.typeTitle': {
@@ -1067,7 +1089,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-leaf',
-    filterDescription: 'Specifies the type of synonym provided for the organism used in the NF/TF, such as common name, or synonym',
+    filterDescription:
+      'Specifies the type of synonym provided for the organism used in the NF/TF, such as common name, or synonym',
     showInFilters: true
   },
   'organisms.orgSynonyms.typeDefinition': {
@@ -1097,7 +1120,8 @@ export const fields = {
     djangoLimitchoicesField: 'vocab_id',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-molecule',
-    filterDescription: 'Specifies the entry from the PARAM vocabulary used to classify the source substance of the NF/TF.',
+    filterDescription:
+      'Specifies the entry from the PARAM vocabulary used to classify the source substance of the NF/TF.',
     showInFilters: true
   },
   'chemicals.chemSynonyms.title': {
@@ -1112,7 +1136,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-molecule',
-    filterDescription: 'Specifies alternative names or synonyms for the chemical component in the NF/TF, including common names, or synonyms',
+    filterDescription:
+      'Specifies alternative names or synonyms for the chemical component in the NF/TF, including common names, or synonyms',
     showInFilters: true
   },
   'chemicals.chemSynonyms.typeTitle': {
@@ -1127,7 +1152,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-molecule',
-    filterDescription: 'Specifies the type of synonym provided for the chemical used in the NF/TF, such as "common name" or "synonym"',
+    filterDescription:
+      'Specifies the type of synonym provided for the chemical used in the NF/TF, such as "common name" or "synonym"',
     showInFilters: true
   },
   'chemicals.chemSynonyms.typeDefinition': {
@@ -1153,7 +1179,8 @@ export const fields = {
     djangoField: 'type',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-molecule',
-    filterDescription: 'Specifies the type of additional descriptors for the chemical component in the NF/TF that were not included in the PARAM catalogue, such as unique identifiers or structural information.',
+    filterDescription:
+      'Specifies the type of additional descriptors for the chemical component in the NF/TF that were not included in the PARAM catalogue, such as unique identifiers or structural information.',
     showInFilters: true
   },
   'chemicals.chemDescriptors.value': {
@@ -1164,7 +1191,8 @@ export const fields = {
     djangoLookupField: 'chemicals__chemical__chem_descriptors__value',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-molecule',
-    filterDescription: 'Provides the specific value for additional chemical descriptors not found in the PARAM catalogue, such as a unique identifier, molecular formula, or specific structural data.',
+    filterDescription:
+      'Provides the specific value for additional chemical descriptors not found in the PARAM catalogue, such as a unique identifier, molecular formula, or specific structural data.',
     showInFilters: true
   },
 
@@ -1265,7 +1293,8 @@ export const fields = {
     djangoLookupField: 'adme__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'Provides additional comments or context regarding the ADME study for the NF/TF',
+    filterDescription:
+      'Provides additional comments or context regarding the ADME study for the NF/TF',
     showInFilters: true
   },
   'admes.testMaterial': {
@@ -1280,7 +1309,8 @@ export const fields = {
     djangoField: 'test_material',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'Specifies the test material used in the ADME study for the NF/TF, such as the specific form or preparation of the substance tested.',
+    filterDescription:
+      'Specifies the test material used in the ADME study for the NF/TF, such as the specific form or preparation of the substance tested.',
     showInFilters: true
   },
 
@@ -1384,7 +1414,8 @@ export const fields = {
     djangoLookupField: 'genotox__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'Provides additional comments or context regarding the genotoxicity study for the NF/TF',
+    filterDescription:
+      'Provides additional comments or context regarding the genotoxicity study for the NF/TF',
     showInFilters: true
   },
   'genotoxes.testMaterial': {
@@ -1399,7 +1430,8 @@ export const fields = {
     djangoField: 'test_material',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'Specifies the test material used in the genotoxicity study for the NF/TF, such as the specific form or preparation of the substance tested.',
+    filterDescription:
+      'Specifies the test material used in the genotoxicity study for the NF/TF, such as the specific form or preparation of the substance tested.',
     showInFilters: true
   },
 
@@ -1436,7 +1468,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
+    filterDescription:
+      'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
     showInFilters: true
   },
   'endpointstudies.guideline': {
@@ -1538,7 +1571,8 @@ export const fields = {
     djangoField: 'title',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA).',
+    filterDescription:
+      'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA).',
     showInFilters: true
   },
   'endpointstudies.remarks': {
@@ -1549,7 +1583,8 @@ export const fields = {
     djangoLookupField: 'endpointstudy__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'Provides additional comments or context regarding the endpoint study for the NF/TF',
+    filterDescription:
+      'Provides additional comments or context regarding the endpoint study for the NF/TF',
     showInFilters: true
   },
   'endpointstudies.testMaterial': {
@@ -1564,7 +1599,8 @@ export const fields = {
     djangoField: 'test_material',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-outline',
-    filterDescription: 'Specifies the test material used in the endpoint study for the NF/TF, such as the specific form or preparation of the substance tested.',
+    filterDescription:
+      'Specifies the test material used in the endpoint study for the NF/TF, such as the specific form or preparation of the substance tested.',
     showInFilters: true
   },
 
@@ -1654,7 +1690,8 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'Specifies the unit of the numerical value of the reference point (e.g. NOAEL).',
+    filterDescription:
+      'Specifies the unit of the numerical value of the reference point (e.g. NOAEL).',
     showInFilters: true
   },
 
@@ -1726,7 +1763,8 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'Specifies the unit of the numerical value of the final outcome (e.g. safe level).',
+    filterDescription:
+      'Specifies the unit of the numerical value of the final outcome (e.g. safe level).',
     showInFilters: true
   },
 
@@ -1738,7 +1776,8 @@ export const fields = {
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__uncertainty_factor',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'Specifies the uncertainty factor applied to the reference point from the endpoint study to reach the final outcome, accounting for variability or gaps in data to ensure safety (e.g., an uncertainty factor of 10 for interspecies differences)',
+    filterDescription:
+      'Specifies the uncertainty factor applied to the reference point from the endpoint study to reach the final outcome, accounting for variability or gaps in data to ensure safety (e.g., an uncertainty factor of 10 for interspecies differences)',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.remarks': {
@@ -1749,7 +1788,8 @@ export const fields = {
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__remarks__text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-comment-text-outline',
-    filterDescription: 'Provides additional comments or context regarding the Final outcome for the NF/TF',
+    filterDescription:
+      'Provides additional comments or context regarding the Final outcome for the NF/TF',
     showInFilters: true
   },
 
@@ -1811,7 +1851,8 @@ export const fields = {
       'endpointstudy__endpoints__finaloutcome__populations__population__upper_range_value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
-    filterDescription: 'Value representing the upper limit of the age range of the population subgroup for which the final outcome was determined.',
+    filterDescription:
+      'Value representing the upper limit of the age range of the population subgroup for which the final outcome was determined.',
     showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations.unit': {
@@ -1830,7 +1871,8 @@ export const fields = {
     djangoLimitchoicesField: 'unit',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-scale',
-    filterDescription: 'Specifies the unit of measurement for the age of the population subgroup in the final outcome, such as "years" or "months."',
+    filterDescription:
+      'Specifies the unit of measurement for the age of the population subgroup in the final outcome, such as "years" or "months."',
     showInFilters: true
   },
 
@@ -1983,8 +2025,24 @@ export const fields = {
     filterDescription: 'Unit for Age Value of Proposed Use Population Subgroup',
     showInFilters: true
   },
-
-
+  'novelFoodVariants.compositions.qualifier': {
+    displayName: 'Value Qualifier',
+    flattenedDisplayName: 'Composition Value Qualifier',
+    displayGroupName: 'Novel Food Variant Composition',
+    type: 'text',
+    djangoLookupField: 'novelfoodvariant__compositions__qualifier__tax_node',
+    apiEndpoint: 'novel-food-values-list/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'composition',
+    djangoLimitchoicesModel: 'Composition',
+    djangoLimitchoicesField: 'qualifier',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-scale',
+    filterDescription: 'Qualifier for Composition Value',
+    showInFilters: true
+  },
   'novelFoodVariants.compositions.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Composition Value',
@@ -2025,24 +2083,7 @@ export const fields = {
     filterDescription: 'Unit for Composition Value',
     showInFilters: true
   },
-  'novelFoodVariants.compositions.qualifier': {
-    displayName: 'Value Qualifier',
-    flattenedDisplayName: 'Composition Value Qualifier',
-    displayGroupName: 'Novel Food Variant Composition',
-    type: 'text',
-    djangoLookupField: 'novelfoodvariant__compositions__qualifier__tax_node',
-    apiEndpoint: 'novel-food-values-list/',
-    djangoApp: 'taxonomies',
-    djangoModel: 'TaxonomyNode',
-    djangoField: 'short_name',
-    djangoLimitchoicesApp: 'composition',
-    djangoLimitchoicesModel: 'Composition',
-    djangoLimitchoicesField: 'qualifier',
-    qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription: 'Qualifier for Composition Value',
-    showInFilters: true
-  },
+
   'novelFoodVariants.compositions.type': {
     displayName: 'Composition Type',
     flattenedDisplayName: 'Composition Type',
@@ -2118,7 +2159,8 @@ export const fields = {
     djangoLimitchoicesField: 'vocab_id',
     qualifiers: ['is', 'is None'],
     icon: 'mdi-book-open-outline',
-    filterDescription: 'This field is only used for Composition Parameter that already exist in the catalogue',
+    filterDescription:
+      'This field is only used for Composition Parameter that already exist in the catalogue',
     showInFilters: true
   },
 
@@ -2172,4 +2214,30 @@ export const fields = {
     filterDescription: 'will provide a link to django admin',
     showInFilters: false
   }
+}
+
+export const preselectGroups = {
+  'endpointstudies.endpoints.finalOutcomes.value': [
+    'endpointstudies.endpoints.finalOutcomes.qualifier',
+    'endpointstudies.endpoints.finalOutcomes.value',
+    'endpointstudies.endpoints.finalOutcomes.unit'
+  ],
+  'endpointstudies.endpoints.finalOutcomes.populations.value': [
+    'endpointstudies.endpoints.finalOutcomes.populations.qualifier',
+    'endpointstudies.endpoints.finalOutcomes.populations.value',
+    'endpointstudies.endpoints.finalOutcomes.populations.upperRangeValue',
+    'endpointstudies.endpoints.finalOutcomes.populations.unit'
+  ],
+  'novelFoodVariants.proposedUses.population.value': [
+    'novelFoodVariants.proposedUses.population.qualifier',
+    'novelFoodVariants.proposedUses.population.value',
+    'novelFoodVariants.proposedUses.population.upperRangeValue',
+    'novelFoodVariants.proposedUses.population.unit'
+  ],
+  'novelFoodVariants.compositions.value': [
+    'novelFoodVariants.compositions.qualifier',
+    'novelFoodVariants.compositions.value',
+    'novelFoodVariants.compositions.upperRangeValue',
+    'novelFoodVariants.compositions.unit'
+  ]
 }

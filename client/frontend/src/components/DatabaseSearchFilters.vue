@@ -296,7 +296,7 @@
 </template>
 
 <script>
-import { fields } from '@/libs/definitions'
+import { fields, preselectGroups } from '@/libs/definitions'
 import { useTheme } from 'vuetify'
 import axios from '@/libs/axios'
 import { attrsMandatoryForExport } from '@/libs/graphql-query'
@@ -324,12 +324,17 @@ export default {
     fields: fields,
     fieldsSearch: '',
     selectedFields: {},
-    tooltipVisibility: {}
+    preselectGroups: preselectGroups
   }),
   methods: {
     handleClick(field, key) {
-      this.tooltipVisibility[key] = false
-      this.selectedFields[key] = field
+      if (key in this.preselectGroups) {
+        for (let fieldToPreselect of this.preselectGroups[key]) {
+          this.selectedFields[fieldToPreselect] = this.fields[fieldToPreselect]
+        }
+      } else {
+        this.selectedFields[key] = field
+      }
     },
     toggleDescription(key) {
       this.expandedItems[key] = !this.expandedItems[key]
@@ -528,9 +533,6 @@ export default {
     this.addedFilters = this.addedFiltersFromPreviousSearch
       ? [...this.addedFiltersFromPreviousSearch]
       : []
-    for (const key in this.fields) {
-      this.tooltipVisibility[key] = false
-    }
   }
 }
 </script>
