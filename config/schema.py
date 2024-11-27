@@ -11,6 +11,7 @@ class NovelFoodFilterInput(graphene.InputObjectType):
     qualifier = graphene.String()
     value = graphene.String()
     django_lookup_field = graphene.String()
+    field_type = graphene.String()
 
 
 class NovelFoodConnection(graphene.relay.Connection):
@@ -63,34 +64,31 @@ class Query(graphene.ObjectType):
             include = f.get("include")
             lookup_field = f.get("django_lookup_field")
             lookup_type = map[f.get("qualifier")]
+            field_type = f.get("field_type", None)
             value = f.get("value")
 
             # for taxonomy node fields
-            if lookup_field.endswith("__tax_node"):
+            if field_type == "tax_node":
                 # values offered in frontend are:
                 # TaxonomyNode.short_name values or
                 # TaxonomyNode.extended_name values if TaxonomyNode.short_name is empty,
                 # therefore here we match incomming value with TaxonomyNode.short_name or
                 # with TaxonomyNode.extended_name if TaxonomyNode.short_name is empty
-                prefix = lookup_field[: -len("__tax_node")]
-
                 if lookup_type == "isnull":
-                    q_object = create_isnull_or_isempty_q_object(prefix)
+                    q_object = create_isnull_or_isempty_q_object(lookup_field)
                 else:
                     q_object = (
-                        Q(**{f"{prefix}__short_name__{lookup_type}": value})
+                        Q(**{f"{lookup_field}__short_name__{lookup_type}": value})
                     ) | (
                         (
-                            Q(**{f"{prefix}__short_name__isnull": True})
-                            | Q(**{f"{prefix}__short_name": ""})
+                            Q(**{f"{lookup_field}__short_name__isnull": True})
+                            | Q(**{f"{lookup_field}__short_name": ""})
                         )
-                        & Q(**{f"{prefix}__extended_name__{lookup_type}": value})
+                        & Q(**{f"{lookup_field}__extended_name__{lookup_type}": value})
                     )
 
             # for fields which are django.db.models.TextField
-            elif lookup_field.endswith("__text_field"):
-                lookup_field = lookup_field[: -len("__text_field")]
-
+            elif field_type == "text_field":
                 if lookup_type == "isnull":
                     q_object = create_isnull_or_isempty_q_object(lookup_field)
                     q_object |= Q(**{lookup_field + "__exact": ""})
