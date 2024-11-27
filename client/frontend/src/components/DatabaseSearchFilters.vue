@@ -327,8 +327,8 @@ export default {
       this.selectedFields[key] = field
     },
     async getOptions(selectedField) {
-      if (selectedField.apiEndpoint) {
-        const url = `/api/v1/${selectedField.apiEndpoint}`
+      if (selectedField.isPicklist) {
+        const url = `/api/v1/novel-food-values-list/`
         const djangoApp = selectedField.djangoApp
         const djangoModel = selectedField.djangoModel
         const djangoField = selectedField.djangoField
@@ -384,7 +384,7 @@ export default {
           title: this.newFilter.title,
           group: this.newFilter.group,
           qualifier: this.newFilter.qualifier,
-          value: this.newFilter.qualifier === 'is None' ? '' : this.newFilter.value,
+          value: this.newFilter.qualifier === 'is None' ? '' : this.newFilter.value
         })
         this.addingFilter = false
         this.newFilter = {
