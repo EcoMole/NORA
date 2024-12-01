@@ -13,8 +13,10 @@ import { fields } from './definitions'
 
 function buildVariables(addedFilters) {
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
-    const djangoLookupField = fields[key].djangoLookupField
-    acc.push({ qualifier, include, value, djangoLookupField })
+    const djangoLookupField = fields[key].djangoLookupField ? fields[key].djangoLookupField : null
+    const fieldType = fields[key].fieldType ? fields[key].fieldType : null
+    const valueFields = fields[key].valueFields ? fields[key].valueFields : null
+    acc.push({ qualifier, include, value, djangoLookupField, fieldType, valueFields})
     return acc
   }, [])
 }

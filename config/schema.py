@@ -1,7 +1,16 @@
 import graphene
-from django.db.models import Q
+from django.apps import apps
+from django.db.models import BooleanField, Case, Q, Value, When
 from novel_food.models import NovelFood
 from novel_food.schema import NovelFoodType
+
+
+class ValueFieldsInput(graphene.InputObjectType):
+    django_app = graphene.String()
+    django_model = graphene.String()
+    qualifier_field = graphene.String()
+    value_field = graphene.String()
+    upper_range_value_field = graphene.String()
 
 
 # Define the custom filter input
@@ -11,6 +20,8 @@ class NovelFoodFilterInput(graphene.InputObjectType):
     qualifier = graphene.String()
     value = graphene.String()
     django_lookup_field = graphene.String()
+    field_type = graphene.String()
+    value_fields = graphene.Field(ValueFieldsInput)
 
 
 class NovelFoodConnection(graphene.relay.Connection):
@@ -26,10 +37,119 @@ class Query(graphene.ObjectType):
     )
 
     def resolve_novel_foods(self, info, filters=None, **kwargs):
-        def create_q_object(lookup_field, lookup_type, value):
-            lookup = f"{lookup_field}__{lookup_type}"
-            print("lookup: value", f"{lookup}: {value}")
-            return Q(**{lookup: value})
+        def get_sub_queryset(
+            filter_qualifier,
+            filter_value,
+            django_app,
+            django_model,
+            qualifier_field,
+            value_field,
+            upper_range_value_field,
+        ):
+            qualifier_field = qualifier_field + "__extended_name"
+
+            if filter_qualifier == "lt":
+                annot_condition = (
+                    Q(**{qualifier_field: "traces"})
+                    | Q(**{qualifier_field: "Less than"})
+                    | Q(**{qualifier_field: "Less than or equal to"})
+                    | (
+                        (
+                            Q(**{qualifier_field: "Greater than"})
+                            | Q(**{qualifier_field: "Greater than or qual to"})
+                            | Q(**{qualifier_field: "Equal to"})
+                            | Q(**{qualifier_field: "Circa"})
+                        )
+                        & Q(**{value_field + "__lt": filter_value})
+                    )
+                )
+
+            elif filter_qualifier == "gt":
+                annot_condition = (
+                    Q(**{qualifier_field: "traces"})
+                    | Q(**{qualifier_field: "Greater than"})
+                    | Q(**{qualifier_field: "Greater than or equal to"})
+                    | (
+                        (
+                            Q(**{qualifier_field: "Less than"})
+                            | Q(**{qualifier_field: "Less than or equal to"})
+                            | Q(**{qualifier_field: "Equal to"})
+                            | Q(**{qualifier_field: "Circa"})
+                        )
+                        & Q(**{value_field + "__gt": filter_value})
+                    )
+                )
+                if upper_range_value_field:
+                    annot_condition |= Q(
+                        **{upper_range_value_field + "__gt": filter_value}
+                    )
+
+            elif filter_qualifier == "iexact":
+                annot_condition = (
+                    Q(**{qualifier_field: "traces"})
+                    | (
+                        (
+                            Q(**{qualifier_field: "Equal to"})
+                            | Q(**{qualifier_field: "Circa"})
+                        )
+                        & Q(**{value_field: filter_value})
+                    )
+                    | (
+                        Q(**{qualifier_field: "Greater than"})
+                        & Q(**{value_field + "__lt": filter_value})
+                    )
+                    | (
+                        Q(**{qualifier_field: "Greater than or equal to"})
+                        & (
+                            Q(**{value_field: filter_value})
+                            | Q(**{value_field + "__lt": filter_value})
+                        )
+                    )
+                    | (
+                        Q(**{qualifier_field: "Less than"})
+                        & Q(**{value_field + "__gt": filter_value})
+                    )
+                    | (
+                        Q(**{qualifier_field: "Less than or equal to"})
+                        & (
+                            Q(**{value_field: filter_value})
+                            | Q(**{value_field + "__gt": filter_value})
+                        )
+                    )
+                )
+                if upper_range_value_field:
+                    annot_condition |= Q(
+                        **{upper_range_value_field + "__isnull": False}
+                    ) & (
+                        Q(**{value_field: filter_value})
+                        | Q(**{upper_range_value_field: filter_value})
+                        | (
+                            Q(**{value_field + "__lt": filter_value})
+                            & Q(**{upper_range_value_field + "__gt": filter_value})
+                        )
+                    )
+            else:
+                raise ValueError("Frontend has not send a supported filter_qualifier")
+
+            annotation = {
+                "include": Case(
+                    When(annot_condition, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                )
+            }
+
+            qs = (
+                apps.get_model(django_app, django_model)
+                .objects.annotate(**annotation)
+                .filter(include=True)
+            )
+            return qs
+
+        def create_q_object(lookup_field, filter_qualifier, filter_value):
+            lookup = f"{lookup_field}__{filter_qualifier}"
+            print("lookup: filter_value", f"{lookup}: {filter_value}")
+            return Q(**{lookup: filter_value})
 
         def create_isnull_or_isempty_q_object(field_chain):
             """
@@ -60,49 +180,92 @@ class Query(graphene.ObjectType):
         }
 
         for f in filters:
-            include = f.get("include")
-            lookup_field = f.get("django_lookup_field")
-            lookup_type = map[f.get("qualifier")]
-            value = f.get("value")
+            field_type = f.get("field_type", None)
+            filter_qualifier = map[f.get("qualifier")]
+            filter_value = f.get("value", None)
+            lookup_field = f.get("django_lookup_field", None)
+            include = f.get("include", None)
+            value_fields = f.get("value_fields", None)
+            if value_fields:
+                django_app = value_fields.get("django_app", None)
+                django_model = value_fields.get("django_model", None)
+                qualifier_field = value_fields.get("qualifier_field", None)
+                value_field = value_fields.get("value_field", None)
+                upper_range_value_field = value_fields.get(
+                    "upper_range_value_field", None
+                )
+            else:
+                django_app = None
+                django_model = None
+                qualifier_field = None
+                value_field = None
+                upper_range_value_field = None
 
             # for taxonomy node fields
-            if lookup_field.endswith("__tax_node"):
+            if field_type == "tax_node":
                 # values offered in frontend are:
                 # TaxonomyNode.short_name values or
                 # TaxonomyNode.extended_name values if TaxonomyNode.short_name is empty,
-                # therefore here we match incomming value with TaxonomyNode.short_name or
+                # therefore here we match incomming filter_value with TaxonomyNode.short_name or
                 # with TaxonomyNode.extended_name if TaxonomyNode.short_name is empty
-                prefix = lookup_field[: -len("__tax_node")]
-
-                if lookup_type == "isnull":
-                    q_object = create_isnull_or_isempty_q_object(prefix)
+                if filter_qualifier == "isnull":
+                    q_object = create_isnull_or_isempty_q_object(lookup_field)
                 else:
                     q_object = (
-                        Q(**{f"{prefix}__short_name__{lookup_type}": value})
+                        Q(
+                            **{
+                                f"{lookup_field}__short_name__{filter_qualifier}": filter_value
+                            }
+                        )
                     ) | (
                         (
-                            Q(**{f"{prefix}__short_name__isnull": True})
-                            | Q(**{f"{prefix}__short_name": ""})
+                            Q(**{f"{lookup_field}__short_name__isnull": True})
+                            | Q(**{f"{lookup_field}__short_name": ""})
                         )
-                        & Q(**{f"{prefix}__extended_name__{lookup_type}": value})
+                        & Q(
+                            **{
+                                f"{lookup_field}__extended_name__{filter_qualifier}": filter_value
+                            }
+                        )
                     )
 
             # for fields which are django.db.models.TextField
-            elif lookup_field.endswith("__text_field"):
-                lookup_field = lookup_field[: -len("__text_field")]
-
-                if lookup_type == "isnull":
+            elif field_type == "text_field":
+                if filter_qualifier == "isnull":
                     q_object = create_isnull_or_isempty_q_object(lookup_field)
                     q_object |= Q(**{lookup_field + "__exact": ""})
                 else:
-                    q_object = create_q_object(lookup_field, lookup_type, value)
+                    q_object = create_q_object(
+                        lookup_field, filter_qualifier, filter_value
+                    )
+
+            # value fields
+            elif field_type == "value_field":
+                if filter_qualifier == "isnull":
+                    q_object = create_isnull_or_isempty_q_object(lookup_field)
+                else:
+                    sub_queryset = get_sub_queryset(
+                        filter_qualifier,
+                        filter_value,
+                        django_app,
+                        django_model,
+                        qualifier_field,
+                        value_field,
+                        upper_range_value_field,
+                    )
+                    if lookup_field.endswith(f"__{value_field}"):
+                        lookup_field = lookup_field[: -len(f"__{value_field}")]
+
+                    q_object = Q(**{f"{lookup_field}__in": sub_queryset})
 
             # for all other fields
             else:
-                if lookup_type == "isnull":
+                if filter_qualifier == "isnull":
                     q_object = create_isnull_or_isempty_q_object(lookup_field)
                 else:
-                    q_object = create_q_object(lookup_field, lookup_type, value)
+                    q_object = create_q_object(
+                        lookup_field, filter_qualifier, filter_value
+                    )
 
             print("q_object", q_object)
 
