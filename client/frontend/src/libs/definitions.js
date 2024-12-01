@@ -757,9 +757,8 @@ export const fields = {
     flattenedDisplayName: 'Mandate Type Definition',
     displayGroupName: 'Mandate',
     type: 'text',
-    djangoLookupField:
-      'opinion__questions__question__mandates__mandate_type__definition',
-      fieldType: 'text_field',
+    djangoLookupField: 'opinion__questions__question__mandates__mandate_type__definition',
+    fieldType: 'text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription: 'description for Mandate Type Definition',
@@ -1632,26 +1631,6 @@ export const fields = {
       'Specifies the reference point which was derived from the endpoint study, such as NOAEL or LOAEL.',
     showInFilters: true
   },
-  'endpointstudies.endpoints.qualifier': {
-    displayName: 'Qualifier',
-    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point qualifier',
-    displayGroupName: 'Endpoint',
-    type: 'text',
-    djangoLookupField: 'endpointstudy__endpoints__qualifier',
-    fieldType: 'tax_node',
-    isPicklist: true,
-    djangoApp: 'taxonomies',
-    djangoModel: 'TaxonomyNode',
-    djangoField: 'short_name',
-    djangoLimitchoicesApp: 'studies',
-    djangoLimitchoicesModel: 'Endpoint',
-    djangoLimitchoicesField: 'qualifier',
-    qualifiers: ['is', 'is None'],
-    icon: 'mdi-scale',
-    filterDescription:
-      'Specifies the qualifier for the reference point, such as "greater than," "less than," or "equal to".',
-    showInFilters: true
-  },
   'endpointstudies.endpoints.subpopulation': {
     displayName: 'Subpopulation',
     flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point subpopulation',
@@ -1672,12 +1651,40 @@ export const fields = {
       'Specifies the subpopulation for which the reference point (e.g., LOAEL or NOAEL) was derived, such as "males," "females," or "fetus." This field is used when different reference points are determined for specific subpopulations within the study.',
     showInFilters: true
   },
+  'endpointstudies.endpoints.qualifier': {
+    displayName: 'Qualifier',
+    flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point qualifier',
+    displayGroupName: 'Endpoint',
+    type: 'text',
+    djangoLookupField: 'endpointstudy__endpoints__qualifier',
+    fieldType: 'tax_node',
+    isPicklist: true,
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'studies',
+    djangoLimitchoicesModel: 'Endpoint',
+    djangoLimitchoicesField: 'qualifier',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-scale',
+    filterDescription:
+      'Specifies the qualifier for the reference point, such as "greater than," "less than," or "equal to".',
+    showInFilters: true
+  },
+
   'endpointstudies.endpoints.lovalue': {
     displayName: 'Value',
     flattenedDisplayName: 'Toxicology - Endpoint Study - Reference point value',
     displayGroupName: 'Endpoint',
     type: 'number',
     djangoLookupField: 'endpointstudy__endpoints__lovalue',
+    fieldType: 'value_field',
+    valueFields: {
+      djangoApp: 'studies',
+      djangoModel: 'Endpoint',
+      qualifierField: 'qualifier',
+      valueField: 'lovalue'
+    },
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-arrow-down',
     filterDescription:
@@ -1750,6 +1757,13 @@ export const fields = {
     displayName: 'Value',
     flattenedDisplayName: 'Toxicology - Final Outcome Value',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__value',
+    fieldType: 'value_field',
+    valueFields: {
+      djangoApp: 'studies',
+      djangoModel: 'FinalOutcome',
+      qualifierField: 'qualifier',
+      valueField: 'value'
+    },
     displayGroupName: 'Final Outcome',
     type: 'number',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
@@ -1825,9 +1839,8 @@ export const fields = {
     flattenedDisplayName: 'Toxicology - Final Outcome Population Qualifier',
     displayGroupName: 'Population',
     type: 'text',
-    djangoLookupField:
-      'endpointstudy__endpoints__finaloutcome__populations__population__qualifier',
-      fieldType: 'tax_node',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__qualifier',
+    fieldType: 'tax_node',
     isPicklist: true,
     djangoApp: 'taxonomies',
     djangoModel: 'TaxonomyNode',
@@ -1846,8 +1859,15 @@ export const fields = {
     flattenedDisplayName: 'Toxicology - Final Outcome Population Value',
     displayGroupName: 'Population',
     type: 'number',
-    fieldType: 'tax_node',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__value',
+    fieldType: 'value_field',
+    valueFields: {
+      djangoApp: 'taxonomies',
+      djangoModel: 'Population',
+      qualifierField: 'qualifier',
+      valueField: 'value',
+      upperRangeValueField: 'upper_range_value'
+    },
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription:
@@ -1856,7 +1876,7 @@ export const fields = {
   },
   'endpointstudies.endpoints.finalOutcomes.populations.upperRangeValue': {
     displayName: 'Upper Range Value',
-    flattenedDisplayName: 'Final Outcome Population Upper Range Value',
+    flattenedDisplayName: 'Toxicology - Final Outcome Population Upper Range Value',
     displayGroupName: 'Population',
     type: 'number',
     djangoLookupField:
@@ -1871,9 +1891,8 @@ export const fields = {
     flattenedDisplayName: 'Final Outcome Population Unit',
     displayGroupName: 'Population',
     type: 'text',
-    djangoLookupField:
-      'endpointstudy__endpoints__finaloutcome__populations__population__unit',
-      fieldType: 'tax_node',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__unit',
+    fieldType: 'tax_node',
     isPicklist: true,
     djangoApp: 'taxonomies',
     djangoModel: 'TaxonomyNode',
@@ -2005,6 +2024,14 @@ export const fields = {
     displayGroupName: 'Population',
     type: 'number',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__value',
+    fieldType: 'value_field',
+    valueFields: {
+      djangoApp: 'taxonomies',
+      djangoModel: 'Population',
+      qualifierField: 'qualifier',
+      valueField: 'value',
+      upperRangeValueField: 'upper_range_value'
+    },
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
     filterDescription: 'description for Value',
@@ -2041,13 +2068,20 @@ export const fields = {
     showInFilters: true
   },
 
-
   'novelFoodVariants.compositions.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Composition Value',
     displayGroupName: 'Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__value',
+    fieldType: 'value_field',
+    valueFields: {
+      djangoApp: 'composition',
+      djangoModel: 'Composition',
+      qualifierField: 'qualifier',
+      valueField: 'value',
+      upperRangeValueField: 'upper_range_value'
+    },
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'description for Composition Value',

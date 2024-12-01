@@ -35,7 +35,8 @@ function buildVariables(addedFilters) {
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
     const djangoLookupField = fields[key].djangoLookupField ? fields[key].djangoLookupField : null
     const fieldType = fields[key].fieldType ? fields[key].fieldType : null
-    acc.push({ qualifier, include, value, djangoLookupField, fieldType })
+    const valueFields = fields[key].valueFields ? fields[key].valueFields : null
+    acc.push({ qualifier, include, value, djangoLookupField, fieldType, valueFields})
     return acc
   }, [])
 }
