@@ -13,13 +13,25 @@ import { fields, novelFoodAndOpinionFields } from './definitions'
 const allFields = { ...fields, ...novelFoodAndOpinionFields }
 
 function buildVariables(addedFilters) {
-  return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
-    const djangoLookupField = allFields[key].djangoLookupField
-      ? allFields[key].djangoLookupField
+  return addedFilters.reduce((acc, { path, include, djangoModel, coupledFilters }) => {
+    const djangoLookupField = allFields[coupledFilters[0].key].djangoLookupField
+      ? allFields[coupledFilters[0].key].djangoLookupField
       : null
-    const fieldType = allFields[key].fieldType ? allFields[key].fieldType : null
-    const valueFields = allFields[key].valueFields ? allFields[key].valueFields : null
-    acc.push({ qualifier, include, value, djangoLookupField, fieldType, valueFields })
+    const fieldType = allFields[coupledFilters[0].key].fieldType
+      ? allFields[coupledFilters[0].key].fieldType
+      : null
+    const valueFields = allFields[coupledFilters[0].key].valueFields
+      ? allFields[coupledFilters[0].key].valueFields
+      : null
+    acc.push({
+      path,
+      include,
+      djangoModel,
+      coupledFilters: coupledFilters.map(({ qualifier, value }) => {
+        return { qualifier, value, djangoLookupField, fieldType, valueFields }
+      })
+    })
+
     return acc
   }, [])
 }

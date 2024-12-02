@@ -14,14 +14,20 @@ class ValueFieldsInput(graphene.InputObjectType):
 
 
 # Define the custom filter input
-class NovelFoodFilterInput(graphene.InputObjectType):
-    include = graphene.String()
+class CoupledFilterInput(graphene.InputObjectType):
     key = graphene.String()
     qualifier = graphene.String()
     value = graphene.String()
     django_lookup_field = graphene.String()
     field_type = graphene.String()
     value_fields = graphene.Field(ValueFieldsInput)
+
+
+class NovelFoodFilterInput(graphene.InputObjectType):
+    path = graphene.String()
+    include = graphene.String()
+    django_model = graphene.String()
+    coupled_filters = graphene.List(CoupledFilterInput)
 
 
 class NovelFoodConnection(graphene.relay.Connection):
@@ -180,99 +186,99 @@ class Query(graphene.ObjectType):
         }
 
         for f in filters:
-            field_type = f.get("field_type", None)
-            filter_qualifier = map[f.get("qualifier")]
-            filter_value = f.get("value", None)
-            lookup_field = f.get("django_lookup_field", None)
+            # f_path = f.get("path")
             include = f.get("include", None)
-            value_fields = f.get("value_fields", None)
-            if value_fields:
-                django_app = value_fields.get("django_app", None)
-                django_model = value_fields.get("django_model", None)
-                qualifier_field = value_fields.get("qualifier_field", None)
-                value_field = value_fields.get("value_field", None)
-                upper_range_value_field = value_fields.get(
-                    "upper_range_value_field", None
-                )
-            else:
-                django_app = None
-                django_model = None
-                qualifier_field = None
-                value_field = None
-                upper_range_value_field = None
+            # django_model = f.get("django_model", None)
+            for coup_f in f.get("coupled_filters"):
+                field_type = coup_f.get("field_type", None)
+                filter_qualifier = map[coup_f.get("qualifier")]
+                filter_value = coup_f.get("value", None)
+                lookup_field = coup_f.get("django_lookup_field", None)
 
-            # for taxonomy node fields
-            if field_type == "tax_node":
-                # values offered in frontend are:
-                # TaxonomyNode.short_name values or
-                # TaxonomyNode.extended_name values if TaxonomyNode.short_name is empty,
-                # therefore here we match incomming filter_value with TaxonomyNode.short_name or
-                # with TaxonomyNode.extended_name if TaxonomyNode.short_name is empty
-                if filter_qualifier == "isnull":
-                    q_object = create_isnull_or_isempty_q_object(lookup_field)
+                value_fields = coup_f.get("value_fields", None)
+                if value_fields:
+                    django_app = value_fields.get("django_app", None)
+                    django_model = value_fields.get("django_model", None)
+                    qualifier_field = value_fields.get("qualifier_field", None)
+                    value_field = value_fields.get("value_field", None)
+                    upper_range_value_field = value_fields.get(
+                        "upper_range_value_field", None
+                    )
                 else:
-                    q_object = (
-                        Q(
-                            **{
-                                f"{lookup_field}__short_name__{filter_qualifier}": filter_value
-                            }
+                    django_app = None
+                    django_model = None
+                    qualifier_field = None
+                    value_field = None
+                    upper_range_value_field = None
+
+                # for taxonomy node fields
+                if field_type == "tax_node":
+                    # values offered in frontend are:
+                    # TaxonomyNode.short_name values or
+                    # TaxonomyNode.extended_name values if TaxonomyNode.short_name is empty,
+                    # therefore here we match incomming filter_value with TaxonomyNode.short_name or
+                    # with TaxonomyNode.extended_name if TaxonomyNode.short_name is empty
+                    if filter_qualifier == "isnull":
+                        q_object = create_isnull_or_isempty_q_object(lookup_field)
+                    else:
+                        short_name_lookup = (
+                            f"{lookup_field}__short_name__{filter_qualifier}"
                         )
-                    ) | (
-                        (
-                            Q(**{f"{lookup_field}__short_name__isnull": True})
-                            | Q(**{f"{lookup_field}__short_name": ""})
+                        extended_name_lookup = (
+                            f"{lookup_field}__extended_name__{filter_qualifier}"
                         )
-                        & Q(
-                            **{
-                                f"{lookup_field}__extended_name__{filter_qualifier}": filter_value
-                            }
+                        q_object = (Q(**{short_name_lookup: filter_value})) | (
+                            (
+                                Q(**{f"{lookup_field}__short_name__isnull": True})
+                                | Q(**{f"{lookup_field}__short_name": ""})
+                            )
+                            & Q(**{extended_name_lookup: filter_value})
                         )
-                    )
 
-            # for fields which are django.db.models.TextField
-            elif field_type == "text_field":
-                if filter_qualifier == "isnull":
-                    q_object = create_isnull_or_isempty_q_object(lookup_field)
-                    q_object |= Q(**{lookup_field + "__exact": ""})
+                # for fields which are django.db.models.TextField
+                elif field_type == "text_field":
+                    if filter_qualifier == "isnull":
+                        q_object = create_isnull_or_isempty_q_object(lookup_field)
+                        q_object |= Q(**{lookup_field + "__exact": ""})
+                    else:
+                        q_object = create_q_object(
+                            lookup_field, filter_qualifier, filter_value
+                        )
+
+                # value fields
+                elif field_type == "value_field":
+                    if filter_qualifier == "isnull":
+                        q_object = create_isnull_or_isempty_q_object(lookup_field)
+                    else:
+                        sub_queryset = get_sub_queryset(
+                            filter_qualifier,
+                            filter_value,
+                            django_app,
+                            django_model,
+                            qualifier_field,
+                            value_field,
+                            upper_range_value_field,
+                        )
+                        if lookup_field.endswith(f"__{value_field}"):
+                            lookup_field = lookup_field[: -len(f"__{value_field}")]
+
+                        q_object = Q(**{f"{lookup_field}__in": sub_queryset})
+
+                # for all other fields
                 else:
-                    q_object = create_q_object(
-                        lookup_field, filter_qualifier, filter_value
-                    )
+                    if filter_qualifier == "isnull":
+                        q_object = create_isnull_or_isempty_q_object(lookup_field)
+                    else:
+                        q_object = create_q_object(
+                            lookup_field, filter_qualifier, filter_value
+                        )
 
-            # value fields
-            elif field_type == "value_field":
-                if filter_qualifier == "isnull":
-                    q_object = create_isnull_or_isempty_q_object(lookup_field)
-                else:
-                    sub_queryset = get_sub_queryset(
-                        filter_qualifier,
-                        filter_value,
-                        django_app,
-                        django_model,
-                        qualifier_field,
-                        value_field,
-                        upper_range_value_field,
-                    )
-                    if lookup_field.endswith(f"__{value_field}"):
-                        lookup_field = lookup_field[: -len(f"__{value_field}")]
+                print("q_object", q_object)
 
-                    q_object = Q(**{f"{lookup_field}__in": sub_queryset})
-
-            # for all other fields
-            else:
-                if filter_qualifier == "isnull":
-                    q_object = create_isnull_or_isempty_q_object(lookup_field)
-                else:
-                    q_object = create_q_object(
-                        lookup_field, filter_qualifier, filter_value
-                    )
-
-            print("q_object", q_object)
-
-            if include == "must have":
-                qs = qs.filter(q_object).distinct()
-            elif include == "must not have":
-                qs = qs.exclude(q_object).distinct()
+                if include == "must have":
+                    qs = qs.filter(q_object).distinct()
+                elif include == "must not have":
+                    qs = qs.exclude(q_object).distinct()
         print("QUERYSET: ", qs)
         return qs
 

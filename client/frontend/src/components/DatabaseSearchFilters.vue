@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-btn @click="print">print</v-btn>
     <v-row class="mt-4">
       <v-col cols="6">
         <v-row class="d-flex justify-center">
@@ -42,7 +43,7 @@
               @keyup.enter="addFilter"
             >
               <v-card-subtitle class="text-h6 pt-4">
-                {{ this.newFilter.group }}
+                {{ this.newFilter.coupledFilters[0].group }}
               </v-card-subtitle>
               <v-card-text class="pb-0">
                 <v-container>
@@ -58,23 +59,43 @@
                           max-width="140px"
                         ></v-select>
                         <v-autocomplete
-                          v-model="newFilter.key"
+                          v-model="newFilter.coupledFilters[0].key"
                           :items="filtersItems"
                           item-title="displayName"
                           item-value="key"
                           class="ml-6"
                           variant="underlined"
                           @update:modelValue="updateFilterKey"
-                        ></v-autocomplete>
+                          ><template v-slot:append>
+                            <v-icon small>mdi-information-outline</v-icon>
+                          </template></v-autocomplete
+                        >
                       </v-row>
                     </v-col>
+                    <!-- <v-col cols="12">
+                      <v-row class="d-flex align-center">
+                        <span>with</span>
+                        <v-autocomplete
+                          v-model="newFilter.coupledFilters[0].key"
+                          :items="filtersItems"
+                          item-title="displayName"
+                          item-value="key"
+                          class="ml-6"
+                          variant="underlined"
+                          @update:modelValue="updateFilterKey"
+                          ><template v-slot:append>
+                            <v-icon small>mdi-information-outline</v-icon>
+                          </template></v-autocomplete
+                        >
+                      </v-row>
+                    </v-col> -->
                     <v-col cols="12">
                       <v-row class="d-flex align-center">
-                        <span v-if="newFilter.key">which</span>
+                        <span v-if="newFilter.coupledFilters[0].key">which</span>
                         <v-autocomplete
-                          :disabled="!newFilter.key"
-                          v-model="newFilter.qualifier"
-                          :items="fields[newFilter.key]?.qualifiers || []"
+                          :disabled="!newFilter.coupledFilters[0].key"
+                          v-model="newFilter.coupledFilters[0].qualifier"
+                          :items="fields[newFilter.coupledFilters[0].key]?.qualifiers || []"
                           max-width="150px"
                           variant="underlined"
                           class="ml-6"
@@ -82,28 +103,39 @@
                         ></v-autocomplete>
                         <v-autocomplete
                           v-if="showOptionsListField"
-                          v-model="newFilter.value"
-                          :items="newFilter.options"
+                          v-model="newFilter.coupledFilters[0].value"
+                          :items="newFilter.coupledFilters[0].options"
                           variant="underlined"
                           class="ml-6"
                         ></v-autocomplete>
                         <v-text-field
                           v-if="showValueField"
                           variant="underlined"
-                          v-model="newFilter.value"
-                          :type="fields[newFilter.key]?.type"
+                          v-model="newFilter.coupledFilters[0].value"
+                          :type="fields[newFilter.coupledFilters[0].key]?.type"
                           class="ml-6"
-                          :disabled="!newFilter.key"
+                          :disabled="!newFilter.coupledFilters[0].key"
                         ></v-text-field>
                       </v-row>
                     </v-col>
 
-                    <v-col v-if="fields[newFilter.key]?.filterDescription" cols="12">
+                    <v-col
+                      v-if="fields[newFilter.coupledFilters[0].key]?.filterDescription"
+                      cols="12"
+                    >
                       <p>
-                        {{ fields[newFilter.key].filterDescription }}
+                        {{ fields[newFilter.coupledFilters[0].key].filterDescription }}
                       </p>
                     </v-col>
                   </v-row>
+                  <!-- <v-row class="d-flex justify-center mt-5">
+                    <v-btn color="secondary" variant="tonal" @click="addingFilter = true">
+                      and with..
+                    </v-btn>
+                  </v-row>
+                  <v-row class="d-flex justify-center mb-0" v-if="true">
+                    <span class="mt-0">and</span>
+                  </v-row> -->
                 </v-container>
               </v-card-text>
               <v-card-actions class="mb-1 pt-0">
@@ -155,17 +187,17 @@
               <v-card-text class="pt-0">
                 Novel Foods <b>{{ filter.include }}</b> {{ ' ' }}
                 <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                  filter.title
+                  filter.coupledFilters[0].title
                 }}</v-chip
-                >{{ ' ' }}which <b>{{ filter.qualifier }}</b
+                >{{ ' ' }}which <b>{{ filter.coupledFilters[0].qualifier }}</b
                 >{{ ' ' }}
                 <v-chip
-                  v-if="filter.value"
+                  v-if="filter.coupledFilters[0].value"
                   rounded="pill"
                   density="compact"
                   class="pb-1"
                   color="secondary"
-                  >{{ filter.value }}</v-chip
+                  >{{ filter.coupledFilters[0].value }}</v-chip
                 >
               </v-card-text>
             </v-card>
@@ -311,14 +343,29 @@ export default {
     selectedField: '',
     expandedItems: {},
     filter: '',
+    // newFilter: {
+    //   key: '',
+    //   include: '',
+    //   title: '',
+    //   group: '',
+    //   qualifier: '',
+    //   value: '',
+    //   options: []
+    // },
     newFilter: {
-      key: '',
+      path: '',
       include: '',
-      title: '',
-      group: '',
-      qualifier: '',
-      value: '',
-      options: []
+      djangoModel: '',
+      coupledFilters: [
+        {
+          key: '',
+          title: '',
+          group: '',
+          qualifier: '',
+          value: '',
+          options: []
+        }
+      ]
     },
     addedFilters: [],
     novelFoodAndOpinionFields: novelFoodAndOpinionFields,
@@ -329,6 +376,9 @@ export default {
     preselectGroups: preselectGroups
   }),
   methods: {
+    print() {
+      console.log('addedFilters', this.addedFilters)
+    },
     handleClick(field, key) {
       if (key in this.preselectGroups) {
         for (let fieldToPreselect of this.preselectGroups[key]) {
@@ -371,12 +421,12 @@ export default {
             `options for ${djangoApp} - ${djangoModel}.${djangoField} are:`,
             response.data
           )
-          this.newFilter.options = response.data.filter((option) => option)
+          this.newFilter.coupledFilters[0].options = response.data.filter((option) => option)
         } catch (error) {
           console.error(`Error fetching options from ${url} endpoint`, error)
         }
       } else {
-        this.newFilter.options = []
+        this.newFilter.coupledFilters[0].options = []
       }
     },
     getHeadersToHide() {
@@ -393,70 +443,91 @@ export default {
     },
     addFilter() {
       if (this.addFilterValid) {
+        // this.addedFilters.unshift({
+        //   id: this.addedFilters.length + 1,
+        //   key: this.newFilter.key,
+        //   include: this.newFilter.include,
+        //   title: this.newFilter.title,
+        //   group: this.newFilter.group,
+        //   qualifier: this.newFilter.qualifier,
+        //   value: this.newFilter.qualifier === 'is None' ? '' : this.newFilter.value
+        // })
         this.addedFilters.unshift({
           id: this.addedFilters.length + 1,
-          key: this.newFilter.key,
+          path: this.newFilter.path,
           include: this.newFilter.include,
-          title: this.newFilter.title,
-          group: this.newFilter.group,
-          qualifier: this.newFilter.qualifier,
-          value: this.newFilter.qualifier === 'is None' ? '' : this.newFilter.value
+          djangoModel: this.newFilter.djangoModel,
+          coupledFilters: this.newFilter.coupledFilters.map((filter) => ({
+            key: filter.key,
+            title: filter.title,
+            group: filter.group,
+            qualifier: filter.qualifier,
+            value: filter.value
+          }))
         })
         this.addingFilter = false
         this.newFilter = {
-          key: '',
+          path: '',
           include: '',
-          title: '',
-          group: '',
-          qualifier: '',
-          value: '',
-          options: []
+          djangoModel: '',
+          coupledFilters: [
+            {
+              key: '',
+              title: '',
+              group: '',
+              qualifier: '',
+              value: '',
+              options: []
+            }
+          ]
         }
       }
     },
     async updateFilterQualifier() {
-      const selectedField = this.fields[this.newFilter.key]
+      const selectedField = this.fields[this.newFilter.coupledFilters[0].key]
 
       if (selectedField) {
         await this.getOptions(selectedField)
       }
     },
     async updateFilterKey() {
-      const selectedField = this.fields[this.newFilter.key]
+      const selectedField = this.fields[this.newFilter.coupledFilters[0].key]
 
       if (selectedField) {
-        this.newFilter.title = selectedField.flattenedDisplayName || selectedField.displayName
-        this.newFilter.qualifier =
+        this.newFilter.coupledFilters[0].title =
+          selectedField.flattenedDisplayName || selectedField.displayName
+        this.newFilter.coupledFilters[0].qualifier =
           selectedField.qualifiers.length === 1 ? selectedField.qualifiers[0] : ''
-        this.newFilter.group = selectedField.displayGroupName
-        this.newFilter.value = ''
+        this.newFilter.coupledFilters[0].group = selectedField.displayGroupName
+        this.newFilter.coupledFilters[0].value = ''
         await this.getOptions(selectedField)
       }
     },
     cancelNewFilter() {
       this.addingFilter = false
       this.newFilter = {
+        path: '',
         include: '',
-        key: '',
-        title: '',
-        group: '',
-        qualifier: '',
-        value: '',
-        options: []
+        djangoModel: '',
+        coupledFilters: [
+          {
+            key: '',
+            title: '',
+            group: '',
+            qualifier: '',
+            value: '',
+            options: []
+          }
+        ]
       }
     },
     editFilter(index) {
       this.addingFilter = true
       this.newFilter = {
-        include: this.addedFilters[index].include,
-        key: this.addedFilters[index].key,
-        title: this.addedFilters[index].title,
-        group: this.addedFilters[index].group,
-        qualifier: this.addedFilters[index].qualifier,
-        value: this.addedFilters[index].value,
-        options: this.addedFilters[index].options ? this.addedFilters[index].options : []
+        path: this.addedFilters[index].path,
+        coupledFilters: this.addedFilters[index].coupledFilters
       }
-      const selectedField = this.fields[this.newFilter.key]
+      const selectedField = this.fields[this.newFilter.coupledFilters[0].key]
       this.getOptions(selectedField)
       this.removeFilter(index)
     },
@@ -464,6 +535,7 @@ export default {
       this.addedFilters.splice(index, 1)
     },
     renderTable() {
+      console.log('new this.addedFilters', this.addedFilters)
       this.$emit('render-table', this.addedFilters, this.selectedFields, this.getHeadersToHide())
       this.$emit('close')
     }
@@ -479,14 +551,20 @@ export default {
       }
     },
     showOptionsListField() {
-      return this.newFilter.options.length > 0 && this.newFilter.qualifier !== 'is None'
+      return (
+        this.newFilter.coupledFilters[0].options.length > 0 &&
+        this.newFilter.coupledFilters[0].qualifier !== 'is None'
+      )
     },
     showValueField() {
-      return this.newFilter.options.length < 1 && this.newFilter.qualifier !== 'is None'
+      return (
+        this.newFilter.coupledFilters[0].options.length < 1 &&
+        this.newFilter.coupledFilters[0].qualifier !== 'is None'
+      )
     },
     filtersItems() {
       return (
-        Object.entries({ ...this.novelFoodAndOpinionFields, ...this.objectTypes })
+        Object.entries({ ...this.novelFoodAndOpinionFields }) // ...this.objectTypes
           // filterout fields which are not showInFilters
           .filter((entry) => entry[1].showInFilters)
           .map(([key, field]) => ({
@@ -500,9 +578,11 @@ export default {
     },
     addFilterValid() {
       const hasNecessaryFields =
-        this.newFilter.include && this.newFilter.title && this.newFilter.qualifier
-      const hasValue = this.newFilter.value
-      if (this.newFilter.qualifier != 'is None') {
+        this.newFilter.include &&
+        this.newFilter.coupledFilters[0].title &&
+        this.newFilter.coupledFilters[0].qualifier
+      const hasValue = this.newFilter.coupledFilters[0].value
+      if (this.newFilter.coupledFilters[0].qualifier != 'is None') {
         return hasNecessaryFields && hasValue
       } else {
         return hasNecessaryFields
