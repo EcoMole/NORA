@@ -1,103 +1,135 @@
 export const objectTypes = {
   allergenicities: {
-    displayName: 'Allergenicity'
+    displayName: 'Allergenicity',
+    showInFilters: true
   },
   synonyms: {
-    displayName: 'Novel Food Synonym'
+    displayName: 'Novel Food Synonym',
+    showInFilters: true
   },
   panels: {
-    displayName: 'Panel'
+    displayName: 'Panel',
+    showInFilters: true
   },
   sciOfficers: {
-    displayName: 'Scientific Officer'
+    displayName: 'Scientific Officer',
+    showInFilters: true
   },
   questions: {
-    displayName: 'Question'
+    displayName: 'Question',
+    showInFilters: true
   },
   'questions.applicants': {
-    displayName: 'Applicant'
+    displayName: 'Applicant',
+    showInFilters: true
   },
   'questions.mandates': {
-    displayName: 'Mandate'
+    displayName: 'Mandate',
+    showInFilters: true
   },
   foodCategories: {
-    displayName: 'Food Category'
+    displayName: 'Food Category',
+    showInFilters: true
   },
   novelFoodCategories: {
-    displayName: 'Novel Food Category'
+    displayName: 'Novel Food Category',
+    showInFilters: true
   },
   admes: {
-    displayName: 'ADME'
+    displayName: 'ADME',
+    showInFilters: true
   },
   'admes.investigationTypes': {
-    displayName: 'Investigation Type'
+    displayName: 'Investigation Type',
+    showInFilters: true
   },
   genotoxes: {
-    displayName: 'Genotox'
+    displayName: 'Genotox',
+    showInFilters: true
   },
   endpointstudies: {
-    displayName: 'Endpoint Study'
+    displayName: 'Endpoint Study',
+    showInFilters: true
   },
   'endpointstudies.endpoints': {
-    displayName: 'Endpoint'
+    displayName: 'Endpoint',
+    showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes': {
-    displayName: 'Final Outcome'
+    displayName: 'Final Outcome',
+    showInFilters: true
   },
   'endpointstudies.endpoints.finalOutcomes.populations': {
-    displayName: 'Population'
+    displayName: 'Population',
+    showInFilters: true
   },
   novelFoodVariants: {
-    displayName: 'Novel Food Variant'
+    displayName: 'Novel Food Variant',
+    showInFilters: true
   },
   'novelFoodVariants.riskAssessRedFlags': {
-    displayName: 'Risk Assessment Red Flag'
+    displayName: 'Risk Assessment Red Flag',
+    showInFilters: true
   },
   'novelFoodVariants.productionProcesses': {
-    displayName: 'Production Process'
+    displayName: 'Production Process',
+    showInFilters: true
   },
   'novelFoodVariants.proposedUses': {
-    displayName: 'Proposed Use'
+    displayName: 'Proposed Use',
+    showInFilters: true
   },
   'novelFoodVariants.proposedUses.population': {
-    displayName: 'Proposed Uses Population'
+    displayName: 'Proposed Uses Population',
+    showInFilters: true
   },
   'novelFoodVariants.compositions': {
-    displayName: 'Composition'
+    displayName: 'Composition',
+    showInFilters: true
   },
   organisms: {
-    displayName: 'Organism'
+    displayName: 'Organism',
+    showInFilters: true
   },
   'organisms.species': {
-    displayName: 'Taxonomy'
+    displayName: 'Taxonomy',
+    showInFilters: true
   },
   'organisms.orgSynonyms': {
-    displayName: 'Organism Synonym'
+    displayName: 'Organism Synonym',
+    showInFilters: true
   },
   chemicals: {
-    displayName: 'Chemical'
+    displayName: 'Chemical',
+    showInFilters: true
   },
   'chemicals.chemSynonyms': {
-    displayName: 'Chemical Synonym'
+    displayName: 'Chemical Synonym',
+    showInFilters: true
   },
   'chemicals.chemDescriptors': {
-    displayName: 'Chemical Descriptor'
+    displayName: 'Chemical Descriptor',
+    showInFilters: true
   },
   specificToxicities: {
-    displayName: 'Specific Toxicity'
+    displayName: 'Specific Toxicity',
+    showInFilters: true
   },
   substancesOfConcern: {
-    displayName: 'Substance of Concern'
+    displayName: 'Substance of Concern',
+    showInFilters: true
   },
   backgroundExposureAssessments: {
-    displayName: 'Background Exposure Assessment'
+    displayName: 'Background Exposure Assessment',
+    showInFilters: true
   },
   hbgvs: {
-    displayName: 'HBGV'
+    displayName: 'HBGV',
+    showInFilters: true
   }
 }
 
-export const fields = {
+export const novelFoodAndOpinionFields = {
   // novel food
 
   novelFoodId: {
@@ -410,6 +442,85 @@ export const fields = {
     showInFilters: true
   },
 
+  // opinion
+
+  opinionDocumentType: {
+    displayName: 'Opinion Document Type',
+    displayGroupName: 'Opinion',
+    type: 'text',
+    djangoLookupField: 'opinion__document_type',
+    fieldType: 'tax_node',
+    apiEndpoint: 'picklist/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'administrative',
+    djangoLimitchoicesModel: 'Opinion',
+    djangoLimitchoicesField: 'document_type',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription:
+      'Defines whether the document is an EFSA opinion, Technical Report or an EFSA statement.',
+    showInFilters: true
+  },
+  opinionTitle: {
+    displayName: 'Opinion Title',
+    displayGroupName: 'Opinion',
+    type: 'text',
+    djangoLookupField: 'opinion__title',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription:
+      'Title of the publication, e.g., “Safety of chia seeds (Salvia hispanica L.) powders, as novel foods, pursuant to Regulation (EU) 2015/2283”',
+    showInFilters: true
+  },
+  opinionDoi: {
+    displayName: 'Opinion DOI',
+    displayGroupName: 'Opinion',
+    type: 'text',
+    djangoLookupField: 'opinion__doi',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription:
+      'Digital Object Identifier (DOI) of the publication, e.g., “10.2903/j.efsa.2021.6846”',
+    showInFilters: true
+  },
+  opinionUrl: {
+    displayName: 'Opinion URL',
+    displayGroupName: 'Opinion',
+    type: 'text',
+    djangoLookupField: 'opinion__url',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription:
+      'URL to the publication on the EFSA Journal website, e.g., “https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2021.6846”',
+    showInFilters: true
+  },
+  opinionPublicationDate: {
+    displayName: 'Opinion Publication Date',
+    displayGroupName: 'Opinion',
+    type: 'date',
+    djangoLookupField: 'opinion__publication_date',
+    qualifiers: ['is before', 'is after', 'is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription:
+      'The date when the publication (scientific opinion/technical report/statement) was published',
+    showInFilters: true
+  },
+  opinionAdoptionDate: {
+    displayName: 'Opinion Adoption Date',
+    displayGroupName: 'Opinion',
+    type: 'date',
+    djangoLookupField: 'opinion__adoption_date',
+    qualifiers: ['is before', 'is after', 'is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription:
+      'The date when the publication (scientific opinion/statement) was adopted by the Panel. For Technical reports, this is the “Approval date”.',
+    showInFilters: true
+  }
+}
+
+export const fields = {
   'allergenicities.title': {
     displayName: '',
     flattenedDisplayName: 'Allergenicity',
@@ -589,83 +700,6 @@ export const fields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription: 'description for Novel Food Synonym Type Definition',
-    showInFilters: true
-  },
-
-  // opinion
-
-  opinionDocumentType: {
-    displayName: 'Opinion Document Type',
-    displayGroupName: 'Opinion',
-    type: 'text',
-    djangoLookupField: 'opinion__document_type',
-    fieldType: 'tax_node',
-    apiEndpoint: 'picklist/',
-    djangoApp: 'taxonomies',
-    djangoModel: 'TaxonomyNode',
-    djangoField: 'short_name',
-    djangoLimitchoicesApp: 'administrative',
-    djangoLimitchoicesModel: 'Opinion',
-    djangoLimitchoicesField: 'document_type',
-    qualifiers: ['is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription:
-      'Defines whether the document is an EFSA opinion, Technical Report or an EFSA statement.',
-    showInFilters: true
-  },
-  opinionTitle: {
-    displayName: 'Opinion Title',
-    displayGroupName: 'Opinion',
-    type: 'text',
-    djangoLookupField: 'opinion__title',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription:
-      'Title of the publication, e.g., “Safety of chia seeds (Salvia hispanica L.) powders, as novel foods, pursuant to Regulation (EU) 2015/2283”',
-    showInFilters: true
-  },
-  opinionDoi: {
-    displayName: 'Opinion DOI',
-    displayGroupName: 'Opinion',
-    type: 'text',
-    djangoLookupField: 'opinion__doi',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription:
-      'Digital Object Identifier (DOI) of the publication, e.g., “10.2903/j.efsa.2021.6846”',
-    showInFilters: true
-  },
-  opinionUrl: {
-    displayName: 'Opinion URL',
-    displayGroupName: 'Opinion',
-    type: 'text',
-    djangoLookupField: 'opinion__url',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription:
-      'URL to the publication on the EFSA Journal website, e.g., “https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2021.6846”',
-    showInFilters: true
-  },
-  opinionPublicationDate: {
-    displayName: 'Opinion Publication Date',
-    displayGroupName: 'Opinion',
-    type: 'date',
-    djangoLookupField: 'opinion__publication_date',
-    qualifiers: ['is before', 'is after', 'is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription:
-      'The date when the publication (scientific opinion/technical report/statement) was published',
-    showInFilters: true
-  },
-  opinionAdoptionDate: {
-    displayName: 'Opinion Adoption Date',
-    displayGroupName: 'Opinion',
-    type: 'date',
-    djangoLookupField: 'opinion__adoption_date',
-    qualifiers: ['is before', 'is after', 'is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription:
-      'The date when the publication (scientific opinion/statement) was adopted by the Panel. For Technical reports, this is the “Approval date”.',
     showInFilters: true
   },
 
@@ -1882,9 +1916,8 @@ export const fields = {
     flattenedDisplayName: 'Toxicology - Final Outcome Population Qualifier',
     displayGroupName: 'Population',
     type: 'text',
-    djangoLookupField:
-      'endpointstudy__endpoints__finaloutcome__populations__population__qualifier',
-      fieldType: 'tax_node',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__qualifier',
+    fieldType: 'tax_node',
     apiEndpoint: 'picklist/',
     djangoApp: 'taxonomies',
     djangoModel: 'TaxonomyNode',
@@ -1936,9 +1969,8 @@ export const fields = {
     flattenedDisplayName: 'Final Outcome Population Unit',
     displayGroupName: 'Population',
     type: 'text',
-    djangoLookupField:
-      'endpointstudy__endpoints__finaloutcome__populations__population__unit',
-      fieldType: 'tax_node',
+    djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__unit',
+    fieldType: 'tax_node',
     apiEndpoint: 'picklist/',
     djangoApp: 'taxonomies',
     djangoModel: 'TaxonomyNode',

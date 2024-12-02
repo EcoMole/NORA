@@ -296,7 +296,7 @@
 </template>
 
 <script>
-import { fields, preselectGroups } from '@/libs/definitions'
+import { novelFoodAndOpinionFields, objectTypes, fields, preselectGroups } from '@/libs/definitions'
 import { useTheme } from 'vuetify'
 import axios from '@/libs/axios'
 import { attrsMandatoryForExport } from '@/libs/graphql-query'
@@ -321,7 +321,9 @@ export default {
       options: []
     },
     addedFilters: [],
-    fields: fields,
+    novelFoodAndOpinionFields: novelFoodAndOpinionFields,
+    // objectTypes: objectTypes,
+    fields: { ...novelFoodAndOpinionFields, ...fields },
     fieldsSearch: '',
     selectedFields: {},
     preselectGroups: preselectGroups
@@ -484,7 +486,7 @@ export default {
     },
     filtersItems() {
       return (
-        Object.entries(this.fields)
+        Object.entries({ ...this.novelFoodAndOpinionFields, ...this.objectTypes })
           // filterout fields which are not showInFilters
           .filter((entry) => entry[1].showInFilters)
           .map(([key, field]) => ({

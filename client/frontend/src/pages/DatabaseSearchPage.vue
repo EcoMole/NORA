@@ -124,10 +124,10 @@
 <script>
 import { useTheme } from 'vuetify'
 import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
-import {  formatGraphQLQuery } from '@/libs/graphql-query.js'
+import { formatGraphQLQuery } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
-import { objectTypes, fields } from '@/libs/definitions.js'
+import { fields, novelFoodAndOpinionFields } from '@/libs/definitions.js'
 import { buildVariables } from '@/libs/utils.js'
 import axios from '@/libs/axios'
 import { mapState, mapActions } from 'pinia'
@@ -141,7 +141,7 @@ export default {
     addedFilters: [],
     selectedFields: {},
     headdersToHide: [],
-    nameMappingObj: { ...objectTypes, ...fields },
+    nameMappingObj: { ...novelFoodAndOpinionFields, ...fields },
     exporting: false,
     showCompactTable: false,
     isAtBottom: false

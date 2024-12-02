@@ -8,15 +8,18 @@ function getUserType(user) {
   return user.isSuperuser ? 'superuser' : user.isStaff ? 'staff' : null
 }
 
+import { fields, novelFoodAndOpinionFields } from './definitions'
 
-import { fields } from './definitions'
+const allFields = { ...fields, ...novelFoodAndOpinionFields }
 
 function buildVariables(addedFilters) {
   return addedFilters.reduce((acc, { key, qualifier, include, value }) => {
-    const djangoLookupField = fields[key].djangoLookupField ? fields[key].djangoLookupField : null
-    const fieldType = fields[key].fieldType ? fields[key].fieldType : null
-    const valueFields = fields[key].valueFields ? fields[key].valueFields : null
-    acc.push({ qualifier, include, value, djangoLookupField, fieldType, valueFields})
+    const djangoLookupField = allFields[key].djangoLookupField
+      ? allFields[key].djangoLookupField
+      : null
+    const fieldType = allFields[key].fieldType ? allFields[key].fieldType : null
+    const valueFields = allFields[key].valueFields ? allFields[key].valueFields : null
+    acc.push({ qualifier, include, value, djangoLookupField, fieldType, valueFields })
     return acc
   }, [])
 }
