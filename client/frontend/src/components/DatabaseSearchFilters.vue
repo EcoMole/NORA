@@ -353,8 +353,9 @@ export default {
     //   options: []
     // },
     newFilter: {
-      path: '',
+      djangoLookupFilter: '',
       include: '',
+      djangoApp: '',
       djangoModel: '',
       coupledFilters: [
         {
@@ -454,8 +455,9 @@ export default {
         // })
         this.addedFilters.unshift({
           id: this.addedFilters.length + 1,
-          path: this.newFilter.path,
+          djangoLookupFilter: this.newFilter.djangoLookupFilter,
           include: this.newFilter.include,
+          djangoApp: this.newFilter.djangoApp,
           djangoModel: this.newFilter.djangoModel,
           coupledFilters: this.newFilter.coupledFilters.map((filter) => ({
             key: filter.key,
@@ -467,8 +469,9 @@ export default {
         })
         this.addingFilter = false
         this.newFilter = {
-          path: '',
+          djangoLookupFilter: '',
           include: '',
+          djangoApp: '',
           djangoModel: '',
           coupledFilters: [
             {
@@ -506,8 +509,9 @@ export default {
     cancelNewFilter() {
       this.addingFilter = false
       this.newFilter = {
-        path: '',
+        djangoLookupFilter: '',
         include: '',
+        djangoApp: '',
         djangoModel: '',
         coupledFilters: [
           {
@@ -524,7 +528,7 @@ export default {
     editFilter(index) {
       this.addingFilter = true
       this.newFilter = {
-        path: this.addedFilters[index].path,
+        djangoLookupFilter: this.addedFilters[index].djangoLookupFilter,
         coupledFilters: this.addedFilters[index].coupledFilters
       }
       const selectedField = this.fields[this.newFilter.coupledFilters[0].key]

@@ -24,8 +24,9 @@ class CoupledFilterInput(graphene.InputObjectType):
 
 
 class NovelFoodFilterInput(graphene.InputObjectType):
-    path = graphene.String()
+    django_lookup_filter = graphene.String()
     include = graphene.String()
+    django_app = graphene.String()
     django_model = graphene.String()
     coupled_filters = graphene.List(CoupledFilterInput)
 
@@ -170,7 +171,7 @@ class Query(graphene.ObjectType):
                 q_objects |= Q(**{f_chain + "__isnull": True})
             return q_objects
 
-        qs = NovelFood.objects.all()
+        nf_qs = NovelFood.objects.all()
 
         print("filters")
         print(filters)
@@ -186,14 +187,28 @@ class Query(graphene.ObjectType):
         }
 
         for f in filters:
-            # f_path = f.get("path")
+            lookup_filter = f.get("django_lookup_filter")
             include = f.get("include", None)
-            # django_model = f.get("django_model", None)
+            django_app = f.get("django_app", None)
+            django_model = f.get("django_model", None)
+
+            model = NovelFood
+            # todo: decide whether this prest of NovelFood model will be set here in backnd or
+            # todo: in frontend
+            if django_app and django_model:
+                model = apps.get_model(django_app, django_model)
+
+            qs = model.objects.all()
+
             for coup_f in f.get("coupled_filters"):
                 field_type = coup_f.get("field_type", None)
                 filter_qualifier = map[coup_f.get("qualifier")]
                 filter_value = coup_f.get("value", None)
                 lookup_field = coup_f.get("django_lookup_field", None)
+                if lookup_field.startswith(lookup_filter):
+                    # Remove lookup_filter from lookup_field
+                    lookup_field = lookup_field[len(lookup_filter) :]
+                    lookup_field = lookup_field.lstrip("_")
 
                 value_fields = coup_f.get("value_fields", None)
                 if value_fields:
@@ -274,13 +289,22 @@ class Query(graphene.ObjectType):
                         )
 
                 print("q_object", q_object)
+                qs = qs.filter(q_object).distinct()
 
+                if model == NovelFood:
+                    if include == "must have":
+                        nf_qs = nf_qs.intersection(qs)
+
+                    elif include == "must not have":
+                        nf_qs = nf_qs.difference(qs)
+
+            if model != NovelFood:
                 if include == "must have":
-                    qs = qs.filter(q_object).distinct()
+                    nf_qs = nf_qs.filter(Q(**{f"{lookup_filter}__in": qs})).distinct()
                 elif include == "must not have":
-                    qs = qs.exclude(q_object).distinct()
-        print("QUERYSET: ", qs)
-        return qs
+                    nf_qs = nf_qs.exclude(Q(**{f"{lookup_filter}__in": qs})).distinct()
+        print("QUERYSET: ", nf_qs)
+        return nf_qs
 
 
 schema = graphene.Schema(query=Query)
