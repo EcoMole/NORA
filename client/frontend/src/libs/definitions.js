@@ -1,131 +1,227 @@
 export const objectTypes = {
   allergenicities: {
     displayName: 'Allergenicity',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'allergenicities__allergenicity',
+    djangoApp: 'novel_food',
+    djangoModel: 'Allergenicity'
   },
   synonyms: {
     displayName: 'Novel Food Synonym',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'synonyms',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodSyn'
   },
   panels: {
     displayName: 'Panel',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'opinion__panels__panel',
+    djangoApp: 'administrative',
+    djangoModel: 'Panel'
   },
   sciOfficers: {
     displayName: 'Scientific Officer',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'opinion__sci_officers__sci_officer',
+    djangoApp: 'administrative',
+    djangoModel: 'ScientificOfficer'
   },
   questions: {
     displayName: 'Question',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'opinion__questions__question',
+    djangoApp: 'administrative',
+    djangoModel: 'Question'
   },
   'questions.applicants': {
     displayName: 'Applicant',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'opinion__questions__question__applicants__applicant',
+    djangoApp: 'administrative',
+    djangoModel: 'Applicant'
   },
   'questions.mandates': {
     displayName: 'Mandate',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'opinion__questions__question__mandates',
+    djangoApp: 'administrative',
+    djangoModel: 'Mandate'
   },
   foodCategories: {
     displayName: 'Food Category',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'food_categories__food_category',
+    djangoApp: 'novel_food',
+    djangoModel: 'FoodCategory'
   },
   novelFoodCategories: {
     displayName: 'Novel Food Category',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'novel_food_categories__novel_food_category',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodCategory'
   },
   admes: {
     displayName: 'ADME',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'adme',
+    djangoApp: 'studies',
+    djangoModel: 'ADME'
   },
   'admes.investigationTypes': {
     displayName: 'Investigation Type',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'adme__investigation_types__investigation_type',
+    djangoApp: 'studies',
+    djangoModel: 'InvestigationType'
   },
   genotoxes: {
     displayName: 'Genotox',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'genotox',
+    djangoApp: 'studies',
+    djangoModel: 'Genotox'
   },
   endpointstudies: {
     displayName: 'Endpoint Study',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'endpointstudy',
+    djangoApp: 'studies',
+    djangoModel: 'Endpointstudy'
   },
   'endpointstudies.endpoints': {
     displayName: 'Endpoint',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'endpointstudy__endpoints',
+    djangoApp: 'studies',
+    djangoModel: 'Endpoint'
   },
   'endpointstudies.endpoints.finalOutcomes': {
     displayName: 'Final Outcome',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'endpointstudy__endpoints__finaloutcome',
+    djangoApp: 'studies',
+    djangoModel: 'FinalOutcome'
   },
   'endpointstudies.endpoints.finalOutcomes.populations': {
     displayName: 'Population',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'endpointstudy__endpoints__finaloutcome__populations__population',
+    djangoApp: 'taxonomies',
+    djangoModel: 'Population'
   },
   novelFoodVariants: {
     displayName: 'Novel Food Variant',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'novelfoodvariant',
+    djangoApp: 'composition',
+    djangoModel: 'NovelFoodVariant'
   },
   'novelFoodVariants.riskAssessRedFlags': {
     displayName: 'Risk Assessment Red Flag',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'novelfoodvariant__risk_assess_red_flags__risk_assess_red_flag',
+    djangoApp: 'composition',
+    djangoModel: 'RiskAssessRedFlag'
   },
   'novelFoodVariants.productionProcesses': {
     displayName: 'Production Process',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'novelfoodvariant__productions',
+    djangoApp: 'composition',
+    djangoModel: 'ProductionNovelFoodVariant'
   },
   'novelFoodVariants.proposedUses': {
     displayName: 'Proposed Use',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'novelfoodvariant__proposed_uses',
+    djangoApp: 'composition',
+    djangoModel: 'ProposedUse'
   },
   'novelFoodVariants.proposedUses.population': {
     displayName: 'Proposed Uses Population',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'novelfoodvariant__proposed_uses__population',
+    djangoApp: 'taxonomies',
+    djangoModel: 'Population'
   },
   'novelFoodVariants.compositions': {
     displayName: 'Composition',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'novelfoodvariant__compositions',
+    djangoApp: 'composition',
+    djangoModel: 'Composition'
   },
   organisms: {
     displayName: 'Organism',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'organisms',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodOrganism'
   },
   'organisms.species': {
     displayName: 'Taxonomy',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'organisms__organism__species',
+    djangoApp: 'novel_food',
+    djangoModel: 'Species'
   },
   'organisms.orgSynonyms': {
     displayName: 'Organism Synonym',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'organisms__organism__synonyms',
+    djangoApp: 'novel_food',
+    djangoModel: 'OrganismSyn'
   },
   chemicals: {
     displayName: 'Chemical',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'chemicals',
+    djangoApp: 'novel_food',
+    djangoModel: 'NovelFoodChemical'
   },
   'chemicals.chemSynonyms': {
     displayName: 'Chemical Synonym',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'chemicals__chemical__synonyms',
+    djangoApp: 'novel_food',
+    djangoModel: 'ChemicalSyn'
   },
   'chemicals.chemDescriptors': {
     displayName: 'Chemical Descriptor',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'chemicals__chemical__chem_descriptors',
+    djangoApp: 'novel_food',
+    djangoModel: 'ChemDescriptor'
   },
   specificToxicities: {
     displayName: 'Specific Toxicity',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'specific_toxicities',
+    djangoApp: 'novel_food',
+    djangoModel: 'SpecificToxicity'
   },
   substancesOfConcern: {
     displayName: 'Substance of Concern',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'substances_of_concern',
+    djangoApp: 'novel_food',
+    djangoModel: 'SubstanceOfConcernNovelFood'
   },
   backgroundExposureAssessments: {
     displayName: 'Background Exposure Assessment',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'bg_expo_assessments',
+    djangoApp: 'novel_food',
+    djangoModel: 'BackgroundExposureAssessment'
   },
   hbgvs: {
     displayName: 'HBGV',
-    showInFilters: true
+    showInFilters: true,
+    djangoLookupFilter: 'hbgvs',
+    djangoApp: 'novel_food',
+    djangoModel: 'HBGV'
   }
 }
 
