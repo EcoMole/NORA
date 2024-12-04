@@ -1,6 +1,7 @@
 export const objectTypes = {
   allergenicities: {
     displayName: 'Allergenicity',
+    displayGroupName: 'Allergenicity',
     showInFilters: true,
     djangoLookupFilter: 'allergenicities__allergenicity',
     djangoApp: 'novel_food',
@@ -8,6 +9,7 @@ export const objectTypes = {
   },
   synonyms: {
     displayName: 'Novel Food Synonym',
+    displayGroupName: 'Synonym',
     showInFilters: true,
     djangoLookupFilter: 'synonyms',
     djangoApp: 'novel_food',
@@ -15,6 +17,7 @@ export const objectTypes = {
   },
   panels: {
     displayName: 'Panel',
+    displayGroupName: 'Administrative',
     showInFilters: true,
     djangoLookupFilter: 'opinion__panels__panel',
     djangoApp: 'administrative',
@@ -22,6 +25,7 @@ export const objectTypes = {
   },
   sciOfficers: {
     displayName: 'Scientific Officer',
+    displayGroupName: 'Administrative',
     showInFilters: true,
     djangoLookupFilter: 'opinion__sci_officers__sci_officer',
     djangoApp: 'administrative',
@@ -29,6 +33,7 @@ export const objectTypes = {
   },
   questions: {
     displayName: 'Question',
+    displayGroupName: 'Question',
     showInFilters: true,
     djangoLookupFilter: 'opinion__questions__question',
     djangoApp: 'administrative',
@@ -36,6 +41,7 @@ export const objectTypes = {
   },
   'questions.applicants': {
     displayName: 'Applicant',
+    displayGroupName: 'Applicant',
     showInFilters: true,
     djangoLookupFilter: 'opinion__questions__question__applicants__applicant',
     djangoApp: 'administrative',
@@ -43,6 +49,7 @@ export const objectTypes = {
   },
   'questions.mandates': {
     displayName: 'Mandate',
+    displayGroupName: 'Mandate',
     showInFilters: true,
     djangoLookupFilter: 'opinion__questions__question__mandates',
     djangoApp: 'administrative',
@@ -50,6 +57,7 @@ export const objectTypes = {
   },
   foodCategories: {
     displayName: 'Food Category',
+    displayGroupName: 'Novel Food',
     showInFilters: true,
     djangoLookupFilter: 'food_categories__food_category',
     djangoApp: 'novel_food',
@@ -57,6 +65,7 @@ export const objectTypes = {
   },
   novelFoodCategories: {
     displayName: 'Novel Food Category',
+    displayGroupName: 'Novel Food',
     showInFilters: true,
     djangoLookupFilter: 'novel_food_categories__novel_food_category',
     djangoApp: 'novel_food',
@@ -64,6 +73,7 @@ export const objectTypes = {
   },
   admes: {
     displayName: 'ADME',
+    displayGroupName: 'ADME',
     showInFilters: true,
     djangoLookupFilter: 'adme',
     djangoApp: 'studies',
@@ -71,6 +81,7 @@ export const objectTypes = {
   },
   'admes.investigationTypes': {
     displayName: 'Investigation Type',
+    displayGroupName: 'ADME',
     showInFilters: true,
     djangoLookupFilter: 'adme__investigation_types__investigation_type',
     djangoApp: 'studies',
@@ -78,6 +89,7 @@ export const objectTypes = {
   },
   genotoxes: {
     displayName: 'Genotox',
+    displayGroupName: 'Genotox',
     showInFilters: true,
     djangoLookupFilter: 'genotox',
     djangoApp: 'studies',
@@ -85,6 +97,7 @@ export const objectTypes = {
   },
   endpointstudies: {
     displayName: 'Endpoint Study',
+    displayGroupName: 'Endpoint Study',
     showInFilters: true,
     djangoLookupFilter: 'endpointstudy',
     djangoApp: 'studies',
@@ -92,6 +105,7 @@ export const objectTypes = {
   },
   'endpointstudies.endpoints': {
     displayName: 'Endpoint',
+    displayGroupName: 'Endpoint',
     showInFilters: true,
     djangoLookupFilter: 'endpointstudy__endpoints',
     djangoApp: 'studies',
@@ -99,6 +113,7 @@ export const objectTypes = {
   },
   'endpointstudies.endpoints.finalOutcomes': {
     displayName: 'Final Outcome',
+    displayGroupName: 'Final Outcome',
     showInFilters: true,
     djangoLookupFilter: 'endpointstudy__endpoints__finaloutcome',
     djangoApp: 'studies',
@@ -106,6 +121,7 @@ export const objectTypes = {
   },
   'endpointstudies.endpoints.finalOutcomes.populations': {
     displayName: 'Population',
+    displayGroupName: 'Population',
     showInFilters: true,
     djangoLookupFilter: 'endpointstudy__endpoints__finaloutcome__populations__population',
     djangoApp: 'taxonomies',
@@ -113,6 +129,7 @@ export const objectTypes = {
   },
   novelFoodVariants: {
     displayName: 'Novel Food Variant',
+    displayGroupName: 'Novel Food Variant',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant',
     djangoApp: 'composition',
@@ -120,6 +137,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.riskAssessRedFlags': {
     displayName: 'Risk Assessment Red Flag',
+    displayGroupName: 'Production process of Novel Food Variant',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant__risk_assess_red_flags__risk_assess_red_flag',
     djangoApp: 'composition',
@@ -127,6 +145,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.productionProcesses': {
     displayName: 'Production Process',
+    displayGroupName: 'Production process of Novel Food Variant',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant__productions',
     djangoApp: 'composition',
@@ -134,6 +153,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.proposedUses': {
     displayName: 'Proposed Use',
+    displayGroupName: 'Proposed Use of Novel Food Variant',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant__proposed_uses',
     djangoApp: 'composition',
@@ -141,6 +161,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.proposedUses.population': {
     displayName: 'Proposed Uses Population',
+    displayGroupName: 'Proposed Use Population Subgroup',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant__proposed_uses__population',
     djangoApp: 'taxonomies',
@@ -148,6 +169,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.compositions': {
     displayName: 'Composition',
+    displayGroupName: 'Novel Food Variant Composition',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant__compositions',
     djangoApp: 'composition',
@@ -155,6 +177,7 @@ export const objectTypes = {
   },
   organisms: {
     displayName: 'Organism',
+    displayGroupName: 'Identity',
     showInFilters: true,
     djangoLookupFilter: 'organisms',
     djangoApp: 'novel_food',
@@ -162,6 +185,7 @@ export const objectTypes = {
   },
   'organisms.species': {
     displayName: 'Taxonomy',
+    displayGroupName: 'Identity',
     showInFilters: true,
     djangoLookupFilter: 'organisms__organism__species',
     djangoApp: 'novel_food',
@@ -169,6 +193,7 @@ export const objectTypes = {
   },
   'organisms.orgSynonyms': {
     displayName: 'Organism Synonym',
+    displayGroupName: 'Synonym',
     showInFilters: true,
     djangoLookupFilter: 'organisms__organism__synonyms',
     djangoApp: 'novel_food',
@@ -176,6 +201,7 @@ export const objectTypes = {
   },
   chemicals: {
     displayName: 'Chemical',
+    displayGroupName: 'Identity',
     showInFilters: true,
     djangoLookupFilter: 'chemicals',
     djangoApp: 'novel_food',
@@ -183,6 +209,7 @@ export const objectTypes = {
   },
   'chemicals.chemSynonyms': {
     displayName: 'Chemical Synonym',
+    displayGroupName: 'Synonym',
     showInFilters: true,
     djangoLookupFilter: 'chemicals__chemical__synonyms',
     djangoApp: 'novel_food',
@@ -190,6 +217,7 @@ export const objectTypes = {
   },
   'chemicals.chemDescriptors': {
     displayName: 'Chemical Descriptor',
+    displayGroupName: 'Chemical',
     showInFilters: true,
     djangoLookupFilter: 'chemicals__chemical__chem_descriptors',
     djangoApp: 'novel_food',
@@ -197,6 +225,7 @@ export const objectTypes = {
   },
   specificToxicities: {
     displayName: 'Specific Toxicity',
+    displayGroupName: 'Hazards',
     showInFilters: true,
     djangoLookupFilter: 'specific_toxicities',
     djangoApp: 'novel_food',
@@ -204,6 +233,7 @@ export const objectTypes = {
   },
   substancesOfConcern: {
     displayName: 'Substance of Concern',
+    displayGroupName: 'Hazards',
     showInFilters: true,
     djangoLookupFilter: 'substances_of_concern',
     djangoApp: 'novel_food',
@@ -211,6 +241,7 @@ export const objectTypes = {
   },
   backgroundExposureAssessments: {
     displayName: 'Background Exposure Assessment',
+    displayGroupName: 'Nutrition',
     showInFilters: true,
     djangoLookupFilter: 'bg_expo_assessments',
     djangoApp: 'novel_food',
@@ -218,6 +249,7 @@ export const objectTypes = {
   },
   hbgvs: {
     displayName: 'HBGV',
+    displayGroupName: 'Hazards',
     showInFilters: true,
     djangoLookupFilter: 'hbgvs',
     djangoApp: 'novel_food',
@@ -620,7 +652,6 @@ export const fields = {
   'allergenicities.title': {
     displayName: '',
     flattenedDisplayName: 'Allergenicity',
-    displayGroupName: 'Allergenicity',
     type: 'text',
     djangoLookupField: 'allergenicities__allergenicity__title',
     apiEndpoint: 'picklist/',
@@ -636,7 +667,6 @@ export const fields = {
   'specificToxicities.specificToxicity': {
     displayName: '',
     flattenedDisplayName: 'Hazards - Specific Toxicity',
-    displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'specific_toxicities__specific_toxicity',
     fieldType: 'tax_node',
@@ -656,7 +686,6 @@ export const fields = {
   'substancesOfConcern.substanceOfConcern': {
     displayName: '',
     flattenedDisplayName: 'Hazards - Substance of Concern',
-    displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'substances_of_concern__substance_of_concern',
     fieldType: 'tax_node',
@@ -676,7 +705,6 @@ export const fields = {
   'backgroundExposureAssessments.compOfInterest': {
     displayName: 'Background exposure assess.',
     flattenedDisplayName: 'Nutrition - Background Exposure Assessment',
-    displayGroupName: 'Nutrition',
     type: 'text',
     djangoLookupField: 'bg_expo_assessments__comp_of_interest',
     fieldType: 'tax_node',
@@ -696,7 +724,6 @@ export const fields = {
   'hbgvs.type': {
     displayName: 'Type',
     flattenedDisplayName: 'Hazards - HBGV Type',
-    displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'hbgvs__type',
     fieldType: 'tax_node',
@@ -716,7 +743,6 @@ export const fields = {
   'hbgvs.exceeded': {
     displayName: 'Exceeded',
     flattenedDisplayName: 'Hazards - HBGV Exceeded',
-    displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'hbgvs__exceeded',
     fieldType: 'tax_node',
@@ -736,7 +762,6 @@ export const fields = {
   'hbgvs.substance': {
     displayName: 'Substance',
     flattenedDisplayName: 'Hazards - HBGV Substance',
-    displayGroupName: 'Hazards',
     type: 'text',
     djangoLookupField: 'hbgvs__substance',
     fieldType: 'tax_node',
@@ -759,7 +784,6 @@ export const fields = {
   'synonyms.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Novel Food Synonym',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'synonyms__title',
     apiEndpoint: 'picklist/',
@@ -775,7 +799,6 @@ export const fields = {
   'synonyms.typeTitle': {
     displayName: 'Type',
     flattenedDisplayName: 'Novel Food Synonym Type',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'synonyms__syn_type__title',
     apiEndpoint: 'picklist/',
@@ -790,7 +813,6 @@ export const fields = {
   'synonyms.typeDefinition': {
     displayName: 'Type Definition',
     flattenedDisplayName: 'Novel Food Synonym Type Definition',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
@@ -802,7 +824,6 @@ export const fields = {
   'panels.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Opinion - Panel',
-    displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__panels__panel__title',
     apiEndpoint: 'picklist/',
@@ -819,7 +840,6 @@ export const fields = {
   'sciOfficers.firstName': {
     displayName: 'First Name',
     flattenedDisplayName: "Opinion - Scientific Officer's First Name",
-    displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__first_name',
     qualifiers: ['contains', 'is', 'is None'],
@@ -830,7 +850,6 @@ export const fields = {
   'sciOfficers.middleName': {
     displayName: 'Middle Name',
     flattenedDisplayName: "Opinion - Scientific officer's Middle Name",
-    displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__middle_name',
     qualifiers: ['contains', 'is', 'is None'],
@@ -841,7 +860,6 @@ export const fields = {
   'sciOfficers.lastName': {
     displayName: 'Last Name',
     flattenedDisplayName: "Opinion - Scientific officer's Last Name",
-    displayGroupName: 'Administrative',
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__last_name',
     qualifiers: ['contains', 'is', 'is None'],
@@ -856,7 +874,6 @@ export const fields = {
   'questions.number': {
     displayName: 'Number',
     flattenedDisplayName: 'Opinion - Question Number',
-    displayGroupName: 'Question',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__number',
     qualifiers: ['contains', 'is', 'is None'],
@@ -868,7 +885,6 @@ export const fields = {
   'questions.applicants.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Opinion - Applicant',
-    displayGroupName: 'Applicant',
     djangoLookupField: 'opinion__questions__question__applicants__applicant__title',
     type: 'text',
     qualifiers: ['contains', 'is', 'is None'],
@@ -880,7 +896,6 @@ export const fields = {
   'questions.mandates.mandateTypeTitle': {
     displayName: 'Type',
     flattenedDisplayName: 'Opinion - Mandate Type',
-    displayGroupName: 'Mandate',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__mandates__mandate_type__title',
     apiEndpoint: 'picklist/',
@@ -896,7 +911,6 @@ export const fields = {
   'questions.mandates.mandateTypeDefinition': {
     displayName: 'Type Definition',
     flattenedDisplayName: 'Mandate Type Definition',
-    displayGroupName: 'Mandate',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__mandates__mandate_type__definition',
     fieldType: 'text_field',
@@ -908,7 +922,6 @@ export const fields = {
   'questions.mandates.regulation': {
     displayName: 'Regulation',
     flattenedDisplayName: 'Opinion - Mandate Regulation',
-    displayGroupName: 'Mandate',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__mandates__regulation',
     fieldType: 'tax_node',
@@ -929,7 +942,6 @@ export const fields = {
   'foodCategories.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Food Category Tool Name',
-    displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'food_categories__food_category__title',
     apiEndpoint: 'picklist/',
@@ -945,7 +957,6 @@ export const fields = {
   'foodCategories.definition': {
     displayName: 'Definition',
     flattenedDisplayName: 'Food Category Definition',
-    displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'food_categories__food_category__definition',
     fieldType: 'text_field',
@@ -958,7 +969,6 @@ export const fields = {
   'novelFoodCategories.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Novel Food Category',
-    displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'novel_food_categories__novel_food_category__title',
     apiEndpoint: 'picklist/',
@@ -974,7 +984,6 @@ export const fields = {
   'novelFoodCategories.definition': {
     displayName: 'Definition',
     flattenedDisplayName: 'Novel Food Category Definition',
-    displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'novel_food_categories__novel_food_category__definition',
     fieldType: 'text_field',
@@ -987,7 +996,6 @@ export const fields = {
   'novelFoodCategories.regulation': {
     displayName: 'Regulation',
     flattenedDisplayName: 'Novel Food Category Regulation',
-    displayGroupName: 'Novel Food',
     type: 'text',
     djangoLookupField: 'novel_food_categories__novel_food_category__regulation',
     fieldType: 'tax_node',
@@ -1010,7 +1018,6 @@ export const fields = {
   'organisms.organism': {
     displayName: 'Vocab ID',
     flattenedDisplayName: 'Identity - Organism Vocab ID',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__vocab_id',
     fieldType: 'tax_node',
@@ -1030,7 +1037,6 @@ export const fields = {
   'organisms.orgPart': {
     displayName: 'Part',
     flattenedDisplayName: 'Identity - Organism Part',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__org_part',
     fieldType: 'tax_node',
@@ -1050,7 +1056,6 @@ export const fields = {
   'organisms.variant': {
     displayName: 'Variant',
     flattenedDisplayName: 'Identity - Organism Variant',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__variant',
     apiEndpoint: 'picklist/',
@@ -1066,7 +1071,6 @@ export const fields = {
   'organisms.isGmo': {
     displayName: 'is GMO',
     flattenedDisplayName: 'Identity - Organism is GMO',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__is_gmo',
     fieldType: 'tax_node',
@@ -1086,7 +1090,6 @@ export const fields = {
   'organisms.hasQps': {
     displayName: 'has QPS',
     flattenedDisplayName: 'Identity - Organism has QPS',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__has_qps',
     fieldType: 'tax_node',
@@ -1107,7 +1110,6 @@ export const fields = {
   'organisms.cellCulture': {
     displayName: 'Cell Culture',
     flattenedDisplayName: 'Identity - Organism Cell Culture',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__cell_culture',
     apiEndpoint: 'picklist/',
@@ -1124,7 +1126,6 @@ export const fields = {
   'organisms.cellsModified': {
     displayName: 'Cells Modified',
     flattenedDisplayName: 'Identity - Organism Cell Modification',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__cells_modified',
     fieldType: 'tax_node',
@@ -1144,7 +1145,6 @@ export const fields = {
   'organisms.species.name': {
     displayName: 'Species Name',
     flattenedDisplayName: 'Identity - Species Name',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__name',
     apiEndpoint: 'picklist/',
@@ -1160,7 +1160,6 @@ export const fields = {
   'organisms.species.scientificName': {
     displayName: 'Identity - Organism Scientific Name',
     flattenedDisplayName: 'Identity - Species Scientific Name',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__scientific_name',
     apiEndpoint: 'picklist/',
@@ -1176,7 +1175,6 @@ export const fields = {
   'organisms.species.genus': {
     displayName: 'Genus',
     flattenedDisplayName: 'Identity - Species Genus',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__genus__title',
     apiEndpoint: 'picklist/',
@@ -1192,7 +1190,6 @@ export const fields = {
   'organisms.species.family': {
     displayName: 'Family',
     flattenedDisplayName: 'Identity - Species Family',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__genus__family__title',
     apiEndpoint: 'picklist/',
@@ -1208,7 +1205,6 @@ export const fields = {
   'organisms.species.orgType': {
     displayName: 'Organism Type',
     flattenedDisplayName: 'Identity - Species Organism Type',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__genus__family__org_type__title',
     apiEndpoint: 'picklist/',
@@ -1224,7 +1220,6 @@ export const fields = {
   'organisms.orgSynonyms.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Identity - Organism Synonym',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'organisms__organism__synonyms__title',
     apiEndpoint: 'picklist/',
@@ -1240,7 +1235,6 @@ export const fields = {
   'organisms.orgSynonyms.typeTitle': {
     displayName: 'Type',
     flattenedDisplayName: 'Identity - Organism Synonym Type',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'organisms__organism__synonyms__syn_type__title',
     apiEndpoint: 'picklist/',
@@ -1256,7 +1250,6 @@ export const fields = {
   'organisms.orgSynonyms.typeDefinition': {
     displayName: 'Type Definition',
     flattenedDisplayName: 'Organism Synonym Type Definition',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'organisms__organism__synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
@@ -1268,7 +1261,6 @@ export const fields = {
   'chemicals.chemical': {
     displayName: 'Vocab ID',
     flattenedDisplayName: 'Identity - Chemical Vocab ID',
-    displayGroupName: 'Identity',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__vocab_id',
     fieldType: 'tax_node',
@@ -1288,7 +1280,6 @@ export const fields = {
   'chemicals.chemSynonyms.title': {
     displayName: 'Name',
     flattenedDisplayName: 'Identity - Chemical Synonym',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__synonyms__title',
     apiEndpoint: 'picklist/',
@@ -1304,7 +1295,6 @@ export const fields = {
   'chemicals.chemSynonyms.typeTitle': {
     displayName: 'Type',
     flattenedDisplayName: 'Identity - Chemical Synonym Type',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__synonyms__syn_type__title',
     apiEndpoint: 'picklist/',
@@ -1320,7 +1310,6 @@ export const fields = {
   'chemicals.chemSynonyms.typeDefinition': {
     displayName: 'Type Definition',
     flattenedDisplayName: 'Chemical Synonym Type Definition',
-    displayGroupName: 'Synonym',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
@@ -1331,7 +1320,6 @@ export const fields = {
   'chemicals.chemDescriptors.type': {
     displayName: 'Type',
     flattenedDisplayName: 'Identity - Chemical Descriptor Type',
-    displayGroupName: 'Chemical',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__chem_descriptors__type',
     apiEndpoint: 'picklist/',
@@ -1347,7 +1335,6 @@ export const fields = {
   'chemicals.chemDescriptors.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Identity -  Chemical Descriptor Value',
-    displayGroupName: 'Chemical',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__chem_descriptors__value',
     qualifiers: ['contains', 'is', 'is None'],
@@ -1362,7 +1349,6 @@ export const fields = {
   'admes.testType': {
     displayName: 'Test Type',
     flattenedDisplayName: 'ADME Test Type',
-    displayGroupName: 'ADME',
     type: 'text',
     djangoLookupField: 'adme__test_type',
     fieldType: 'tax_node',
@@ -1382,7 +1368,6 @@ export const fields = {
   'admes.guideline': {
     displayName: 'Guideline',
     flattenedDisplayName: 'ADME Guideline',
-    displayGroupName: 'ADME',
     type: 'text',
     djangoLookupField: 'adme__guideline',
     fieldType: 'tax_node',
@@ -1402,7 +1387,6 @@ export const fields = {
   'admes.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
     flattenedDisplayName: 'ADME Guideline Qualifier',
-    displayGroupName: 'ADME',
     type: 'text',
     djangoLookupField: 'adme__guideline_qualifier__title',
     apiEndpoint: 'picklist/',
@@ -1418,7 +1402,6 @@ export const fields = {
   'admes.studySource': {
     displayName: 'Study Source',
     flattenedDisplayName: 'ADME Study Source',
-    displayGroupName: 'ADME',
     type: 'text',
     djangoLookupField: 'adme__study_source__title',
     apiEndpoint: 'picklist/',
@@ -1435,7 +1418,6 @@ export const fields = {
   'admes.investigationTypes.title': {
     displayName: 'Name',
     flattenedDisplayName: 'ADME Investigation Type',
-    displayGroupName: 'ADME',
     type: 'text',
     djangoLookupField: 'adme__investigation_types__investigation_type__title',
     apiEndpoint: 'picklist/',
@@ -1451,7 +1433,6 @@ export const fields = {
   'admes.remarks': {
     displayName: 'Remarks',
     flattenedDisplayName: 'ADME Remarks',
-    displayGroupName: 'ADME',
     type: 'text',
     djangoLookupField: 'adme__remarks',
     fieldType: 'text_field',
@@ -1464,7 +1445,6 @@ export const fields = {
   'admes.testMaterial': {
     displayName: 'Test Material',
     flattenedDisplayName: 'ADME Test Material',
-    displayGroupName: 'ADME',
     type: 'text',
     djangoLookupField: 'adme__test_material',
     apiEndpoint: 'picklist/',
@@ -1483,7 +1463,6 @@ export const fields = {
   'genotoxes.testType': {
     displayName: 'Test Type',
     flattenedDisplayName: 'Genotoxicity Test Type',
-    displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__test_type',
     fieldType: 'tax_node',
@@ -1503,7 +1482,6 @@ export const fields = {
   'genotoxes.guideline': {
     displayName: 'Guideline',
     flattenedDisplayName: 'Genotoxicity Guideline',
-    displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__guideline',
     fieldType: 'tax_node',
@@ -1523,7 +1501,6 @@ export const fields = {
   'genotoxes.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
     flattenedDisplayName: 'Genotoxicity Guideline Qualifier',
-    displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__guideline_qualifier__title',
     apiEndpoint: 'picklist/',
@@ -1539,7 +1516,6 @@ export const fields = {
   'genotoxes.studySource': {
     displayName: 'Study Source',
     flattenedDisplayName: 'Genotoxicity Study Source',
-    displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__study_source__title',
     apiEndpoint: 'picklist/',
@@ -1555,7 +1531,6 @@ export const fields = {
   'genotoxes.outcome': {
     displayName: 'Outcome',
     flattenedDisplayName: 'Genotoxicity Outcome',
-    displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__outcome',
     fieldType: 'tax_node',
@@ -1576,7 +1551,6 @@ export const fields = {
   'genotoxes.remarks': {
     displayName: 'Remarks',
     flattenedDisplayName: 'Genotoxicity Remarks',
-    displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__remarks',
     fieldType: 'text_field',
@@ -1589,7 +1563,6 @@ export const fields = {
   'genotoxes.testMaterial': {
     displayName: 'Test Material',
     flattenedDisplayName: 'Genotoxicity Test Material',
-    displayGroupName: 'Genotox',
     type: 'text',
     djangoLookupField: 'genotox__test_material',
     apiEndpoint: 'picklist/',
@@ -1608,7 +1581,6 @@ export const fields = {
   'endpointstudies.testType': {
     displayName: 'Test Type',
     flattenedDisplayName: 'Toxicology - Endpoint Study Test Type',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__test_type',
     fieldType: 'tax_node',
@@ -1628,7 +1600,6 @@ export const fields = {
   'endpointstudies.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
     flattenedDisplayName: 'Endpoint Study Guideline Qualifier',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__guideline_qualifier__title',
     apiEndpoint: 'picklist/',
@@ -1644,7 +1615,6 @@ export const fields = {
   'endpointstudies.guideline': {
     displayName: 'Guideline',
     flattenedDisplayName: 'Toxicology - Endpoint Study Guideline',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__guideline',
     fieldType: 'tax_node',
@@ -1664,7 +1634,6 @@ export const fields = {
   'endpointstudies.species': {
     displayName: 'Species',
     flattenedDisplayName: 'Toxicology - Endpoint Study Species',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__species',
     fieldType: 'tax_node',
@@ -1684,7 +1653,6 @@ export const fields = {
   'endpointstudies.sex': {
     displayName: 'Sex',
     flattenedDisplayName: 'Toxicology - Endpoint Study Sex',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__sex',
     fieldType: 'tax_node',
@@ -1704,7 +1672,6 @@ export const fields = {
   'endpointstudies.studyDuration': {
     displayName: 'Study Duration',
     flattenedDisplayName: 'Toxicology - Endpoint Study Duration',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__study_duration',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
@@ -1716,7 +1683,6 @@ export const fields = {
   'endpointstudies.durationUnit': {
     displayName: 'Study Duration Unit',
     flattenedDisplayName: 'Toxicology - Endpoint Study Duration Unit',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__duration_unit',
     fieldType: 'tax_node',
@@ -1735,7 +1701,6 @@ export const fields = {
   'endpointstudies.studySource': {
     displayName: 'Study Source',
     flattenedDisplayName: 'Toxicology - Endpoint Study Source',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__study_source__title',
     apiEndpoint: 'picklist/',
@@ -1751,7 +1716,6 @@ export const fields = {
   'endpointstudies.remarks': {
     displayName: 'Remarks',
     flattenedDisplayName: 'Toxicology - Endpoint Study Remarks',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__remarks',
     fieldType: 'text_field',
@@ -1764,7 +1728,6 @@ export const fields = {
   'endpointstudies.testMaterial': {
     displayName: 'Test Material',
     flattenedDisplayName: 'Toxicology - Endpoint Study Test Material',
-    displayGroupName: 'Endpoint Study',
     type: 'text',
     djangoLookupField: 'endpointstudy__test_material',
     apiEndpoint: 'picklist/',
@@ -1783,7 +1746,6 @@ export const fields = {
   'endpointstudies.endpoints.referencePoint': {
     displayName: 'Reference Point',
     flattenedDisplayName: 'Toxicology - Endpoint - Reference point',
-    displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__reference_point',
     fieldType: 'tax_node',
@@ -1803,7 +1765,6 @@ export const fields = {
   'endpointstudies.endpoints.subpopulation': {
     displayName: 'Subpopulation',
     flattenedDisplayName: 'Toxicology - Endpoint - Reference point subpopulation',
-    displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__subpopulation',
     fieldType: 'tax_node',
@@ -1823,7 +1784,6 @@ export const fields = {
   'endpointstudies.endpoints.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Toxicology - Endpoint - Reference point qualifier',
-    displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__qualifier',
     fieldType: 'tax_node',
@@ -1844,7 +1804,6 @@ export const fields = {
   'endpointstudies.endpoints.lovalue': {
     displayName: 'Value',
     flattenedDisplayName: 'Toxicology - Endpoint - Reference point value',
-    displayGroupName: 'Endpoint',
     type: 'number',
     djangoLookupField: 'endpointstudy__endpoints__lovalue',
     fieldType: 'value_field',
@@ -1863,7 +1822,6 @@ export const fields = {
   'endpointstudies.endpoints.unit': {
     displayName: 'Unit',
     flattenedDisplayName: 'Toxicology - Endpoint - Unit',
-    displayGroupName: 'Endpoint',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__unit',
     fieldType: 'tax_node',
@@ -1886,7 +1844,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.outcome': {
     displayName: 'Outcome',
     flattenedDisplayName: 'Toxicology - Final Outcome',
-    displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__outcome',
     fieldType: 'tax_node',
@@ -1906,7 +1863,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Toxicology - Final Outcome Qualifier',
-    displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__qualifier',
     fieldType: 'tax_node',
@@ -1934,7 +1890,6 @@ export const fields = {
       qualifierField: 'qualifier',
       valueField: 'value'
     },
-    displayGroupName: 'Final Outcome',
     type: 'number',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
     icon: 'mdi-numeric',
@@ -1946,7 +1901,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.unit': {
     displayName: 'Unit',
     flattenedDisplayName: 'Toxicology - Final Outcome Unit',
-    displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__unit',
     fieldType: 'tax_node',
@@ -1967,7 +1921,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.uncertaintyFactor': {
     displayName: 'Uncertainty Factor',
     flattenedDisplayName: 'Toxicology - Final Outcome Uncertainty Factor',
-    displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__uncertainty_factor',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
@@ -1979,7 +1932,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.remarks': {
     displayName: 'Remarks',
     flattenedDisplayName: 'Toxicology - Final Outcome Remarks',
-    displayGroupName: 'Final Outcome',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__remarks',
     fieldType: 'text_field',
@@ -1993,7 +1945,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.populations.subgroup': {
     displayName: 'Subgroup',
     flattenedDisplayName: 'Toxicology - Final Outcome Population Subgroup',
-    displayGroupName: 'Population',
     type: 'text',
     djangoLookupField:
       'endpointstudy__endpoints__finaloutcome__populations__population__subgroup__title',
@@ -2010,7 +1961,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.populations.qualifier': {
     displayName: 'Qualifier',
     flattenedDisplayName: 'Toxicology - Final Outcome Population Qualifier',
-    displayGroupName: 'Population',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__qualifier',
     fieldType: 'tax_node',
@@ -2030,7 +1980,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.populations.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Toxicology - Final Outcome Population Value',
-    displayGroupName: 'Population',
     type: 'number',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__value',
     fieldType: 'value_field',
@@ -2050,7 +1999,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.populations.upperRangeValue': {
     displayName: 'Upper Range Value',
     flattenedDisplayName: 'Toxicology - Final Outcome Population Upper Range Value',
-    displayGroupName: 'Population',
     type: 'number',
     djangoLookupField:
       'endpointstudy__endpoints__finaloutcome__populations__population__upper_range_value',
@@ -2063,7 +2011,6 @@ export const fields = {
   'endpointstudies.endpoints.finalOutcomes.populations.unit': {
     displayName: 'Unit',
     flattenedDisplayName: 'Final Outcome Population Unit',
-    displayGroupName: 'Population',
     type: 'text',
     djangoLookupField: 'endpointstudy__endpoints__finaloutcome__populations__population__unit',
     fieldType: 'tax_node',
@@ -2086,7 +2033,6 @@ export const fields = {
   'novelFoodVariants.foodForm': {
     displayName: 'Food Form',
     flattenedDisplayName: 'Novel Food Variant Food Form',
-    displayGroupName: 'Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__food_form__title',
     apiEndpoint: 'picklist/',
@@ -2101,7 +2047,6 @@ export const fields = {
   'novelFoodVariants.riskAssessRedFlags.title': {
     displayName: 'Production process Risk Assessment Red flag',
     flattenedDisplayName: 'Production process Risk Assessment Red Flag',
-    displayGroupName: 'Production process of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__risk_assess_red_flags__risk_assess_red_flag__title',
     apiEndpoint: 'picklist/',
@@ -2116,7 +2061,6 @@ export const fields = {
   'novelFoodVariants.productionProcesses.process': {
     displayName: 'Production Process',
     flattenedDisplayName: 'Production Process of Novel Food Variant',
-    displayGroupName: 'Production process of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__productions__process',
     fieldType: 'tax_node',
@@ -2135,7 +2079,6 @@ export const fields = {
   'novelFoodVariants.proposedUses.useType': {
     displayName: 'Proposed Use Type',
     flattenedDisplayName: 'Proposed Use of Novel Food Variant',
-    displayGroupName: 'Proposed Use of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__use_type',
     apiEndpoint: 'picklist/',
@@ -2150,7 +2093,6 @@ export const fields = {
   'novelFoodVariants.proposedUses.remarks': {
     displayName: 'Remarks for Proposed Use',
     flattenedDisplayName: 'Proposed Use - Remarks',
-    displayGroupName: 'Proposed Use of Novel Food Variant',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__remarks',
     fieldType: 'text_field',
@@ -2162,7 +2104,6 @@ export const fields = {
   'novelFoodVariants.proposedUses.population.subgroup': {
     displayName: 'Subgroup',
     flattenedDisplayName: 'Proposed Use - Population Subgroup',
-    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__subgroup__title',
     apiEndpoint: 'picklist/',
@@ -2177,7 +2118,6 @@ export const fields = {
   'novelFoodVariants.proposedUses.population.qualifier': {
     displayName: 'Age Qualifier',
     flattenedDisplayName: 'Proposed Use - Qualifier for Age Value of Population Subgroup',
-    displayGroupName: 'Proposed Use Population subgroup',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__qualifier',
     fieldType: 'tax_node',
@@ -2196,7 +2136,6 @@ export const fields = {
   'novelFoodVariants.proposedUses.population.value': {
     displayName: 'Age Value',
     flattenedDisplayName: 'Proposed Use - Age Value of Population Subgroup',
-    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'number',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__value',
     fieldType: 'value_field',
@@ -2215,7 +2154,6 @@ export const fields = {
   'novelFoodVariants.proposedUses.population.upperRangeValue': {
     displayName: 'Upper Range Age Value',
     flattenedDisplayName: 'Proposed Use - Upper Range Age Value of Population Subgroup',
-    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'number',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__upper_range_value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
@@ -2226,7 +2164,6 @@ export const fields = {
   'novelFoodVariants.proposedUses.population.unit': {
     displayName: 'Age Value Unit',
     flattenedDisplayName: 'Proposed Use - Unit for Age Value of Population Subgroup',
-    displayGroupName: 'Proposed Use Population Subgroup',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__proposed_uses__population__unit',
     fieldType: 'tax_node',
@@ -2245,7 +2182,6 @@ export const fields = {
   'novelFoodVariants.compositions.qualifier': {
     displayName: 'Value Qualifier',
     flattenedDisplayName: 'Composition Value Qualifier',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__qualifier',
     fieldType: 'tax_node',
@@ -2264,7 +2200,6 @@ export const fields = {
   'novelFoodVariants.compositions.value': {
     displayName: 'Value',
     flattenedDisplayName: 'Composition Value',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__value',
     fieldType: 'value_field',
@@ -2283,7 +2218,6 @@ export const fields = {
   'novelFoodVariants.compositions.upperRangeValue': {
     displayName: 'Upper Range Value',
     flattenedDisplayName: 'Composition Upper Range Value',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__upper_range_value',
     qualifiers: ['is', 'is greater than', 'is less than', 'is None'],
@@ -2294,7 +2228,6 @@ export const fields = {
   'novelFoodVariants.compositions.unit': {
     displayName: 'Value Unit',
     flattenedDisplayName: 'Composition Value Unit',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__unit',
     fieldType: 'tax_node',
@@ -2314,7 +2247,6 @@ export const fields = {
   'novelFoodVariants.compositions.type': {
     displayName: 'Composition Type',
     flattenedDisplayName: 'Composition Type',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__type',
     apiEndpoint: 'picklist/',
@@ -2329,7 +2261,6 @@ export const fields = {
   'novelFoodVariants.compositions.footnote': {
     displayName: 'Footnote',
     flattenedDisplayName: 'Composition Footnote',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__footnote__text_field',
     apiEndpoint: 'picklist/',
@@ -2344,7 +2275,6 @@ export const fields = {
   'novelFoodVariants.compositions.parameterTitle': {
     displayName: 'Parameter',
     flattenedDisplayName: 'Composition - Parameter',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__parameter__title',
     apiEndpoint: 'picklist/',
@@ -2359,7 +2289,6 @@ export const fields = {
   'novelFoodVariants.compositions.parameterTypeTitle': {
     displayName: 'Parameter Type',
     flattenedDisplayName: 'Composition - Parameter Type',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__parameter__type__title',
     apiEndpoint: 'picklist/',
@@ -2374,7 +2303,6 @@ export const fields = {
   'novelFoodVariants.compositions.parameterVocabId': {
     displayName: 'Parameter Vocab ID',
     flattenedDisplayName: 'Composition - Parameter Vocabulary ID',
-    displayGroupName: 'Novel Food Variant Composition',
     type: 'text',
     djangoLookupField: 'novelfoodvariant__compositions__parameter__vocab_id',
     fieldType: 'tax_node',
