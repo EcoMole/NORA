@@ -82,7 +82,7 @@
                           <span>with</span>
                           <v-autocomplete
                             v-model="newFilter.coupledFilters[i].key"
-                            :items="coupledFiltersAvailable"
+                            :items="coupledFiltersItems"
                             item-title="displayName"
                             item-value="key"
                             class="ml-6"
@@ -362,7 +362,7 @@ export default {
     fieldsSearch: '',
     selectedFields: {},
     preselectGroups: preselectGroups,
-    coupledFiltersAvailable: []
+    coupledFiltersAvailable: {}
   }),
   methods: {
     print() {
@@ -469,14 +469,14 @@ export default {
           title: selectedField.displayName,
           options: options
         })
-      } else if (
-        Object.values(this.objectTypes)
-          .map((filter) => {
-            filter.key
-          })
-          .includes(this.newFilter.key)
-      ) {
+      } else if (Object.keys(this.objectTypes).includes(this.newFilter.key)) {
         selectedField = this.objectTypes[this.newFilter.key]
+        this.newFilter.coupledFilters.push({
+          key: '',
+          title: '',
+          options: []
+        })
+
         this.coupledFiltersAvailable = Object.fromEntries(
           Object.entries(this.fields).filter(([key, value]) => key.startsWith(this.newFilter.key))
         )
@@ -535,6 +535,14 @@ export default {
         this.newFilter.coupledFilters[i].options.length < 1 &&
         this.newFilter.coupledFilters[i].qualifier !== 'is None'
       )
+    },
+    coupledFiltersItems() {
+      return Object.entries({ ...this.coupledFiltersAvailable })
+        .filter((entry) => entry[1].showInFilters)
+        .map(([key, field]) => ({
+          key: key,
+          displayName: field.flattenedDisplayName || field.displayName
+        }))
     },
     filtersItems() {
       return (
