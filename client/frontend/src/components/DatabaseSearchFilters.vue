@@ -485,11 +485,9 @@ export default {
     },
 
     async updateFilterKey() {
-      let selectedField
-
       if (Object.keys(this.novelFoodAndOpinionFields).includes(this.newFilter.key)) {
         this.coupledFiltersAvailable = {}
-        selectedField = this.novelFoodAndOpinionFields[this.newFilter.key]
+        const selectedField = this.novelFoodAndOpinionFields[this.newFilter.key]
         this.newFilter.group = selectedField.displayGroupName
         this.newFilter.coupledFilters = [
           {
@@ -500,7 +498,7 @@ export default {
           }
         ]
       } else if (Object.keys(this.objectTypes).includes(this.newFilter.key)) {
-        selectedField = this.objectTypes[this.newFilter.key]
+        const selectedField = this.objectTypes[this.newFilter.key]
         this.newFilter.djangoApp = selectedField.djangoApp
         this.newFilter.djangoModel = selectedField.djangoModel
         this.newFilter.djangoLookupFilter = selectedField.djangoLookupFilter
@@ -522,6 +520,8 @@ export default {
     },
     async updateCoupledFilter(i) {
       let selectedCoupledField = this.fields[this.newFilter.coupledFilters[i].key]
+      this.newFilter.coupledFilters[i].qualifier = ''
+      this.newFilter.coupledFilters[i].value = ''
       this.newFilter.coupledFilters[i].options = await this.getOptions(selectedCoupledField)
     },
     cancelNewFilter() {
