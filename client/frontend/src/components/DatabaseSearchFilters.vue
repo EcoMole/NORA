@@ -132,6 +132,9 @@
                           </v-row>
                         </v-col>
                       </v-row>
+                      <!-- <v-row class="d-flex justify-center mb-0" v-if="true">
+                        <span class="mt-0">and</span>
+                      </v-row> -->
                     </v-col>
                     <!-- <v-col
                       v-for="(coupledFilter, i) in newFilter.coupledFilters"
@@ -143,14 +146,11 @@
                       </p> -->
                     <!-- </v-col>  -->
                   </v-row>
-                  <!-- <v-row class="d-flex justify-center mt-5">
-                    <v-btn color="secondary" variant="tonal" @click="addingFilter = true">
+                  <v-row class="d-flex justify-center mt-5">
+                    <v-btn color="secondary" variant="tonal" @click="addCoupledFilter">
                       and with..
                     </v-btn>
                   </v-row>
-                  <v-row class="d-flex justify-center mb-0" v-if="true">
-                    <span class="mt-0">and</span>
-                  </v-row> -->
                 </v-container>
               </v-card-text>
               <v-card-actions class="mb-1 pt-0">
@@ -202,7 +202,7 @@
               <v-card-text v-if="Object.keys(objectTypes).includes(filter.key)" class="pt-0">
                 <div class="mb-3">
                   Novel Foods <b>{{ filter.include }}</b> {{ ' ' }}
-                  <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
+                  <v-chip rounded="pill" class="pb-1" color="secondary">{{
                     this.objectTypes[filter.key].displayName
                   }}</v-chip>
                 </div>
@@ -210,34 +210,24 @@
                   <span>with</span> {{ ' ' }}
 
                   <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                    this.fields[coupledFiler.key].displayName ? this.fields[coupledFiler.key].displayName : this.fields[coupledFiler.key].flattenedDisplayName
+                    this.fields[coupledFiler.key].displayName
+                      ? this.fields[coupledFiler.key].displayName
+                      : this.fields[coupledFiler.key].flattenedDisplayName
                   }}</v-chip
                   >{{ ' ' }}which <b>{{ coupledFiler.qualifier }}</b
                   >{{ ' ' }}
-                  <v-chip
-                    v-if="coupledFiler.value"
-                    rounded="pill"
-                    density="compact"
-                    class="pb-1"
-                    color="secondary"
-                    >{{ coupledFiler.value }}</v-chip
-                  >
+                  <v-span v-if="coupledFiler.value">"{{ coupledFiler.value }}"</v-span>
                 </div>
               </v-card-text>
               <v-card-text v-else class="pt-0">
                 Novel Foods <b>{{ filter.include }}</b> {{ ' ' }}
-                <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
+                <v-chip rounded="pill" class="pb-1" color="secondary">{{
                   this.novelFoodAndOpinionFields[filter.key].displayName
                 }}</v-chip
                 >{{ ' ' }}which <b>{{ filter.coupledFilters[0].qualifier }}</b
                 >{{ ' ' }}
-                <v-chip
-                  v-if="filter.coupledFilters[0].value"
-                  rounded="pill"
-                  density="compact"
-                  class="pb-1"
-                  color="secondary"
-                  >{{ filter.coupledFilters[0].value }}</v-chip
+                <v-span v-if="filter.coupledFilters[0].value"
+                  >"{{ filter.coupledFilters[0].value }}"</v-span
                 >
               </v-card-text>
             </v-card>
@@ -403,7 +393,7 @@ export default {
   }),
   methods: {
     print() {
-      console.log('this.newFilter', this.newFilter)
+      console.log('this.addedFilters', this.addedFilters)
     },
     handleClick(field, key) {
       if (key in this.preselectGroups) {
@@ -483,6 +473,14 @@ export default {
         this.coupledFiltersAvailable = {}
       }
     },
+    addCoupledFilter() {
+      this.newFilter.coupledFilters.push({
+        key: '',
+        qualifier: '',
+        value: '',
+        options: []
+      })
+    },
 
     async updateFilterKey() {
       if (Object.keys(this.novelFoodAndOpinionFields).includes(this.newFilter.key)) {
@@ -512,9 +510,7 @@ export default {
           }
         ]
         this.coupledFiltersAvailable = Object.fromEntries(
-          Object.entries(this.fields).filter(([key, value]) =>
-            key.startsWith(this.newFilter.key)
-          )
+          Object.entries(this.fields).filter(([key, value]) => key.startsWith(this.newFilter.key))
         )
       }
     },
@@ -541,10 +537,8 @@ export default {
       this.addingFilter = true
       this.newFilter = this.addedFilters[i]
       this.coupledFiltersAvailable = Object.fromEntries(
-          Object.entries(this.fields).filter(([key, value]) =>
-            key.startsWith(this.newFilter.key)
-          )
-        )
+        Object.entries(this.fields).filter(([key, value]) => key.startsWith(this.newFilter.key))
+      )
       this.removeFilter(i)
     },
     removeFilter(i) {
