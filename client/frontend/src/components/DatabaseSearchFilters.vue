@@ -155,7 +155,7 @@
               </v-card-text>
               <v-card-actions class="mb-1 pt-0">
                 <v-spacer></v-spacer>
-                <v-btn color="tertiary" variant="tonal" @click="cancelNewFilter">Cancel</v-btn>
+                <v-btn color="tertiary" variant="tonal" @click="cancelNewFilter">Discard</v-btn>
                 <v-btn
                   color="secondary"
                   :disabled="!addFilterValid"
@@ -210,7 +210,7 @@
                   <span>with</span> {{ ' ' }}
 
                   <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                    this.allFields[coupledFiler.key].displayName ? this.allFields[coupledFiler.key].displayName : this.allFields[coupledFiler.key].flattenedDisplayName
+                    this.fields[coupledFiler.key].displayName ? this.fields[coupledFiler.key].displayName : this.fields[coupledFiler.key].flattenedDisplayName
                   }}</v-chip
                   >{{ ' ' }}which <b>{{ coupledFiler.qualifier }}</b
                   >{{ ' ' }}
@@ -227,7 +227,7 @@
               <v-card-text v-else class="pt-0">
                 Novel Foods <b>{{ filter.include }}</b> {{ ' ' }}
                 <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                  this.allFields[filter.key].displayName
+                  this.novelFoodAndOpinionFields[filter.key].displayName
                 }}</v-chip
                 >{{ ' ' }}which <b>{{ filter.coupledFilters[0].qualifier }}</b
                 >{{ ' ' }}
@@ -392,8 +392,9 @@ export default {
       coupledFilters: []
     },
     addedFilters: [],
-    novelFoodAndOpinionFields: novelFoodAndOpinionFields,
     objectTypes: objectTypes,
+    novelFoodAndOpinionFields: novelFoodAndOpinionFields,
+    fields: fields,
     allFields: { ...novelFoodAndOpinionFields, ...fields },
     fieldsSearch: '',
     selectedFields: {},
@@ -513,14 +514,14 @@ export default {
           }
         ]
         this.coupledFiltersAvailable = Object.fromEntries(
-          Object.entries(this.allFields).filter(([key, value]) =>
+          Object.entries(this.fields).filter(([key, value]) =>
             key.startsWith(this.newFilter.key)
           )
         )
       }
     },
     async updateCoupledFilter(i) {
-      let selectedCoupledField = this.allFields[this.newFilter.coupledFilters[i].key]
+      let selectedCoupledField = this.fields[this.newFilter.coupledFilters[i].key]
       this.newFilter.coupledFilters[i].options = await this.getOptions(selectedCoupledField)
     },
     cancelNewFilter() {
@@ -539,6 +540,11 @@ export default {
     editFilter(i) {
       this.addingFilter = true
       this.newFilter = this.addedFilters[i]
+      this.coupledFiltersAvailable = Object.fromEntries(
+          Object.entries(this.fields).filter(([key, value]) =>
+            key.startsWith(this.newFilter.key)
+          )
+        )
       this.removeFilter(i)
     },
     removeFilter(i) {
