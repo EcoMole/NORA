@@ -72,69 +72,133 @@
                         >
                       </v-row>
                     </v-col>
-                    <v-col cols="12">
+                    <v-col
+                      v-if="
+                        Object.keys(coupledFiltersAvailable).length < 1 &&
+                        newFilter.coupledFilters.length === 1
+                      "
+                      cols="12"
+                    >
+                      <v-row class="d-flex align-center">
+                        <v-col cols="12">
+                          <v-row class="d-flex align-center">
+                            <span>which</span>
+                            <v-autocomplete
+                              v-model="newFilter.coupledFilters[0].qualifier"
+                              :items="allFields[newFilter.coupledFilters[0].key]?.qualifiers || []"
+                              max-width="150px"
+                              variant="underlined"
+                              class="ml-6"
+                              :disabled="!newFilter.coupledFilters[0].key"
+                            ></v-autocomplete>
+
+                            <v-autocomplete
+                              v-if="
+                                newFilter.coupledFilters[0].options.length > 0 &&
+                                newFilter.coupledFilters[0].qualifier !== 'is None'
+                              "
+                              v-model="newFilter.coupledFilters[0].value"
+                              :items="newFilter.coupledFilters[0].options"
+                              variant="underlined"
+                              class="ml-6"
+                              :disabled="!newFilter.coupledFilters[0].key"
+                            ></v-autocomplete>
+                            <v-text-field
+                              v-if="
+                                newFilter.coupledFilters[0].options.length < 1 &&
+                                newFilter.coupledFilters[0].qualifier !== 'is None'
+                              "
+                              variant="underlined"
+                              v-model="newFilter.coupledFilters[0].value"
+                              :type="allFields[newFilter.coupledFilters[0].key]?.type"
+                              class="ml-6"
+                              :disabled="!newFilter.coupledFilters[0].key"
+                            ></v-text-field>
+                          </v-row>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <v-col v-else cols="12">
                       <v-row
                         v-for="(coupledFilter, i) in newFilter.coupledFilters"
                         :key="i"
                         class="d-flex align-center"
                       >
-                        <v-col v-if="Object.keys(coupledFiltersAvailable).length > 0" cols="12">
+                        <v-col v-if="i !== 0" cols="12">
+                          <v-row class="d-flex justify-center mb-0" v-if="true">
+                            <span class="mt-0">and</span>
+                          </v-row>
+                        </v-col>
+
+                        <v-col cols="1">
                           <v-row class="d-flex align-center">
                             <span>with</span>
-                            <v-autocomplete
-                              v-model="newFilter.coupledFilters[i].key"
-                              :items="coupledFiltersItems"
-                              item-title="displayName"
-                              item-value="key"
-                              class="ml-6"
-                              variant="underlined"
-                              @update:modelValue="updateCoupledFilter(i)"
-                              ><template v-slot:append>
-                                <v-icon small>mdi-information-outline</v-icon>
-                              </template></v-autocomplete
-                            >
                           </v-row>
                         </v-col>
-                        <v-col cols="12">
-                          <v-row class="d-flex align-center">
-                            <span>which</span>
-                            <v-autocomplete
-                              v-model="newFilter.coupledFilters[i].qualifier"
-                              :items="allFields[newFilter.coupledFilters[i].key]?.qualifiers || []"
-                              max-width="150px"
-                              variant="underlined"
-                              class="ml-6"
-                              :disabled="!newFilter.coupledFilters[i].key"
-                            ></v-autocomplete>
+                        <v-col cols="11">
+                          <v-sheet
+                            class="pa-4 text-center mx-auto"
+                            elevation="4"
+                            rounded="lg"
+                            width="100%"
+                          >
+                            <v-col cols="12">
+                              <v-row class="d-flex align-center">
+                                <v-autocomplete
+                                  v-model="newFilter.coupledFilters[i].key"
+                                  :items="coupledFiltersItems"
+                                  item-title="displayName"
+                                  item-value="key"
+                                  class="ml-6"
+                                  variant="underlined"
+                                  @update:modelValue="updateCoupledFilter(i)"
+                                  ><template v-slot:append>
+                                    <v-icon small>mdi-information-outline</v-icon>
+                                  </template></v-autocomplete
+                                >
+                              </v-row>
+                            </v-col>
+                            <v-col cols="12">
+                              <v-row class="d-flex align-center">
+                                <span>which</span>
+                                <v-autocomplete
+                                  v-model="newFilter.coupledFilters[i].qualifier"
+                                  :items="
+                                    allFields[newFilter.coupledFilters[i].key]?.qualifiers || []
+                                  "
+                                  max-width="150px"
+                                  variant="underlined"
+                                  class="ml-6"
+                                  :disabled="!newFilter.coupledFilters[i].key"
+                                ></v-autocomplete>
 
-                            <v-autocomplete
-                              v-if="
-                                newFilter.coupledFilters[i].options.length > 0 &&
-                                newFilter.coupledFilters[i].qualifier !== 'is None'
-                              "
-                              v-model="newFilter.coupledFilters[i].value"
-                              :items="newFilter.coupledFilters[i].options"
-                              variant="underlined"
-                              class="ml-6"
-                              :disabled="!newFilter.coupledFilters[i].key"
-                            ></v-autocomplete>
-                            <v-text-field
-                              v-if="
-                                newFilter.coupledFilters[i].options.length < 1 &&
-                                newFilter.coupledFilters[i].qualifier !== 'is None'
-                              "
-                              variant="underlined"
-                              v-model="newFilter.coupledFilters[i].value"
-                              :type="allFields[newFilter.coupledFilters[i].key]?.type"
-                              class="ml-6"
-                              :disabled="!newFilter.coupledFilters[i].key"
-                            ></v-text-field>
-                          </v-row>
+                                <v-autocomplete
+                                  v-if="
+                                    newFilter.coupledFilters[i].options.length > 0 &&
+                                    newFilter.coupledFilters[i].qualifier !== 'is None'
+                                  "
+                                  v-model="newFilter.coupledFilters[i].value"
+                                  :items="newFilter.coupledFilters[i].options"
+                                  variant="underlined"
+                                  class="ml-6"
+                                  :disabled="!newFilter.coupledFilters[i].key"
+                                ></v-autocomplete>
+                                <v-text-field
+                                  v-if="
+                                    newFilter.coupledFilters[i].options.length < 1 &&
+                                    newFilter.coupledFilters[i].qualifier !== 'is None'
+                                  "
+                                  variant="underlined"
+                                  v-model="newFilter.coupledFilters[i].value"
+                                  :type="allFields[newFilter.coupledFilters[i].key]?.type"
+                                  class="ml-6"
+                                  :disabled="!newFilter.coupledFilters[i].key"
+                                ></v-text-field>
+                              </v-row>
+                            </v-col>
+                          </v-sheet>
                         </v-col>
                       </v-row>
-                      <!-- <v-row class="d-flex justify-center mb-0" v-if="true">
-                        <span class="mt-0">and</span>
-                      </v-row> -->
                     </v-col>
                     <!-- <v-col
                       v-for="(coupledFilter, i) in newFilter.coupledFilters"
@@ -146,10 +210,11 @@
                       </p> -->
                     <!-- </v-col>  -->
                   </v-row>
-                  <v-row class="d-flex justify-center mt-5">
-                    <v-btn color="secondary" variant="tonal" @click="addCoupledFilter">
-                      and with..
-                    </v-btn>
+                  <v-row
+                    v-if="Object.keys(coupledFiltersAvailable).length > 0"
+                    class="d-flex justify-center mt-5"
+                  >
+                    <v-btn color="secondary" variant="tonal" @click="addCoupledFilter"> and </v-btn>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -207,16 +272,16 @@
                   }}</v-chip>
                 </div>
                 <div v-for="(coupledFiler, cfI) in filter.coupledFilters" :key="cfI">
-                  <span>with</span> {{ ' ' }}
-
+                  <span v-if="cfI !== 0">and{{ ' ' }}</span>
+                  <span>with{{ ' ' }}</span>
                   <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                    this.fields[coupledFiler.key].displayName
-                      ? this.fields[coupledFiler.key].displayName
-                      : this.fields[coupledFiler.key].flattenedDisplayName
+                    this.fields[coupledFiler.key].flattenedDisplayName
+                      ? this.fields[coupledFiler.key].flattenedDisplayName
+                      : this.fields[coupledFiler.key].displayName
                   }}</v-chip
-                  >{{ ' ' }}which <b>{{ coupledFiler.qualifier }}</b
+                  >{{ ' ' }}which{{ ' ' }}<b>{{ coupledFiler.qualifier }}</b
                   >{{ ' ' }}
-                  <v-span v-if="coupledFiler.value">"{{ coupledFiler.value }}"</v-span>
+                  <span v-if="coupledFiler.value">"{{ coupledFiler.value }}"</span>
                 </div>
               </v-card-text>
               <v-card-text v-else class="pt-0">
@@ -224,10 +289,10 @@
                 <v-chip rounded="pill" class="pb-1" color="secondary">{{
                   this.novelFoodAndOpinionFields[filter.key].displayName
                 }}</v-chip
-                >{{ ' ' }}which <b>{{ filter.coupledFilters[0].qualifier }}</b
+                >{{ ' ' }}which{{ ' ' }}<b>{{ filter.coupledFilters[0].qualifier }}</b
                 >{{ ' ' }}
-                <v-span v-if="filter.coupledFilters[0].value"
-                  >"{{ filter.coupledFilters[0].value }}"</v-span
+                <span v-if="filter.coupledFilters[0].value"
+                  >"{{ filter.coupledFilters[0].value }}"</span
                 >
               </v-card-text>
             </v-card>
@@ -393,7 +458,7 @@ export default {
   }),
   methods: {
     print() {
-      console.log('this.addedFilters', this.addedFilters)
+      console.log('this.newFilter', this.newFilter)
     },
     handleClick(field, key) {
       if (key in this.preselectGroups) {
