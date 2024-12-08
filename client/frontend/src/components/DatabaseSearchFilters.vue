@@ -125,7 +125,7 @@
                         class="d-flex align-center"
                       >
                         <v-col v-if="i !== 0" cols="12">
-                          <v-row class="d-flex justify-center mb-0" v-if="true">
+                          <v-row class="d-flex justify-center my-1" v-if="true">
                             <span class="mt-0">and</span>
                           </v-row>
                         </v-col>
@@ -136,67 +136,74 @@
                           </v-row>
                         </v-col>
                         <v-col cols="11">
-                          <v-sheet
-                            class="pa-4 text-center mx-auto"
-                            elevation="4"
-                            rounded="lg"
-                            width="100%"
-                          >
-                            <v-col cols="12">
-                              <v-row class="d-flex align-center">
-                                <v-autocomplete
-                                  v-model="newFilter.coupledFilters[i].key"
-                                  :items="coupledFiltersItems"
-                                  item-title="displayName"
-                                  item-value="key"
-                                  class="ml-6"
-                                  variant="underlined"
-                                  @update:modelValue="updateCoupledFilter(i)"
-                                  ><template v-slot:append>
-                                    <v-icon small>mdi-information-outline</v-icon>
-                                  </template></v-autocomplete
-                                >
-                              </v-row>
-                            </v-col>
-                            <v-col cols="12">
-                              <v-row class="d-flex align-center">
-                                <span>which</span>
-                                <v-autocomplete
-                                  v-model="newFilter.coupledFilters[i].qualifier"
-                                  :items="
-                                    allFields[newFilter.coupledFilters[i].key]?.qualifiers || []
-                                  "
-                                  max-width="150px"
-                                  variant="underlined"
-                                  class="ml-6"
-                                  :disabled="!newFilter.coupledFilters[i].key"
-                                ></v-autocomplete>
+                          <v-card class="pa-2" elevation="4" rounded="lg" density="compact">
+                            <v-card-text>
+                              <v-col cols="12">
+                                <v-row class="d-flex align-center">
+                                  <v-autocomplete
+                                    v-model="newFilter.coupledFilters[i].key"
+                                    :items="coupledFiltersItems"
+                                    item-title="displayName"
+                                    item-value="key"
+                                    class="ml-6"
+                                    variant="underlined"
+                                    @update:modelValue="updateCoupledFilter(i)"
+                                    ><template v-slot:append>
+                                      <v-icon small>mdi-information-outline</v-icon>
+                                    </template></v-autocomplete
+                                  >
+                                </v-row>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-row class="d-flex align-center">
+                                  <span>which</span>
+                                  <v-autocomplete
+                                    v-model="newFilter.coupledFilters[i].qualifier"
+                                    :items="
+                                      allFields[newFilter.coupledFilters[i].key]?.qualifiers || []
+                                    "
+                                    max-width="150px"
+                                    variant="underlined"
+                                    class="ml-6"
+                                    :disabled="!newFilter.coupledFilters[i].key"
+                                  ></v-autocomplete>
 
-                                <v-autocomplete
-                                  v-if="
-                                    newFilter.coupledFilters[i].options.length > 0 &&
-                                    newFilter.coupledFilters[i].qualifier !== 'is None'
-                                  "
-                                  v-model="newFilter.coupledFilters[i].value"
-                                  :items="newFilter.coupledFilters[i].options"
-                                  variant="underlined"
-                                  class="ml-6"
-                                  :disabled="!newFilter.coupledFilters[i].key"
-                                ></v-autocomplete>
-                                <v-text-field
-                                  v-if="
-                                    newFilter.coupledFilters[i].options.length < 1 &&
-                                    newFilter.coupledFilters[i].qualifier !== 'is None'
-                                  "
-                                  variant="underlined"
-                                  v-model="newFilter.coupledFilters[i].value"
-                                  :type="allFields[newFilter.coupledFilters[i].key]?.type"
-                                  class="ml-6"
-                                  :disabled="!newFilter.coupledFilters[i].key"
-                                ></v-text-field>
-                              </v-row>
-                            </v-col>
-                          </v-sheet>
+                                  <v-autocomplete
+                                    v-if="
+                                      newFilter.coupledFilters[i].options.length > 0 &&
+                                      newFilter.coupledFilters[i].qualifier !== 'is None'
+                                    "
+                                    v-model="newFilter.coupledFilters[i].value"
+                                    :items="newFilter.coupledFilters[i].options"
+                                    variant="underlined"
+                                    class="ml-6"
+                                    :disabled="!newFilter.coupledFilters[i].key"
+                                  ></v-autocomplete>
+                                  <v-text-field
+                                    v-if="
+                                      newFilter.coupledFilters[i].options.length < 1 &&
+                                      newFilter.coupledFilters[i].qualifier !== 'is None'
+                                    "
+                                    variant="underlined"
+                                    v-model="newFilter.coupledFilters[i].value"
+                                    :type="allFields[newFilter.coupledFilters[i].key]?.type"
+                                    class="ml-6"
+                                    :disabled="!newFilter.coupledFilters[i].key"
+                                  ></v-text-field>
+                                </v-row>
+                              </v-col>
+                            </v-card-text>
+                            <v-card-actions v-if="newFilter.coupledFilters.length > 1" class="mb-1 pt-0">
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                color="black"
+                                size="small"
+                                variant="tonal"
+                                @click="newFilter.coupledFilters.splice(i, 1)"
+                                >discard</v-btn
+                              >
+                            </v-card-actions>
+                          </v-card>
                         </v-col>
                       </v-row>
                     </v-col>
