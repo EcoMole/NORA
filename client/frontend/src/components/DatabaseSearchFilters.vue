@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <v-btn @click="print">print</v-btn>
     <v-row class="mt-4">
       <v-col cols="6">
         <v-row class="d-flex justify-center">
@@ -472,9 +471,6 @@ export default {
     coupledFiltersAvailable: {}
   }),
   methods: {
-    print() {
-      console.log('this.addedFilters', this.addedFilters)
-    },
     handleClick(field, key) {
       if (key in this.preselectGroups) {
         for (let fieldToPreselect of this.preselectGroups[key]) {
