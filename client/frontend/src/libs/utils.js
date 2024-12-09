@@ -15,21 +15,22 @@ const allFields = { ...fields, ...novelFoodAndOpinionFields }
 function buildVariables(addedFilters) {
   return addedFilters.reduce(
     (acc, { djangoLookupFilter, include, djangoApp, djangoModel, coupledFilters }) => {
-      const djangoLookupField = allFields[coupledFilters[0].key].djangoLookupField
-        ? allFields[coupledFilters[0].key].djangoLookupField
-        : null
-      const fieldType = allFields[coupledFilters[0].key].fieldType
-        ? allFields[coupledFilters[0].key].fieldType
-        : null
-      const valueFields = allFields[coupledFilters[0].key].valueFields
-        ? allFields[coupledFilters[0].key].valueFields
-        : null
       acc.push({
         djangoLookupFilter,
         include,
         djangoApp,
         djangoModel,
-        coupledFilters: coupledFilters.map(({ qualifier, value }) => {
+        coupledFilters: coupledFilters.map(({ key, qualifier, value }) => {
+          const djangoLookupField = allFields[key].djangoLookupField
+            ? allFields[key].djangoLookupField
+            : null
+          const fieldType = allFields[key].fieldType
+            ? allFields[key].fieldType
+            : null
+          const valueFields = allFields[key].valueFields
+            ? allFields[key].valueFields
+            : null
+
           return { qualifier, value, djangoLookupField, fieldType, valueFields }
         })
       })

@@ -293,10 +293,12 @@ class Query(graphene.ObjectType):
 
                 if model == NovelFood:
                     if include == "must have":
-                        nf_qs = nf_qs.intersection(qs)
+                        # nf_qs becomes intersection of nf_qs and qs
+                        nf_qs = nf_qs.filter(pk__in=qs.values_list("pk", flat=True))
 
                     elif include == "must not have":
-                        nf_qs = nf_qs.difference(qs)
+                        # nf_qs becomes nf_qs difference from qs
+                        nf_qs = nf_qs.exclude(pk__in=qs.values_list("pk", flat=True))
 
             if model != NovelFood:
                 if include == "must have":

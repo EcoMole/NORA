@@ -465,7 +465,7 @@ export default {
   }),
   methods: {
     print() {
-      console.log('this.newFilter', this.newFilter)
+      console.log('this.addedFilters', this.addedFilters)
     },
     handleClick(field, key) {
       if (key in this.preselectGroups) {

@@ -650,7 +650,7 @@ export const novelFoodAndOpinionFields = {
 
 export const fields = {
   'allergenicities.title': {
-    displayName: '',
+    displayName: 'Allergenicity',
     flattenedDisplayName: 'Allergenicity',
     type: 'text',
     djangoLookupField: 'allergenicities__allergenicity__title',
@@ -665,7 +665,7 @@ export const fields = {
   },
 
   'specificToxicities.specificToxicity': {
-    displayName: '',
+    displayName: 'Specific Toxicity',
     flattenedDisplayName: 'Hazards - Specific Toxicity',
     type: 'text',
     djangoLookupField: 'specific_toxicities__specific_toxicity',
@@ -684,7 +684,7 @@ export const fields = {
     showInFilters: true
   },
   'substancesOfConcern.substanceOfConcern': {
-    displayName: '',
+    displayName: 'Substance of Concern',
     flattenedDisplayName: 'Hazards - Substance of Concern',
     type: 'text',
     djangoLookupField: 'substances_of_concern__substance_of_concern',
