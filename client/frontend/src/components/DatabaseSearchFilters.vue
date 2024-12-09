@@ -193,7 +193,10 @@
                                 </v-row>
                               </v-col>
                             </v-card-text>
-                            <v-card-actions v-if="newFilter.coupledFilters.length > 1" class="mb-1 pt-0">
+                            <v-card-actions
+                              v-if="newFilter.coupledFilters.length > 1"
+                              class="mb-1 pt-0"
+                            >
                               <v-spacer></v-spacer>
                               <v-btn
                                 color="black"
@@ -282,9 +285,9 @@
                   <span v-if="cfI !== 0">and{{ ' ' }}</span>
                   <span>with{{ ' ' }}</span>
                   <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
-                    this.fields[coupledFiler.key].flattenedDisplayName
-                      ? this.fields[coupledFiler.key].flattenedDisplayName
-                      : this.fields[coupledFiler.key].displayName
+                    this.coupledFilterFields[coupledFiler.key].flattenedDisplayName
+                      ? this.coupledFilterFields[coupledFiler.key].flattenedDisplayName
+                      : this.coupledFilterFields[coupledFiler.key].displayName
                   }}</v-chip
                   >{{ ' ' }}which{{ ' ' }}<b>{{ coupledFiler.qualifier }}</b
                   >{{ ' ' }}
@@ -294,7 +297,7 @@
               <v-card-text v-else class="pt-0">
                 Novel Foods <b>{{ filter.include }}</b> {{ ' ' }}
                 <v-chip rounded="pill" class="pb-1" color="secondary">{{
-                  this.novelFoodAndOpinionFields[filter.key].displayName
+                  this.simpleFilterFields[filter.key].displayName
                 }}</v-chip
                 >{{ ' ' }}which{{ ' ' }}<b>{{ filter.coupledFilters[0].qualifier }}</b
                 >{{ ' ' }}
@@ -430,7 +433,12 @@
 </template>
 
 <script>
-import { novelFoodAndOpinionFields, objectTypes, fields, preselectGroups } from '@/libs/definitions'
+import {
+  simpleFilterFields,
+  objectTypes,
+  coupledFilterFields,
+  preselectGroups
+} from '@/libs/definitions'
 import { useTheme } from 'vuetify'
 import axios from '@/libs/axios'
 import { attrsMandatoryForExport } from '@/libs/graphql-query'
@@ -455,9 +463,9 @@ export default {
     },
     addedFilters: [],
     objectTypes: objectTypes,
-    novelFoodAndOpinionFields: novelFoodAndOpinionFields,
-    fields: fields,
-    allFields: { ...novelFoodAndOpinionFields, ...fields },
+    simpleFilterFields: simpleFilterFields,
+    coupledFilterFields: coupledFilterFields,
+    allFields: { ...simpleFilterFields, ...coupledFilterFields },
     fieldsSearch: '',
     selectedFields: {},
     preselectGroups: preselectGroups,
@@ -555,9 +563,9 @@ export default {
     },
 
     async updateFilterKey() {
-      if (Object.keys(this.novelFoodAndOpinionFields).includes(this.newFilter.key)) {
+      if (Object.keys(this.simpleFilterFields).includes(this.newFilter.key)) {
         this.coupledFiltersAvailable = {}
-        const selectedField = this.novelFoodAndOpinionFields[this.newFilter.key]
+        const selectedField = this.simpleFilterFields[this.newFilter.key]
         this.newFilter.group = selectedField.displayGroupName
         this.newFilter.coupledFilters = [
           {
@@ -582,12 +590,14 @@ export default {
           }
         ]
         this.coupledFiltersAvailable = Object.fromEntries(
-          Object.entries(this.fields).filter(([key, value]) => key.startsWith(this.newFilter.key))
+          Object.entries(this.coupledFilterFields).filter(([key, value]) =>
+            key.startsWith(this.newFilter.key)
+          )
         )
       }
     },
     async updateCoupledFilter(i) {
-      let selectedCoupledField = this.fields[this.newFilter.coupledFilters[i].key]
+      let selectedCoupledField = this.coupledFilterFields[this.newFilter.coupledFilters[i].key]
       this.newFilter.coupledFilters[i].qualifier = ''
       this.newFilter.coupledFilters[i].value = ''
       this.newFilter.coupledFilters[i].options = await this.getOptions(selectedCoupledField)
@@ -609,7 +619,9 @@ export default {
       this.addingFilter = true
       this.newFilter = this.addedFilters[i]
       this.coupledFiltersAvailable = Object.fromEntries(
-        Object.entries(this.fields).filter(([key, value]) => key.startsWith(this.newFilter.key))
+        Object.entries(this.coupledFilterFields).filter(([key, value]) =>
+          key.startsWith(this.newFilter.key)
+        )
       )
       this.removeFilter(i)
     },
@@ -633,7 +645,7 @@ export default {
       }
     },
     filtersItems() {
-      return Object.entries({ ...this.novelFoodAndOpinionFields, ...this.objectTypes })
+      return Object.entries({ ...this.simpleFilterFields, ...this.objectTypes })
         .filter(([key, field]) => field.showInFilters)
         .map(([key, field]) => ({
           key: key,

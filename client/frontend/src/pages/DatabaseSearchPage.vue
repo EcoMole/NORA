@@ -127,7 +127,7 @@ import DatabaseSearchFilters from '@/components/DatabaseSearchFilters.vue'
 import { formatGraphQLQuery } from '@/libs/graphql-query.js'
 import { useMainStore } from '@/stores/main'
 import RecursiveDataTable from '@/components/RecursiveDataTable.vue'
-import { objectTypes, fields, novelFoodAndOpinionFields } from '@/libs/definitions.js'
+import { objectTypes, coupledFilterFields, simpleFilterFields } from '@/libs/definitions.js'
 import { buildVariables } from '@/libs/utils.js'
 import axios from '@/libs/axios'
 import { mapState, mapActions } from 'pinia'
@@ -141,7 +141,7 @@ export default {
     addedFilters: [],
     selectedFields: {},
     headdersToHide: [],
-    nameMappingObj: { ...novelFoodAndOpinionFields, ...fields, ...objectTypes },
+    nameMappingObj: { ...simpleFilterFields, ...coupledFilterFields, ...objectTypes },
     exporting: false,
     showCompactTable: false,
     isAtBottom: false

@@ -257,7 +257,7 @@ export const objectTypes = {
   }
 }
 
-export const novelFoodAndOpinionFields = {
+export const simpleFilterFields = {
   // novel food
 
   novelFoodId: {
@@ -648,7 +648,7 @@ export const novelFoodAndOpinionFields = {
   }
 }
 
-export const fields = {
+export const coupledFilterFields = {
   'allergenicities.title': {
     displayName: 'Allergenicity',
     flattenedDisplayName: 'Allergenicity',

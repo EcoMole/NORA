@@ -8,9 +8,9 @@ function getUserType(user) {
   return user.isSuperuser ? 'superuser' : user.isStaff ? 'staff' : null
 }
 
-import { fields, novelFoodAndOpinionFields } from './definitions'
+import { coupledFilterFields, simpleFilterFields } from './definitions'
 
-const allFields = { ...fields, ...novelFoodAndOpinionFields }
+const allFields = { ...coupledFilterFields, ...simpleFilterFields }
 
 function buildVariables(addedFilters) {
   return addedFilters.reduce(
@@ -24,12 +24,8 @@ function buildVariables(addedFilters) {
           const djangoLookupField = allFields[key].djangoLookupField
             ? allFields[key].djangoLookupField
             : null
-          const fieldType = allFields[key].fieldType
-            ? allFields[key].fieldType
-            : null
-          const valueFields = allFields[key].valueFields
-            ? allFields[key].valueFields
-            : null
+          const fieldType = allFields[key].fieldType ? allFields[key].fieldType : null
+          const valueFields = allFields[key].valueFields ? allFields[key].valueFields : null
 
           return { qualifier, value, djangoLookupField, fieldType, valueFields }
         })
