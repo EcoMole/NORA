@@ -65,9 +65,7 @@
                           class="ml-6"
                           variant="underlined"
                           @update:modelValue="updateFilterKey"
-                          ><template v-slot:append>
-                            <v-icon small>mdi-information-outline</v-icon>
-                          </template></v-autocomplete
+                          ></v-autocomplete
                         >
                       </v-row>
                     </v-col>
@@ -147,9 +145,7 @@
                                     class="ml-6"
                                     variant="underlined"
                                     @update:modelValue="updateCoupledFilterKey(i)"
-                                    ><template v-slot:append>
-                                      <v-icon small>mdi-information-outline</v-icon>
-                                    </template></v-autocomplete
+                                    ></v-autocomplete
                                   >
                                 </v-row>
                               </v-col>
