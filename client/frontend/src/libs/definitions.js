@@ -2,7 +2,7 @@ export const objectTypes = {
   allergenicities: {
     displayName: 'Allergenicity',
     displayGroupName: 'Allergenicity',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'allergenicities__allergenicity',
     djangoApp: 'novel_food',
     djangoModel: 'Allergenicity'
@@ -18,7 +18,7 @@ export const objectTypes = {
   panels: {
     displayName: 'Panel',
     displayGroupName: 'Administrative',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'opinion__panels__panel',
     djangoApp: 'administrative',
     djangoModel: 'Panel'
@@ -42,7 +42,7 @@ export const objectTypes = {
   'questions.applicants': {
     displayName: 'Applicant',
     displayGroupName: 'Applicant',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'opinion__questions__question__applicants__applicant',
     djangoApp: 'administrative',
     djangoModel: 'Applicant'
@@ -82,7 +82,7 @@ export const objectTypes = {
   'admes.investigationTypes': {
     displayName: 'Investigation Type',
     displayGroupName: 'ADME',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'adme__investigation_types__investigation_type',
     djangoApp: 'studies',
     djangoModel: 'InvestigationType'
@@ -138,7 +138,7 @@ export const objectTypes = {
   'novelFoodVariants.riskAssessRedFlags': {
     displayName: 'Risk Assessment Red Flag',
     displayGroupName: 'Production process of Novel Food Variant',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'novelfoodvariant__risk_assess_red_flags__risk_assess_red_flag',
     djangoApp: 'composition',
     djangoModel: 'RiskAssessRedFlag'
@@ -146,7 +146,7 @@ export const objectTypes = {
   'novelFoodVariants.productionProcesses': {
     displayName: 'Production Process',
     displayGroupName: 'Production process of Novel Food Variant',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'novelfoodvariant__productions',
     djangoApp: 'composition',
     djangoModel: 'ProductionNovelFoodVariant'
@@ -226,7 +226,7 @@ export const objectTypes = {
   specificToxicities: {
     displayName: 'Specific Toxicity',
     displayGroupName: 'Hazards',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'specific_toxicities',
     djangoApp: 'novel_food',
     djangoModel: 'SpecificToxicity'
@@ -234,7 +234,7 @@ export const objectTypes = {
   substancesOfConcern: {
     displayName: 'Substance of Concern',
     displayGroupName: 'Hazards',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'substances_of_concern',
     djangoApp: 'novel_food',
     djangoModel: 'SubstanceOfConcernNovelFood'
@@ -242,7 +242,7 @@ export const objectTypes = {
   backgroundExposureAssessments: {
     displayName: 'Background Exposure Assessment',
     displayGroupName: 'Nutrition',
-    showInFilters: true,
+    showInFilters: false,
     djangoLookupFilter: 'bg_expo_assessments',
     djangoApp: 'novel_food',
     djangoModel: 'BackgroundExposureAssessment'
@@ -645,10 +645,7 @@ export const simpleFilterFields = {
     filterDescription:
       'The date when the publication (scientific opinion/statement) was adopted by the Panel. For Technical reports, this is the “Approval date”.',
     showInFilters: true
-  }
-}
-
-export const coupledFilterFields = {
+  },
   'allergenicities.title': {
     displayName: 'Allergenicity',
     flattenedDisplayName: 'Allergenicity',
@@ -663,7 +660,79 @@ export const coupledFilterFields = {
     filterDescription: 'Panel’s conclusion on allergenicity risk posed by the NF/TF',
     showInFilters: true
   },
+  'panels.title': {
+    displayName: 'Name',
+    flattenedDisplayName: 'Opinion - Panel',
+    type: 'text',
+    djangoLookupField: 'opinion__panels__panel__title',
+    apiEndpoint: 'picklist/',
+    djangoApp: 'administrative',
+    djangoModel: 'Panel',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription:
+      'The abbreviation of the EFSA Panel that authored the publication. “EFSA” was used instead of Panel in cases of Technical Reports or when EFSA was the sole author.',
+    showInFilters: true
+  },
+  'questions.applicants.title': {
+    displayName: 'Name',
+    flattenedDisplayName: 'Opinion - Applicant',
+    djangoLookupField: 'opinion__questions__question__applicants__applicant__title',
+    type: 'text',
+    qualifiers: ['contains', 'is', 'is None'],
+    icon: 'mdi-file-document-outline',
+    filterDescription: 'Name of the applicant (usually a company)',
+    showInFilters: true
+  },
 
+  'admes.investigationTypes.title': {
+    displayName: 'Name',
+    flattenedDisplayName: 'ADME Investigation Type',
+    type: 'text',
+    djangoLookupField: 'adme__investigation_types__investigation_type__title',
+    apiEndpoint: 'picklist/',
+    djangoApp: 'studies',
+    djangoModel: 'InvestigationType',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-flask',
+    filterDescription:
+      'Describes what was investigated in the study, e.g. “absorption”, “metabolism”, or “bioavailability”. A study can have multiple investigation types.',
+    showInFilters: true
+  },
+  'novelFoodVariants.riskAssessRedFlags.title': {
+    displayName: 'Production process Risk Assessment Red flag',
+    flattenedDisplayName: 'Production process Risk Assessment Red Flag',
+    type: 'text',
+    djangoLookupField: 'novelfoodvariant__risk_assess_red_flags__risk_assess_red_flag__title',
+    apiEndpoint: 'picklist/',
+    djangoApp: 'composition',
+    djangoModel: 'RiskAssessRedFlag',
+    djangoField: 'title',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-alert-circle',
+    filterDescription: 'possible Red Flags in the production process',
+    showInFilters: true
+  },
+  'novelFoodVariants.productionProcesses.process': {
+    displayName: 'Production Process',
+    flattenedDisplayName: 'Production Process of Novel Food Variant',
+    type: 'text',
+    djangoLookupField: 'novelfoodvariant__productions__process',
+    fieldType: 'tax_node',
+    apiEndpoint: 'picklist/',
+    djangoApp: 'taxonomies',
+    djangoModel: 'TaxonomyNode',
+    djangoField: 'short_name',
+    djangoLimitchoicesApp: 'composition',
+    djangoLimitchoicesModel: 'ProductionNovelFoodVariant',
+    djangoLimitchoicesField: 'process',
+    qualifiers: ['is', 'is None'],
+    icon: 'mdi-factory',
+    filterDescription: 'Process in Production of Novel Food Variant',
+    showInFilters: true
+  },
   'specificToxicities.specificToxicity': {
     displayName: 'Specific Toxicity',
     flattenedDisplayName: 'Hazards - Specific Toxicity',
@@ -721,6 +790,14 @@ export const coupledFilterFields = {
       'Specifies the substances for which background exposure was assessed, indicating the baseline dietary exposure levels considered in the NF/TF assessment. This field is left blank if no background exposure assessment was conducted. ',
     showInFilters: true
   },
+}
+
+export const coupledFilterFields = {
+
+
+
+
+
   'hbgvs.type': {
     displayName: 'Type',
     flattenedDisplayName: 'Hazards - HBGV Type',
@@ -821,21 +898,7 @@ export const coupledFilterFields = {
     showInFilters: true
   },
 
-  'panels.title': {
-    displayName: 'Name',
-    flattenedDisplayName: 'Opinion - Panel',
-    type: 'text',
-    djangoLookupField: 'opinion__panels__panel__title',
-    apiEndpoint: 'picklist/',
-    djangoApp: 'administrative',
-    djangoModel: 'Panel',
-    djangoField: 'title',
-    qualifiers: ['is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription:
-      'The abbreviation of the EFSA Panel that authored the publication. “EFSA” was used instead of Panel in cases of Technical Reports or when EFSA was the sole author.',
-    showInFilters: true
-  },
+
 
   'sciOfficers.firstName': {
     displayName: 'First Name',
