@@ -65,8 +65,7 @@
                           class="ml-6"
                           variant="underlined"
                           @update:modelValue="updateFilterKey"
-                          ></v-autocomplete
-                        >
+                        ></v-autocomplete>
                       </v-row>
                     </v-col>
                     <v-col
@@ -145,8 +144,7 @@
                                     class="ml-6"
                                     variant="underlined"
                                     @update:modelValue="updateCoupledFilterKey(i)"
-                                    ></v-autocomplete
-                                  >
+                                  ></v-autocomplete>
                                 </v-row>
                               </v-col>
                               <v-col cols="12">
@@ -205,15 +203,6 @@
                         </v-col>
                       </v-row>
                     </v-col>
-                    <!-- <v-col
-                      v-for="(coupledFilter, i) in newFilter.coupledFilters"
-                      :key="i"
-                      cols="12"
-                    >
-                      <p>
-                        {{ allFields[newFilter.coupledFilters[i].key].filterDescription }}
-                      </p> -->
-                    <!-- </v-col>  -->
                   </v-row>
                   <v-row
                     v-if="Object.keys(coupledFiltersAvailable).length > 0"
@@ -228,7 +217,7 @@
                 <v-btn color="tertiary" variant="tonal" @click="cancelNewFilter">Discard</v-btn>
                 <v-btn
                   color="secondary"
-                  :disabled="!addFilterValid"
+                  :disabled="!allFiltersValid"
                   variant="elevated"
                   class="mr-2 ml-5"
                   @click="addFilter"
@@ -530,7 +519,7 @@ export default {
       return fieldsToHide
     },
     addFilter() {
-      if (this.addFilterValid) {
+      if (this.allFiltersValid) {
         this.addedFilters.unshift(this.newFilter)
         this.addingFilter = false
         this.newFilter = {
@@ -658,13 +647,16 @@ export default {
     allFieldsSelected() {
       return Object.keys(this.selectedFields).length === Object.keys(this.allFields).length
     },
-    addFilterValid() {
-      return this.newFilter.coupledFilters.filter((filter) => {
-        const hasBasicFields = filter.include && filter.qualifier
-        const requiresValue = filter.qualifier !== 'is None'
+    allFiltersValid() {
+      return (
+        this.newFilter.key && this.newFilter.include &&
+        this.newFilter.coupledFilters.every((filter) => {
+          const hasBasicFields = filter.key && filter.qualifier
+          const requiresValue = filter.qualifier !== 'is None'
 
-        return requiresValue ? hasBasicFields && filter.value : hasBasicFields
-      })
+          return requiresValue ? hasBasicFields && filter.value : hasBasicFields
+        })
+      )
     },
     fieldsSearched() {
       const fieldsSearch = this.fieldsSearch?.toLowerCase()
