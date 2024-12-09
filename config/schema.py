@@ -193,8 +193,6 @@ class Query(graphene.ObjectType):
             django_model = f.get("django_model", None)
 
             model = NovelFood
-            # todo: decide whether this prest of NovelFood model will be set here in backnd or
-            # todo: in frontend
             if django_app and django_model:
                 model = apps.get_model(django_app, django_model)
 
@@ -313,11 +311,15 @@ class Query(graphene.ObjectType):
                 if model == NovelFood:
                     if include == "must have":
                         # nf_qs becomes intersection of nf_qs and qs
-                        nf_qs = nf_qs.filter(pk__in=qs.values_list("pk", flat=True))
+                        nf_qs = nf_qs.filter(
+                            pk__in=qs.values_list("pk", flat=True)
+                        ).distinct()
 
                     elif include == "must not have":
                         # nf_qs becomes nf_qs difference from qs
-                        nf_qs = nf_qs.exclude(pk__in=qs.values_list("pk", flat=True))
+                        nf_qs = nf_qs.exclude(
+                            pk__in=qs.values_list("pk", flat=True)
+                        ).distinct()
 
             if model != NovelFood:
                 if include == "must have":
