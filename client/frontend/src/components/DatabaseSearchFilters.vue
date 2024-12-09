@@ -147,7 +147,7 @@
                                     item-value="key"
                                     class="ml-6"
                                     variant="underlined"
-                                    @update:modelValue="updateCoupledFilter(i)"
+                                    @update:modelValue="updateCoupledFilterKey(i)"
                                     ><template v-slot:append>
                                       <v-icon small>mdi-information-outline</v-icon>
                                     </template></v-autocomplete
@@ -575,6 +575,9 @@ export default {
             options: await this.getOptions(selectedField)
           }
         ]
+        this.newFilter.djangoApp = ''
+        this.newFilter.djangoModel = ''
+        this.newFilter.djangoLookupFilter = ''
       } else if (Object.keys(this.objectTypes).includes(this.newFilter.key)) {
         const selectedField = this.objectTypes[this.newFilter.key]
         this.newFilter.djangoApp = selectedField.djangoApp
@@ -596,7 +599,7 @@ export default {
         )
       }
     },
-    async updateCoupledFilter(i) {
+    async updateCoupledFilterKey(i) {
       let selectedCoupledField = this.coupledFilterFields[this.newFilter.coupledFilters[i].key]
       this.newFilter.coupledFilters[i].qualifier = ''
       this.newFilter.coupledFilters[i].value = ''

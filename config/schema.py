@@ -274,11 +274,30 @@ class Query(graphene.ObjectType):
                             value_field,
                             upper_range_value_field,
                         )
-                        if lookup_field.endswith(f"__{value_field}"):
-                            lookup_field = lookup_field[: -len(f"__{value_field}")]
+                        for item in sub_queryset:
+                            print(
+                                item.qualifier,
+                                item.value,
+                                " - ",
+                                item.upper_range_value,
+                            )
+                        # breakpoint()
+                        if lookup_field.endswith(value_field):
+                            remaining_lookup_path = lookup_field[: -len(value_field)]
+                            # if lookup_field is "some_field__value" and
+                            # the value_field is "value" then
+                            # the remaining_lookup_path is "some_field__"
 
-                        q_object = Q(**{f"{lookup_field}__in": sub_queryset})
-
+                            # if lookup_field is "value" and
+                            # the value_field is "value" then
+                            # the remaining_lookup_path is ""
+                        q_object = Q(
+                            **{
+                                f"{remaining_lookup_path}pk__in": sub_queryset.values_list(
+                                    "pk", flat=True
+                                )
+                            }
+                        )
                 # for all other fields
                 else:
                     if filter_qualifier == "isnull":
