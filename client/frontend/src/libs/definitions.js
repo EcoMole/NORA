@@ -793,11 +793,6 @@ export const simpleFilterFields = {
 }
 
 export const coupledFilterFields = {
-
-
-
-
-
   'hbgvs.type': {
     displayName: 'Type',
     flattenedDisplayName: 'Hazards - HBGV Type',
@@ -897,8 +892,6 @@ export const coupledFilterFields = {
     filterDescription: 'description for Novel Food Synonym Type Definition',
     showInFilters: true
   },
-
-
 
   'sciOfficers.firstName': {
     displayName: 'First Name',
@@ -2436,6 +2429,11 @@ export const coupledFilterFields = {
 }
 
 export const preselectGroups = {
+  'endpointstudies.endpoints.lovalue': [
+    'endpointstudies.endpoints.qualifier',
+    'endpointstudies.endpoints.lovalue',
+    'endpointstudies.endpoints.unit'
+  ],
   'endpointstudies.endpoints.finalOutcomes.value': [
     'endpointstudies.endpoints.finalOutcomes.qualifier',
     'endpointstudies.endpoints.finalOutcomes.value',

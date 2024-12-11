@@ -272,14 +272,6 @@ class Query(graphene.ObjectType):
                             value_field,
                             upper_range_value_field,
                         )
-                        for item in sub_queryset:
-                            print(
-                                item.qualifier,
-                                item.value,
-                                " - ",
-                                item.upper_range_value,
-                            )
-                        # breakpoint()
                         if lookup_field.endswith(value_field):
                             remaining_lookup_path = lookup_field[: -len(value_field)]
                             # if lookup_field is "some_field__value" and
