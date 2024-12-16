@@ -141,6 +141,7 @@ export default {
     addedFilters: [],
     selectedFields: {},
     headdersToHide: [],
+    objectTypes: objectTypes,
     nameMappingObj: { ...simpleFilterFields, ...coupledFilterFields, ...objectTypes },
     exporting: false,
     showCompactTable: false,
@@ -176,10 +177,23 @@ export default {
       if (this.addedFilters.length === 0) {
         return ['No filters applied']
       }
-      return this.addedFilters.map(
-        ({ include, title, qualifier, value }) =>
-          `Novel Foods ${include} ${title} which ${qualifier} ${value}`
-      )
+      return this.addedFilters.map(({ key, include, coupledFilters }) => {
+        let text = `All Novel Foods ${include} ${this.nameMappingObj[key].displayName}`
+
+        if (Object.keys(this.objectTypes).includes(key)) {
+          coupledFilters.forEach((cF, index) => {
+            if (index !== 0) {
+              text += ' and'
+            }
+            text += ` ${cF.include} ${this.nameMappingObj[cF.key].flattenedDisplayName
+                ? this.nameMappingObj[cF.key].flattenedDisplayName
+                : this.nameMappingObj[cF.key].displayName} which ${cF.qualifier} ${cF.value}`
+          })
+        } else {
+            text += ` which ${coupledFilters[0].qualifier} ${coupledFilters[0].value}`
+        }
+        return text
+      })
     },
     async renderTable(addedFilters, selectedFields, headdersToHide) {
       this.resetOfferingCompactTable()
