@@ -15,6 +15,7 @@ class ValueFieldsInput(graphene.InputObjectType):
 
 # Define the custom filter input
 class CoupledFilterInput(graphene.InputObjectType):
+    include = graphene.String()
     key = graphene.String()
     qualifier = graphene.String()
     value = graphene.String()
@@ -199,6 +200,7 @@ class Query(graphene.ObjectType):
             qs = model.objects.all()
 
             for coup_f in f.get("coupled_filters"):
+                field_include = coup_f.get("include", None)
                 field_type = coup_f.get("field_type", None)
                 filter_qualifier = map[coup_f.get("qualifier")]
                 filter_value = coup_f.get("value", None)
@@ -297,8 +299,10 @@ class Query(graphene.ObjectType):
                             lookup_field, filter_qualifier, filter_value
                         )
 
-                print("q_object", q_object)
-                qs = qs.filter(q_object).distinct()
+                if field_include == "with":
+                    qs = qs.filter(q_object).distinct()
+                elif field_include == "without":
+                    qs = qs.exclude(q_object).distinct()
 
                 if model == NovelFood:
                     if include == "must have":
