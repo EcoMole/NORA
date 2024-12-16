@@ -126,12 +126,18 @@
                           </v-row>
                         </v-col>
 
-                        <v-col cols="1">
+                        <v-col cols="3">
                           <v-row class="d-flex align-center">
-                            <span>with</span>
+                            <v-select
+                              v-model="newFilter.coupledFilters[i].include"
+                              :items="['with', 'without']"
+                              class="ml-6"
+                              variant="underlined"
+                              max-width="140px"
+                            ></v-select>
                           </v-row>
                         </v-col>
-                        <v-col cols="11">
+                        <v-col cols="9">
                           <v-card class="pa-2" elevation="4" rounded="lg" density="compact">
                             <v-card-text>
                               <v-col cols="12">
@@ -208,7 +214,7 @@
                     v-if="Object.keys(coupledFiltersAvailable).length > 0"
                     class="d-flex justify-center mt-5"
                   >
-                    <v-btn color="secondary" variant="tonal" @click="addCoupledFilter"> and </v-btn>
+                    <v-btn color="secondary" variant="tonal" @click="addCoupledFilter" :disabled="!allFiltersValid"> and </v-btn>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -267,7 +273,7 @@
                 </div>
                 <div v-for="(coupledFiler, cfI) in filter.coupledFilters" :key="cfI">
                   <span v-if="cfI !== 0">and{{ ' ' }}</span>
-                  <span>with{{ ' ' }}</span>
+                  <b>{{ coupledFiler.include }}</b><span>{{ ' ' }}</span>
                   <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
                     this.coupledFilterFields[coupledFiler.key].flattenedDisplayName
                       ? this.coupledFilterFields[coupledFiler.key].flattenedDisplayName
@@ -386,10 +392,7 @@
                     >
                   </template>
                   <v-expand-transition>
-                    <v-list-item-subtitle
-                      v-if="expandedItems[key]"
-                      class="wrap-list-item-subtitle"
-                    >
+                    <v-list-item-subtitle v-if="expandedItems[key]" class="wrap-list-item-subtitle">
                       {{ field.filterDescription }}
                     </v-list-item-subtitle>
                   </v-expand-transition>
@@ -539,6 +542,7 @@ export default {
     },
     addCoupledFilter() {
       this.newFilter.coupledFilters.push({
+        include: '',
         key: '',
         qualifier: '',
         value: '',
@@ -553,6 +557,7 @@ export default {
         this.newFilter.group = selectedField.displayGroupName
         this.newFilter.coupledFilters = [
           {
+            include: 'with',
             key: this.newFilter.key,
             qualifier: '',
             value: '',
@@ -570,6 +575,7 @@ export default {
         this.newFilter.group = selectedField.displayGroupName
         this.newFilter.coupledFilters = [
           {
+            include: '',
             key: '',
             qualifier: '',
             value: '',
@@ -655,7 +661,7 @@ export default {
         this.newFilter.key &&
         this.newFilter.include &&
         this.newFilter.coupledFilters.every((filter) => {
-          const hasBasicFields = filter.key && filter.qualifier
+          const hasBasicFields = filter.key && filter.qualifier && filter.include
           const requiresValue = filter.qualifier !== 'is None'
 
           return requiresValue ? hasBasicFields && filter.value : hasBasicFields

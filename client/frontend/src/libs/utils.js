@@ -20,14 +20,14 @@ function buildVariables(addedFilters) {
         include,
         djangoApp,
         djangoModel,
-        coupledFilters: coupledFilters.map(({ key, qualifier, value }) => {
+        coupledFilters: coupledFilters.map(({ key, include, qualifier, value }) => {
           const djangoLookupField = allFields[key].djangoLookupField
             ? allFields[key].djangoLookupField
             : null
           const fieldType = allFields[key].fieldType ? allFields[key].fieldType : null
           const valueFields = allFields[key].valueFields ? allFields[key].valueFields : null
 
-          return { qualifier, value, djangoLookupField, fieldType, valueFields }
+          return { include, qualifier, value, djangoLookupField, fieldType, valueFields }
         })
       })
 
