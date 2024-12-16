@@ -265,8 +265,14 @@ def process_chemicals(chemicals, nf_id):
                     for synonym in chem_synonyms
                     if synonym["typeTitle"] == "trade name"
                 ]
+                chemical_synonym_names = [
+                    synonym
+                    for synonym in chem_synonyms
+                    if synonym["typeTitle"] == "synonym"
+                ]
                 chemical["common names"] = serialize_synonyms(chemical_common_names)
                 chemical["trade names"] = serialize_synonyms(chemical_trade_names)
+                chemical["synonyms"] = serialize_synonyms(chemical_synonym_names)
             else:
                 chemical["synonyms"] = serialize_synonyms(chem_synonyms)
 
