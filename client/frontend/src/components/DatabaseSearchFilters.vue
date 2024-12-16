@@ -500,10 +500,6 @@ export default {
               djangoLimitchoicesField
             }
           })
-          console.log(
-            `options for ${djangoApp} - ${djangoModel}.${djangoField} are:`,
-            response.data
-          )
           return response.data.filter((option) => option)
         } catch (error) {
           console.error(`Error fetching options from ${url} endpoint`, error)
@@ -622,7 +618,6 @@ export default {
       this.addedFilters.splice(i, 1)
     },
     renderTable() {
-      console.log('new this.addedFilters', this.addedFilters)
       this.$emit('render-table', this.addedFilters, this.selectedFields, this.getHeadersToHide())
       this.$emit('close')
     }

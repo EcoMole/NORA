@@ -156,7 +156,6 @@ class Query(graphene.ObjectType):
 
         def create_q_object(lookup_field, filter_qualifier, filter_value):
             lookup = f"{lookup_field}__{filter_qualifier}"
-            print("lookup: filter_value", f"{lookup}: {filter_value}")
             return Q(**{lookup: filter_value})
 
         def create_isnull_or_isempty_q_object(field_chain):
@@ -173,9 +172,6 @@ class Query(graphene.ObjectType):
             return q_objects
 
         nf_qs = NovelFood.objects.all()
-
-        print("filters")
-        print(filters)
 
         map = {
             "is before": "lt",
@@ -322,7 +318,6 @@ class Query(graphene.ObjectType):
                     nf_qs = nf_qs.filter(Q(**{f"{lookup_filter}__in": qs})).distinct()
                 elif include == "must not have":
                     nf_qs = nf_qs.exclude(Q(**{f"{lookup_filter}__in": qs})).distinct()
-        print("QUERYSET: ", nf_qs)
         return nf_qs
 
 

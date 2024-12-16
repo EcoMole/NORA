@@ -49,7 +49,6 @@ def get_picklist(request):
             )
         field = Model._meta.get_field(field_name)
         if hasattr(field, "choices"):
-            print("field.choices: ", field.choices)
             return field.choices
         return None
 
@@ -70,10 +69,8 @@ def get_picklist(request):
             and hasattr(field.remote_field, "limit_choices_to")
         ):
             limit_choices_to = field.remote_field.limit_choices_to
-            print("field.remote_field.limit_choices_to: ", limit_choices_to)
         elif hasattr(field, "limit_choices_to"):
             limit_choices_to = field.limit_choices_to
-            print("field.limit_choices_to: ", limit_choices_to)
         return limit_choices_to
 
     # Extract parameters
@@ -103,8 +100,6 @@ def get_picklist(request):
     if limit_choices := get_limit_choices_to(
         limitchoices_app, limitchoices_model, limitchoices_field
     ):
-        print("limit_choices: ", limit_choices)
-
         qs = model.objects.filter(limit_choices)
     else:
         qs = model.objects.all()

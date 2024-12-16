@@ -187,13 +187,9 @@ export default {
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
-      console.log('this.addedFilters', this.addedFilters)
       const startTime = performance.now()
       const query = this.formatGraphQLQuery(selectedFields)
       const filters = buildVariables(this.addedFilters)
-      console.log('filters', filters)
-      console.log('query', query)
-      console.log('selectedFiltersToText', this.selectedFiltersToText())
       try {
         const response = await this.$apollo.query({
           query: query,
@@ -202,13 +198,11 @@ export default {
           }
         })
         this.fetchedNovelFoods = response.data.novelFoods.edges.map((edge) => edge.node)
-        console.log('this.fetchedNovelFoods', this.fetchedNovelFoods)
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
         const endTime = performance.now()
         const timeTaken = endTime - startTime
-        console.log(`Query and processing took ${timeTaken.toFixed(2)} milliseconds.`)
         this.tableIsLoading = false
       }
     },
@@ -219,14 +213,12 @@ export default {
     },
     exportSearchResult() {
       this.exporting = true
-      console.log('exporting search result')
       axios
         .post('/api/v1/export/', [this.fetchedNovelFoods, this.selectedFiltersToText()], {
           responseType: 'blob'
         })
         .then((response) => {
           // Handle success (e.g., trigger download if needed)
-          console.log('Export successful', response)
           const blob = new Blob([response.data], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
           })
