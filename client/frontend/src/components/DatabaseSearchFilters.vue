@@ -377,7 +377,7 @@
                     <v-icon :icon="field.icon"></v-icon>
                   </template>
 
-                  <v-list-item-title class="wrap-text">
+                  <v-list-item-title class="wrap-list-item-title">
                     {{ field.flattenedDisplayName || field.displayName }}
                   </v-list-item-title>
                   <template v-slot:append>
@@ -386,7 +386,10 @@
                     >
                   </template>
                   <v-expand-transition>
-                    <v-list-item-subtitle v-if="expandedItems[key]" class="wrap-text">
+                    <v-list-item-subtitle
+                      v-if="expandedItems[key]"
+                      class="wrap-list-item-subtitle"
+                    >
                       {{ field.filterDescription }}
                     </v-list-item-subtitle>
                   </v-expand-transition>
@@ -649,7 +652,8 @@ export default {
     },
     allFiltersValid() {
       return (
-        this.newFilter.key && this.newFilter.include &&
+        this.newFilter.key &&
+        this.newFilter.include &&
         this.newFilter.coupledFilters.every((filter) => {
           const hasBasicFields = filter.key && filter.qualifier
           const requiresValue = filter.qualifier !== 'is None'
@@ -689,9 +693,16 @@ export default {
 }
 </script>
 <style>
-.wrap-text {
+.wrap-list-item-title {
   white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
+
+.wrap-list-item-subtitle {
+  display: block;
+}
+
 .wrap-text-in-chip {
   height: auto !important;
 }
