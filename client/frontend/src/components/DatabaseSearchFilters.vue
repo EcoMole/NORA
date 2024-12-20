@@ -91,7 +91,7 @@
                             <v-autocomplete
                               v-if="
                                 newFilter.coupledFilters[0].options.length > 0 &&
-                                newFilter.coupledFilters[0].qualifier !== 'is None'
+                                newFilter.coupledFilters[0].qualifier === 'is'
                               "
                               v-model="newFilter.coupledFilters[0].value"
                               :items="newFilter.coupledFilters[0].options"
@@ -100,10 +100,7 @@
                               :disabled="!newFilter.coupledFilters[0].key"
                             ></v-autocomplete>
                             <v-text-field
-                              v-if="
-                                newFilter.coupledFilters[0].options.length < 1 &&
-                                newFilter.coupledFilters[0].qualifier !== 'is None'
-                              "
+                              v-else-if="newFilter.coupledFilters[0].qualifier !== 'is None'"
                               variant="underlined"
                               v-model="newFilter.coupledFilters[0].value"
                               :type="allFields[newFilter.coupledFilters[0].key]?.type"
@@ -170,7 +167,7 @@
                                   <v-autocomplete
                                     v-if="
                                       newFilter.coupledFilters[i].options.length > 0 &&
-                                      newFilter.coupledFilters[i].qualifier !== 'is None'
+                                      newFilter.coupledFilters[i].qualifier === 'is'
                                     "
                                     v-model="newFilter.coupledFilters[i].value"
                                     :items="newFilter.coupledFilters[i].options"
@@ -179,10 +176,7 @@
                                     :disabled="!newFilter.coupledFilters[i].key"
                                   ></v-autocomplete>
                                   <v-text-field
-                                    v-if="
-                                      newFilter.coupledFilters[i].options.length < 1 &&
-                                      newFilter.coupledFilters[i].qualifier !== 'is None'
-                                    "
+                                    v-else-if="newFilter.coupledFilters[i].qualifier !== 'is None'"
                                     variant="underlined"
                                     v-model="newFilter.coupledFilters[i].value"
                                     :type="allFields[newFilter.coupledFilters[i].key]?.type"

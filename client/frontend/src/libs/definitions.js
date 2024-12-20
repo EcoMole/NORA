@@ -304,7 +304,7 @@ export const simpleFilterFields = {
     djangoModel: 'NovelFood',
     djangoField: 'tox_study_required',
     djangoLookupField: 'tox_study_required',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-flask-outline',
     filterDescription: 'Were toxicology studies required for the assessment of the NF/TF?',
     showInFilters: true
@@ -319,7 +319,7 @@ export const simpleFilterFields = {
     djangoModel: 'GenotoxFinalOutcome',
     djangoField: 'title',
     djangoLookupField: 'genotox_final_outcome__title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-dna',
     filterDescription:
       'Panel’s final conclusion on genotoxicity. Can be either blank, “no concerns”, “concerns” or “inconclusive”',
@@ -352,7 +352,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'protein_digestibility',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-food-drumstick-outline',
     filterDescription:
       'Was the digestibility of protein in the NF/TF discussed within the opinion?',
@@ -374,7 +374,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'antinutritional_factors',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-stomach',
     filterDescription:
       'Indicates whether antinutritional factors (substances that may interfere with nutrient absorption or have negative health effects, e.g. tannins or phytic acid) are discussed in the Novel Food assessment.',
@@ -394,7 +394,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'has_nutri_disadvantage',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-stomach',
     filterDescription:
       'The Panel’s conclusion on whether the NF/TF is nutritionally disadvantageous, e.g., due to a significant amount of antinutritional factors',
@@ -427,7 +427,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'sufficient_data',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-database-check',
     filterDescription: 'Were sufficient data provided to demonstrate the stability of the NF/TF?',
     showInFilters: true
@@ -446,7 +446,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'food_matrices',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-grid',
     filterDescription: 'Was stability within different food matrices discussed within the opinion?',
     showInFilters: true
@@ -465,7 +465,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'instability_concerns',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription:
       'Were any instability concerns identified within the opinion (e.g., instability within certain food matrices, at high temperatures or in the absence of stabilisers)?',
@@ -497,7 +497,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'shelflife_unit',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-timer-sand',
     filterDescription: 'Unit of the proposed shelf life (e.g., day, month, year)',
     showInFilters: true
@@ -516,7 +516,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'endocrine_disrupt_prop',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription: 'Were endocrine disrupting properties identified in the NF/TF?',
     showInFilters: true
@@ -531,7 +531,7 @@ export const simpleFilterFields = {
     djangoModel: 'NovelFood',
     djangoField: 'outcome',
     djangoLookupField: 'outcome',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-check-circle-outline',
     filterDescription:
       'Conclusion of the opinion. Can be either: “positive”, “partially negative”, or “negative”.',
@@ -563,7 +563,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFood',
     djangoLimitchoicesField: 'vocab_id',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Specifies the name from the PARAM catalogue used to map the Novel Food to an existing entry in the catalogue. This field is only used for Novel Foods that already exist in the catalogue, as no new terms are added.',
@@ -585,7 +585,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'administrative',
     djangoLimitchoicesModel: 'Opinion',
     djangoLimitchoicesField: 'document_type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription:
       'Defines whether the document is an EFSA opinion, Technical Report or an EFSA statement.',
@@ -655,7 +655,7 @@ export const simpleFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'Allergenicity',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription: 'Panel’s conclusion on allergenicity risk posed by the NF/TF',
     showInFilters: true
@@ -669,7 +669,7 @@ export const simpleFilterFields = {
     djangoApp: 'administrative',
     djangoModel: 'Panel',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription:
       'The abbreviation of the EFSA Panel that authored the publication. “EFSA” was used instead of Panel in cases of Technical Reports or when EFSA was the sole author.',
@@ -695,7 +695,7 @@ export const simpleFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'InvestigationType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-flask',
     filterDescription:
       'Describes what was investigated in the study, e.g. “absorption”, “metabolism”, or “bioavailability”. A study can have multiple investigation types.',
@@ -710,7 +710,7 @@ export const simpleFilterFields = {
     djangoApp: 'composition',
     djangoModel: 'RiskAssessRedFlag',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle',
     filterDescription: 'possible Red Flags in the production process',
     showInFilters: true
@@ -728,7 +728,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'composition',
     djangoLimitchoicesModel: 'ProductionNovelFoodVariant',
     djangoLimitchoicesField: 'process',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-factory',
     filterDescription: 'Process in Production of Novel Food Variant',
     showInFilters: true
@@ -746,7 +746,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'SpecificToxicity',
     djangoLimitchoicesField: 'specific_toxicity',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription:
       "Indicates whether specific toxicity, such as hepatotoxicity, nephrotoxicity, or neurotoxicity, was discussed in the NF/TF opinion's discussion section. If no specific toxicity is associated with the Novel or Traditional Food, this field will be set to NONE (TOX14A).",
@@ -765,7 +765,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'SubstanceOfConcernNovelFood',
     djangoLimitchoicesField: 'substance_of_concern',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription:
       "Specifies the substances of concern, such as contaminants, heavy metals, or pesticide residues, discussed in the Novel Food opinion's discussion section. This field is left blank if no substances of concern were identified.",
@@ -784,7 +784,7 @@ export const simpleFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'BackgroundExposureAssessment',
     djangoLimitchoicesField: 'comp_of_interest',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale-balance',
     filterDescription:
       'Specifies the substances for which background exposure was assessed, indicating the baseline dietary exposure levels considered in the NF/TF assessment. This field is left blank if no background exposure assessment was conducted. ',
@@ -806,7 +806,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'HBGV',
     djangoLimitchoicesField: 'type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription:
       'Specifies the type of Health-Based Guidance Value (HBGV) considered in the NF/TF assessment, such as Acceptable Daily Intake (ADI), Tolerable Daily Intake (TDI), or Reference Dose (RfD)."',
@@ -825,7 +825,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'HBGV',
     djangoLimitchoicesField: 'exceeded',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription:
       'Indicates whether the estimated intake of the NF/TF exceeds the established Health-Based Guidance Value (HBGV), such as the Acceptable Daily Intake (ADI) or Tolerable Daily Intake (TDI).',
@@ -844,7 +844,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'HBGV',
     djangoLimitchoicesField: 'substance',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-outline',
     filterDescription:
       'Specifies the substance for which a Health-Based Guidance Value (HBGV) was considered in the NF/TF assessment.',
@@ -862,7 +862,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'NovelFoodSyn',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Specifies alternative names or synonyms for the NF/TF, including common names and trade names.',
@@ -877,7 +877,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'SynonymType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription: 'Specifies whether the type of synonym is a common name or trade name.',
     showInFilters: true
@@ -958,7 +958,7 @@ export const coupledFilterFields = {
     djangoApp: 'administrative',
     djangoModel: 'MandateType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription:
       'Describes the whether the mandate was for Novel Food (New dossier, Extension of use, or Nutrient source) or Traditional Food.',
@@ -988,7 +988,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'administrative',
     djangoLimitchoicesModel: 'Mandate',
     djangoLimitchoicesField: 'regulation',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription:
       'Assigns the regulation(s) according to which the NF/TF was assessed, e.g., EU 2015/2283.',
@@ -1004,7 +1004,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'FoodCategory',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription:
       'Specifies if the FAIM, FoodEx, or both food category tools were used in the assessment.',
@@ -1031,7 +1031,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'NovelFoodCategory',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
     filterDescription:
       'Describes which food category as defined by a relevant legislation (e.g., Article 3 of Regulation (EU) 2015/22832) the NF/TF falls under (e.g., “From microorganisms, fungi or algae” or “New production process”',
@@ -1062,7 +1062,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFoodCategory',
     djangoLimitchoicesField: 'regulation',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-document-outline',
     filterDescription:
       'Describes which legislation (e.g., Article 3 of Regulation (EU) 2015/22832) defined the NF category.',
@@ -1084,7 +1084,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'Organism',
     djangoLimitchoicesField: 'vocab_id',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Specifies the entry from the MTX vocabulary used to classify the source organism of the NF/TF.',
@@ -1103,7 +1103,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'org_part',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Specifies the part of the organism used in the NF/TF, such as "leaf," "root," "seed," or "whole organism."',
@@ -1118,7 +1118,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'NovelFoodOrganism',
     djangoField: 'variant',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Specifies the variant of the organism used for the production of the NF/TF, such as strain (microorganisms), subspecies (animals), or cultivar (plants). ',
@@ -1137,7 +1137,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'is_gmo',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Indicates whether the organism used in the NF/TF has been genetically modified (GMO). Options include "Yes" for genetically modified organisms, "No" for non-GMOs, and "Unknown" if the GMO status is not specified.',
@@ -1156,7 +1156,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'has_qps',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Indicates whether the organism used in the NF/TF has Qualified Presumption of Safety (QPS) status, which is granted by EFSA for certain microorganisms deemed safe for use. Options include "Yes" if the organism has QPS status, "No" if it does not, and "Unknown" if the QPS status is not specified. Only applicable for microorganisms.',
@@ -1172,7 +1172,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'NovelFoodOrganism',
     djangoField: 'cell_culture',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Indicates the type of cell culture that the NF/TF was derived from. Only applicable to cell or tissue cultures.',
@@ -1192,7 +1192,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'NovelFoodOrganism',
     djangoLimitchoicesField: 'cells_modified',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Indicates whether the cells used in the NF/TF were modified, such as “pluripotent stem cells”. Only applicable to cell or tissue cultures.',
@@ -1207,7 +1207,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'Species',
     djangoField: 'name',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-tree-outline',
     filterDescription:
       'Specifies the species name of the organism used in the NF/TF, following scientific nomenclature (e.g., Escherichia coli, Saccharomyces cerevisiae). ',
@@ -1222,7 +1222,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'Species',
     djangoField: 'scientific_name',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-tree-outline',
     filterDescription:
       'Specifies the full scientific name of the species used in the NF/TF, including genus, species, and the authority who named the species (e.g., Salvia hispanica L., Cryptops ulomoides (Solier, 1851).',
@@ -1237,7 +1237,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'Genus',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-tree-outline',
     filterDescription:
       'Specifies the genus of the species used in the NF/TF, representing the broader taxonomic category to which the organism belongs (e.g., Lactobacillus, Salvia). ',
@@ -1252,7 +1252,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'Family',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-tree-outline',
     filterDescription:
       'Specifies the family of the species used in the NF/TF, representing a higher taxonomic classification above the genus (e.g., Poaceae, Lamiaceae).',
@@ -1267,7 +1267,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'OrgType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-file-tree-outline',
     filterDescription:
       'Specifies the broad biological category of the source organism used in the NF/TF, such as “Bacteria”, “Fungi”, “Plant”, or “Animal”.',
@@ -1282,7 +1282,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'OrganismSyn',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Specifies alternative names or synonyms for the organism used in the NF/TF, such as common names. ',
@@ -1297,7 +1297,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'SynonymType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
       'Specifies the type of synonym provided for the organism used in the NF/TF, such as common name, or synonym',
@@ -1327,7 +1327,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'novel_food',
     djangoLimitchoicesModel: 'Chemical',
     djangoLimitchoicesField: 'vocab_id',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-molecule',
     filterDescription:
       'Specifies the entry from the PARAM vocabulary used to classify the source substance of the NF/TF.',
@@ -1342,7 +1342,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'ChemicalSyn',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-molecule',
     filterDescription:
       'Specifies alternative names or synonyms for the chemical component in the NF/TF, including common names, or synonyms',
@@ -1357,7 +1357,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'SynonymType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-molecule',
     filterDescription:
       'Specifies the type of synonym provided for the chemical used in the NF/TF, such as "common name" or "synonym"',
@@ -1382,7 +1382,7 @@ export const coupledFilterFields = {
     djangoApp: 'novel_food',
     djangoModel: 'ChemDescriptor',
     djangoField: 'type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-molecule',
     filterDescription:
       'Specifies the type of additional descriptors for the chemical component in the NF/TF that were not included in the PARAM catalogue, such as unique identifiers or structural information.',
@@ -1415,7 +1415,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'ADME',
     djangoLimitchoicesField: 'test_type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-flask-outline',
     filterDescription:
       'Selects the type of study from the following options: In silico, In vitro, Animal, Human interventional clinical trial, Human observational clinical trial, Human other, Other, Not reported',
@@ -1434,7 +1434,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'ADME',
     djangoLimitchoicesField: 'guideline',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Describes the guideline according to which the study was carried out (e.g. ICH-GCP).',
@@ -1449,7 +1449,7 @@ export const coupledFilterFields = {
     djangoApp: 'taxonomies',
     djangoModel: 'GuidelineQualifier',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
@@ -1464,7 +1464,7 @@ export const coupledFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'StudySource',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription:
       'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA)',
@@ -1480,7 +1480,7 @@ export const coupledFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'InvestigationType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-flask',
     filterDescription:
       'Describes what was investigated in the study, e.g. “absorption”, “metabolism”, or “bioavailability”. A study can have multiple investigation types.',
@@ -1507,7 +1507,7 @@ export const coupledFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'ADME',
     djangoField: 'test_material',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription:
       'Specifies the test material used in the ADME study for the NF/TF, such as the specific form or preparation of the substance tested.',
@@ -1529,7 +1529,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Genotox',
     djangoLimitchoicesField: 'test_type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-dna',
     filterDescription:
       'Specifies the type of genotoxicity test conducted in the study, such as "bacterial reverse mutation test," "in vitro mammalian chromosome aberration test," or "in vivo micronucleus test”.',
@@ -1548,7 +1548,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Genotox',
     djangoLimitchoicesField: 'guideline',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Specifies the guideline followed by the genotoxicity study, such as OECD test guidelines (e.g., OECD TG471).',
@@ -1563,7 +1563,7 @@ export const coupledFilterFields = {
     djangoApp: 'taxonomies',
     djangoModel: 'GuidelineQualifier',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
@@ -1578,7 +1578,7 @@ export const coupledFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'StudySource',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription:
       'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA)',
@@ -1597,7 +1597,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Genotox',
     djangoLimitchoicesField: 'outcome',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-check-circle-outline',
     filterDescription:
       'Specifies the outcome of the genotoxicity test. The available options are: "Negative/Absent," "Positive/Present," and "Inconclusive".',
@@ -1625,7 +1625,7 @@ export const coupledFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'Genotox',
     djangoField: 'test_material',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription:
       'Specifies the test material used in the genotoxicity study for the NF/TF, such as the specific form or preparation of the substance tested.',
@@ -1647,7 +1647,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpointstudy',
     djangoLimitchoicesField: 'test_type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-flask-outline',
     filterDescription:
       'Specifies the type of test conducted in the endpoint study, such as "In vitro," "Animal," or "Human clinical trial".',
@@ -1662,7 +1662,7 @@ export const coupledFilterFields = {
     djangoApp: 'taxonomies',
     djangoModel: 'GuidelineQualifier',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Describes whether the study was conducted according to, similar to, or not according to a guideline. This field is left blank for cases when the guideline was not specified in the opinion.',
@@ -1681,7 +1681,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpointstudy',
     djangoLimitchoicesField: 'guideline',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'Specifies the guideline followed for the endpoint study, such as OECD guidelines (e.g. OECD TG 407)',
@@ -1700,7 +1700,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpointstudy',
     djangoLimitchoicesField: 'species',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-paw',
     filterDescription:
       'Specifies the species used in the endpoint study, such as "rat," "mouse," or "human".',
@@ -1719,7 +1719,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpointstudy',
     djangoLimitchoicesField: 'sex',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-gender-male-female',
     filterDescription:
       'Specifies the sex of the subjects or test animals used in the endpoint study, such as "male," "female," or "Mixed females and males".',
@@ -1749,7 +1749,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpointstudy',
     djangoLimitchoicesField: 'duration_unit',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-clock-outline',
     filterDescription: 'Study Duration Unit',
     showInFilters: true
@@ -1763,7 +1763,7 @@ export const coupledFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'StudySource',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription:
       'Study source can be selected from the following options: Original (applicant), Literature, Previous assessment, Previous assessment (FEEDAP Panel), and Original (EFSA).',
@@ -1790,7 +1790,7 @@ export const coupledFilterFields = {
     djangoApp: 'studies',
     djangoModel: 'Endpointstudy',
     djangoField: 'test_material',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-outline',
     filterDescription:
       'Specifies the test material used in the endpoint study for the NF/TF, such as the specific form or preparation of the substance tested.',
@@ -1812,7 +1812,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpoint',
     djangoLimitchoicesField: 'reference_point',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-target',
     filterDescription:
       'Specifies the reference point which was derived from the endpoint study, such as NOAEL or LOAEL.',
@@ -1831,7 +1831,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpoint',
     djangoLimitchoicesField: 'subpopulation',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-account-group',
     filterDescription:
       'Specifies the subpopulation for which the reference point (e.g., LOAEL or NOAEL) was derived, such as "males," "females," or "fetus." This field is used when different reference points are determined for specific subpopulations within the study.',
@@ -1850,7 +1850,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpoint',
     djangoLimitchoicesField: 'qualifier',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription:
       'Specifies the qualifier for the reference point, such as "greater than," "less than," or "equal to".',
@@ -1888,7 +1888,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'Endpoint',
     djangoLimitchoicesField: 'unit',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription:
       'Specifies the unit of the numerical value of the reference point (e.g. NOAEL).',
@@ -1910,7 +1910,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'FinalOutcome',
     djangoLimitchoicesField: 'outcome',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-check-circle-outline',
     filterDescription:
       '"Specifies the final outcome derived from a reference point in the endpoint study, such as a margin of exposure (MOE), acceptable daily intake (ADI), or tolerable upper intake level (UL).',
@@ -1929,7 +1929,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'FinalOutcome',
     djangoLimitchoicesField: 'qualifier',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription:
       'Specifies the qualifier for the final outcome, such as "greater than," "less than," or "equal to," in relation to the derived value (e.g., margin of exposure or safe intake level).',
@@ -1967,7 +1967,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'studies',
     djangoLimitchoicesModel: 'FinalOutcome',
     djangoLimitchoicesField: 'unit',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription:
       'Specifies the unit of the numerical value of the final outcome (e.g. safe level).',
@@ -2008,7 +2008,7 @@ export const coupledFilterFields = {
     djangoApp: 'taxonomies',
     djangoModel: 'Subgroup',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-account-multiple-outline',
     filterDescription:
       'Specifies the population subgroup based on age for which the final outcome is derived, such as "infants", "other children", "adolescents", "adults” (including or excluding pregnant and lactating women), or "general population." This field is used when different final outcome values are calculated for specific age-based subpopulations in the study.',
@@ -2027,7 +2027,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'taxonomies',
     djangoLimitchoicesModel: 'Population',
     djangoLimitchoicesField: 'qualifier',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription:
       'Specifies the qualifier for the age of the population subgroup, such as "greater than," "less than," or "equal to," indicating the age range for which the final outcome (e.g., MOE, ADI) is applicable, such as children from 5 years of age.',
@@ -2077,7 +2077,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'taxonomies',
     djangoLimitchoicesModel: 'Population',
     djangoLimitchoicesField: 'unit',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription:
       'Specifies the unit of measurement for the age of the population subgroup in the final outcome, such as "years" or "months."',
@@ -2095,7 +2095,7 @@ export const coupledFilterFields = {
     djangoApp: 'composition',
     djangoModel: 'FoodForm',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-rice',
     filterDescription: 'variant or food form of Novel Food',
     showInFilters: true
@@ -2109,7 +2109,7 @@ export const coupledFilterFields = {
     djangoApp: 'composition',
     djangoModel: 'RiskAssessRedFlag',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle',
     filterDescription: 'possible Red Flags in the production process',
     showInFilters: true
@@ -2127,7 +2127,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'composition',
     djangoLimitchoicesModel: 'ProductionNovelFoodVariant',
     djangoLimitchoicesField: 'process',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-factory',
     filterDescription: 'Process in Production of Novel Food Variant',
     showInFilters: true
@@ -2141,7 +2141,7 @@ export const coupledFilterFields = {
     djangoApp: 'composition',
     djangoModel: 'ProposedUse',
     djangoField: 'use_type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-pill',
     filterDescription: 'Uses of Novel Food Variant proposed by applicant',
     showInFilters: true
@@ -2166,7 +2166,7 @@ export const coupledFilterFields = {
     djangoApp: 'taxonomies',
     djangoModel: 'Subgroup',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-account-multiple-outline',
     filterDescription: 'Subgroup of population for Proposed Use',
     showInFilters: true
@@ -2184,7 +2184,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'taxonomies',
     djangoLimitchoicesModel: 'Population',
     djangoLimitchoicesField: 'qualifier',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'Qualifier for Age Value of Proposed Use Population Subgroup',
     showInFilters: true
@@ -2230,7 +2230,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'taxonomies',
     djangoLimitchoicesModel: 'Population',
     djangoLimitchoicesField: 'unit',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'Unit for Age Value of Proposed Use Population Subgroup',
     showInFilters: true
@@ -2248,7 +2248,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'composition',
     djangoLimitchoicesModel: 'Composition',
     djangoLimitchoicesField: 'qualifier',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'Qualifier for Composition Value',
     showInFilters: true
@@ -2294,7 +2294,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'composition',
     djangoLimitchoicesModel: 'Composition',
     djangoLimitchoicesField: 'unit',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-scale',
     filterDescription: 'Unit for Composition Value',
     showInFilters: true
@@ -2309,7 +2309,7 @@ export const coupledFilterFields = {
     djangoApp: 'composition',
     djangoModel: 'Composition',
     djangoField: 'type',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-beaker',
     filterDescription: 'Novel Food Variant Composition Type',
     showInFilters: true
@@ -2337,7 +2337,7 @@ export const coupledFilterFields = {
     djangoApp: 'composition',
     djangoModel: 'Parameter',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-test-tube',
     filterDescription: 'Title of Composition Parameter',
     showInFilters: true
@@ -2351,7 +2351,7 @@ export const coupledFilterFields = {
     djangoApp: 'composition',
     djangoModel: 'ParameterType',
     djangoField: 'title',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-beaker',
     filterDescription: 'Composition Parameter Type',
     showInFilters: true
@@ -2369,7 +2369,7 @@ export const coupledFilterFields = {
     djangoLimitchoicesApp: 'composition',
     djangoLimitchoicesModel: 'Parameter',
     djangoLimitchoicesField: 'vocab_id',
-    qualifiers: ['is', 'is None'],
+    qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-book-open-outline',
     filterDescription:
       'This field is only used for Composition Parameter that already exist in the catalogue',
