@@ -214,7 +214,14 @@
                     v-if="Object.keys(coupledFiltersAvailable).length > 0"
                     class="d-flex justify-center mt-5"
                   >
-                    <v-btn color="secondary" variant="tonal" @click="addCoupledFilter" :disabled="!allFiltersValid"> and </v-btn>
+                    <v-btn
+                      color="secondary"
+                      variant="tonal"
+                      @click="addCoupledFilter"
+                      :disabled="!allFiltersValid"
+                    >
+                      and
+                    </v-btn>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -273,7 +280,8 @@
                 </div>
                 <div v-for="(coupledFiler, cfI) in filter.coupledFilters" :key="cfI">
                   <span v-if="cfI !== 0">and{{ ' ' }}</span>
-                  <b>{{ coupledFiler.include }}</b><span>{{ ' ' }}</span>
+                  <b>{{ coupledFiler.include }}</b
+                  ><span>{{ ' ' }}</span>
                   <v-chip rounded="pill" density="compact" class="pb-1" color="secondary">{{
                     this.coupledFilterFields[coupledFiler.key].flattenedDisplayName
                       ? this.coupledFilterFields[coupledFiler.key].flattenedDisplayName
@@ -457,6 +465,12 @@ export default {
     coupledFilterFields: coupledFilterFields,
     allFields: { ...simpleFilterFields, ...coupledFilterFields },
     fieldsSearch: '',
+    defaultSelectedFields: {
+      title: simpleFilterFields['title'],
+      nfCode: simpleFilterFields['nfCode'],
+      'questions.number': coupledFilterFields['questions.number'],
+      opinionUrl: simpleFilterFields['opinionUrl']
+    },
     selectedFields: {},
     preselectGroups: preselectGroups,
     coupledFiltersAvailable: {}
@@ -683,10 +697,10 @@ export default {
   },
   created() {
     this.theme = useTheme()
-    // Properly initialize local copies from props when the component is created
-    this.selectedFields = this.selectedFieldsFromPreviousSearch
-      ? { ...this.selectedFieldsFromPreviousSearch }
-      : {}
+    this.selectedFields =
+      Object.keys(this.selectedFieldsFromPreviousSearch).length > 0
+        ? { ...this.selectedFieldsFromPreviousSearch }
+        : this.defaultSelectedFields
     this.addedFilters = this.addedFiltersFromPreviousSearch
       ? [...this.addedFiltersFromPreviousSearch]
       : []

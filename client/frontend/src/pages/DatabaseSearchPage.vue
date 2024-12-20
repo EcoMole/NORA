@@ -185,12 +185,14 @@ export default {
             if (index !== 0) {
               text += ' and'
             }
-            text += ` ${cF.include} ${this.nameMappingObj[cF.key].flattenedDisplayName
+            text += ` ${cF.include} ${
+              this.nameMappingObj[cF.key].flattenedDisplayName
                 ? this.nameMappingObj[cF.key].flattenedDisplayName
-                : this.nameMappingObj[cF.key].displayName} which ${cF.qualifier} ${cF.value}`
+                : this.nameMappingObj[cF.key].displayName
+            } which ${cF.qualifier} ${cF.value}`
           })
         } else {
-            text += ` which ${coupledFilters[0].qualifier} ${coupledFilters[0].value}`
+          text += ` which ${coupledFilters[0].qualifier} ${coupledFilters[0].value}`
         }
         return text
       })
@@ -201,7 +203,6 @@ export default {
       this.addedFilters = addedFilters
       this.selectedFields = selectedFields
       this.tableIsLoading = true
-      const startTime = performance.now()
       const query = this.formatGraphQLQuery(selectedFields)
       const filters = buildVariables(this.addedFilters)
       try {
@@ -215,15 +216,13 @@ export default {
       } catch (error) {
         this.mainStore.handleError(error['message'])
       } finally {
-        const endTime = performance.now()
-        const timeTaken = endTime - startTime
         this.tableIsLoading = false
       }
     },
     newSearch() {
       this.showFilterInterface = true
       this.addedFilters = []
-      this.selectedFields = []
+      this.selectedFields = {}
     },
     exportSearchResult() {
       this.exporting = true
