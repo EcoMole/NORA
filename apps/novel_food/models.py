@@ -42,7 +42,6 @@ class AllergenicityNovelFood(models.Model):
 class FoodCategory(models.Model):
     id = models.AutoField(primary_key=True, db_column="id_food_category")
     title = models.CharField(max_length=255)
-    definition = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -156,7 +155,6 @@ class SynonymType(models.Model):
         help_text="Title of the synonym type e.g. common name, trade name, synonym",
         db_column="synonym",
     )
-    definition = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.title

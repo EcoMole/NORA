@@ -158,10 +158,6 @@ class MandateType(models.Model):
         db_column="mandate_type",
         unique=True,
     )
-    definition = models.TextField(
-        blank=True,
-        null=True,
-    )
 
     def __str__(self):
         return self.title

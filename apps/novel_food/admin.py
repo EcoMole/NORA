@@ -313,7 +313,7 @@ class NovelFoodCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(FoodCategory)
 class FoodCategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition"]
+    list_display = ["title"]
 
 
 @admin.register(Allergenicity)

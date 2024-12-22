@@ -184,8 +184,12 @@ class MandateAdmin(admin.ModelAdmin):
 
 @admin.register(MandateType)
 class MandateTypeAdmin(admin.ModelAdmin):
-    list_display = ["title", "definition"]
-    search_fields = ["title", "definition"]
+    list_display = [
+        "title",
+    ]
+    search_fields = [
+        "title",
+    ]
 
 
 @admin.register(ScientificOfficer)

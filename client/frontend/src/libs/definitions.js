@@ -903,16 +903,6 @@ export const coupledFilterFields = {
     filterDescription: 'Specifies whether the type of synonym is a common name or trade name.',
     showInFilters: true
   },
-  'synonyms.typeDefinition': {
-    displayName: 'Type Definition',
-    flattenedDisplayName: 'Novel Food Synonym Type Definition',
-    type: 'text',
-    djangoLookupField: 'synonyms__syn_type__definition',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-book-open-outline',
-    filterDescription: 'description for Novel Food Synonym Type Definition',
-    showInFilters: true
-  },
 
   'sciOfficers.firstName': {
     displayName: 'First Name',
@@ -985,17 +975,6 @@ export const coupledFilterFields = {
       'Describes the whether the mandate was for Novel Food (New dossier, Extension of use, or Nutrient source) or Traditional Food.',
     showInFilters: true
   },
-  'questions.mandates.mandateTypeDefinition': {
-    displayName: 'Type Definition',
-    flattenedDisplayName: 'Opinion - Mandate Type Definition',
-    type: 'text',
-    djangoLookupField: 'opinion__questions__question__mandates__mandate_type__definition',
-    fieldType: 'text_field',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-file-document-outline',
-    filterDescription: 'description for Mandate Type Definition',
-    showInFilters: true
-  },
   'questions.mandates.regulation': {
     displayName: 'Regulation',
     flattenedDisplayName: 'Opinion - Mandate Regulation',
@@ -1029,17 +1008,6 @@ export const coupledFilterFields = {
     icon: 'mdi-alert-circle-outline',
     filterDescription:
       'Specifies if the FAIM, FoodEx, or both food category tools were used in the assessment.',
-    showInFilters: true
-  },
-  'foodCategories.definition': {
-    displayName: 'Definition',
-    flattenedDisplayName: 'Food Category Tool Definition',
-    type: 'text',
-    djangoLookupField: 'food_categories__food_category__definition',
-    fieldType: 'text_field',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-alert-circle-outline',
-    filterDescription: 'serve as a description or note for food category tools',
     showInFilters: true
   },
 
@@ -1324,16 +1292,6 @@ export const coupledFilterFields = {
       'Specifies the type of synonym provided for the organism used in the NF/TF, such as common name, or synonym',
     showInFilters: true
   },
-  'organisms.orgSynonyms.typeDefinition': {
-    displayName: 'Type Definition',
-    flattenedDisplayName: 'Identity - Organism Synonym Type Definition',
-    type: 'text',
-    djangoLookupField: 'organisms__organism__synonyms__syn_type__definition',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-leaf',
-    filterDescription: 'description for Organism Synonym Type Definition',
-    showInFilters: true
-  },
 
   'chemicals.chemical': {
     displayName: 'Vocab ID',
@@ -1382,16 +1340,6 @@ export const coupledFilterFields = {
     icon: 'mdi-molecule',
     filterDescription:
       'Specifies the type of synonym provided for the chemical used in the NF/TF, such as "common name" or "synonym"',
-    showInFilters: true
-  },
-  'chemicals.chemSynonyms.typeDefinition': {
-    displayName: 'Type Definition',
-    flattenedDisplayName: 'Identity - Chemical Synonym Type Definition',
-    type: 'text',
-    djangoLookupField: 'chemicals__chemical__synonyms__syn_type__definition',
-    qualifiers: ['contains', 'is', 'is None'],
-    icon: 'mdi-molecule',
-    filterDescription: 'description for Chemical Synonym Type Definition',
     showInFilters: true
   },
   'chemicals.chemDescriptors.type': {
