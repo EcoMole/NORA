@@ -25,6 +25,7 @@ export const objectTypes = {
   },
   sciOfficers: {
     displayName: 'Scientific Officer',
+    flattenedDisplayName: 'Opinion - Scientific Officer',
     displayGroupName: 'Administrative',
     showInFilters: true,
     djangoLookupFilter: 'opinion__sci_officers__sci_officer',
@@ -41,6 +42,7 @@ export const objectTypes = {
   },
   'questions.applicants': {
     displayName: 'Applicant',
+    flattenedDisplayName: 'Opinion - Applicant',
     displayGroupName: 'Applicant',
     showInFilters: false,
     djangoLookupFilter: 'opinion__questions__question__applicants__applicant',
@@ -49,6 +51,7 @@ export const objectTypes = {
   },
   'questions.mandates': {
     displayName: 'Mandate',
+    flattenedDisplayName: 'Opinion - Mandate',
     displayGroupName: 'Mandate',
     showInFilters: true,
     djangoLookupFilter: 'opinion__questions__question__mandates',
@@ -56,7 +59,7 @@ export const objectTypes = {
     djangoModel: 'Mandate'
   },
   foodCategories: {
-    displayName: 'Food Category',
+    displayName: 'Food Category Tool',
     displayGroupName: 'Novel Food',
     showInFilters: true,
     djangoLookupFilter: 'food_categories__food_category',
@@ -81,6 +84,7 @@ export const objectTypes = {
   },
   'admes.investigationTypes': {
     displayName: 'Investigation Type',
+    flattenedDisplayName: 'ADME - Investigation Type',
     displayGroupName: 'ADME',
     showInFilters: false,
     djangoLookupFilter: 'adme__investigation_types__investigation_type',
@@ -105,6 +109,7 @@ export const objectTypes = {
   },
   'endpointstudies.endpoints': {
     displayName: 'Endpoint',
+    flattenedDisplayName: 'Toxicology - Endpoint',
     displayGroupName: 'Endpoint',
     showInFilters: true,
     djangoLookupFilter: 'endpointstudy__endpoints',
@@ -113,6 +118,7 @@ export const objectTypes = {
   },
   'endpointstudies.endpoints.finalOutcomes': {
     displayName: 'Final Outcome',
+    flattenedDisplayName: 'Toxicology - Final Outcome',
     displayGroupName: 'Final Outcome',
     showInFilters: true,
     djangoLookupFilter: 'endpointstudy__endpoints__finaloutcome',
@@ -121,6 +127,7 @@ export const objectTypes = {
   },
   'endpointstudies.endpoints.finalOutcomes.populations': {
     displayName: 'Population',
+    flattenedDisplayName: 'Toxicology - Final Outcome Population',
     displayGroupName: 'Population',
     showInFilters: true,
     djangoLookupFilter: 'endpointstudy__endpoints__finaloutcome__populations__population',
@@ -137,6 +144,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.riskAssessRedFlags': {
     displayName: 'Risk Assessment Red Flag',
+    flattenedDisplayName: 'Production process Risk Assessment Red Flag',
     displayGroupName: 'Production process of Novel Food Variant',
     showInFilters: false,
     djangoLookupFilter: 'novelfoodvariant__risk_assess_red_flags__risk_assess_red_flag',
@@ -145,6 +153,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.productionProcesses': {
     displayName: 'Production Process',
+    flattenedDisplayName: 'Production Process of Novel Food Variant',
     displayGroupName: 'Production process of Novel Food Variant',
     showInFilters: false,
     djangoLookupFilter: 'novelfoodvariant__productions',
@@ -153,6 +162,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.proposedUses': {
     displayName: 'Proposed Use',
+    flattenedDisplayName: 'Proposed Use of Novel Food Variant',
     displayGroupName: 'Proposed Use of Novel Food Variant',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant__proposed_uses',
@@ -161,6 +171,7 @@ export const objectTypes = {
   },
   'novelFoodVariants.proposedUses.population': {
     displayName: 'Proposed Uses Population',
+    flattenedDisplayName: 'Proposed Use - Population',
     displayGroupName: 'Proposed Use Population Subgroup',
     showInFilters: true,
     djangoLookupFilter: 'novelfoodvariant__proposed_uses__population',
@@ -177,6 +188,7 @@ export const objectTypes = {
   },
   organisms: {
     displayName: 'Organism',
+    flattenedDisplayName: 'Identity - Organism',
     displayGroupName: 'Identity',
     showInFilters: true,
     djangoLookupFilter: 'organisms',
@@ -185,6 +197,7 @@ export const objectTypes = {
   },
   'organisms.species': {
     displayName: 'Taxonomy',
+    flattenedDisplayName: 'Identity - Species',
     displayGroupName: 'Identity',
     showInFilters: true,
     djangoLookupFilter: 'organisms__organism__species',
@@ -193,6 +206,7 @@ export const objectTypes = {
   },
   'organisms.orgSynonyms': {
     displayName: 'Organism Synonym',
+    flattenedDisplayName: 'Identity - Organism Synonym',
     displayGroupName: 'Synonym',
     showInFilters: true,
     djangoLookupFilter: 'organisms__organism__synonyms',
@@ -201,6 +215,7 @@ export const objectTypes = {
   },
   chemicals: {
     displayName: 'Chemical',
+    flattenedDisplayName: 'Identity - Chemical',
     displayGroupName: 'Identity',
     showInFilters: true,
     djangoLookupFilter: 'chemicals',
@@ -209,6 +224,7 @@ export const objectTypes = {
   },
   'chemicals.chemSynonyms': {
     displayName: 'Chemical Synonym',
+    flattenedDisplayName: 'Identity - Chemical Synonym',
     displayGroupName: 'Synonym',
     showInFilters: true,
     djangoLookupFilter: 'chemicals__chemical__synonyms',
@@ -217,6 +233,7 @@ export const objectTypes = {
   },
   'chemicals.chemDescriptors': {
     displayName: 'Chemical Descriptor',
+    flattenedDisplayName: 'Identity - Chemical Descriptor',
     displayGroupName: 'Chemical',
     showInFilters: true,
     djangoLookupFilter: 'chemicals__chemical__chem_descriptors',
@@ -225,6 +242,7 @@ export const objectTypes = {
   },
   specificToxicities: {
     displayName: 'Specific Toxicity',
+    flattenedDisplayName: 'Hazards - Specific Toxicity',
     displayGroupName: 'Hazards',
     showInFilters: false,
     djangoLookupFilter: 'specific_toxicities',
@@ -233,6 +251,7 @@ export const objectTypes = {
   },
   substancesOfConcern: {
     displayName: 'Substance of Concern',
+    flattenedDisplayName: 'Hazards - Substance of Concern',
     displayGroupName: 'Hazards',
     showInFilters: false,
     djangoLookupFilter: 'substances_of_concern',
@@ -241,6 +260,7 @@ export const objectTypes = {
   },
   backgroundExposureAssessments: {
     displayName: 'Background Exposure Assessment',
+    flattenedDisplayName: 'Nutrition - Background Exposure Assessment',
     displayGroupName: 'Nutrition',
     showInFilters: false,
     djangoLookupFilter: 'bg_expo_assessments',
@@ -249,6 +269,7 @@ export const objectTypes = {
   },
   hbgvs: {
     displayName: 'HBGV',
+    flattenedDisplayName: 'Hazards - HBGV',
     displayGroupName: 'Hazards',
     showInFilters: true,
     djangoLookupFilter: 'hbgvs',
@@ -311,7 +332,7 @@ export const simpleFilterFields = {
   },
   genotoxFinalOutcome: {
     displayName: 'Genotoxicity Final Outcome',
-    flattenedDisplayName: 'Genotoxicity Final Outcome',
+    flattenedDisplayName: 'Genotoxicity - Final Outcome',
     displayGroupName: 'Novel Food',
     type: 'text',
     apiEndpoint: 'picklist/',
@@ -688,7 +709,7 @@ export const simpleFilterFields = {
 
   'admes.investigationTypes.title': {
     displayName: 'Name',
-    flattenedDisplayName: 'ADME Investigation Type',
+    flattenedDisplayName: 'ADME - Investigation Type',
     type: 'text',
     djangoLookupField: 'adme__investigation_types__investigation_type__title',
     apiEndpoint: 'picklist/',
@@ -789,7 +810,7 @@ export const simpleFilterFields = {
     filterDescription:
       'Specifies the substances for which background exposure was assessed, indicating the baseline dietary exposure levels considered in the NF/TF assessment. This field is left blank if no background exposure assessment was conducted. ',
     showInFilters: true
-  },
+  }
 }
 
 export const coupledFilterFields = {
@@ -905,7 +926,7 @@ export const coupledFilterFields = {
   },
   'sciOfficers.middleName': {
     displayName: 'Middle Name',
-    flattenedDisplayName: "Opinion - Scientific officer's Middle Name",
+    flattenedDisplayName: "Opinion - Scientific Officer's Middle Name",
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__middle_name',
     qualifiers: ['contains', 'is', 'is None'],
@@ -915,7 +936,7 @@ export const coupledFilterFields = {
   },
   'sciOfficers.lastName': {
     displayName: 'Last Name',
-    flattenedDisplayName: "Opinion - Scientific officer's Last Name",
+    flattenedDisplayName: "Opinion - Scientific Officer's Last Name",
     type: 'text',
     djangoLookupField: 'opinion__sci_officers__sci_officer__last_name',
     qualifiers: ['contains', 'is', 'is None'],
@@ -966,7 +987,7 @@ export const coupledFilterFields = {
   },
   'questions.mandates.mandateTypeDefinition': {
     displayName: 'Type Definition',
-    flattenedDisplayName: 'Mandate Type Definition',
+    flattenedDisplayName: 'Opinion - Mandate Type Definition',
     type: 'text',
     djangoLookupField: 'opinion__questions__question__mandates__mandate_type__definition',
     fieldType: 'text_field',
@@ -1012,13 +1033,13 @@ export const coupledFilterFields = {
   },
   'foodCategories.definition': {
     displayName: 'Definition',
-    flattenedDisplayName: 'Food Category Definition',
+    flattenedDisplayName: 'Food Category Tool Definition',
     type: 'text',
     djangoLookupField: 'food_categories__food_category__definition',
     fieldType: 'text_field',
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-alert-circle-outline',
-    filterDescription: 'description for Food Category Definition',
+    filterDescription: 'serve as a description or note for food category tools',
     showInFilters: true
   },
 
@@ -1110,8 +1131,8 @@ export const coupledFilterFields = {
     showInFilters: true
   },
   'organisms.variant': {
-    displayName: 'Variant',
-    flattenedDisplayName: 'Identity - Organism Variant',
+    displayName: 'Subspecies/Variety/Strain',
+    flattenedDisplayName: 'Identity - Organism Subspecies/Variety/Strain',
     type: 'text',
     djangoLookupField: 'organisms__variant',
     apiEndpoint: 'picklist/',
@@ -1121,7 +1142,7 @@ export const coupledFilterFields = {
     qualifiers: ['contains', 'is', 'is None'],
     icon: 'mdi-leaf',
     filterDescription:
-      'Specifies the variant of the organism used for the production of the NF/TF, such as strain (microorganisms), subspecies (animals), or cultivar (plants). ',
+      'Specifies the subspecies if animal / variety if plant / strain if microorganism of the organism used for the production of the NF/TF. ',
     showInFilters: true
   },
   'organisms.isGmo': {
@@ -1214,7 +1235,7 @@ export const coupledFilterFields = {
     showInFilters: true
   },
   'organisms.species.scientificName': {
-    displayName: 'Identity - Organism Scientific Name',
+    displayName: 'Scientific Name',
     flattenedDisplayName: 'Identity - Species Scientific Name',
     type: 'text',
     djangoLookupField: 'organisms__organism__species__scientific_name',
@@ -1305,7 +1326,7 @@ export const coupledFilterFields = {
   },
   'organisms.orgSynonyms.typeDefinition': {
     displayName: 'Type Definition',
-    flattenedDisplayName: 'Organism Synonym Type Definition',
+    flattenedDisplayName: 'Identity - Organism Synonym Type Definition',
     type: 'text',
     djangoLookupField: 'organisms__organism__synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
@@ -1365,7 +1386,7 @@ export const coupledFilterFields = {
   },
   'chemicals.chemSynonyms.typeDefinition': {
     displayName: 'Type Definition',
-    flattenedDisplayName: 'Chemical Synonym Type Definition',
+    flattenedDisplayName: 'Identity - Chemical Synonym Type Definition',
     type: 'text',
     djangoLookupField: 'chemicals__chemical__synonyms__syn_type__definition',
     qualifiers: ['contains', 'is', 'is None'],
@@ -1404,7 +1425,7 @@ export const coupledFilterFields = {
 
   'admes.testType': {
     displayName: 'Test Type',
-    flattenedDisplayName: 'ADME Test Type',
+    flattenedDisplayName: 'ADME - Test Type',
     type: 'text',
     djangoLookupField: 'adme__test_type',
     fieldType: 'tax_node',
@@ -1423,7 +1444,7 @@ export const coupledFilterFields = {
   },
   'admes.guideline': {
     displayName: 'Guideline',
-    flattenedDisplayName: 'ADME Guideline',
+    flattenedDisplayName: 'ADME - Guideline',
     type: 'text',
     djangoLookupField: 'adme__guideline',
     fieldType: 'tax_node',
@@ -1442,7 +1463,7 @@ export const coupledFilterFields = {
   },
   'admes.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
-    flattenedDisplayName: 'ADME Guideline Qualifier',
+    flattenedDisplayName: 'ADME - Guideline Qualifier',
     type: 'text',
     djangoLookupField: 'adme__guideline_qualifier__title',
     apiEndpoint: 'picklist/',
@@ -1457,7 +1478,7 @@ export const coupledFilterFields = {
   },
   'admes.studySource': {
     displayName: 'Study Source',
-    flattenedDisplayName: 'ADME Study Source',
+    flattenedDisplayName: 'ADME - Study Source',
     type: 'text',
     djangoLookupField: 'adme__study_source__title',
     apiEndpoint: 'picklist/',
@@ -1473,7 +1494,7 @@ export const coupledFilterFields = {
 
   'admes.investigationTypes.title': {
     displayName: 'Name',
-    flattenedDisplayName: 'ADME Investigation Type',
+    flattenedDisplayName: 'ADME - Investigation Type',
     type: 'text',
     djangoLookupField: 'adme__investigation_types__investigation_type__title',
     apiEndpoint: 'picklist/',
@@ -1488,7 +1509,7 @@ export const coupledFilterFields = {
   },
   'admes.remarks': {
     displayName: 'Remarks',
-    flattenedDisplayName: 'ADME Remarks',
+    flattenedDisplayName: 'ADME - Remarks',
     type: 'text',
     djangoLookupField: 'adme__remarks',
     fieldType: 'text_field',
@@ -1500,7 +1521,7 @@ export const coupledFilterFields = {
   },
   'admes.testMaterial': {
     displayName: 'Test Material',
-    flattenedDisplayName: 'ADME Test Material',
+    flattenedDisplayName: 'ADME - Test Material',
     type: 'text',
     djangoLookupField: 'adme__test_material',
     apiEndpoint: 'picklist/',
@@ -1518,7 +1539,7 @@ export const coupledFilterFields = {
 
   'genotoxes.testType': {
     displayName: 'Test Type',
-    flattenedDisplayName: 'Genotoxicity Test Type',
+    flattenedDisplayName: 'Genotoxicity - Test Type',
     type: 'text',
     djangoLookupField: 'genotox__test_type',
     fieldType: 'tax_node',
@@ -1537,7 +1558,7 @@ export const coupledFilterFields = {
   },
   'genotoxes.guideline': {
     displayName: 'Guideline',
-    flattenedDisplayName: 'Genotoxicity Guideline',
+    flattenedDisplayName: 'Genotoxicity - Guideline',
     type: 'text',
     djangoLookupField: 'genotox__guideline',
     fieldType: 'tax_node',
@@ -1556,7 +1577,7 @@ export const coupledFilterFields = {
   },
   'genotoxes.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
-    flattenedDisplayName: 'Genotoxicity Guideline Qualifier',
+    flattenedDisplayName: 'Genotoxicity - Guideline Qualifier',
     type: 'text',
     djangoLookupField: 'genotox__guideline_qualifier__title',
     apiEndpoint: 'picklist/',
@@ -1571,7 +1592,7 @@ export const coupledFilterFields = {
   },
   'genotoxes.studySource': {
     displayName: 'Study Source',
-    flattenedDisplayName: 'Genotoxicity Study Source',
+    flattenedDisplayName: 'Genotoxicity - Study Source',
     type: 'text',
     djangoLookupField: 'genotox__study_source__title',
     apiEndpoint: 'picklist/',
@@ -1586,7 +1607,7 @@ export const coupledFilterFields = {
   },
   'genotoxes.outcome': {
     displayName: 'Outcome',
-    flattenedDisplayName: 'Genotoxicity Outcome',
+    flattenedDisplayName: 'Genotoxicity - Outcome',
     type: 'text',
     djangoLookupField: 'genotox__outcome',
     fieldType: 'tax_node',
@@ -1606,7 +1627,7 @@ export const coupledFilterFields = {
 
   'genotoxes.remarks': {
     displayName: 'Remarks',
-    flattenedDisplayName: 'Genotoxicity Remarks',
+    flattenedDisplayName: 'Genotoxicity - Remarks',
     type: 'text',
     djangoLookupField: 'genotox__remarks',
     fieldType: 'text_field',
@@ -1618,7 +1639,7 @@ export const coupledFilterFields = {
   },
   'genotoxes.testMaterial': {
     displayName: 'Test Material',
-    flattenedDisplayName: 'Genotoxicity Test Material',
+    flattenedDisplayName: 'Genotoxicity - Test Material',
     type: 'text',
     djangoLookupField: 'genotox__test_material',
     apiEndpoint: 'picklist/',
@@ -1655,7 +1676,7 @@ export const coupledFilterFields = {
   },
   'endpointstudies.guidelineQualifier': {
     displayName: 'Guideline Qualifier',
-    flattenedDisplayName: 'Endpoint Study Guideline Qualifier',
+    flattenedDisplayName: 'Toxicology - Endpoint Study Guideline Qualifier',
     type: 'text',
     djangoLookupField: 'endpointstudy__guideline_qualifier__title',
     apiEndpoint: 'picklist/',
@@ -2393,7 +2414,7 @@ export const coupledFilterFields = {
   },
   'admes.djangoAdminAdme': {
     displayName: 'ADME Admin',
-    flattenedDisplayName: 'ADME Admin',
+    flattenedDisplayName: 'ADME - Admin',
     icon: 'mdi-account-cowboy-hat',
     filterDescription: 'will provide a link to django admin',
     showInFilters: false
