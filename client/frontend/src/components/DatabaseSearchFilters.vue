@@ -412,7 +412,7 @@
         color="secondary"
         position="fixed"
         location="bottom right"
-        class="mb-8 mr-10"
+        class="mb-5 mr-6"
         :ripple="false"
         size="large"
         min-height="50px"

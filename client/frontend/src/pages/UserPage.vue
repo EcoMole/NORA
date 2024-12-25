@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <h1>User page</h1>
-  </div>
   <v-row>
     <v-sheet
       elevation="2"
       max-width="600"
       rounded="lg"
       width="100%"
-      class="pa-4 text-center mx-auto"
+      class="pa-4 text-center mx-auto mt-10"
     >
       <UserForm
         v-if="editing === 'profile'"
