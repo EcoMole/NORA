@@ -27,7 +27,27 @@
       </v-sheet>
 
       <!-- btns -->
-
+      <v-hover v-slot="{ isHovering, props: hoverProps }">
+        <v-btn
+          v-bind="{ ...hoverProps }"
+          :elevation="isHovering ? 14 : 4"
+          size="small"
+          min-height="40px"
+          color="primary"
+          style="margin-top: 86px"
+          position="fixed"
+          location="top right"
+          class="mr-6"
+          :ripple="false"
+          @click="exportSearchResult"
+          :loading="exporting"
+        >
+          <v-icon>mdi-download</v-icon>
+          <v-tooltip activator="parent" location="bottom"
+            >Download this search as an Excel file</v-tooltip
+          >
+        </v-btn>
+      </v-hover>
       <v-hover v-slot="{ isHovering, props }">
         <v-btn
           v-bind="props"
@@ -36,9 +56,10 @@
           size="small"
           min-height="50px"
           color="tertiary"
-          :style="{ marginBottom: '20px', left: '80px' }"
+          :style="{ marginBottom: isAtBottom ? '142px' : '80px' }"
           position="fixed"
-          location="bottom left"
+          location="bottom right"
+          class="mr-6"
           :ripple="false"
         >
           <v-icon left>mdi-replay</v-icon>
@@ -51,7 +72,7 @@
         elevation="24"
         position="fixed"
         location="bottom"
-        class="mb-5 px-5"
+        class="mb-6 px-5"
         rounded="lg"
       >
         <v-row class="d-flex align-center">
@@ -82,24 +103,6 @@
           </v-col>
         </v-row>
       </v-sheet>
-      <v-hover v-slot="{ isHovering, props }">
-        <v-btn
-          v-bind="props"
-          :elevation="isHovering ? 14 : 4"
-          size="small"
-          min-height="40px"
-          color="primary"
-          position="fixed"
-          location="bottom right"
-          :style="{ marginBottom: isAtBottom ? '142px' : '80px', right: '25px' }"
-          :ripple="false"
-          @click="exportSearchResult"
-          :loading="exporting"
-        >
-          <v-icon left>mdi-download</v-icon>
-          Export
-        </v-btn>
-      </v-hover>
       <v-btn
         elevation="24"
         @click="showFilterInterface = true"
@@ -107,8 +110,9 @@
         color="secondary"
         position="fixed"
         location="bottom right"
+        class="mr-6"
         :ripple="false"
-        :style="{ marginBottom: isAtBottom ? '82px' : '20px', right: '25px' }"
+        :style="{ marginBottom: isAtBottom ? '82px' : '20px' }"
       >
         <v-icon left>mdi-replay</v-icon>
         edit search

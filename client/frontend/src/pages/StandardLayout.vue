@@ -5,7 +5,7 @@
     <v-spacer></v-spacer>
 
     <v-btn v-if="settings.adminPath" class="mr-1" color="secondary" icon @click="goToDjangoAdmin">
-      <v-icon size="large">mdi-account-cowboy-hat</v-icon>
+      <v-icon size="large">mdi-database-cog </v-icon>
       <v-tooltip activator="parent" location="bottom">Django Admin</v-tooltip>
     </v-btn>
 
