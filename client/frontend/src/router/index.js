@@ -24,11 +24,6 @@ export default new createRouter({
       path: '/user/',
       name: 'user-page',
       component: () => import('@/pages/UserPage.vue')
-    },
-    {
-      path: '/settings/',
-      name: 'settings-page',
-      component: () => import('@/pages/SettingsPage.vue')
     }
   ]
 })

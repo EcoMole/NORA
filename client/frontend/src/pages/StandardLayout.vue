@@ -25,11 +25,6 @@
             @click="toggleTheme"
           ></v-switch>
         </v-list-item>
-        <v-list-item>
-          <v-btn :to="{ name: 'settings-page' }" variant="text" @click="menuSettings = false">
-            Advanced Settings
-          </v-btn>
-        </v-list-item>
       </v-list>
     </v-menu>
     <v-menu v-model="menuAccount" min-width="200px" :close-on-content-click="false">
@@ -128,12 +123,6 @@ export default {
           icon: 'mdi-account',
           value: 'user',
           routerLink: 'user-page'
-        },
-        {
-          title: 'Settings',
-          icon: 'mdi-cog',
-          value: 'settings',
-          routerLink: 'settings-page'
         }
       ]
     }
