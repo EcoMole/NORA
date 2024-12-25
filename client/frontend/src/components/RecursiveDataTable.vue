@@ -90,10 +90,12 @@ export default {
         .map((key) => {
           const fullPath = [...this.path, key].join('.')
           const mappingEntry = this.nameMappingObj[fullPath]
+          const isNested = this.isNested(dataItem[key])
           return {
             title: mappingEntry ? mappingEntry.displayName : key,
             value: key,
-            align: 'center'
+            align: 'center',
+            sortable: isNested ? false : true
           }
         })
     },
