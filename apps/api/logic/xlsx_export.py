@@ -44,6 +44,18 @@ def process_adme_studies(admes, nf_id):
     return adme_rows
 
 
+def serialize_endpoint(endpoint):
+    parts = [
+        f"(Id: {endpoint.get('endpointId', '')})",
+        endpoint.get("referencePoint", ""),
+        endpoint.get("qualifier", ""),
+        endpoint.get("lovalue", ""),
+        endpoint.get("unit", ""),
+        endpoint.get("subpopulation", ""),
+    ]
+    return " - ".join(filter(bool, parts))
+
+
 def process_endpoint_studies(endpointstudies, nf_id):
     endpoint_rows = []
     final_outcome_rows = []
@@ -53,50 +65,34 @@ def process_endpoint_studies(endpointstudies, nf_id):
         )
         study_id = endpoint_study.get("endpointstudyId", "")
 
-        # endpoint-lovalue, subpopulation, qualifier, referencePoint into one column
         serialized_endpoints = [
             serialize_endpoint(endpoint)
             for endpoint in endpoint_study.get("endpoints", [])
         ]
-        for endpoint in endpoint_study.get(
-            "endpoints", []
-        ):  # process the final outcomes for given endpoint
+        # process the final outcomes for given endpoint
+        for endpoint in endpoint_study.get("endpoints", []):
             final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
             final_outcome_rows += final_outcomes
-        endpoint_study["endpoints"] = "; ".join(
-            serialized_endpoints
-        )  # make all endpoints into one column
-        additional = {"novelFoodId": nf_id}
+
+        additional = {
+            "novelFoodId": nf_id,
+            "endpoints": "; ".join(serialized_endpoints),
+        }
         endpoint_rows.append({**additional, **endpoint_study})
     return endpoint_rows, final_outcome_rows
 
 
-def serialize_endpoint(endpoint):
-    reference_point = endpoint.get("referencePoint", "")
-    qualifier = endpoint.get("qualifier", "")
-    lovalue = endpoint.get("lovalue", "")
-    subpopulation = endpoint.get("subpopulation", "")
-    id = endpoint.get("endpointId", "")
-    unit = endpoint.get("unit", "")
-
-    id_str = f"(Id: {id})"
-
-    # Filter the empty strings out
-    return " - ".join(
+def serialize_population(population):
+    return " ".join(
         filter(
             bool,
-            [str(id_str), reference_point, qualifier, lovalue, unit, subpopulation],
+            [
+                population.get("subgroup", ""),
+                population.get("qualifier", ""),
+                population.get("value", ""),
+            ],
         )
     )
-
-
-def serialize_population(population):
-    subgroup = population.get("subgroup", "")
-    qualifier = population.get("qualifier", "")
-    value = population.get("value", "")
-
-    # Filter the empty strings out
-    return " ".join(filter(bool, [subgroup, qualifier, value]))
 
 
 def create_final_outcome_rows(endpoint, nf_id, study_id):
@@ -104,69 +100,35 @@ def create_final_outcome_rows(endpoint, nf_id, study_id):
     endpoint_id = endpoint.get("endpointId", "")
     final_outcome_rows = []
     for final_outcome in final_outcomes:
-        final_outcome["endpointId"] = endpoint_id
-        final_outcome["endpointstudyId"] = study_id
-        final_outcome.pop("djangoAdminFinalOutcome", "")
-        final_outcome = {
-            key: value
-            for key, value in final_outcome.items()
-            if not key.startswith("__") and key != "id"
-        }
+
+        final_outcome = filter_metadata(
+            final_outcome, exclude_keys={"id", "djangoAdminFinalOutcome"}
+        )
         serialized_populations = []
-        for population in final_outcome.get(
-            "populations", []
-        ):  # serialize populations into strings
+        # serialize populations into strings
+        for population in final_outcome.get("populations", []):
             serialized_population = serialize_population(population)
             serialized_populations.append(serialized_population)
-        final_outcome["populations"] = "; ".join(
-            serialized_populations
-        )  # make all populations into one column
-        final_outcome["novelFoodId"] = nf_id  # Add NF id
-        final_outcome_rows.append(final_outcome)
+        final_outcome["populations"] = "; ".join(serialized_populations)
+        additional = {
+            "novelFoodId": nf_id,
+            "endpointId": endpoint_id,
+            "endpointstudyId": study_id,
+        }
+        final_outcome_rows.append({**additional, **final_outcome})
     return final_outcome_rows
 
-
-def process_adme_studies(admes, nf_id):
-    adme_rows = []
-    for adme_study in admes:
-        adme_study.pop("djangoAdminAdme", "")
-        investig_types = [
-            investigation_type["title"]
-            for investigation_type in adme_study.get("investigationTypes", [])
-        ]
-        if len(investig_types) > 0:
-            adme_study["investigationTypes"] = "; ".join(
-                investig_types
-            )  # flatten the investigation types into one column
-        adme_study = {
-            key: value
-            for key, value in adme_study.items()
-            if not key.startswith("__") and key != "id"
-        }  # ignore GraphQl metadata
-        adme_study["novelFoodId"] = nf_id  # Add NF id
-        adme_rows.append(adme_study)
-    return adme_rows
-
-
 def serialize_species(species):
-    name = species.get("name", "")
-    scientific_name = species.get("scientificName", "")
-    genus = species.get("genus", "")
-    family = species.get("family")
-    organism_type = species.get("orgType")
-
-    return " < ".join(
-        filter(bool, [name, scientific_name, genus, family, organism_type])
-    )
-
+    return " < ".join(filter(bool, [
+        species.get("name", ""),
+        species.get("scientificName", ""),
+        species.get("genus", ""),
+        species.get("family", ""),
+        species.get("orgType", ""),
+    ]))
 
 def serialize_synonyms(synonyms):
-    names = []
-    for synonym in synonyms:
-        names.append(synonym.get("title", ""))
-
-    return " ; ".join(names)
-
+    return " ; ".join(synonym.get("title", "") for synonym in synonyms)
 
 def process_organism_identity(organisms, nf_id):
     organism_rows = []
