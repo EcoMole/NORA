@@ -4,42 +4,95 @@ import pandas as pd
 from django.http import HttpResponse
 
 
+def filter_metadata(data, exclude_keys=None):
+    """Filter out unwanted keys from a dictionary."""
+    exclude_keys = exclude_keys or {"id"}
+    return {
+        k: v
+        for k, v in data.items()
+        if not k.startswith("__") and k not in exclude_keys
+    }
+
+
 def process_genotox_studies(genotoxes, nf_id):
     genotox_rows = []
     for genotox_study in genotoxes:
-        genotox_study = {
-            key: value
-            for key, value in genotox_study.items()
-            if not key.startswith("__") and key != "id"
-        }  # ignore GraphQl metadata
-        genotox_study["novelFoodId"] = nf_id  # Add NF id
-        genotox_study.pop("djangoAdminGenotox", "")
-        genotox_rows.append(genotox_study)
+        genotox_study = filter_metadata(
+            genotox_study, exclude_keys={"djangoAdminGenotox", "id"}
+        )
+        additional = {"novelFoodId": nf_id}
+        genotox_rows.append({**additional, **genotox_study})
     return genotox_rows
 
 
+def process_adme_studies(admes, nf_id):
+    adme_rows = []
+    for adme_study in admes:
+        adme_study = filter_metadata(adme_study, exclude_keys={"djangoAdminAdme", "id"})
+
+        investig_types = [
+            investigation_type["title"]
+            for investigation_type in adme_study.get("investigationTypes", [])
+        ]
+        if len(investig_types) > 0:
+            adme_study["investigationTypes"] = "; ".join(
+                investig_types
+            )  # flatten the investigation types into one column
+
+        additional = {"novelFoodId": nf_id}
+        adme_rows.append({**additional, **adme_study})
+    return adme_rows
+
+
 def serialize_endpoint(endpoint):
-    reference_point = endpoint.get("referencePoint", "")
-    qualifier = endpoint.get("qualifier", "")
-    lovalue = endpoint.get("lovalue", "")
-    subpopulation = endpoint.get("subpopulation", "")
-    id = endpoint.get("endpointId", "")
+    parts = [
+        f"(Id: {endpoint.get('endpointId', '')})",
+        endpoint.get("referencePoint", ""),
+        endpoint.get("qualifier", ""),
+        endpoint.get("lovalue", ""),
+        endpoint.get("unit", ""),
+        endpoint.get("subpopulation", ""),
+    ]
+    return " - ".join(filter(bool, parts))
 
-    id_str = f"(Id: {id})"
 
-    # Filter the empty strings out
-    return " - ".join(
-        filter(bool, [str(id_str), reference_point, qualifier, lovalue, subpopulation])
-    )
+def process_endpoint_studies(endpointstudies, nf_id):
+    endpoint_rows = []
+    final_outcome_rows = []
+    for endpoint_study in endpointstudies:
+        endpoint_study = filter_metadata(
+            endpoint_study, exclude_keys={"id", "djangoAdminEndpointstudy"}
+        )
+        study_id = endpoint_study.get("endpointstudyId", "")
+
+        serialized_endpoints = [
+            serialize_endpoint(endpoint)
+            for endpoint in endpoint_study.get("endpoints", [])
+        ]
+        # process the final outcomes for given endpoint
+        for endpoint in endpoint_study.get("endpoints", []):
+            final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
+            final_outcome_rows += final_outcomes
+
+        additional = {
+            "novelFoodId": nf_id,
+            "endpoints": "; ".join(serialized_endpoints),
+        }
+        endpoint_rows.append({**additional, **endpoint_study})
+    return endpoint_rows, final_outcome_rows
 
 
 def serialize_population(population):
-    subgroup = population.get("subgroup", "")
-    qualifier = population.get("qualifier", "")
-    value = population.get("value", "")
-
-    # Filter the empty strings out
-    return " ".join(filter(bool, [subgroup, qualifier, value]))
+    return " ".join(
+        filter(
+            bool,
+            [
+                population.get("subgroup", ""),
+                population.get("qualifier", ""),
+                population.get("value", ""),
+            ],
+        )
+    )
 
 
 def create_final_outcome_rows(endpoint, nf_id, study_id):
@@ -47,162 +100,97 @@ def create_final_outcome_rows(endpoint, nf_id, study_id):
     endpoint_id = endpoint.get("endpointId", "")
     final_outcome_rows = []
     for final_outcome in final_outcomes:
-        final_outcome["endpointId"] = endpoint_id
-        final_outcome["endpointstudyId"] = study_id
-        final_outcome.pop("djangoAdminFinalOutcome", "")
-        final_outcome = {
-            key: value
-            for key, value in final_outcome.items()
-            if not key.startswith("__") and key != "id"
-        }
+
+        final_outcome = filter_metadata(
+            final_outcome, exclude_keys={"id", "djangoAdminFinalOutcome"}
+        )
         serialized_populations = []
-        for population in final_outcome.get(
-            "populations", []
-        ):  # serialize populations into strings
+        # serialize populations into strings
+        for population in final_outcome.get("populations", []):
             serialized_population = serialize_population(population)
             serialized_populations.append(serialized_population)
-        final_outcome["populations"] = "; ".join(
-            serialized_populations
-        )  # make all populations into one column
-        final_outcome["novelFoodId"] = nf_id  # Add NF id
-        final_outcome_rows.append(final_outcome)
+        final_outcome["populations"] = "; ".join(serialized_populations)
+        additional = {
+            "novelFoodId": nf_id,
+            "endpointId": endpoint_id,
+            "endpointstudyId": study_id,
+        }
+        final_outcome_rows.append({**additional, **final_outcome})
     return final_outcome_rows
 
 
-def process_endpoint_studies(endpointstudies, nf_id):
-    endpoint_rows = []
-    final_outcome_rows = []
-    for endpoint_study in endpointstudies:
-        endpoint_study.pop("djangoAdminEndpointstudy", "")
-        study_id = endpoint_study.get("endpointstudyId", "")
-        endpoint_study = {
-            key: value
-            for key, value in endpoint_study.items()
-            if not key.startswith("__") and key != "id"
-        }
-
-        # endpoint-lovalue, subpopulation, qualifier, referencePoint into one column
-        serialized_endpoints = [
-            serialize_endpoint(endpoint)
-            for endpoint in endpoint_study.get("endpoints", [])
-        ]
-        for endpoint in endpoint_study.get(
-            "endpoints", []
-        ):  # process the final outcomes for given endpoint
-            final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
-            final_outcome_rows += final_outcomes
-        endpoint_study["endpoints"] = "; ".join(
-            serialized_endpoints
-        )  # make all endpoints into one column
-        endpoint_study["novelFoodId"] = nf_id  # Add NF id
-        endpoint_rows.append(endpoint_study)
-    return endpoint_rows, final_outcome_rows
-
-
-def process_adme_studies(admes, nf_id):
-    adme_rows = []
-    for adme_study in admes:
-        adme_study.pop("djangoAdminAdme", "")
-        investig_types = [
-            investigation_type["title"]
-            for investigation_type in adme_study["investigationTypes"]
-        ]
-        adme_study["investigationTypes"] = "; ".join(
-            investig_types
-        )  # flatten the investigation types into one column
-        adme_study = {
-            key: value
-            for key, value in adme_study.items()
-            if not key.startswith("__") and key != "id"
-        }  # ignore GraphQl metadata
-        adme_study["novelFoodId"] = nf_id  # Add NF id
-        adme_rows.append(adme_study)
-    return adme_rows
-
-
 def serialize_species(species):
-    name = species.get("name", "")
-    scientific_name = species.get("scientificName", "")
-    genus = species.get("genus", "")
-    family = species.get("family")
-    organism_type = species.get("orgType")
-
     return " < ".join(
-        filter(bool, [name, scientific_name, genus, family, organism_type])
+        filter(
+            bool,
+            [
+                species.get("name", ""),
+                species.get("scientificName", ""),
+                species.get("genus", ""),
+                species.get("family", ""),
+                species.get("orgType", ""),
+            ],
+        )
     )
 
 
 def serialize_synonyms(synonyms):
-    names = []
-    for synonym in synonyms:
-        names.append(synonym.get("title", ""))
-
-    return " ; ".join(names)
+    return " ; ".join(synonym.get("title", "") for synonym in synonyms)
 
 
 def process_organism_identity(organisms, nf_id):
     organism_rows = []
     for organism in organisms:
+
         organism["novelFoodId"] = nf_id
         species_list = organism.get("species", [])
-        if len(species_list) > 0:
-            serialized_species = [
-                serialize_species(species) for species in species_list
-            ]
+        serialized_species = [serialize_species(species) for species in species_list]
+        if len(serialized_species) > 0:
             organism["species"] = " ; ".join(serialized_species)
 
         organism_synonyms = organism.get("orgSynonyms", [])
-        if len(organism_synonyms) > 0:
-            organism_common_names = [
-                synonym
-                for synonym in organism_synonyms
-                if synonym["typeTitle"] == "common name"
-            ]
-            organism_trade_names = [
-                synonym
-                for synonym in organism_synonyms
-                if synonym["typeTitle"] == "trade name"
-            ]
+
+        organism_common_names = [
+            synonym
+            for synonym in organism_synonyms
+            if synonym.get("typeTitle", "") == "common name"
+        ]
+        organism_trade_names = [
+            synonym
+            for synonym in organism_synonyms
+            if synonym.get("typeTitle", "") == "trade name"
+        ]
+        if len(organism_common_names) > 0:
             organism["common names"] = serialize_synonyms(organism_common_names)
+        if len(organism_trade_names) > 0:
             organism["trade names"] = serialize_synonyms(organism_trade_names)
+        organism_general_synonyms = [
+            synonym
+            for synonym in organism_synonyms
+            if synonym.get("typeTitle", "") == "synonym"
+        ]
+        if len(organism_general_synonyms) > 0:
+            organism["synonyms"] = serialize_synonyms(organism_general_synonyms)
 
-        if len(organism_synonyms) > 0:
-            if organism_synonyms[0].get("typeTitle", "") != "":
-                organism_common_names = [
-                    synonym
-                    for synonym in organism_synonyms
-                    if synonym["typeTitle"] == "common name"
-                ]
-                organism_trade_names = [
-                    synonym
-                    for synonym in organism_synonyms
-                    if synonym["typeTitle"] == "trade name"
-                ]
-                organism["common names"] = serialize_synonyms(organism_common_names)
-                organism["trade names"] = serialize_synonyms(organism_trade_names)
-            else:
-                organism["synonyms"] = serialize_synonyms(organism_synonyms)
-
-        organism.pop("orgSynonyms", "")
-        organism.pop("__typename", "")
+        organism = filter_metadata(
+            organism, exclude_keys={"id", "djangoAdminOrganism", "orgSynonyms"}
+        )
 
         organism_rows.append(organism)
     return organism_rows
 
-
 def serialize_production_processes(processes):
-    procs = []
-    for process in processes:
-        procs.append(process["process"])
-    return " , ".join(procs)
+    return " , ".join([proc["process"] for proc in processes])
 
-
-def process_compositions(compositions, nf_id, food_form):
+def process_compositions(compositions, nf_id, nf_variant_id, food_form):
     composition_rows = []  # radek s nf id, nf food form, slozenim
     for composition in compositions:
-        composition["novelFoodId"] = nf_id
-        composition["foodForm"] = food_form
-        composition_rows.append(composition)
+        additional = {
+            "novelFoodId": nf_id,
+            "novelFoodVariantId": nf_variant_id,
+            "foodForm": food_form,
+        }
+        composition_rows.append({**additional, **composition})
         composition.pop("__typename", "")
     return composition_rows
 
@@ -213,8 +201,9 @@ def process_nf_variants(variants, nf_id):
     for variant in variants:
         var = {}
         var["novelFoodId"] = nf_id
+        nf_variant_id = variant.get("novelfoodvariantId", "")
+        var["novelFoodVariantId"] = nf_variant_id
         var["foodForm"] = variant.get("foodForm", "not selected for export")
-        # var["proposedUses"] =
         uses = []
         for proposed_use in variant.get("proposedUses", []):
             use = proposed_use.get("useType", "")
@@ -240,7 +229,7 @@ def process_nf_variants(variants, nf_id):
         compositions = variant.get("compositions", [])
         if len(compositions) > 0:
             composition_rows += process_compositions(
-                compositions, nf_id, var["foodForm"]
+                compositions, nf_id, nf_variant_id, var["foodForm"]
             )
         nf_variants_rows.append(var)
 
@@ -254,30 +243,28 @@ def process_chemicals(chemicals, nf_id):
         chemical["novelFoodId"] = nf_id
         chem_synonyms = chemical.get("chemSynonyms", [])
         if len(chem_synonyms) > 0:
-            if chem_synonyms[0].get("typeTitle", "") != "":
-                chemical_common_names = [
-                    synonym
-                    for synonym in chem_synonyms
-                    if synonym["typeTitle"] == "common name"
-                ]
-                chemical_trade_names = [
-                    synonym
-                    for synonym in chem_synonyms
-                    if synonym["typeTitle"] == "trade name"
-                ]
-                chemical_synonym_names = [
-                    synonym
-                    for synonym in chem_synonyms
-                    if synonym["typeTitle"] == "synonym"
-                ]
+            chemical_common_names = [
+                synonym
+                for synonym in chem_synonyms
+                if synonym["typeTitle"] == "common name"
+            ]
+            chemical_trade_names = [
+                synonym
+                for synonym in chem_synonyms
+                if synonym["typeTitle"] == "trade name"
+            ]
+            chemical_synonym_names = [
+                synonym
+                for synonym in chem_synonyms
+                if synonym["typeTitle"] == "synonym"
+            ]
+            if len(chemical_common_names) > 0:
                 chemical["common names"] = serialize_synonyms(chemical_common_names)
+            if len(chemical_trade_names) > 0:
                 chemical["trade names"] = serialize_synonyms(chemical_trade_names)
+            if len(chemical_synonym_names) > 0:
                 chemical["synonyms"] = serialize_synonyms(chemical_synonym_names)
-            else:
-                chemical["synonyms"] = serialize_synonyms(chem_synonyms)
 
-        chemical.pop("chemSynonyms", "")
-        chemical.pop("__typename", "")
 
         descriptors = chemical.get("chemDescriptors", [])
 
@@ -286,7 +273,7 @@ def process_chemicals(chemicals, nf_id):
                 if "type" in descriptor:
                     chemical[descriptor["type"]] = f"{descriptor.get('value', '')} "
 
-        chemical.pop("chemDescriptors", "")
+        chemical = filter_metadata(chemical, exclude_keys={"id", "djangoAdminChemical", "chemSynonyms", "chemDescriptors"})
 
         chemicals_rows.append(chemical)
 
@@ -386,7 +373,7 @@ def flatten_json(
                 continue
             if key == "hbgvs":
                 hbgvs = process_hbgvs(value)
-                items.append(("hbvgs", hbgvs))
+                items.append(("HBVG", hbgvs))
                 continue
 
             if (
@@ -479,11 +466,11 @@ def flatten_json(
     )
 
 
-def create_export(novel_food_data):
-    filters = novel_food_data[1]
+def create_export(data):
+    filters = data[1]
 
-    novel_food_data = novel_food_data[0]
-
+    novel_food_data = data[0]
+    
     novel_food_df_data = []
     genotox_rows = []
     endpoint_rows = []
@@ -494,6 +481,8 @@ def create_export(novel_food_data):
     composition_rows = []
     chemicals_rows = []
     for item in novel_food_data:
+        if "allergenicities" in item.keys():
+            item["allergenicity"] = item.pop("allergenicities")
         (
             nf,
             genotox_rows,
