@@ -387,7 +387,7 @@ def flatten_json(
                 continue
             if key == "hbgvs":
                 hbgvs = process_hbgvs(value)
-                items.append(("hbvgs", hbgvs))
+                items.append(("HBVG", hbgvs))
                 continue
 
             if (
