@@ -4,18 +4,67 @@ import pandas as pd
 from django.http import HttpResponse
 
 
+
+def filter_metadata(data, exclude_keys=None):
+    """Filter out unwanted keys from a dictionary."""
+    exclude_keys = exclude_keys or {"id"}
+    return {k: v for k, v in data.items() if not k.startswith("__") and k not in exclude_keys}
+
+
 def process_genotox_studies(genotoxes, nf_id):
     genotox_rows = []
     for genotox_study in genotoxes:
-        genotox_study = {
-            key: value
-            for key, value in genotox_study.items()
-            if not key.startswith("__") and key != "id"
-        }  # ignore GraphQl metadata
-        genotox_study["novelFoodId"] = nf_id  # Add NF id
-        genotox_study.pop("djangoAdminGenotox", "")
-        genotox_rows.append(genotox_study)
+        genotox_study = filter_metadata(genotox_study, exclude_keys={"djangoAdminGenotox", "id"})
+        additional = {"novelFoodId": nf_id}
+        genotox_rows.append({**additional, **genotox_study})
     return genotox_rows
+
+def process_adme_studies(admes, nf_id):
+    adme_rows = []
+    for adme_study in admes:
+        adme_study = filter_metadata(adme_study, exclude_keys={"djangoAdminAdme", "id"})
+
+        investig_types = [
+            investigation_type["title"]
+            for investigation_type in adme_study.get("investigationTypes",[])
+        ]
+        if len(investig_types) > 0:
+            adme_study["investigationTypes"] = "; ".join(
+                investig_types
+            )  # flatten the investigation types into one column
+
+        additional = {"novelFoodId": nf_id}
+        adme_rows.append({**additional, **adme_study})
+    return adme_rows
+
+def process_endpoint_studies(endpointstudies, nf_id):
+    endpoint_rows = []
+    final_outcome_rows = []
+    for endpoint_study in endpointstudies:
+        endpoint_study.pop("djangoAdminEndpointstudy", "")
+        study_id = endpoint_study.get("endpointstudyId", "")
+        endpoint_study = {
+            key: value
+            for key, value in endpoint_study.items()
+            if not key.startswith("__") and key != "id"
+        }
+
+        # endpoint-lovalue, subpopulation, qualifier, referencePoint into one column
+        serialized_endpoints = [
+            serialize_endpoint(endpoint)
+            for endpoint in endpoint_study.get("endpoints", [])
+        ]
+        for endpoint in endpoint_study.get(
+            "endpoints", []
+        ):  # process the final outcomes for given endpoint
+            final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
+            final_outcome_rows += final_outcomes
+        endpoint_study["endpoints"] = "; ".join(
+            serialized_endpoints
+        )  # make all endpoints into one column
+        endpoint_study["novelFoodId"] = nf_id  # Add NF id
+        endpoint_rows.append(endpoint_study)
+    return endpoint_rows, final_outcome_rows
 
 
 def serialize_endpoint(endpoint):
@@ -70,34 +119,7 @@ def create_final_outcome_rows(endpoint, nf_id, study_id):
     return final_outcome_rows
 
 
-def process_endpoint_studies(endpointstudies, nf_id):
-    endpoint_rows = []
-    final_outcome_rows = []
-    for endpoint_study in endpointstudies:
-        endpoint_study.pop("djangoAdminEndpointstudy", "")
-        study_id = endpoint_study.get("endpointstudyId", "")
-        endpoint_study = {
-            key: value
-            for key, value in endpoint_study.items()
-            if not key.startswith("__") and key != "id"
-        }
 
-        # endpoint-lovalue, subpopulation, qualifier, referencePoint into one column
-        serialized_endpoints = [
-            serialize_endpoint(endpoint)
-            for endpoint in endpoint_study.get("endpoints", [])
-        ]
-        for endpoint in endpoint_study.get(
-            "endpoints", []
-        ):  # process the final outcomes for given endpoint
-            final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
-            final_outcome_rows += final_outcomes
-        endpoint_study["endpoints"] = "; ".join(
-            serialized_endpoints
-        )  # make all endpoints into one column
-        endpoint_study["novelFoodId"] = nf_id  # Add NF id
-        endpoint_rows.append(endpoint_study)
-    return endpoint_rows, final_outcome_rows
 
 
 def process_adme_studies(admes, nf_id):
@@ -106,11 +128,12 @@ def process_adme_studies(admes, nf_id):
         adme_study.pop("djangoAdminAdme", "")
         investig_types = [
             investigation_type["title"]
-            for investigation_type in adme_study["investigationTypes"]
+            for investigation_type in adme_study.get("investigationTypes",[])
         ]
-        adme_study["investigationTypes"] = "; ".join(
-            investig_types
-        )  # flatten the investigation types into one column
+        if len(investig_types) > 0:
+            adme_study["investigationTypes"] = "; ".join(
+                investig_types
+            )  # flatten the investigation types into one column
         adme_study = {
             key: value
             for key, value in adme_study.items()
@@ -198,12 +221,15 @@ def serialize_production_processes(processes):
     return " , ".join(procs)
 
 
-def process_compositions(compositions, nf_id, food_form):
+def process_compositions(compositions, nf_id, nf_variant_id, food_form):
     composition_rows = []  # radek s nf id, nf food form, slozenim
     for composition in compositions:
-        composition["novelFoodId"] = nf_id
-        composition["foodForm"] = food_form
-        composition_rows.append(composition)
+        additional = {
+            "novelFoodId": nf_id,
+            "novelFoodVariantId": nf_variant_id,
+            "foodForm": food_form,
+        }
+        composition_rows.append({**additional, **composition})
         composition.pop("__typename", "")
     return composition_rows
 
@@ -214,8 +240,9 @@ def process_nf_variants(variants, nf_id):
     for variant in variants:
         var = {}
         var["novelFoodId"] = nf_id
+        nf_variant_id = variant.get("novelfoodvariantId", "")
+        var["novelFoodVariantId"] = nf_variant_id
         var["foodForm"] = variant.get("foodForm", "not selected for export")
-        # var["proposedUses"] =
         uses = []
         for proposed_use in variant.get("proposedUses", []):
             use = proposed_use.get("useType", "")
@@ -241,7 +268,7 @@ def process_nf_variants(variants, nf_id):
         compositions = variant.get("compositions", [])
         if len(compositions) > 0:
             composition_rows += process_compositions(
-                compositions, nf_id, var["foodForm"]
+                compositions, nf_id, nf_variant_id, var["foodForm"]
             )
         nf_variants_rows.append(var)
 
