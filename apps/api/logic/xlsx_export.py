@@ -24,12 +24,13 @@ def serialize_endpoint(endpoint):
     lovalue = endpoint.get("lovalue", "")
     subpopulation = endpoint.get("subpopulation", "")
     id = endpoint.get("endpointId", "")
+    unit = endpoint.get("unit", "")
 
     id_str = f"(Id: {id})"
 
     # Filter the empty strings out
     return " - ".join(
-        filter(bool, [str(id_str), reference_point, qualifier, lovalue, subpopulation])
+        filter(bool, [str(id_str), reference_point, qualifier, lovalue, unit, subpopulation])
     )
 
 
@@ -479,10 +480,12 @@ def flatten_json(
     )
 
 
-def create_export(novel_food_data):
-    filters = novel_food_data[1]
+def create_export(data):
+    filters = data[1]
 
-    novel_food_data = novel_food_data[0]
+    novel_food_data = data[0]
+
+    print(novel_food_data)
 
     novel_food_df_data = []
     genotox_rows = []
@@ -494,6 +497,8 @@ def create_export(novel_food_data):
     composition_rows = []
     chemicals_rows = []
     for item in novel_food_data:
+        if "allergenicities" in item.keys():
+            item['allergenicity'] = item.pop('allergenicities')
         (
             nf,
             genotox_rows,
