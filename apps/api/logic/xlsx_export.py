@@ -179,13 +179,8 @@ def process_organism_identity(organisms, nf_id):
         organism_rows.append(organism)
     return organism_rows
 
-
 def serialize_production_processes(processes):
-    procs = []
-    for process in processes:
-        procs.append(process["process"])
-    return " , ".join(procs)
-
+    return " , ".join([proc["process"] for proc in processes])
 
 def process_compositions(compositions, nf_id, nf_variant_id, food_form):
     composition_rows = []  # radek s nf id, nf food form, slozenim
@@ -248,30 +243,28 @@ def process_chemicals(chemicals, nf_id):
         chemical["novelFoodId"] = nf_id
         chem_synonyms = chemical.get("chemSynonyms", [])
         if len(chem_synonyms) > 0:
-            if chem_synonyms[0].get("typeTitle", "") != "":
-                chemical_common_names = [
-                    synonym
-                    for synonym in chem_synonyms
-                    if synonym["typeTitle"] == "common name"
-                ]
-                chemical_trade_names = [
-                    synonym
-                    for synonym in chem_synonyms
-                    if synonym["typeTitle"] == "trade name"
-                ]
-                chemical_synonym_names = [
-                    synonym
-                    for synonym in chem_synonyms
-                    if synonym["typeTitle"] == "synonym"
-                ]
+            chemical_common_names = [
+                synonym
+                for synonym in chem_synonyms
+                if synonym["typeTitle"] == "common name"
+            ]
+            chemical_trade_names = [
+                synonym
+                for synonym in chem_synonyms
+                if synonym["typeTitle"] == "trade name"
+            ]
+            chemical_synonym_names = [
+                synonym
+                for synonym in chem_synonyms
+                if synonym["typeTitle"] == "synonym"
+            ]
+            if len(chemical_common_names) > 0:
                 chemical["common names"] = serialize_synonyms(chemical_common_names)
+            if len(chemical_trade_names) > 0:
                 chemical["trade names"] = serialize_synonyms(chemical_trade_names)
+            if len(chemical_synonym_names) > 0:
                 chemical["synonyms"] = serialize_synonyms(chemical_synonym_names)
-            else:
-                chemical["synonyms"] = serialize_synonyms(chem_synonyms)
 
-        chemical.pop("chemSynonyms", "")
-        chemical.pop("__typename", "")
 
         descriptors = chemical.get("chemDescriptors", [])
 
@@ -280,7 +273,7 @@ def process_chemicals(chemicals, nf_id):
                 if "type" in descriptor:
                     chemical[descriptor["type"]] = f"{descriptor.get('value', '')} "
 
-        chemical.pop("chemDescriptors", "")
+        chemical = filter_metadata(chemical, exclude_keys={"id", "djangoAdminChemical", "chemSynonyms", "chemDescriptors"})
 
         chemicals_rows.append(chemical)
 
@@ -477,9 +470,7 @@ def create_export(data):
     filters = data[1]
 
     novel_food_data = data[0]
-
-    print(novel_food_data)
-
+    
     novel_food_df_data = []
     genotox_rows = []
     endpoint_rows = []
