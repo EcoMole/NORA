@@ -118,63 +118,63 @@ def create_final_outcome_rows(endpoint, nf_id, study_id):
         final_outcome_rows.append({**additional, **final_outcome})
     return final_outcome_rows
 
+
 def serialize_species(species):
-    return " < ".join(filter(bool, [
-        species.get("name", ""),
-        species.get("scientificName", ""),
-        species.get("genus", ""),
-        species.get("family", ""),
-        species.get("orgType", ""),
-    ]))
+    return " < ".join(
+        filter(
+            bool,
+            [
+                species.get("name", ""),
+                species.get("scientificName", ""),
+                species.get("genus", ""),
+                species.get("family", ""),
+                species.get("orgType", ""),
+            ],
+        )
+    )
+
 
 def serialize_synonyms(synonyms):
     return " ; ".join(synonym.get("title", "") for synonym in synonyms)
 
+
 def process_organism_identity(organisms, nf_id):
     organism_rows = []
     for organism in organisms:
+
         organism["novelFoodId"] = nf_id
         species_list = organism.get("species", [])
-        if len(species_list) > 0:
-            serialized_species = [
-                serialize_species(species) for species in species_list
-            ]
+        serialized_species = [serialize_species(species) for species in species_list]
+        if len(serialized_species) > 0:
             organism["species"] = " ; ".join(serialized_species)
 
         organism_synonyms = organism.get("orgSynonyms", [])
-        if len(organism_synonyms) > 0:
-            organism_common_names = [
-                synonym
-                for synonym in organism_synonyms
-                if synonym["typeTitle"] == "common name"
-            ]
-            organism_trade_names = [
-                synonym
-                for synonym in organism_synonyms
-                if synonym["typeTitle"] == "trade name"
-            ]
+
+        organism_common_names = [
+            synonym
+            for synonym in organism_synonyms
+            if synonym.get("typeTitle", "") == "common name"
+        ]
+        organism_trade_names = [
+            synonym
+            for synonym in organism_synonyms
+            if synonym.get("typeTitle", "") == "trade name"
+        ]
+        if len(organism_common_names) > 0:
             organism["common names"] = serialize_synonyms(organism_common_names)
+        if len(organism_trade_names) > 0:
             organism["trade names"] = serialize_synonyms(organism_trade_names)
+        organism_general_synonyms = [
+            synonym
+            for synonym in organism_synonyms
+            if synonym.get("typeTitle", "") == "synonym"
+        ]
+        if len(organism_general_synonyms) > 0:
+            organism["synonyms"] = serialize_synonyms(organism_general_synonyms)
 
-        if len(organism_synonyms) > 0:
-            if organism_synonyms[0].get("typeTitle", "") != "":
-                organism_common_names = [
-                    synonym
-                    for synonym in organism_synonyms
-                    if synonym["typeTitle"] == "common name"
-                ]
-                organism_trade_names = [
-                    synonym
-                    for synonym in organism_synonyms
-                    if synonym["typeTitle"] == "trade name"
-                ]
-                organism["common names"] = serialize_synonyms(organism_common_names)
-                organism["trade names"] = serialize_synonyms(organism_trade_names)
-            else:
-                organism["synonyms"] = serialize_synonyms(organism_synonyms)
-
-        organism.pop("orgSynonyms", "")
-        organism.pop("__typename", "")
+        organism = filter_metadata(
+            organism, exclude_keys={"id", "djangoAdminOrganism", "orgSynonyms"}
+        )
 
         organism_rows.append(organism)
     return organism_rows
