@@ -4,20 +4,26 @@ import pandas as pd
 from django.http import HttpResponse
 
 
-
 def filter_metadata(data, exclude_keys=None):
     """Filter out unwanted keys from a dictionary."""
     exclude_keys = exclude_keys or {"id"}
-    return {k: v for k, v in data.items() if not k.startswith("__") and k not in exclude_keys}
+    return {
+        k: v
+        for k, v in data.items()
+        if not k.startswith("__") and k not in exclude_keys
+    }
 
 
 def process_genotox_studies(genotoxes, nf_id):
     genotox_rows = []
     for genotox_study in genotoxes:
-        genotox_study = filter_metadata(genotox_study, exclude_keys={"djangoAdminGenotox", "id"})
+        genotox_study = filter_metadata(
+            genotox_study, exclude_keys={"djangoAdminGenotox", "id"}
+        )
         additional = {"novelFoodId": nf_id}
         genotox_rows.append({**additional, **genotox_study})
     return genotox_rows
+
 
 def process_adme_studies(admes, nf_id):
     adme_rows = []
@@ -26,7 +32,7 @@ def process_adme_studies(admes, nf_id):
 
         investig_types = [
             investigation_type["title"]
-            for investigation_type in adme_study.get("investigationTypes",[])
+            for investigation_type in adme_study.get("investigationTypes", [])
         ]
         if len(investig_types) > 0:
             adme_study["investigationTypes"] = "; ".join(
@@ -37,17 +43,15 @@ def process_adme_studies(admes, nf_id):
         adme_rows.append({**additional, **adme_study})
     return adme_rows
 
+
 def process_endpoint_studies(endpointstudies, nf_id):
     endpoint_rows = []
     final_outcome_rows = []
     for endpoint_study in endpointstudies:
-        endpoint_study.pop("djangoAdminEndpointstudy", "")
+        endpoint_study = filter_metadata(
+            endpoint_study, exclude_keys={"id", "djangoAdminEndpointstudy"}
+        )
         study_id = endpoint_study.get("endpointstudyId", "")
-        endpoint_study = {
-            key: value
-            for key, value in endpoint_study.items()
-            if not key.startswith("__") and key != "id"
-        }
 
         # endpoint-lovalue, subpopulation, qualifier, referencePoint into one column
         serialized_endpoints = [
@@ -62,8 +66,8 @@ def process_endpoint_studies(endpointstudies, nf_id):
         endpoint_study["endpoints"] = "; ".join(
             serialized_endpoints
         )  # make all endpoints into one column
-        endpoint_study["novelFoodId"] = nf_id  # Add NF id
-        endpoint_rows.append(endpoint_study)
+        additional = {"novelFoodId": nf_id}
+        endpoint_rows.append({**additional, **endpoint_study})
     return endpoint_rows, final_outcome_rows
 
 
@@ -79,7 +83,10 @@ def serialize_endpoint(endpoint):
 
     # Filter the empty strings out
     return " - ".join(
-        filter(bool, [str(id_str), reference_point, qualifier, lovalue, unit, subpopulation])
+        filter(
+            bool,
+            [str(id_str), reference_point, qualifier, lovalue, unit, subpopulation],
+        )
     )
 
 
@@ -119,16 +126,13 @@ def create_final_outcome_rows(endpoint, nf_id, study_id):
     return final_outcome_rows
 
 
-
-
-
 def process_adme_studies(admes, nf_id):
     adme_rows = []
     for adme_study in admes:
         adme_study.pop("djangoAdminAdme", "")
         investig_types = [
             investigation_type["title"]
-            for investigation_type in adme_study.get("investigationTypes",[])
+            for investigation_type in adme_study.get("investigationTypes", [])
         ]
         if len(investig_types) > 0:
             adme_study["investigationTypes"] = "; ".join(
@@ -525,7 +529,7 @@ def create_export(data):
     chemicals_rows = []
     for item in novel_food_data:
         if "allergenicities" in item.keys():
-            item['allergenicity'] = item.pop('allergenicities')
+            item["allergenicity"] = item.pop("allergenicities")
         (
             nf,
             genotox_rows,
