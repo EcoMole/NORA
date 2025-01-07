@@ -2398,6 +2398,9 @@ export const coupledFilterFields = {
 }
 
 export const preselectGroups = {
+  'admes.guideline': ['admes.guidelineQualifier', 'admes.guideline'],
+  'genotoxes.guideline': ['genotoxes.guidelineQualifier', 'genotoxes.guideline'],
+  'endpointstudies.guideline': ['endpointstudies.guidelineQualifier', 'endpointstudies.guideline'],
   'endpointstudies.endpoints.lovalue': [
     'endpointstudies.endpoints.qualifier',
     'endpointstudies.endpoints.lovalue',
