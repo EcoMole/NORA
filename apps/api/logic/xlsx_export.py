@@ -45,7 +45,6 @@ def process_adme_studies(admes, nf_id):
 
 
 def serialize_endpoint(endpoint):
-    print(f"Serializing endpoint {endpoint}")
     parts = [
         f"(Id: {endpoint.get('endpointId', '')})",
         endpoint.get("referencePoint", ""),
@@ -54,7 +53,6 @@ def serialize_endpoint(endpoint):
         endpoint.get("unit", ""),
         endpoint.get("subpopulation", ""),
     ]
-    print(f"Serialization result: {' - '.join(filter(bool, parts))}")
     return " - ".join(filter(bool, parts))
 
 
