@@ -63,6 +63,10 @@ def process_endpoint_studies(endpointstudies, nf_id):
     final_outcome_rows = []
     for endpoint_study in endpointstudies:        
         study_id = endpoint_study.get("endpointstudyId", "")
+        # process the final outcomes for given endpoint
+        for endpoint in endpoint_study.get("endpoints", []):
+            final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
+            final_outcome_rows += final_outcomes
 
         serialized_endpoints = [
             serialize_endpoint(endpoint)
@@ -70,10 +74,6 @@ def process_endpoint_studies(endpointstudies, nf_id):
         ]
         if len(serialized_endpoints) > 0:
             endpoint_study["endpoints"] = "; ".join(serialized_endpoints)
-        # process the final outcomes for given endpoint
-        for endpoint in endpoint_study.get("endpoints", []):
-            final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
-            final_outcome_rows += final_outcomes
 
         endpoint_study = filter_metadata(
             endpoint_study, exclude_keys={"id", "djangoAdminEndpointstudy", "endpoints"}
@@ -275,9 +275,14 @@ def process_chemicals(chemicals, nf_id):
         descriptors = chemical.get("chemDescriptors", [])
 
         if len(descriptors) > 0:
+            other_names = []
             for descriptor in descriptors:
-                if "type" in descriptor:
+                if descriptor["type"] == "OTHERNAMES":
+                    other_names.append(descriptor["value"])
+                elif "type" in descriptor:
                     chemical[descriptor["type"]] = f"{descriptor.get('value', '')} "
+            
+            chemical["other names"] = " ; ".join(other_names)
 
         chemical = filter_metadata(chemical, exclude_keys={"id", "djangoAdminChemical", "chemSynonyms", "chemDescriptors"})
 
