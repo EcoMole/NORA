@@ -191,13 +191,13 @@ def serialize_production_processes(processes):
 def process_compositions(compositions, nf_id, nf_variant_id, food_form):
     composition_rows = []  # radek s nf id, nf food form, slozenim
     for composition in compositions:
+        composition = filter_metadata(composition, exclude_keys={"id"})
         additional = {
             "novelFoodId": nf_id,
             "novelFoodVariantId": nf_variant_id,
             "foodForm": food_form,
         }
         composition_rows.append({**additional, **composition})
-        composition.pop("__typename", "")
     return composition_rows
 
 
