@@ -45,6 +45,7 @@ def process_adme_studies(admes, nf_id):
 
 
 def serialize_endpoint(endpoint):
+    print(f"Serializing endpoint {endpoint}")
     parts = [
         f"(Id: {endpoint.get('endpointId', '')})",
         endpoint.get("referencePoint", ""),
@@ -53,32 +54,37 @@ def serialize_endpoint(endpoint):
         endpoint.get("unit", ""),
         endpoint.get("subpopulation", ""),
     ]
+    print(f"Serialization result: {' - '.join(filter(bool, parts))}")
     return " - ".join(filter(bool, parts))
 
 
 def process_endpoint_studies(endpointstudies, nf_id):
     endpoint_rows = []
     final_outcome_rows = []
-    for endpoint_study in endpointstudies:
-        endpoint_study = filter_metadata(
-            endpoint_study, exclude_keys={"id", "djangoAdminEndpointstudy"}
-        )
+    for endpoint_study in endpointstudies:        
         study_id = endpoint_study.get("endpointstudyId", "")
 
         serialized_endpoints = [
             serialize_endpoint(endpoint)
             for endpoint in endpoint_study.get("endpoints", [])
         ]
+        if len(serialized_endpoints) > 0:
+            endpoint_study["endpoints"] = "; ".join(serialized_endpoints)
         # process the final outcomes for given endpoint
         for endpoint in endpoint_study.get("endpoints", []):
             final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
             final_outcome_rows += final_outcomes
 
-        additional = {
+        endpoint_study = filter_metadata(
+            endpoint_study, exclude_keys={"id", "djangoAdminEndpointstudy", "endpoints"}
+        )
+
+        additional_id = {
             "novelFoodId": nf_id,
-            "endpoints": "; ".join(serialized_endpoints),
         }
-        endpoint_rows.append({**additional, **endpoint_study})
+
+        endpoint_rows.append({**additional_id, **endpoint_study})
+
     return endpoint_rows, final_outcome_rows
 
 
@@ -373,7 +379,7 @@ def flatten_json(
                 continue
             if key == "hbgvs":
                 hbgvs = process_hbgvs(value)
-                items.append(("HBVG", hbgvs))
+                items.append(("HBGV", hbgvs))
                 continue
 
             if (
