@@ -59,26 +59,30 @@ def serialize_endpoint(endpoint):
 def process_endpoint_studies(endpointstudies, nf_id):
     endpoint_rows = []
     final_outcome_rows = []
-    for endpoint_study in endpointstudies:
-        endpoint_study = filter_metadata(
-            endpoint_study, exclude_keys={"id", "djangoAdminEndpointstudy"}
-        )
+    for endpoint_study in endpointstudies:        
         study_id = endpoint_study.get("endpointstudyId", "")
-
-        serialized_endpoints = [
-            serialize_endpoint(endpoint)
-            for endpoint in endpoint_study.get("endpoints", [])
-        ]
         # process the final outcomes for given endpoint
         for endpoint in endpoint_study.get("endpoints", []):
             final_outcomes = create_final_outcome_rows(endpoint, nf_id, study_id)
             final_outcome_rows += final_outcomes
 
-        additional = {
+        serialized_endpoints = [
+            serialize_endpoint(endpoint)
+            for endpoint in endpoint_study.get("endpoints", [])
+        ]
+        if len(serialized_endpoints) > 0:
+            endpoint_study["endpoints"] = "; ".join(serialized_endpoints)
+
+        endpoint_study = filter_metadata(
+            endpoint_study, exclude_keys={"id", "djangoAdminEndpointstudy", "endpoints"}
+        )
+
+        additional_id = {
             "novelFoodId": nf_id,
-            "endpoints": "; ".join(serialized_endpoints),
         }
-        endpoint_rows.append({**additional, **endpoint_study})
+
+        endpoint_rows.append({**additional_id, **endpoint_study})
+
     return endpoint_rows, final_outcome_rows
 
 
@@ -185,13 +189,13 @@ def serialize_production_processes(processes):
 def process_compositions(compositions, nf_id, nf_variant_id, food_form):
     composition_rows = []  # radek s nf id, nf food form, slozenim
     for composition in compositions:
+        composition = filter_metadata(composition, exclude_keys={"id"})
         additional = {
             "novelFoodId": nf_id,
             "novelFoodVariantId": nf_variant_id,
             "foodForm": food_form,
         }
         composition_rows.append({**additional, **composition})
-        composition.pop("__typename", "")
     return composition_rows
 
 
@@ -269,9 +273,14 @@ def process_chemicals(chemicals, nf_id):
         descriptors = chemical.get("chemDescriptors", [])
 
         if len(descriptors) > 0:
+            other_names = []
             for descriptor in descriptors:
-                if "type" in descriptor:
+                if descriptor["type"] == "OTHERNAMES":
+                    other_names.append(descriptor["value"])
+                elif "type" in descriptor:
                     chemical[descriptor["type"]] = f"{descriptor.get('value', '')} "
+            
+            chemical["other names"] = " ; ".join(other_names)
 
         chemical = filter_metadata(chemical, exclude_keys={"id", "djangoAdminChemical", "chemSynonyms", "chemDescriptors"})
 
@@ -373,7 +382,7 @@ def flatten_json(
                 continue
             if key == "hbgvs":
                 hbgvs = process_hbgvs(value)
-                items.append(("HBVG", hbgvs))
+                items.append(("HBGV", hbgvs))
                 continue
 
             if (
