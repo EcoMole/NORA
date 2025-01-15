@@ -41,11 +41,11 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default=[])
 
 # ADMINS - technical personel responsible for running the application
 # - receives technical notifications via mail_admins()
-# MANAGER - non-technical personel responsible for running the application
-# - receives non-technical notifications via mail_managers()
 ADMINS = config(
     "ADMINS", cast=Csv(cast=Csv(post_process=tuple), delimiter=";"), default=""
 )
+# MANAGER - non-technical personel responsible for running the application
+# - receives non-technical notifications via mail_managers()
 MANAGERS = config(
     "MANAGERS", cast=Csv(cast=Csv(post_process=tuple), delimiter=";"), default=""
 )
@@ -241,25 +241,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Email
-# for possible future implementation of new user creation and password resetting through the frontend
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_USE_TLS = True
-EMAIL_HOST = config("EMAIL_HOST", default="localhost")
-EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-EMAIL_PORT = config("EMAIL_PORT", default="")
-EMAIL_SUBJECT_PREFIX = config("EMAIL_SUBJECT_PREFIX", default="")
-# email address that Django uses for
-# sending error messages or internal notifications to administrators
-SERVER_EMAIL = config(
-    "SERVER_EMAIL",
-    default="Notifications from My Localhost <notifications@mylocalhost.com>",
-)
-# email address that Django uses for sending messages to users and is public facing
-DEFAULT_FROM_EMAIL = config(
-    "DEFAULT_FROM_EMAIL", default="My Localhost <noreply@mylocalhost.com>"
-)
+# Email settings are set in production.py
 
 
 # Internationalization
