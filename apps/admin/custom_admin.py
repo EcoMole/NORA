@@ -1,7 +1,10 @@
 from django.conf import settings
 from django.contrib.admin import AdminSite
+from django.urls import path
 
 from utils.admin_utils import reorder_models
+
+from .views import test_error_email_reporting
 
 
 class CustomAdminSite(AdminSite):
@@ -68,3 +71,15 @@ class CustomAdminSite(AdminSite):
                 reorder_models(app, model_order)
 
         return app_list
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "test-error/",
+                self.admin_view(test_error_email_reporting),
+                name="test_error_email_reporting",
+            ),
+        ]
+
+        return custom_urls + urls
